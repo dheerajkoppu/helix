@@ -11,18 +11,18 @@
     "protein_change": "p.Arg28His"
   },
   "mode": "specialist_lab",
-  "status": "running",
+  "status": "succeeded",
   "budget": {
     "max_tool_calls": 160,
     "max_compute_seconds": 300
   },
   "started_at": "2026-10-03T23:34:41Z",
-  "finished_at": null,
+  "finished_at": "2026-10-03T23:40:12Z",
   "omnigent": {
     "version": "0.16.0",
     "harness": "claude-sdk",
     "model": "claude-sonnet-5",
-    "session_id": null,
+    "session_id": "01ae1ec2225849779949545771800d9d",
     "models": {
       "orchestrator": "claude-sonnet-5",
       "literature": "claude-sonnet-5",
@@ -33,23 +33,42 @@
       "runner": "claude-sonnet-5",
       "analysis": "claude-sonnet-5"
     },
-    "bundle": "lab/agents/helix_lab"
+    "bundle": "lab/agents/helix_lab",
+    "sub_agent_sessions": 13,
+    "loop_ended": "finished"
   },
   "spec_hash": "a7851d7df0f8e38715959ce67d0be8dfb578e8586fd31c215755d3cce308d949",
   "metrics": {
-    "wall_seconds": null,
-    "tool_calls": 0,
-    "distinct_sources": 0,
-    "evidence_items": 0,
-    "hypotheses": 0,
-    "tests_considered": 0,
-    "approvals": 0
+    "wall_seconds": 330.9,
+    "tool_calls": 125,
+    "distinct_sources": 11,
+    "evidence_items": 24,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 2,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 18,
+      "literature": 14,
+      "knowledge_graph": 43,
+      "insight": 5,
+      "planner": 16,
+      "safety": 8,
+      "runner": 9,
+      "analysis": 12
+    },
+    "policy_denials": 1,
+    "reopenings": 1
   },
   "outcome": {
-    "favoured_before": null,
-    "favoured_after": null,
-    "decision_changed": false,
-    "next_experiment": null
+    "favoured_before": "protein_interaction",
+    "favoured_after": "ligand_binding",
+    "decision_changed": true,
+    "next_experiment": "Computational, mutant-specific test of H2 (agent-generated hypothesis; prediction, not a result): dock Ins(1,3,4,5)P4 (4IP, from 1BWN) into the wild-type AlphaFold PH-domain model and into an R28H model (His side chain in the same position, with protonation state set at pH 7.4), then compare pose, docking score and the electrostatic potential at the head-group pocket. Prediction: the R28H model shows a weaker docking score or lost contact with the 4IP phosphates than wild type, and a smaller positive surface potential at the pocket. If the mutant scores match wild type, H2 is weakened for this substitution.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H2",
+    "decisions": 2
   },
   "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
   "approval_mode": "waits for a human decision through the API",

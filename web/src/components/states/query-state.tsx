@@ -44,6 +44,16 @@ export function QueryErrorState({
       />
     );
   }
+  // a 4xx is a request the API will not answer, not an outage: say why, offer no retry
+  if (isApiError(error) && error.status >= 400 && error.status < 500) {
+    return (
+      <EmptyState
+        size={size}
+        title="This can't be shown here"
+        description={error.message}
+      />
+    );
+  }
   const message = isApiError(error)
     ? `HTTP ${error.status} while loading ${subject}: ${error.message}`
     : `unexpected error while loading ${subject}`;

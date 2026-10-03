@@ -34,6 +34,7 @@ import {
   plainMutationRow,
   plainSpot,
 } from "@/lib/plain-language";
+import { isApiError } from "@/lib/api/client";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import {
   resolveColorMode,
@@ -588,11 +589,23 @@ export function CompareStage({ gene, change }: CompareStageProps) {
             zone="instrument"
             title={simple ? COMPARE_WORDS.title : "Reference and variant"}
           >
-            <QueryErrorState
-              error={plan.error}
-              subject={`the comparison plan for ${gene} ${change}`}
-              onRetry={() => void plan.refetch()}
-            />
+            {isApiError(plan.error) && plan.error.status === 400 ? (
+              <EmptyState
+                title="Compare needs a one-letter swap"
+                description="This mutation does not swap one amino acid for another, so there is no normal and mutated shape to compare."
+                actions={
+                  <TextLink href={routes.gene(gene)}>
+                    Pick another mutation
+                  </TextLink>
+                }
+              />
+            ) : (
+              <QueryErrorState
+                error={plan.error}
+                subject={`the comparison plan for ${gene} ${change}`}
+                onRetry={() => void plan.refetch()}
+              />
+            )}
           </Zone>
         }
       />
