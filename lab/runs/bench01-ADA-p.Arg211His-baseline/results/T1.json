@@ -1,0 +1,56 @@
+{
+  "test_id": "T1",
+  "test_kind": "stability_effect",
+  "values": {
+    "headline": "FoldX predicts ΔΔG +8.21 kcal/mol for R211H, at or above the destabilising threshold of 2.0 kcal/mol.",
+    "verdict": "predicted_destabilising",
+    "substitution": "R211H",
+    "foldx_ddg_kcal_mol": 8.20511,
+    "destabilising_threshold_kcal_mol": 2.0,
+    "threshold_defined_by": "ProtVar display bins",
+    "model": "afdb:AF-P00813-F1",
+    "residue_plddt": 98.94,
+    "plddt_supports_interpretation": true,
+    "missense3d": {
+      "state": "ok",
+      "value": "Neutral"
+    },
+    "other_substitutions_at_residue": [
+      {
+        "substitution": "R211C",
+        "foldx_ddg_kcal_mol": 1.27724
+      },
+      {
+        "substitution": "R211S",
+        "foldx_ddg_kcal_mol": 3.89193
+      }
+    ]
+  },
+  "sources": [
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P00813:211:H",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P00813:211:H"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P00813:211:C",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P00813:211:C"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P00813:211:S",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P00813:211:S"
+    }
+  ],
+  "controls": [
+    "Within-site comparison: the same predictor for the other substitutions reported at this residue.",
+    "Applicability control: the model confidence (pLDDT) at the residue, because FoldX on a low-confidence region is not interpretable."
+  ],
+  "limitations": [
+    "FoldX on a predicted model is a computational prediction with errors near 1 kcal/mol.",
+    "A neutral stability prediction does not show the variant is tolerated."
+  ],
+  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments stability_effect --accession P00813 --position 211 --alternate-residue H --reference-residue R --gene ADA --variant-id ADA-p.Arg211His",
+  "elapsed_seconds": 0.0
+}

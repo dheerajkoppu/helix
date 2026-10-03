@@ -2,6 +2,7 @@
 
 import { CompoundDepiction } from "@/components/compound/depiction";
 import {
+  measuredAmount,
   measuredBasis,
   measuredValue,
   phaseLabel,
@@ -30,6 +31,15 @@ import { EmptyState } from "@/components/states/empty-state";
 import { SourceUnavailable } from "@/components/states/source-unavailable";
 import { Button } from "@/components/ui/button";
 import { routes } from "@/lib/ids";
+import {
+  OPTIONS_WORDS,
+  plainConcentration,
+  plainDrugKind,
+  plainDrugStage,
+  plainLabTests,
+  plainLength,
+  plainStageLabel,
+} from "@/lib/plain-language";
 import type { ProviderInfo } from "@/lib/state/jobs";
 import type {
   PocketsResponse,
@@ -82,8 +92,10 @@ function TreatmentBlock({
 }) {
   const stage = (
     <DefinitionRow term="Stage">
-      {treatment.clinical_stage_label}
-      {actsOnTarget ? null : " for this disease"}
+      {advanced
+        ? treatment.clinical_stage_label
+        : plainStageLabel(treatment.clinical_stage_label)}
+      {actsOnTarget ? null : ` ${OPTIONS_WORDS.forDisease}`}
     </DefinitionRow>
   );
   const note = (
@@ -96,17 +108,21 @@ function TreatmentBlock({
   return (
     <>
       <SectionHeader
-        title="Clinical record"
+        title={advanced ? "Clinical record" : OPTIONS_WORDS.inPatients}
         actions={<Cite evidence={treatment.evidence} />}
       />
       {advanced ? null : <DefinitionList>{stage}</DefinitionList>}
       <Detail advanced={advanced}>
       <DefinitionList>
         {advanced ? stage : null}
-        <DefinitionRow term="Modality">
-          {treatment.modality === "Unknown" ? null : treatment.modality}
+        <DefinitionRow term={advanced ? "Modality" : OPTIONS_WORDS.kindRow}>
+          {treatment.modality === "Unknown"
+            ? null
+            : advanced
+              ? treatment.modality
+              : plainDrugKind(treatment.modality)}
         </DefinitionRow>
-        <DefinitionRow term="Indications">
+        <DefinitionRow term={advanced ? "Indications" : OPTIONS_WORDS.usedFor}>
           {treatment.indications.length > 0
             ? treatment.indications
                 .slice(0, 8)
@@ -186,7 +202,7 @@ function RunBlock({
             {
               label: "Predicted affinity",
               value: result.affinity?.affinity_pred_value,
-              unit: "log10(IC50 / µM)",
+              caption: OPTIONS_WORDS.lowerStronger,
               explainer: "affinity",
               missingReason:
                 result.affinity_status === "not_requested"
@@ -194,24 +210,23 @@ function RunBlock({
                   : "Not produced",
             },
             {
-              label: "P(binder)",
+              label: "Binder probability",
               value: result.affinity?.affinity_probability_binary,
               explainer: "binder_probability",
               missingReason: "Not produced",
             },
             {
-              label: "Ligand ipTM",
+              label: "ipTM",
               value: result.pose_confidence.ligand_iptm,
               explainer: "iptm",
               missingReason: "Not reported",
             },
           ]}
           href={routes.job(run.jobId)}
-          hrefLabel="Job"
         />
         <div className="px-3">
           <Button size="sm" variant="outline" onClick={onShowPose}>
-            Show pose in 3D
+            {OPTIONS_WORDS.showIn3d}
           </Button>
         </div>
         <Detail advanced={false}>
@@ -365,21 +380,31 @@ function CompoundDetail({
           depictionUrl={compound?.depiction_url}
           name={row.name}
           absentLabel={
-            row.smallMolecule === false
-              ? `${row.modality}: no small-molecule structure`
-              : "No 2D structure stored"
+            !advanced
+              ? row.smallMolecule === false
+                ? plainDrugKind(row.modality)
+                : OPTIONS_WORDS.noDrawing
+              : row.smallMolecule === false
+                ? `${row.modality}: no small-molecule structure`
+                : "No 2D structure stored"
           }
           className="h-36 w-full"
         />
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
-          <span className="text-muted-foreground">{row.modality}</span>
+          <span className="text-muted-foreground">
+            {advanced ? row.modality : plainDrugKind(row.modality)}
+          </span>
           <span className="text-subtle-foreground" aria-hidden>
             ·
           </span>
           <span className="text-muted-foreground">
-            {status
-              ? `${status}${compound?.max_phase && compound.max_phase >= 4 ? ", any indication" : ""}`
-              : "No clinical record"}
+            {!advanced
+              ? (plainDrugStage(compound?.max_phase, compound?.first_approval) ??
+                plainStageLabel(treatment?.clinical_stage_label) ??
+                OPTIONS_WORDS.noStage)
+              : status
+                ? `${status}${compound?.max_phase && compound.max_phase >= 4 ? ", any indication" : ""}`
+                : "No clinical record"}
           </span>
         </div>
         <div className="flex flex-wrap gap-1.5">
@@ -398,7 +423,7 @@ function CompoundDetail({
               size="sm"
               href={`${routes.compound(compoundRef)}?target=${accession}`}
             >
-              {advanced ? "Compound record" : "Record"}
+              {advanced ? "Compound record" : OPTIONS_WORDS.fullPage}
             </ButtonLink>
           )}
           <AddToProjectButton
@@ -424,19 +449,22 @@ function CompoundDetail({
       </div>
 
       <SectionHeader
-        title="Measured affinity"
+        title={advanced ? "Measured affinity" : OPTIONS_WORDS.strength}
         actions={<Cite evidence={measuredEvidence} />}
       />
       {measured ? (
         <>
           {advanced ? null : (
             <p className="px-3 pt-2.5 pb-1">
-              <span className="tabular block font-mono text-xl leading-7 font-medium text-foreground">
-                {measuredValue(measured)}
+              <span
+                className="tabular block font-mono text-xl leading-7 font-medium text-foreground"
+                title={`${measuredValue(measured)} (${plainConcentration(measured.representative.units)})`}
+              >
+                {measuredAmount(measured)}
               </span>
               <span className="text-xs text-muted-foreground">
-                Median of {measured.assay_count}{" "}
-                {measured.assay_count === 1 ? "assay" : "assays"}
+                {plainLabTests(measured.assay_count)}.{" "}
+                {OPTIONS_WORDS.lowerStronger}
               </span>
             </p>
           )}
@@ -497,7 +525,11 @@ function CompoundDetail({
       ) : (
         <EmptyState
           size="inline"
-          title="No measured affinity for this target"
+          title={
+            advanced
+              ? "No measured affinity for this target"
+              : OPTIONS_WORDS.none
+          }
           description={
             advanced ? "A prediction is never printed in its place." : undefined
           }
@@ -506,7 +538,11 @@ function CompoundDetail({
       )}
 
       <SectionHeader
-        title={advanced ? "Observed in experimental structures" : "In structures"}
+        title={
+          advanced
+            ? "Observed in experimental structures"
+            : OPTIONS_WORDS.seenIn3d
+        }
         count={coCrystal?.pdb_entry_count}
         actions={<Cite evidence={observedEvidence} />}
       />
@@ -517,7 +553,9 @@ function CompoundDetail({
               <span className="font-mono">{coCrystal.ccd_id}</span>
             </DefinitionRow>
           ) : null}
-          <DefinitionRow term="PDB entries">
+          <DefinitionRow
+            term={advanced ? "PDB entries" : OPTIONS_WORDS.labStructures}
+          >
             <span className="flex flex-wrap gap-1">
               {coCrystal.pdb_ids.slice(0, 10).map((pdbId) => (
                 <button
@@ -538,13 +576,20 @@ function CompoundDetail({
             </span>
           </DefinitionRow>
           <DefinitionRow
-            term={<LearnTerm term="binding-site">Binding site</LearnTerm>}
-            mono
+            term={
+              advanced ? (
+                <LearnTerm term="binding-site">Binding site</LearnTerm>
+              ) : (
+                OPTIONS_WORDS.bindsAt
+              )
+            }
+            mono={advanced}
           >
             {advanced
               ? formatPositions(coCrystal.binding_positions)
-              : `${coCrystal.binding_positions.length} residues`}
+              : plainLength(coCrystal.binding_positions.length)}
           </DefinitionRow>
+          {advanced ? (
           <DefinitionRow term="Predicted pocket">
             {overlap
               ? `${overlap.shared} of ${coCrystal.binding_positions.length} site residues lie in pocket ${overlap.pocket.rank}${
@@ -556,11 +601,16 @@ function CompoundDetail({
                 ? "The observed site shares no residue with a predicted pocket"
                 : null}
           </DefinitionRow>
+          ) : null}
         </DefinitionList>
       ) : (
         <EmptyState
           size="inline"
-          title="Not observed in a PDB entry of this protein"
+          title={
+            advanced
+              ? "Not observed in a PDB entry of this protein"
+              : OPTIONS_WORDS.notSeenIn3d
+          }
           searched={["PDBe"]}
         />
       )}
@@ -568,7 +618,7 @@ function CompoundDetail({
       {compound && compound.mechanisms.length > 0 ? (
         <>
           <SectionHeader
-            title="Mechanism"
+            title={advanced ? "Mechanism" : OPTIONS_WORDS.howItWorks}
             count={compound.mechanisms.length}
             actions={
               <Cite
@@ -613,7 +663,10 @@ function CompoundDetail({
         <TreatmentBlock treatment={treatment} actsOnTarget advanced={advanced} />
       ) : null}
 
-      <SectionHeader title="Binding prediction" count={row.runs.length} />
+      <SectionHeader
+        title={advanced ? "Binding prediction" : OPTIONS_WORDS.predictedBinding}
+        count={advanced || row.runs.length > 0 ? row.runs.length : null}
+      />
       {row.runs.map((run) => (
         <RunBlock
           key={run.jobId}
@@ -655,7 +708,7 @@ function CompoundDetail({
                   .filter(Boolean)
                   .join(" ") || provider.name}
                 {!advanced && !provider.availability.available
-                  ? " · no backend attached"
+                  ? ` · ${OPTIONS_WORDS.notAvailable}`
                   : ""}
               </span>
             ) : null}
@@ -704,11 +757,13 @@ function CompoundDetail({
         <EmptyState
           size="inline"
           title={
-            row.smallMolecule === false
-              ? "Not applicable"
-              : "Binding prediction not offered"
+            !advanced
+              ? OPTIONS_WORDS.notOffered
+              : row.smallMolecule === false
+                ? "Not applicable"
+                : "Binding prediction not offered"
           }
-          description={row.eligibility}
+          description={advanced ? row.eligibility : undefined}
         />
       )}
 

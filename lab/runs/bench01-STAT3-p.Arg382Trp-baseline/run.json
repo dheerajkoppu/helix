@@ -1,0 +1,62 @@
+{
+  "run_id": "bench01-STAT3-p.Arg382Trp-baseline",
+  "objective": "Find the molecular mechanism that best explains the loss of function of STAT3-p.Arg382Trp (STAT3, UniProt P40763) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "STAT3",
+    "variant_id": "STAT3-p.Arg382Trp",
+    "accession": "P40763",
+    "position": 382,
+    "reference_residue": "R",
+    "alternate_residue": "W",
+    "protein_change": "p.Arg382Trp"
+  },
+  "mode": "single_agent_baseline",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:19:38Z",
+  "finished_at": "2026-10-03T22:21:01Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "5a1f71ae961d4ceb89067e03a7315b3e",
+    "models": {
+      "generalist": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_baseline",
+    "sub_agent_sessions": 0,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+  "metrics": {
+    "wall_seconds": 82.7,
+    "tool_calls": 40,
+    "distinct_sources": 8,
+    "evidence_items": 12,
+    "hypotheses": 3,
+    "tests_considered": 3,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 40
+    },
+    "policy_denials": 0,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "nucleic_acid_binding",
+    "favoured_after": "nucleic_acid_binding",
+    "decision_changed": false,
+    "next_experiment": "Run the structure comparison (T3) on the 182-581 construct once a structure provider is available and the human approval is granted, and check whether the R382W local geometry changes at the DNA-contacting surface. Confirm H1 if the local rearrangement is small and the residue lies at the domain DNA-binding surface; overturn it if the residue shows no DNA-facing contact. A direct DNA-binding assay (laboratory) would be the decisive test beyond this run.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

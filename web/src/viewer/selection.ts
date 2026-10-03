@@ -65,6 +65,6 @@ export function focusResidues(
   if (!structure) return;
   const loci = lociForRanges(structure, ranges);
   if (StructureElement.Loci.isEmpty(loci)) return;
-  const { durationMs = 250, extraRadius = 4 } = options;
-  plugin.managers.camera.focusLoci(loci, { durationMs, extraRadius, minRadius: 8 });
+  const { durationMs = 250, extraRadius = 10 } = options;
+  plugin.managers.camera.focusLoci(loci, { durationMs, extraRadius, minRadius: 16 });
 }

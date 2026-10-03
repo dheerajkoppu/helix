@@ -4,7 +4,14 @@ import { CheckIcon } from "lucide-react";
 import { cn } from "cn";
 
 import type { AgentState, AgentStatus } from "@/components/lab/loop";
-import { useAgentLabel } from "@/components/lab/run-context";
+import { agentCounts } from "@/components/lab/plain";
+import { useAgentLabel, useRun } from "@/components/lab/run-context";
+import {
+  plainAgentLine,
+  plainAgentName,
+  plainAgentRole,
+} from "@/lib/plain-language";
+import { useAdvancedMode } from "@/lib/state/preferences";
 
 const STATE_LABEL: Record<AgentState, string> = {
   waiting: "Waiting",
@@ -42,7 +49,10 @@ function StateMark({ state }: { state: AgentState }) {
   );
 }
 
-/** The agents of the run, each with its state and its latest record line. Never a log. */
+/**
+ * The agents of the run with a state each. By default the second line is the agent's role until
+ * it has written something, then what it did, from counts; Advanced prints its latest record line.
+ */
 export function AgentColumn({
   agents,
   className,
@@ -51,6 +61,9 @@ export function AgentColumn({
   className?: string;
 }) {
   const agentLabel = useAgentLabel();
+  const advanced = useAdvancedMode();
+  const { run, view } = useRun();
+  const singleAgent = run.mode === "single_agent_baseline";
   return (
     <section aria-label="Agents" className={cn("min-w-0", className)}>
       <h2 className="px-4 pt-4 pb-2 text-2xs font-medium tracking-[0.06em] text-muted-foreground uppercase">
@@ -60,6 +73,24 @@ export function AgentColumn({
         {agents.map((agent) => {
           const working = agent.state === "working";
           const idle = agent.state === "waiting" || agent.state === "unused";
+          const plainId =
+            singleAgent && agent.id === "orchestrator"
+              ? "generalist"
+              : agent.id;
+          const role = plainAgentRole(plainId);
+          const counts = agentCounts(view, agent.id);
+          // a count that grows while the agent works is shown as it grows
+          const counted =
+            { literature: counts.papers, knowledge_graph: counts.facts }[
+              agent.id
+            ] ?? 0;
+          const hasOutput =
+            agent.lines > 0 && (agent.state === "done" || counted > 0);
+          const line = advanced
+            ? agent.line
+            : hasOutput
+              ? plainAgentLine(plainId, counts)
+              : role;
           return (
             <li
               key={agent.id}
@@ -80,7 +111,7 @@ export function AgentColumn({
                         : "font-medium text-foreground",
                     )}
                   >
-                    {agentLabel(agent.id)}
+                    {advanced ? agentLabel(agent.id) : plainAgentName(plainId)}
                   </span>
                   <span
                     className={cn(
@@ -93,9 +124,9 @@ export function AgentColumn({
                 </div>
                 <p
                   className="truncate text-xs text-muted-foreground"
-                  title={agent.line ?? undefined}
+                  title={(advanced ? agent.line : role) ?? undefined}
                 >
-                  {agent.line ?? " "}
+                  {line ?? " "}
                 </p>
               </div>
             </li>

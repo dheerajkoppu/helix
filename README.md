@@ -46,6 +46,25 @@ OrphaFold puts those sources on one residue numbering and one page, and keeps th
 Jobs (`/jobs`) lists computational runs with their stages, logs and manifests. Models (`/models`)
 lists every model provider and whether it can run on this installation.
 
+## Agentic lab
+
+The Lab (`/lab`) is a team of AI agents on top of the OrphaFold API, orchestrated by Omnigent
+0.16.0: a supervisor and seven specialists (literature, knowledge graph, insight, planner, safety,
+runner, analysis). It takes one mutation through a recorded loop: question, evidence, hypothesis,
+experiment, result, updated decision. Four policies bound what each agent may do, and a test that
+starts a compute job waits for a human approval.
+
+- [`SUBMISSION.md`](SUBMISSION.md): the hackathon submission, with the reference run on BTK
+  p.Arg28His told from its record, the measured comparison with a single agent and the open limits.
+- [`lab/README.md`](lab/README.md): agents, policies, how to run the Lab and how to read a run record.
+- [`docs/lab/agent-specs.md`](docs/lab/agent-specs.md),
+  [`docs/lab/policies.md`](docs/lab/policies.md) and
+  [`docs/lab/demo-script.md`](docs/lab/demo-script.md): the agent specifications, the policies and
+  the two minute demo.
+
+The Lab does research and hypothesis generation only. Nothing it outputs has been validated in a
+laboratory.
+
 ## Run it
 
 Needs Python 3.14, Node.js 20.9 or later and pnpm. No database, queue, GPU or API key is required.

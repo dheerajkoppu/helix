@@ -1,0 +1,4 @@
+Objective: Find the molecular mechanism that best explains the loss of function of CYBB-p.His101Arg (CYBB, UniProt P04839) and test it with one targeted computational test.
+Subject line: variant_id=CYBB-p.His101Arg gene=CYBB accession=P04839 position=101 reference=H alternate=R
+Budget for the whole run: 160 lab tool calls and 300 compute seconds.
+Run the discovery loop to the final report.

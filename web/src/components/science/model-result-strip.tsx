@@ -10,6 +10,16 @@ import {
   isMetricId,
   type ExplainerKey,
 } from "@/components/science/explainer";
+import {
+  plainDuration,
+  plainImpact,
+  plainMetricLabel,
+  plainMetricUnit,
+  plainMetricWord,
+  plainMetricWordOnly,
+  plainReadoutLabel,
+  plainUnit,
+} from "@/lib/plain-language";
 import { formatMetricValue } from "@/lib/science/metrics";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import type { StructureOrigin } from "@/lib/structure-origin";
@@ -25,9 +35,13 @@ export interface ModelResultMetric {
   explainer?: ExplainerKey | (string & {});
   /** why the value is absent: "Not reported" */
   missingReason?: string;
+  /** short text under the value: a class label such as "likely pathogenic" */
+  caption?: string | null;
 }
 
 export interface ModelResultStripProps {
+  /** heading above the name, default "Model"; "Test" or "Method" when it is not one model */
+  label?: string;
   /** "ESMFold", "AlphaFold DB", "Boltz-2" */
   model: string;
   /** printed as given: "v6", "2.1.1" */
@@ -79,6 +93,7 @@ const FRAME_CLASS: Record<
  * with their units, run time and the origin tag. Values are never coloured or animated.
  */
 export function ModelResultStrip({
+  label = "Model",
   model,
   version,
   origin,
@@ -92,21 +107,31 @@ export function ModelResultStrip({
   const advanced = useAdvancedMode();
   const producedBy = version ? `${model} ${version}` : model;
   const runtimeText =
-    typeof runtime === "number" ? formatRuntime(runtime) : runtime || null;
+    typeof runtime === "number"
+      ? advanced
+        ? formatRuntime(runtime)
+        : plainDuration(runtime)
+      : runtime || null;
 
   return (
     <div
       data-slot="model-result-strip"
       className={cn(
-        "flex min-w-0 flex-wrap items-end gap-x-8 gap-y-3 bg-background",
+        "flex min-w-0 flex-wrap gap-x-8 gap-y-3 bg-background",
+        advanced ? "items-end" : "items-start",
         FRAME_CLASS[frame],
         className,
       )}
     >
       <div className="flex min-w-0 flex-col gap-1">
-        <span className="text-2xs text-subtle-foreground">Model</span>
+        <span className="text-2xs text-subtle-foreground">
+          {advanced ? label : plainReadoutLabel(label)}
+        </span>
         <span className="flex min-h-6 min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-          <span className="truncate text-base font-medium text-foreground">
+          <span
+            className="truncate text-base font-medium text-foreground"
+            title={advanced ? undefined : producedBy}
+          >
             {model}
           </span>
           {version ? (
@@ -130,6 +155,68 @@ export function ModelResultStrip({
               ? formatMetricValue(metric.explainer, value, advanced)
               : formatNumber(value, advanced)
             : value;
+        const metricId =
+          metric.explainer && isMetricId(metric.explainer)
+            ? metric.explainer
+            : null;
+        if (!advanced) {
+          const word =
+            metricId && typeof value === "number" && hasValue
+              ? plainMetricWord(metricId, value)
+              : null;
+          const wordOnly =
+            word !== null && metricId !== null && plainMetricWordOnly(metricId);
+          const unit =
+            (metricId ? plainMetricUnit(metricId) : null) ??
+            (metric.unit ? plainUnit(metric.unit) : null);
+          const caption =
+            word ??
+            (metric.caption
+              ? /pathogenic|benign|ambiguous/i.test(metric.caption)
+                ? plainImpact(metric.caption)
+                : metric.caption
+              : null);
+          return (
+            <div
+              key={metric.label}
+              data-slot="model-result-metric"
+              className="flex min-w-0 flex-col gap-1"
+            >
+              <span className="flex items-center gap-1.5 text-2xs text-subtle-foreground">
+                {metricId
+                  ? plainMetricLabel(metricId, metric.label)
+                  : plainReadoutLabel(metric.label)}
+                {metric.explainer ? (
+                  <Explainer term={metric.explainer} producedBy={producedBy} />
+                ) : null}
+              </span>
+              {!hasValue ? (
+                <span className="text-base leading-6 text-subtle-foreground">
+                  {metric.missingReason ?? "Unknown"}
+                </span>
+              ) : wordOnly ? (
+                <span
+                  className="text-xl leading-6 font-medium text-foreground"
+                  title={`${text}${metric.unit ? ` ${metric.unit}` : ""}`}
+                >
+                  {word}
+                </span>
+              ) : (
+                <span className="tabular font-mono text-2xl leading-6 font-medium text-foreground">
+                  {text}
+                  {unit ? (
+                    <span className="ml-1.5 font-sans text-xs font-normal text-muted-foreground">
+                      {unit}
+                    </span>
+                  ) : null}
+                </span>
+              )}
+              {hasValue && caption && !wordOnly ? (
+                <span className="text-xs text-muted-foreground">{caption}</span>
+              ) : null}
+            </div>
+          );
+        }
         return (
           <div
             key={metric.label}
@@ -156,13 +243,20 @@ export function ModelResultStrip({
                 {metric.missingReason ?? "Unknown"}
               </span>
             )}
+            {hasValue && metric.caption ? (
+              <span className="text-xs text-muted-foreground">
+                {metric.caption}
+              </span>
+            ) : null}
           </div>
         );
       })}
 
       {runtimeText ? (
         <div className="flex min-w-0 flex-col gap-1">
-          <span className="text-2xs text-subtle-foreground">Run time</span>
+          <span className="text-2xs text-subtle-foreground">
+            {advanced ? "Run time" : plainReadoutLabel("Run time")}
+          </span>
           <span className="tabular font-mono text-base leading-6 text-muted-foreground">
             {runtimeText}
           </span>

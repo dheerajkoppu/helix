@@ -13,6 +13,13 @@ import {
 } from "@/components/ui/popover";
 import { EVIDENCE_META, type EvidenceItem } from "@/lib/evidence";
 import { formatTimestamp } from "@/lib/format";
+import {
+  OPEN_SOURCE_LABEL,
+  plainDatabase,
+  plainEvidenceKind,
+  plainEvidenceMeaning,
+} from "@/lib/plain-language";
+import { useAdvancedMode } from "@/lib/state/preferences";
 
 function Row({
   label,
@@ -39,8 +46,38 @@ export function EvidenceDetail({
   evidence: EvidenceItem;
   className?: string;
 }) {
+  const advanced = useAdvancedMode();
   const meta = EVIDENCE_META[evidence.evidenceClass];
   const { source, strength } = evidence;
+  if (!advanced) {
+    return (
+      <div className={cn("flex flex-col text-xs", className)}>
+        <div className="flex items-center gap-2 border-b border-border-subtle px-3 py-2">
+          <EvidenceGlyph
+            evidenceClass={evidence.evidenceClass}
+            className={cn("size-3.5", meta.textClass)}
+          />
+          <span className="font-medium text-foreground">
+            {plainDatabase(source?.database) ??
+              plainEvidenceKind(evidence.evidenceClass)}
+          </span>
+        </div>
+        <div className="flex flex-col gap-1 px-3 py-2">
+          <p className="text-muted-foreground">
+            {plainEvidenceMeaning(evidence.evidenceClass)}
+          </p>
+          {evidence.statement ? (
+            <p className="text-foreground">{evidence.statement}</p>
+          ) : null}
+        </div>
+        {source?.url ? (
+          <div className="border-t border-border-subtle px-3 py-2">
+            <ExternalLink href={source.url}>{OPEN_SOURCE_LABEL}</ExternalLink>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
   return (
     <div className={cn("flex flex-col text-xs", className)}>
       <div className="flex items-center gap-2 border-b border-border-subtle px-3 py-2">
@@ -155,11 +192,12 @@ export function EvidencePopover({
   align = "start",
   className,
 }: EvidencePopoverProps) {
+  const advanced = useAdvancedMode();
   const meta = EVIDENCE_META[evidence.evidenceClass];
   return (
     <Popover>
       <PopoverTrigger
-        aria-label={`${meta.label}. Show source.`}
+        aria-label={`${advanced ? meta.label : plainEvidenceKind(evidence.evidenceClass)}. Show source.`}
         className={cn(
           "inline-flex cursor-pointer rounded-xs align-middle hover:bg-accent aria-expanded:bg-active",
           className,
@@ -168,6 +206,7 @@ export function EvidencePopover({
         <EvidenceBadge
           evidenceClass={evidence.evidenceClass}
           size={size}
+          source={evidence.source?.database}
           detail={
             detail === undefined && size === "standard"
               ? evidence.source?.recordId

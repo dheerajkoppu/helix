@@ -23,6 +23,17 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { normalizePlddt, PLDDT_BANDS, plddtBand } from "@/lib/science/plddt";
 import { setWorkspaceHover, subscribeWorkspaceHover } from "@/lib/state/hover";
+import {
+  CHAIN_COLOUR_NOTE,
+  VIEWER_WORDS,
+  plainColouring,
+  plainColouringMissing,
+  plainConfidence,
+  plainMutation,
+  plainNotCovered,
+  plainOrigin,
+  plainRole,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import {
   describeRanges,
@@ -508,7 +519,9 @@ export function StructureViewport(props: StructureViewportProps) {
       const resolved = resolveColorMode(colorMode, structure.origin);
       const fallbackNote =
         requested === "confidence" && resolved === "chain" && colorMode !== null
-          ? `${shortStructureId(structure.id)}: pLDDT is defined only for predicted structures, coloured by chain`
+          ? simple
+            ? CHAIN_COLOUR_NOTE
+            : `${shortStructureId(structure.id)}: pLDDT is defined only for predicted structures, coloured by chain`
           : undefined;
       if (
         resolved === "domain" ||
@@ -525,7 +538,7 @@ export function StructureViewport(props: StructureViewportProps) {
       }
       return { mode: resolved, note: fallbackNote };
     },
-    [tint, colorMode, coloringFor],
+    [tint, colorMode, coloringFor, simple],
   );
 
   useEffect(() => {
@@ -646,7 +659,8 @@ export function StructureViewport(props: StructureViewportProps) {
   );
 
   const variantPosition = variant?.position;
-  const variantLabel = variant?.label;
+  const variantLabel =
+    variant && simple ? plainMutation(variant.label) : variant?.label;
   useEffect(() => {
     const handle = viewer.current;
     if (!handle || !palette || variantPosition === undefined || !variantLabel)
@@ -670,7 +684,7 @@ export function StructureViewport(props: StructureViewportProps) {
           .addLabel(structure.id, site[0], variantLabel, {
             textColor: canvasTheme.select,
             borderColor: canvasTheme.background,
-            textSize: 1,
+            textSize: 1.3,
           })
           .catch(() => undefined),
       );
@@ -817,7 +831,11 @@ export function StructureViewport(props: StructureViewportProps) {
           spec: {
             title: "Structure",
             items: displayed.map((entry, at) => ({
-              label: `${shortStructureId(entry.id)} (${STRUCTURE_ORIGIN_META[entry.origin].tag})`,
+              label: simple
+                ? entry.label
+                  ? plainRole(entry.label)
+                  : plainOrigin(entry.origin)
+                : `${shortStructureId(entry.id)} (${STRUCTURE_ORIGIN_META[entry.origin].tag})`,
               color: at === 0 ? palette.reference : palette.chains[1],
               code: slotOf(entry),
             })),
@@ -837,7 +855,10 @@ export function StructureViewport(props: StructureViewportProps) {
         entries.push({
           spec: {
             title: "Chain",
-            note: displayed.length > 1 ? shortStructureId(structure.id) : "",
+            note:
+              displayed.length > 1 && !simple
+                ? shortStructureId(structure.id)
+                : "",
             items: chains.slice(0, 8).map((chain, at) => ({
               label: `Chain ${chain.authAsymId}`,
               color: palette.chains[at % palette.chains.length],
@@ -848,7 +869,7 @@ export function StructureViewport(props: StructureViewportProps) {
       void index;
     });
     return entries;
-  }, [ready, palette, displayed, effectiveMode, slotOf]);
+  }, [ready, palette, displayed, effectiveMode, slotOf, simple]);
 
   const modeNotes = displayed
     .map((structure) => effectiveMode(structure).note)
@@ -872,9 +893,14 @@ export function StructureViewport(props: StructureViewportProps) {
     ...new Set(modeNotes),
     ...(variant && variantOutside.length > 0
       ? [
-          `Residue ${variant.position} has no coordinates in ${variantOutside
-            .map((structure) => structure.label ?? shortStructureId(structure.id))
-            .join(", ")}`,
+          simple
+            ? plainNotCovered(variant.position)
+            : `Residue ${variant.position} has no coordinates in ${variantOutside
+                .map(
+                  (structure) =>
+                    structure.label ?? shortStructureId(structure.id),
+                )
+                .join(", ")}`,
         ]
       : []),
   ];
@@ -939,37 +965,50 @@ export function StructureViewport(props: StructureViewportProps) {
       );
   };
 
+  const colorLabel = (mode: EffectiveMode) =>
+    simple ? plainColouring(mode) : COLOR_LABEL[mode];
   const colorOptions: ViewerColorOption[] = [
-    ...(overlay ? [{ value: "structure", label: COLOR_LABEL.structure }] : []),
+    ...(overlay ? [{ value: "structure", label: colorLabel("structure") }] : []),
     {
       value: "confidence",
-      label: COLOR_LABEL.confidence,
+      label: colorLabel("confidence"),
       unavailable: anyPredicted
         ? undefined
-        : "Defined only for predicted structures",
+        : simple
+          ? plainColouringMissing("confidence")
+          : "Defined only for predicted structures",
     },
-    { value: "chain", label: COLOR_LABEL.chain },
+    { value: "chain", label: colorLabel("chain") },
     {
       value: "domain",
-      label: COLOR_LABEL.domain,
+      label: colorLabel("domain"),
       unavailable: coloringFor("domain")
         ? undefined
-        : "No domain annotation loaded",
+        : simple
+          ? plainColouringMissing("domain")
+          : "No domain annotation loaded",
     },
-    { value: "secondary-structure", label: COLOR_LABEL["secondary-structure"] },
+    {
+      value: "secondary-structure",
+      label: colorLabel("secondary-structure"),
+    },
     {
       value: "alphamissense",
-      label: COLOR_LABEL.alphamissense,
+      label: colorLabel("alphamissense"),
       unavailable: coloringFor("alphamissense")
         ? undefined
-        : "No per-residue scores loaded",
+        : simple
+          ? plainColouringMissing("alphamissense")
+          : "No per-residue scores loaded",
     },
     {
       value: "reference-variant",
-      label: COLOR_LABEL["reference-variant"],
+      label: colorLabel("reference-variant"),
       unavailable: coloringFor("reference-variant")
         ? undefined
-        : "No variant selected",
+        : simple
+          ? plainColouringMissing("reference-variant")
+          : "No variant selected",
     },
   ];
   const colorValue = tint
@@ -1010,6 +1049,21 @@ export function StructureViewport(props: StructureViewportProps) {
       ? normalizePlddt(pick.bFactor, structure.plddtScale ?? "0-100")
       : null;
     const slot = structure ? slotOf(structure) : undefined;
+    if (simple) {
+      return (
+        <>
+          <span className="font-medium text-foreground">
+            {residueName(pick.compId)}
+            {position ?? pick.authSeqId}
+          </span>
+          {plddt !== null ? (
+            <span className="font-sans" title={plddt.toFixed(1)}>
+              {plainConfidence(plddt)}
+            </span>
+          ) : null}
+        </>
+      );
+    }
     return (
       <>
         {slot ? <span className="font-semibold">{slot}</span> : null}
@@ -1097,7 +1151,9 @@ export function StructureViewport(props: StructureViewportProps) {
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuLabel>Fit</DropdownMenuLabel>
+                  <DropdownMenuLabel>
+                    {simple ? VIEWER_WORDS.lineUpBy : "Fit"}
+                  </DropdownMenuLabel>
                   <DropdownMenuRadioGroup
                     value={fitMethod}
                     onValueChange={(value) =>
@@ -1105,10 +1161,10 @@ export function StructureViewport(props: StructureViewportProps) {
                     }
                   >
                     <DropdownMenuRadioItem value="sequence-ca" closeOnClick>
-                      Sequence Cα
+                      {simple ? VIEWER_WORDS.lineUpSequence : "Sequence Cα"}
                     </DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="tm-align" closeOnClick>
-                      TM-align
+                      {simple ? VIEWER_WORDS.lineUpShape : "TM-align"}
                     </DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
                 </DropdownMenuGroup>
@@ -1224,7 +1280,7 @@ export function StructureViewport(props: StructureViewportProps) {
               ))}
               {legendEntries.length > 0 ? (
                 <div className="flex max-w-full flex-wrap items-center gap-x-4 gap-y-1 border border-border-subtle bg-background/85 px-1.5 py-1">
-                  <ViewerLegend entries={legendEntries} compact />
+                  <ViewerLegend entries={legendEntries} compact plain />
                 </div>
               ) : null}
             </div>

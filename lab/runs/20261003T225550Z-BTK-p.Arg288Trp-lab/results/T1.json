@@ -1,0 +1,56 @@
+{
+  "test_id": "T1",
+  "test_kind": "stability_effect",
+  "values": {
+    "headline": "FoldX predicts ΔΔG +5.68 kcal/mol for R288W, at or above the destabilising threshold of 2.0 kcal/mol.",
+    "verdict": "predicted_destabilising",
+    "substitution": "R288W",
+    "foldx_ddg_kcal_mol": 5.68367,
+    "destabilising_threshold_kcal_mol": 2.0,
+    "threshold_defined_by": "ProtVar display bins",
+    "model": "afdb:AF-Q06187-F1",
+    "residue_plddt": 85.06,
+    "plddt_supports_interpretation": true,
+    "missense3d": {
+      "state": "ok",
+      "value": "Neutral"
+    },
+    "other_substitutions_at_residue": [
+      {
+        "substitution": "R288G",
+        "foldx_ddg_kcal_mol": 0.49328
+      },
+      {
+        "substitution": "R288Q",
+        "foldx_ddg_kcal_mol": 0.126002
+      }
+    ]
+  },
+  "sources": [
+    {
+      "database": "EBI ProtVar",
+      "record_id": "Q06187:288:W",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=Q06187:288:W"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "Q06187:288:G",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=Q06187:288:G"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "Q06187:288:Q",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=Q06187:288:Q"
+    }
+  ],
+  "controls": [
+    "Within-site comparison: the same predictor for the other substitutions reported at this residue.",
+    "Applicability control: the model confidence (pLDDT) at the residue, because FoldX on a low-confidence region is not interpretable."
+  ],
+  "limitations": [
+    "FoldX on a predicted model is a computational prediction with errors near 1 kcal/mol.",
+    "A neutral stability prediction does not show the variant is tolerated."
+  ],
+  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments stability_effect --accession Q06187 --position 288 --alternate-residue W --reference-residue R --gene BTK --variant-id BTK-p.Arg288Trp",
+  "elapsed_seconds": 2.2
+}

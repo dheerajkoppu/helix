@@ -1,0 +1,32 @@
+run bench01-BTK-p.Arg28His-baseline (single_agent_baseline) started; record: /Users/dheeraj/Downloads/alphafold/lab/runs/bench01-BTK-p.Arg28His-baseline/record.jsonl
+[  1] human           objective           Find the molecular mechanism that best explains the loss of function of BTK-p.Arg28His (BTK, UniProt Q06187) and test it with one targeted computation
+[  2] orchestrator    evidence            E1 clinical_database ClinVar classifies NM_000061.3(BTK):c.83G>A (p.Arg28His) as Pathogenic (criteria provided, multiple submitters, no conflicts; 2 o
+[  3] orchestrator    evidence            E2 curated_database UniProtKB natural variant VAR_006220 at residue 28 (R to H) is annotated in X-linked agammaglobulinemia with moderate severity, wi
+[  4] orchestrator    evidence            E3 experimental UniProtKB annotates residue 28 of Q06187 as a binding site for 1D-myo-inositol 1,3,4,5-tetrakisphosphate, supported by experimental ev
+[  5] orchestrator    evidence            E4 computational_prediction UniProtKB annotates residues 3-133 of Q06187 as the PH domain, with the PH-domain match supported by sequence-model eviden
+[  6] orchestrator    evidence            E5 computational_prediction AlphaMissense gives p.Arg28His of Q06187 a pathogenicity score of 0.9978, classed as likely pathogenic (scale 0 to 1).
+[  7] orchestrator    evidence            E6 computational_prediction ScoreCons conservation at Q06187 residue 28 is 0.962 on a 0 to 1 scale (UniRef90), indicating high conservation across spe
+[  8] orchestrator    evidence            E7 computational_prediction popEVE gives p.Arg28His of Q06187 a score of -5.634 on a proteome-wide scale, where more negative means more deleterious.
+[  9] orchestrator    evidence            E8 experimental 39 of 170 experimental PDB structures of Q06187 observe residue 28, and 35 of those carry the reference Arg at that position; ZN is pr
+[ 10] orchestrator    evidence            E9 experimental PDB 1B55 (X-ray, 2.4 Å) is the BTK PH domain in complex with inositol 1,3,4,5-tetrakisphosphate, with ligands 4IP and ZN, and it obser
+[ 11] orchestrator    evidence            E10 experimental PDB 6TT2 (X-ray, 1.36 Å) is the BTK PH domain mutant R28C, a different substitution at residue 28, with ligands ZN and MG; no R28H st
+[ 12] orchestrator    evidence            E11 literature A molecular dynamics study simulated 12 systems, including wild-type BTK PH domain and R28C/H, K12R, S14F, K19E, E41K and other mutants
+[ 13] orchestrator    evidence            E12 literature BTK is a multidomain kinase whose PH domain binds phosphoinositides, and the PH domain of BTK shows distinct phosphoinositide specifici
+[ 14] orchestrator    evidence            E13 literature Europe PMC lists 17 publications naming the BTK R28H variant; the returned abstracts are mainly clinical cohorts and do not measure R28
+[ 15] orchestrator    gap                 G1 No experimental structure of the R28H substitution was found; the PDB examples observing residue 28 are R28C or wild-type.
+[ 16] orchestrator    gap                 G2 No measured binding affinity or functional assay of R28H against inositol phosphate or lipid ligands was found in the retrieved records.
+[ 17] orchestrator    gap                 G3 The UniProt function entry and the stability effect of R28H on the PH domain have no retrieved measurement.
+[ 18] orchestrator    hypothesis          H1 ligand_binding R28H removes a basic side chain from the PH-domain inositol-phosphate pocket, so the domain loses its inositol 1,3,4,5-tetrakisphosp
+[ 19] orchestrator    hypothesis          H2 stability_folding R28H destabilises the BTK PH-domain fold through a His side chain that cannot replace the Arg at this conserved position, so the 
+[ 20] orchestrator    test_candidate      T1 ligand_contact learning=0.7 feasibility=0.95 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 21] orchestrator    test_candidate      T2 stability_effect learning=0.5 feasibility=0.9 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 22] orchestrator    test_candidate      T3 structural_context learning=0.3 feasibility=0.85 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 23] orchestrator    plan                chose T1: H1 is currently favoured, so the most useful test is one that can overturn it. The ligand contact test (T1) uses 39 structures holding a non
+[ 24] orchestrator    note                safety_review: review_claims checked 22 statements: no clinical or treatment wording, no evidence without a source, and both hypotheses carry the agen
+[ 25] orchestrator    experiment_started  T1 run_ligand_contact_test
+[ 26] orchestrator    experiment_result   T1 Residue 28 is within 4.5 Å of an organic ligand in 32 of 39 ligand-bound structures (4IP, 4PT, A1B6F, A1B6G, A1B6H, A1B6I); closest 2.58 Å to 4PT (
+[ 27] orchestrator    interpretation      H1 supported; H2 unchanged
+[ 28] orchestrator    decision            ligand_binding -> ligand_binding (changed: False)
+[ 29] orchestrator    next_experiment     computational: Run the FoldX stability test (T2) on R28H to test H2 directly, and if the change is neutral, run the structural context test (T3) to se
+[ 30] orchestrator    note                final_report: ## Question What molecular mechanism best explains loss of function of BTK p.Arg28His (Q06187), and which single computational test can 
+run bench01-BTK-p.Arg28His-baseline succeeded in 84.2s: 39 tool calls, 13 evidence items from 8 databases, 3 tests considered, favoured ligand_binding -> ligand_binding (changed: False)

@@ -1,0 +1,61 @@
+run bench01-JAK3-p.Arg103His-lab (specialist_lab) started; record: /Users/dheeraj/Downloads/alphafold/lab/runs/bench01-JAK3-p.Arg103His-lab/record.jsonl
+[  1] human           objective           Find the molecular mechanism that best explains the loss of function of JAK3-p.Arg103His (JAK3, UniProt P52333) and test it with one targeted computat
+[  2] orchestrator    handoff             orchestrator -> literature: COLLECT evidence on JAK3 p.Arg103His (P52333), subject line variant_id=JAK3-p.Arg103His gene=JAK3 accession=P52333 positio
+[  3] orchestrator    handoff             orchestrator -> knowledge_graph: COLLECT database records for JAK3 p.Arg103His (P52333), subject line variant_id=JAK3-p.Arg103His gene=JAK3 accession=
+[  4] knowledge_graph evidence            E1 clinical_database ClinVar classifies NM_000215.4(JAK3):c.308G>A (p.Arg103His) as Pathogenic (criteria provided, multiple submitters, no conflicts; 
+[  5] knowledge_graph evidence            E2 clinical_database ClinVar lists NM_000215.4(JAK3):c.307C>T (p.Arg103Cys) at the same residue as Pathogenic/Likely pathogenic (criteria provided, mu
+[  6] knowledge_graph evidence            E3 curated_database gnomAD v4.1: allele 19-17843777-C-T observed 10 times in 1461340 alleles (frequency 6.84e-06; 0 hemizygotes, 0 homozygotes).
+[  7] knowledge_graph evidence            E4 computational_prediction UniProtKB annotates residues 24-356 of P52333 as Domain: FERM; evidence: match to sequence model evidence used in manual a
+[  8] knowledge_graph evidence            E5 curated_database UniProtKB annotates residues 1-223 of P52333 as Region: Interaction with cytokine/interferon/growth hormone receptors; evidence: s
+[  9] literature      evidence            E6 literature Somatic missense mutations in the N-terminal FERM domain of JAK3 were found in adult T-cell leukemia/lymphoma patients and induced gain 
+[ 10] knowledge_graph evidence            E7 computational_prediction InterPro annotates residues 24-356 of P52333 as domain: FERM domain; evidence: match to sequence model evidence used in au
+[ 11] literature      evidence            E8 literature The crystal structure of the Jak2 FERM-SH2 region shows that the FERM and SH2 domains and their flanking linker segments interact intima
+[ 12] knowledge_graph evidence            E9 computational_prediction InterPro annotates residues 11-1101 of P52333 as family: Janus Kinase (JAK); evidence: match to sequence model evidence us
+[ 13] literature      evidence            E10 literature Inactivating JAK3 mutations cause autosomal-recessive severe combined immunodeficiency, and genome editing of zebrafish jak3 created mu
+[ 14] literature      evidence            E11 literature Hyperactivation of oncogenic JAK3 mutants depends on ATP binding to the pseudokinase domain, per the paper's title and abstract on JAK3
+[ 15] knowledge_graph evidence            E12 computational_prediction AlphaMissense gives p.Arg103His of P52333 a AlphaMissense pathogenicity of 0.8417, classed as likely pathogenic (AlphaMis
+[ 16] literature      evidence            E13 literature A 2024 review states that JAK3 mutations cause both somatic gain-of-function mutations in immune cell malignancies and germline loss-of
+[ 17] knowledge_graph evidence            E14 computational_prediction ScoreCons gives p.Arg103His of P52333 a Conservation (ScoreCons, UniRef90) of 0.898 (scale: 0 to 1; higher = more conserv
+[ 18] knowledge_graph evidence            E15 computational_prediction popEVE gives p.Arg103His of P52333 a popEVE of -3.809 (scale: proteome-wide scale; more negative = more deleterious).
+[ 19] knowledge_graph evidence            E16 computational_prediction EVE gives p.Arg103His of P52333 a EVE of 0.831, classed as pathogenic (EVE class) (scale: 0 to 1; higher = more pathogeni
+[ 20] literature      gap                 G1 No retrieved paper reports R103H, or any substitution at JAK3 residue 103, in a functional, biochemical or structural assay.
+[ 21] knowledge_graph evidence            E17 experimental 0 of 43 experimental structures of P52333 in the Protein Data Bank observe residue 103.
+[ 22] literature      gap                 G2 The retrieved literature does not establish where residue 103 sits in the JAK3 FERM domain or whether its side chain contacts the FERM-SH2 or FERM-
+[ 23] knowledge_graph evidence            E18 computational_prediction AlphaFold DB model AF-P52333-F1 covers the full sequence of P52333 (mean pLDDT 85.69).
+[ 24] literature      gap                 G3 It is not established whether R103H reduces JAK3 protein stability or expression, impairs catalytic activity, or fails to associate with the common
+[ 25] knowledge_graph evidence            E19 curated_database UniProtKB function of JAK3_HUMAN: Non-receptor tyrosine kinase involved in various processes such as cell growth, development, or
+[ 26] knowledge_graph evidence            E20 curated_database UniProtKB subunit annotation: Interacts with STAM2 and MYO18A (PubMed:10899310). Interacts with SHB (PubMed:12200137). Interacts 
+[ 27] literature      handoff             literature -> orchestrator: Literature search found no paper reporting JAK3 p.Arg103His (Europe PMC returned 0 hits for R103H; OpenAlex returned none)
+[ 28] knowledge_graph gap                 G4 No experimental structure in the Protein Data Bank observes residue 103 of P52333: 0 of 43 experimental structures.
+[ 29] knowledge_graph gap                 G5 The structure ledger reports 0 distinct ligands across all observing structures, and the functional assays covering residue 103 count is 0.
+[ 30] knowledge_graph gap                 G6 The residue annotations for residue 103 list no binding site, active site or PubMed-backed feature at this position; the only UniProtKB feature at 
+[ 31] knowledge_graph handoff             knowledge_graph -> orchestrator: COLLECT for JAK3-p.Arg103His (P52333 R103H) is done: 15 evidence items recorded (E1-E5, E7, E9, E12, E14-E20) from Cl
+[ 32] orchestrator    handoff             orchestrator -> insight: HYPOTHESES for JAK3 p.Arg103His (subject: variant_id=JAK3-p.Arg103His gene=JAK3 accession=P52333 position=103 reference=R alt
+[ 33] insight         hypothesis          H1 stability_folding R103H is a buried-core substitution in the JAK3 FERM domain. Replacing arginine with histidine removes a side-chain interaction t
+[ 34] insight         hypothesis          H2 protein_interaction R103H folds normally but removes a surface contact that JAK3 needs to couple to the common gamma chain (IL2RG) or other cytokin
+[ 35] insight         hypothesis          H3 domain_interface R103H sits at an intramolecular FERM-SH2 or FERM-kinase interface. Losing the arginine breaks the autoinhibitory or scaffold conta
+[ 36] insight         handoff             insight -> orchestrator: Three agent-generated hypotheses are recorded for JAK3 R103H loss of function: H1 (stability_folding, rank 1) a buried FERM-c
+[ 37] orchestrator    handoff             orchestrator -> planner: PLAN one single targeted computational test for JAK3 p.Arg103His (variant_id=JAK3-p.Arg103His gene=JAK3 accession=P52333 posi
+[ 38] planner         test_candidate      T1 stability_effect learning=0.7 feasibility=0.8 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 39] planner         test_candidate      T2 structural_context learning=0.35 feasibility=0.6 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 40] planner         test_candidate      T3 structure_comparison learning=0.5 feasibility=0.1 cost={'compute_seconds': 120, 'tool_calls': 3}
+[ 41] planner         plan                chose T1: Scores: T1 stability_effect learning 0.7, feasibility 0.8, cost 0 s, 2 tool calls, no approval. T2 structural_context learning 0.35, feasibi
+[ 42] planner         handoff             planner -> orchestrator: Planner chose T1 (stability_effect: FoldX ddG for R103H on the AlphaFold model via ProtVar, with pLDDT at residue 103) to dis
+[ 43] orchestrator    handoff             orchestrator -> safety: SAFETY review of the chosen plan for JAK3 p.Arg103His (variant_id=JAK3-p.Arg103His gene=JAK3 accession=P52333 position=103 ref
+[ 44] safety          note                safety_review: Checked 42 statements in the record (review_claims). No clinical or treatment wording. No evidence items missing a source (20 evidence 
+[ 45] safety          handoff             safety -> orchestrator: T1 (stability_effect, FoldX ddG for R103H via EBI ProtVar) is cleared to proceed with no human approval needed. Review of 42 s
+[ 46] orchestrator    handoff             orchestrator -> runner: EXPERIMENT: run exactly test T1 (stability_effect) for JAK3 p.Arg103His (variant_id=JAK3-p.Arg103His gene=JAK3 accession=P5233
+[ 47] runner          experiment_started  T1 run_stability_test
+[ 48] runner          experiment_result   T1 FoldX predicts ΔΔG +4.15 kcal/mol for R103H, at or above the destabilising threshold of 2.0 kcal/mol.
+[ 49] runner          handoff             runner -> orchestrator: T1 (stability_effect) executed and recorded. R103H FoldX ΔΔG +4.15 kcal/mol (predicted destabilising, threshold 2.0), residue 
+[ 50] orchestrator    handoff             orchestrator -> analysis: LEARN from test T1 (stability_effect) for JAK3 p.Arg103His (variant_id=JAK3-p.Arg103His gene=JAK3 accession=P52333 position=
+[ 51] orchestrator    handoff             orchestrator -> knowledge_graph: UPDATE the evidence graph with test T1 (stability_effect) result for JAK3 p.Arg103His (variant_id=JAK3-p.Arg103His ge
+[ 52] knowledge_graph evidence            E21 computational_prediction FoldX predicts ΔΔG +4.15 kcal/mol for R103H on the AlphaFold model AF-P52333-F1, above the 2.0 kcal/mol destabilising thr
+[ 53] knowledge_graph evidence            E22 computational_prediction Within-site comparison: FoldX predicts ΔΔG +2.01879 kcal/mol for R103C at the same residue on the AlphaFold model AF-P523
+[ 54] analysis        interpretation      H1 supported; H2 unchanged; H3 unchanged
+[ 55] knowledge_graph handoff             knowledge_graph -> orchestrator: T1 (stability_effect) recorded as E21 (FoldX ΔΔG +4.15 kcal/mol for R103H, pLDDT 95.88) and E22 (within-site R103C ΔΔ
+[ 56] analysis        decision            stability_folding -> stability_folding (changed: False)
+[ 57] analysis        next_experiment     computational: Computational check on AF-P52333-F1: compute the relative solvent-accessible surface area (SASA) of R103 in wild type and list its side
+[ 58] analysis        handoff             analysis -> orchestrator: T1 (FoldX stability) gives R103H ddG +4.15 kcal/mol on AF-P52333-F1 at residue pLDDT 95.88, so H1 (buried-core destabilisati
+[ 59] orchestrator    note                final_report: ## Question What molecular mechanism best explains the loss of function of JAK3 p.Arg103His (P52333), and can one targeted computational
+run bench01-JAK3-p.Arg103His-lab succeeded in 172.9s: 87 tool calls, 22 evidence items from 10 databases, 3 tests considered, favoured stability_folding -> stability_folding (changed: False)

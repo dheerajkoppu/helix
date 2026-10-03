@@ -26,6 +26,13 @@ import {
 import { useHotkeys } from "@/hooks/use-hotkeys";
 import type { SourceStatus } from "@/lib/api/types";
 import { parseVariantId } from "@/lib/ids";
+import {
+  HARMFUL_SITES_HINT,
+  SEQUENCE_LABEL,
+  plainHarmfulSites,
+  plainLength,
+  plainSelection,
+} from "@/lib/plain-language";
 import { setWorkspaceHover, useWorkspaceHover } from "@/lib/state/hover";
 import {
   useAdvancedMode,
@@ -171,11 +178,11 @@ export function AxisDockSlot({ stage, className }: AxisDockSlotProps) {
         )}
       >
         <span className="flex shrink-0 items-baseline gap-2 text-xs">
-          <span className="font-medium text-foreground">Sequence</span>
+          <span className="font-medium text-foreground">{SEQUENCE_LABEL}</span>
           {ready && data ? (
-            <span className="tabular font-mono text-2xs text-muted-foreground">
-              {describeRanges(ranges, data.sequence) ??
-                `${data.sequence.length} aa`}
+            <span className="tabular text-2xs text-muted-foreground">
+              {plainSelection(ranges, data.sequence) ??
+                plainLength(data.sequence.length)}
             </span>
           ) : (
             <Spinner className="size-3 self-center" />
@@ -203,13 +210,10 @@ export function AxisDockSlot({ stage, className }: AxisDockSlotProps) {
             {markCount > 0 ? (
               <span
                 className="hidden shrink-0 items-center gap-1.5 text-2xs text-muted-foreground md:flex"
-                title="Positions with a variant ClinVar or UniProt lists as pathogenic or likely pathogenic"
+                title={HARMFUL_SITES_HINT}
               >
                 <Swatch swatchClass="bg-clin-pathogenic" />
-                <span className="tabular font-mono text-foreground">
-                  {markCount}
-                </span>
-                P / LP sites
+                {plainHarmfulSites(markCount)}
               </span>
             ) : null}
             <Button
@@ -241,10 +245,19 @@ export function AxisDockSlot({ stage, className }: AxisDockSlotProps) {
       )}
     >
       <header className="flex h-7 shrink-0 items-center gap-2 border-b border-border bg-sunken px-3 text-2xs whitespace-nowrap">
-        <span className="text-[0.625rem] font-medium tracking-[0.08em] text-subtle-foreground uppercase">
-          Axis
-        </span>
-        {ready && data ? (
+        {simple ? (
+          <span className="font-medium text-foreground">{SEQUENCE_LABEL}</span>
+        ) : (
+          <span className="text-[0.625rem] font-medium tracking-[0.08em] text-subtle-foreground uppercase">
+            Axis
+          </span>
+        )}
+        {ready && data && simple ? (
+          <span className="tabular text-muted-foreground">
+            {plainSelection(ranges, data.sequence) ??
+              plainLength(data.sequence.length)}
+          </span>
+        ) : ready && data ? (
           <>
             <span className="font-mono text-foreground" translate="no">
               {data.accession}

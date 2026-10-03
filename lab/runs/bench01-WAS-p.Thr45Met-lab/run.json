@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-WAS-p.Thr45Met-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of WAS-p.Thr45Met (WAS, UniProt P42768) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "WAS",
+    "variant_id": "WAS-p.Thr45Met",
+    "accession": "P42768",
+    "position": 45,
+    "reference_residue": "T",
+    "alternate_residue": "M",
+    "protein_change": "p.Thr45Met"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:13:26Z",
+  "finished_at": "2026-10-03T22:17:34Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "863b79b6200f41429fa586d245d93ce4",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 13,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 248.2,
+    "tool_calls": 118,
+    "distinct_sources": 13,
+    "evidence_items": 22,
+    "hypotheses": 2,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 2,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 18,
+      "literature": 14,
+      "knowledge_graph": 38,
+      "insight": 4,
+      "planner": 16,
+      "safety": 8,
+      "runner": 8,
+      "analysis": 12
+    },
+    "policy_denials": 0,
+    "reopenings": 1
+  },
+  "outcome": {
+    "favoured_before": "protein_interaction",
+    "favoured_after": "stability_folding",
+    "decision_changed": true,
+    "next_experiment": "Computational: on the WIP-complexed structure 9S9X (and AF-P42768-F1 as a control), compute residue-45 relative solvent accessibility (RSA) and the minimum heavy-atom distance from T45 to the WIP-binding surface. Apply the H1 would_refute criterion: refuted if T45 is solvent-exposed (RSA high) and more than about 10 Å from WIP. Supports H2 if T45 is buried (low RSA) and far from WIP, meaning H2 stands and H1 has no contact basis. Support H1 if T45 is within contact range of WIP. Outcome determines whether the H2 favoured call holds.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H2",
+    "decisions": 2
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

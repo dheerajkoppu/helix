@@ -9,6 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  PROJECT_WORDS,
+  plainIdeaState,
+  plainSavedLabel,
+} from "@/lib/plain-language";
+import { useAdvancedMode } from "@/lib/state/preferences";
+import {
   HYPOTHESIS_STATUSES,
   type HypothesisStatus,
   type ProjectItem,
@@ -37,6 +43,7 @@ export function StatusControl({
   onChange: (status: HypothesisStatus) => void;
   disabled?: boolean;
 }) {
+  const advanced = useAdvancedMode();
   return (
     <div
       role="radiogroup"
@@ -56,7 +63,7 @@ export function StatusControl({
             value === status && "bg-active font-medium text-foreground",
           )}
         >
-          {STATUS_LABELS[status]}
+          {advanced ? STATUS_LABELS[status] : plainIdeaState(status)}
         </button>
       ))}
     </div>
@@ -94,6 +101,7 @@ export function HypothesisEditor({
     initial?.supporting_item_ids ?? suggestedSupport,
   );
   const [saving, setSaving] = useState(false);
+  const advanced = useAdvancedMode();
   const ready = statement.trim().length > 0 && support.length > 0;
 
   function toggle(itemId: string, checked: boolean) {
@@ -131,17 +139,24 @@ export function HypothesisEditor({
     >
       <div className="flex min-w-0 flex-col gap-2">
         <div className="flex flex-wrap items-center gap-2">
-          <EvidenceBadge evidenceClass="orphafold_hypothesis" />
+          {advanced ? (
+            <EvidenceBadge evidenceClass="orphafold_hypothesis" />
+          ) : null}
           <span className="text-2xs text-muted-foreground">
-            Authored in OrphaFold. It records what the linked items suggest, not
-            an established finding.
+            {advanced
+              ? "Authored in OrphaFold. It records what the linked items suggest, not an established finding."
+              : PROJECT_WORDS.ideaCaveat}
           </span>
         </div>
         <Textarea
           aria-label="Hypothesis statement"
           value={statement}
           maxLength={4000}
-          placeholder="State the hypothesis in one or two sentences"
+          placeholder={
+            advanced
+              ? "State the hypothesis in one or two sentences"
+              : PROJECT_WORDS.ideaHint
+          }
           className="min-h-20 text-sm"
           onChange={(event) => setStatement(event.target.value)}
         />
@@ -159,28 +174,31 @@ export function HypothesisEditor({
                 onClick={onCancel}
                 disabled={saving}
               >
-                Cancel
+                {PROJECT_WORDS.cancel}
               </Button>
             ) : null}
             <Button type="submit" disabled={!ready || saving}>
-              {saving ? "Saving" : submitLabel}
+              {saving ? PROJECT_WORDS.saving : submitLabel}
             </Button>
           </span>
         </div>
         {!support.length ? (
           <p className="text-2xs text-muted-foreground">
-            Link at least one supporting item to save. A hypothesis without
-            support cannot be recorded.
+            {advanced
+              ? "Link at least one supporting item to save. A hypothesis without support cannot be recorded."
+              : PROJECT_WORDS.ideaNeedsItem}
           </p>
         ) : null}
       </div>
 
       <fieldset className="flex min-w-0 flex-col" disabled={saving}>
         <legend className="mb-1 flex w-full items-baseline justify-between text-2xs font-medium tracking-[0.04em] text-muted-foreground uppercase">
-          Supporting items
-          <span className="tabular font-mono font-normal text-subtle-foreground normal-case">
-            {support.length} linked
-          </span>
+          {advanced ? "Supporting items" : PROJECT_WORDS.ideaRestsOn}
+          {advanced ? (
+            <span className="tabular font-mono font-normal text-subtle-foreground normal-case">
+              {support.length} linked
+            </span>
+          ) : null}
         </legend>
         {candidates.length ? (
           <ul className="scroll-thin max-h-44 overflow-y-auto border border-border">
@@ -204,7 +222,7 @@ export function HypothesisEditor({
                   >
                     <KindMark item={item} />
                     <span className="truncate text-foreground">
-                      {item.label}
+                      {advanced ? item.label : plainSavedLabel(item.label)}
                     </span>
                   </label>
                 </li>
@@ -213,8 +231,9 @@ export function HypothesisEditor({
           </ul>
         ) : (
           <p className="border border-border px-2 py-1.5 text-xs text-muted-foreground">
-            Save a gene, variant, structure, paper or run to the project first.
-            A hypothesis rests on saved items.
+            {advanced
+              ? "Save a gene, variant, structure, paper or run to the project first. A hypothesis rests on saved items."
+              : PROJECT_WORDS.ideaNothingSaved}
           </p>
         )}
       </fieldset>

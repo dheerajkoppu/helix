@@ -24,6 +24,7 @@ import { apiQueryKey } from "@/lib/api/query";
 import type { ApiResult, Schema } from "@/lib/api/types";
 import { formatCount, formatDate } from "@/lib/format";
 import { routes } from "@/lib/ids";
+import { EXPLORE_WORDS, plainInheritance } from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useReportSources } from "@/lib/state/shell";
 
@@ -324,11 +325,12 @@ const statCell = (value: number | null) =>
 
 function columnsFor(
   tableOf: Map<string, number | null>,
+  simple: boolean,
 ): DataTableColumn<ExploreGene>[] {
   return [
     {
       id: "symbol",
-      header: "Gene",
+      header: EXPLORE_WORDS.gene,
       width: 84,
       mono: true,
       accessor: (gene) => gene.symbol,
@@ -356,7 +358,7 @@ function columnsFor(
     },
     {
       id: "diseases",
-      header: "Diseases (IUIS)",
+      header: simple ? EXPLORE_WORDS.disease : "Diseases (IUIS)",
       width: "minmax(11rem,1.6fr)",
       accessor: (gene) => gene.diseases[0]?.name ?? null,
       cell: (gene) => {
@@ -431,16 +433,24 @@ function columnsFor(
     },
     {
       id: "experimental_structures",
-      header: <span title={MEASURES.structures}>PDB</span>,
-      width: 68,
+      header: simple ? (
+        EXPLORE_WORDS.labStructures
+      ) : (
+        <span title={MEASURES.structures}>PDB</span>
+      ),
+      width: simple ? 144 : 68,
       align: "right",
       accessor: (gene) => gene.stats.experimental_structure_count,
       cell: (gene) => statCell(gene.stats.experimental_structure_count),
     },
     {
       id: "alphafold",
-      header: <span title={MEASURES.alphafold}>AFDB</span>,
-      width: 64,
+      header: simple ? (
+        EXPLORE_WORDS.predicted
+      ) : (
+        <span title={MEASURES.alphafold}>AFDB</span>
+      ),
+      width: simple ? 180 : 64,
       accessor: (gene) =>
         gene.stats.has_alphafold_model === null
           ? null
@@ -450,8 +460,12 @@ function columnsFor(
     },
     {
       id: "pathogenic_variants",
-      header: <span title={MEASURES.pathogenic}>CV P/LP</span>,
-      width: 84,
+      header: simple ? (
+        EXPLORE_WORDS.harmful
+      ) : (
+        <span title={MEASURES.pathogenic}>CV P/LP</span>
+      ),
+      width: simple ? 172 : 84,
       align: "right",
       accessor: (gene) => gene.stats.clinvar_pathogenic_count,
       cell: (gene) => statCell(gene.stats.clinvar_pathogenic_count),
@@ -479,7 +493,6 @@ const SIMPLE_COLUMNS = [
   "symbol",
   "name",
   "diseases",
-  "inheritance",
   "experimental_structures",
   "alphafold",
   "pathogenic_variants",
@@ -488,9 +501,11 @@ const SIMPLE_COLUMNS = [
 function GeneDetail({
   gene,
   categoryLabel,
+  simple,
 }: {
   gene: ExploreGene;
   categoryLabel: Map<string, string>;
+  simple: boolean;
 }) {
   return (
     <div className="flex flex-col gap-2 border-t border-border bg-sunken px-3 py-2.5 text-xs">
@@ -505,7 +520,7 @@ function GeneDetail({
         <span className="text-muted-foreground">
           {gene.protein_name ?? gene.name ?? <Unknown />}
         </span>
-        {gene.uniprot_accession ? (
+        {gene.uniprot_accession && !simple ? (
           <Link
             href={routes.protein(gene.uniprot_accession)}
             className="font-mono text-muted-foreground underline-offset-2 hover:underline"
@@ -517,7 +532,7 @@ function GeneDetail({
           href={routes.gene(gene.symbol)}
           className="ml-auto font-medium underline underline-offset-2"
         >
-          Open gene workspace
+          {simple ? EXPLORE_WORDS.openGene : "Open gene workspace"}
         </Link>
       </div>
       <ul className="flex flex-col gap-0.5">
@@ -532,13 +547,22 @@ function GeneDetail({
             >
               {disease.name}
             </Link>
-            <span className="font-mono text-2xs text-muted-foreground">
-              {disease.inheritance_codes.join(", ") || "inheritance not stated"}
-            </span>
-            <span className="text-2xs text-subtle-foreground">
-              {categoryLabel.get(disease.category_id ?? "") ?? ""}
-              {disease.is_phenocopy ? " (phenocopy)" : ""}
-            </span>
+            {simple ? (
+              <span className="text-2xs text-muted-foreground">
+                {plainInheritance(disease.inheritance_codes[0]) ?? ""}
+              </span>
+            ) : (
+              <>
+                <span className="font-mono text-2xs text-muted-foreground">
+                  {disease.inheritance_codes.join(", ") ||
+                    "inheritance not stated"}
+                </span>
+                <span className="text-2xs text-subtle-foreground">
+                  {categoryLabel.get(disease.category_id ?? "") ?? ""}
+                  {disease.is_phenocopy ? " (phenocopy)" : ""}
+                </span>
+              </>
+            )}
           </li>
         ))}
       </ul>
@@ -604,6 +628,7 @@ export function ExploreBrowser() {
           category.table,
         ]),
       ),
+      !advanced,
     );
     return advanced
       ? all
@@ -658,7 +683,11 @@ export function ExploreBrowser() {
             type="search"
             value={filters.q}
             onChange={(event) => update({ q: event.target.value })}
-            placeholder="Gene, protein, accession or disease"
+            placeholder={
+              advanced
+                ? "Gene, protein, accession or disease"
+                : EXPLORE_WORDS.search
+            }
             aria-label="Filter by gene symbol, protein name, UniProt accession or disease name"
             className="h-7 w-full pl-7 text-xs sm:w-64"
           />
@@ -863,7 +892,11 @@ export function ExploreBrowser() {
             </div>
           </div>
           {selected ? (
-            <GeneDetail gene={selected} categoryLabel={categoryLabel} />
+            <GeneDetail
+              gene={selected}
+              categoryLabel={categoryLabel}
+              simple={!advanced}
+            />
           ) : null}
         </Plate>
       </div>

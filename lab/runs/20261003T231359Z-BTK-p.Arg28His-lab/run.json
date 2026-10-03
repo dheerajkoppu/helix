@@ -1,0 +1,76 @@
+{
+  "run_id": "20261003T231359Z-BTK-p.Arg28His-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of BTK-p.Arg28His (BTK, UniProt Q06187) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "BTK",
+    "variant_id": "BTK-p.Arg28His",
+    "accession": "Q06187",
+    "position": 28,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "protein_change": "p.Arg28His"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T23:13:59Z",
+  "finished_at": "2026-10-03T23:17:14Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "934cf4251b97430d9456095a8e1d3c1d",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 8,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 195.5,
+    "tool_calls": 95,
+    "distinct_sources": 10,
+    "evidence_items": 23,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 18,
+      "literature": 14,
+      "knowledge_graph": 35,
+      "insight": 5,
+      "planner": 9,
+      "safety": 4,
+      "runner": 4,
+      "analysis": 6
+    },
+    "policy_denials": 0,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "ligand_binding",
+    "favoured_after": "ligand_binding",
+    "decision_changed": false,
+    "next_experiment": "[Agent-generated hypothesis; prediction, not validated experimentally] Computational R28 versus R28H comparison on the 1B55 backbone with 4IP bound. Model His28 across its rotamers, minimise each complex, and count contacts and buried surface area between residue 28 side chain and the 4IP phosphate oxygens. Confirms H1 if His28 keeps the contact count and buried area of Arg28 within noise. Overturns H1 if His28 loses the phosphate contacts, which meets H1's own would_refute criterion. Expected outcome is a prediction only.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "waits for a human decision through the API",
+  "error": null
+}

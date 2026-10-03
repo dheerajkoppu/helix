@@ -31,10 +31,10 @@ export async function addResidueLabel(
       backgroundColor: Color(options.borderColor ?? 0xffffff),
       backgroundOpacity: 0.85,
       tether: true,
-      tetherLength: 2,
+      tetherLength: 3.5,
       attachment: "bottom-left",
-      // towards the camera, so the cartoon does not cut through the text
-      offsetZ: 6,
+      // towards the camera, far enough that a strand in front does not cut through the text
+      offsetZ: 11,
     },
   });
   return label?.selection.ref;

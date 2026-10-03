@@ -9,6 +9,12 @@ import {
   formatMetricValue,
   type MetricId,
 } from "@/lib/science/metrics";
+import {
+  plainMetricLabel,
+  plainMetricUnit,
+  plainMetricWord,
+  plainMetricWordOnly,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 
 export interface MetricReadoutProps {
@@ -47,6 +53,70 @@ export function MetricReadout({
   const definition = METRICS[metric];
   const hasValue = typeof value === "number" && Number.isFinite(value);
   const interpretation = hasValue ? definition.interpret(value) : null;
+
+  if (!advanced) {
+    const word = hasValue ? plainMetricWord(metric, value) : null;
+    const number = hasValue ? formatMetricValue(metric, value, false) : null;
+    const unit = plainMetricUnit(metric) ?? definition.unit;
+    const wordOnly = word !== null && plainMetricWordOnly(metric);
+    const large = layout === "stack" ? "text-2xl leading-7" : "text-sm";
+    return (
+      <div
+        data-slot="metric-readout"
+        className={cn(
+          "flex min-w-0 text-xs",
+          layout === "row"
+            ? "flex-wrap items-baseline gap-x-2 gap-y-0.5"
+            : "flex-col gap-0.5",
+          className,
+        )}
+      >
+        <span className="shrink-0 text-muted-foreground">
+          {plainMetricLabel(metric, typeof label === "string" ? label : null)}
+        </span>
+        <span
+          className="inline-flex shrink-0 items-baseline gap-1.5"
+          title={wordOnly && number ? `${number} ${unit ?? ""}`.trim() : undefined}
+        >
+          {interpretation?.swatchClass ? (
+            <Swatch
+              swatchClass={interpretation.swatchClass}
+              className="self-center"
+            />
+          ) : null}
+          {!hasValue ? (
+            <span className="text-subtle-foreground">{missingReason}</span>
+          ) : wordOnly ? (
+            <span className={cn("font-medium text-foreground", large)}>
+              {word}
+            </span>
+          ) : (
+            <span
+              className={cn(
+                "tabular font-mono font-medium text-foreground",
+                large,
+              )}
+            >
+              {number}
+              {unit ? (
+                <span className="ml-1 font-sans text-2xs font-normal text-muted-foreground">
+                  {unit}
+                </span>
+              ) : null}
+            </span>
+          )}
+        </span>
+        {word && !wordOnly && !terse ? (
+          <span className="min-w-0 text-foreground">{word}</span>
+        ) : null}
+        <Explainer
+          term={metric}
+          producedBy={producedBy}
+          className="self-center"
+        />
+      </div>
+    );
+  }
 
   return (
     <div

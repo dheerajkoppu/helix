@@ -6,6 +6,7 @@ import {
   ReferenceVariantLegend,
 } from "@/components/science/legends";
 import { Swatch } from "@/components/science/swatch";
+import { plainLegendWord } from "@/lib/plain-language";
 
 import type { ViewerLegendSpec } from "./colorings";
 import { colorToHex } from "./palette";
@@ -19,9 +20,11 @@ export interface ViewerLegendEntry {
 function SpecLegend({
   spec,
   compact,
+  plain,
 }: {
   spec: ViewerLegendSpec;
   compact: boolean;
+  plain: boolean;
 }) {
   return (
     <figure
@@ -31,8 +34,8 @@ function SpecLegend({
       )}
     >
       <figcaption className="font-medium text-foreground">
-        {spec.title}
-        {spec.note && !compact ? (
+        {plain ? plainLegendWord(spec.title) : spec.title}
+        {spec.note && !compact && !plain ? (
           <span className="ml-1 font-normal text-subtle-foreground">
             {spec.note}
           </span>
@@ -49,9 +52,14 @@ function SpecLegend({
             key={item.label}
             className="flex items-center gap-1.5 whitespace-nowrap"
           >
-            <Swatch color={colorToHex(item.color)} code={item.code} />
-            <span className="text-foreground">{item.label}</span>
-            {item.detail ? (
+            <Swatch
+              color={colorToHex(item.color)}
+              code={plain ? undefined : item.code}
+            />
+            <span className="text-foreground">
+              {plain ? plainLegendWord(item.label) : item.label}
+            </span>
+            {item.detail && !plain ? (
               <span className="tabular font-mono text-subtle-foreground">
                 {item.detail}
               </span>
@@ -70,9 +78,12 @@ function SpecLegend({
 export function ViewerLegend({
   entries,
   compact = false,
+  plain = false,
 }: {
   entries: ViewerLegendEntry[];
   compact?: boolean;
+  /** everyday words, no letter codes or ranges */
+  plain?: boolean;
 }) {
   return (
     <>
@@ -96,6 +107,7 @@ export function ViewerLegend({
             key={entry.spec.title}
             spec={entry.spec}
             compact={compact}
+            plain={plain}
           />
         ),
       )}

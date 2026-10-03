@@ -18,6 +18,12 @@ import { Input } from "@/components/ui/input";
 import { isApiError } from "@/lib/api/client";
 import { formatTimestamp } from "@/lib/format";
 import { routes } from "@/lib/ids";
+import {
+  PROJECT_WORDS,
+  plainAccess,
+  plainDate,
+  plainSavedCount,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import {
   projectKeys,
@@ -28,9 +34,9 @@ import {
 
 type Scope = "mine" | "public";
 
-const SCOPES: { id: Scope; label: string }[] = [
-  { id: "mine", label: "This workspace" },
-  { id: "public", label: "Public" },
+const SCOPES: { id: Scope; label: string; plain: string }[] = [
+  { id: "mine", label: "This workspace", plain: PROJECT_WORDS.yours },
+  { id: "public", label: "Public", plain: PROJECT_WORDS.shared },
 ];
 
 function contents(project: ProjectSummary): string {
@@ -75,22 +81,38 @@ function ProjectRow({
             </span>
           ) : null}
         </span>
-        <span className="truncate font-mono text-2xs text-muted-foreground">
-          {advanced
-            ? contents(project)
-            : `${project.item_count} ${project.item_count === 1 ? "step" : "steps"}`}
+        <span
+          className={cn(
+            "truncate text-muted-foreground",
+            advanced ? "font-mono text-2xs" : "text-xs",
+          )}
+        >
+          {advanced ? contents(project) : plainSavedCount(project.item_count)}
         </span>
         <span className="text-xs text-muted-foreground">
-          {scope === "mine"
-            ? project.head_snapshot_id
-              ? `${project.visibility}, published`
-              : project.visibility
-            : project.is_owner
-              ? "yours"
-              : "read only"}
+          {!advanced
+            ? scope === "mine"
+              ? plainAccess(project.visibility)
+              : project.is_owner
+                ? PROJECT_WORDS.yours
+                : PROJECT_WORDS.readOnly
+            : scope === "mine"
+              ? project.head_snapshot_id
+                ? `${project.visibility}, published`
+                : project.visibility
+              : project.is_owner
+                ? "yours"
+                : "read only"}
         </span>
-        <span className="tabular font-mono text-2xs text-subtle-foreground md:text-right">
-          {formatTimestamp(project.updated_at)}
+        <span
+          className={cn(
+            "tabular text-subtle-foreground md:text-right",
+            advanced ? "font-mono text-2xs" : "text-xs",
+          )}
+        >
+          {advanced
+            ? formatTimestamp(project.updated_at)
+            : plainDate(project.updated_at)}
         </span>
       </Link>
     </li>
@@ -104,6 +126,7 @@ export function ProjectsList() {
   const [scope, setScope] = useState<Scope>("mine");
   const [title, setTitle] = useState("");
   const [creating, setCreating] = useState(false);
+  const advanced = useAdvancedMode();
   const query = useQuery({
     queryKey: projectKeys.list(scope),
     queryFn: ({ signal }) => projectsApi.list(scope, signal),
@@ -124,10 +147,12 @@ export function ProjectsList() {
       void queryClient.invalidateQueries({ queryKey: ["projects", "list"] });
       router.push(routes.project(project.id));
     } catch (error) {
-      toast.error("Project not created", {
-        description: isApiError(error)
-          ? error.message
-          : "The project could not be saved.",
+      toast.error(advanced ? "Project not created" : PROJECT_WORDS.notSaved, {
+        description: advanced
+          ? isApiError(error)
+            ? error.message
+            : "The project could not be saved."
+          : undefined,
       });
       setCreating(false);
     }
@@ -157,7 +182,7 @@ export function ProjectsList() {
                   : "font-normal text-muted-foreground hover:text-foreground",
               )}
             >
-              {entry.label}
+              {advanced ? entry.label : entry.plain}
               {scope === entry.id && query.data ? (
                 <span className="tabular ml-2 font-mono text-xs font-normal text-subtle-foreground">
                   {query.data.total}
@@ -171,14 +196,14 @@ export function ProjectsList() {
         <form onSubmit={create} className="flex items-center gap-2">
           <Input
             aria-label="Title of a new project"
-            placeholder="Project title"
+            placeholder={advanced ? "Project title" : PROJECT_WORDS.projectName}
             value={title}
             maxLength={300}
             onChange={(event) => setTitle(event.target.value)}
             className="w-56 max-w-full min-w-0"
           />
           <Button type="submit" disabled={!title.trim() || creating}>
-            {creating ? "Creating" : "New project"}
+            {creating ? PROJECT_WORDS.saving : PROJECT_WORDS.newProject}
           </Button>
         </form>
       }
@@ -198,10 +223,18 @@ export function ProjectsList() {
         ) : projects.length ? (
           <>
             <div className="hidden h-7 items-center gap-x-4 border-b border-border bg-muted px-3 text-2xs font-medium tracking-[0.04em] text-muted-foreground uppercase md:grid md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_7rem_10rem]">
-              <span>Project</span>
-              <span>Trail</span>
-              <span>{scope === "mine" ? "Visibility" : "Access"}</span>
-              <span className="text-right">Updated</span>
+              <span>{PROJECT_WORDS.project}</span>
+              <span>{advanced ? "Trail" : PROJECT_WORDS.saved}</span>
+              <span>
+                {advanced
+                  ? scope === "mine"
+                    ? "Visibility"
+                    : "Access"
+                  : PROJECT_WORDS.whoSees}
+              </span>
+              <span className="text-right">
+                {advanced ? "Updated" : PROJECT_WORDS.changed}
+              </span>
             </div>
             <ul>
               {projects.map((project) => (
@@ -211,13 +244,17 @@ export function ProjectsList() {
           </>
         ) : scope === "mine" ? (
           <EmptyState
-            title="No projects yet"
-            description="Name one above, or use Add to project on any page."
+            title={PROJECT_WORDS.none}
+            description={
+              advanced
+                ? "Name one above, or use Add to project on any page."
+                : PROJECT_WORDS.noneHint
+            }
             actions={<TextLink href={routes.explore()}>Explore</TextLink>}
           />
         ) : (
           <EmptyState
-            title="No public projects"
+            title={advanced ? "No public projects" : PROJECT_WORDS.noneShared}
           />
         )}
       </Plate>

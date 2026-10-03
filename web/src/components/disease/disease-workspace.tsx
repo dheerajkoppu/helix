@@ -37,6 +37,11 @@ import { isApiError } from "@/lib/api/client";
 import type { Schema } from "@/lib/api/types";
 import { formatCount } from "@/lib/format";
 import { routes } from "@/lib/ids";
+import {
+  DISEASE_WORDS,
+  OPEN_SOURCE_LABEL,
+  plainFrequency,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import { withSelection } from "@/lib/state/selection-url";
@@ -191,11 +196,50 @@ function ResearchStatus({ disease }: { disease: DiseaseResponse }) {
 function PhenotypeDetail({
   phenotype,
   onClear,
+  simple = false,
 }: {
   phenotype: Phenotype;
   onClear: () => void;
+  simple?: boolean;
 }) {
   const evidence = phenotypeEvidence(phenotype);
+  if (simple)
+    return (
+      <div className="border-b border-border">
+        <SectionHeader
+          title={DISEASE_WORDS.symptom}
+          actions={
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label={DISEASE_WORDS.clear}
+              onClick={onClear}
+            >
+              <XIcon />
+            </Button>
+          }
+        />
+        <DefinitionList termWidth="6rem">
+          <DefinitionRow term={DISEASE_WORDS.howOften}>
+            {phenotype.frequency ? (
+              <span title={phenotype.frequency}>
+                {plainFrequency(phenotype.frequency)}
+              </span>
+            ) : (
+              <Unknown reason={DISEASE_WORDS.inheritanceUnknown} />
+            )}
+          </DefinitionRow>
+          <DefinitionRow term={DISEASE_WORDS.source}>
+            <span className="flex flex-wrap items-center gap-2">
+              {evidence ? <EvidencePopover evidence={evidence} /> : null}
+              <ExternalLink href={phenotype.url}>
+                {OPEN_SOURCE_LABEL}
+              </ExternalLink>
+            </span>
+          </DefinitionRow>
+        </DefinitionList>
+      </div>
+    );
   return (
     <div className="border-b border-border">
       <SectionHeader
@@ -500,7 +544,7 @@ export function DiseaseWorkspace({ diseaseId }: DiseaseWorkspaceProps) {
         <WorkspaceZones
           layoutId="disease"
           instrument={
-            <Zone zone="instrument" title="Disease">
+            <Zone zone="instrument" title={DISEASE_WORDS.title}>
               {failure ?? <RowsSkeleton rows={10} />}
             </Zone>
           }
@@ -508,10 +552,10 @@ export function DiseaseWorkspace({ diseaseId }: DiseaseWorkspaceProps) {
       ) : !full && disease ? (
         <WorkspaceZones
           layoutId="disease"
-          ledgerLabel="Disease"
-          inspectorLabel="Phenotype"
+          ledgerLabel={DISEASE_WORDS.title}
+          inspectorLabel={DISEASE_WORDS.symptom}
           ledger={
-            <Zone zone="ledger" title="Disease">
+            <Zone zone="ledger" title={DISEASE_WORDS.title}>
               <DiseaseSummary
                 disease={disease}
                 phenotypes={byFrequency}
@@ -519,7 +563,6 @@ export function DiseaseWorkspace({ diseaseId }: DiseaseWorkspaceProps) {
                 onSelectPhenotype={(row) =>
                   setParam("hp", row.hpo_id === phenotypeId ? null : row.hpo_id)
                 }
-                frequencyCell={frequencyCell}
                 stageHref={stageHref}
                 onOpenRecord={() => setDetails(true)}
               />
@@ -537,24 +580,23 @@ export function DiseaseWorkspace({ diseaseId }: DiseaseWorkspaceProps) {
                       size="sm"
                       className="mr-1"
                     >
-                      {gene.symbol} variants
+                      {DISEASE_WORDS.seeMutations}
                       <ArrowRightIcon data-icon="inline-end" />
                     </ButtonLink>
                   ) : null
                 }
               />
             ) : (
-              <Zone zone="instrument" title="Structure">
+              <Zone zone="instrument" title={DISEASE_WORDS.noStructure}>
                 <EmptyState
-                  title={gene ? "No protein mapped" : "No gene named"}
-                  description="Without a protein there is no structure to show."
+                  title={gene ? DISEASE_WORDS.noProtein : DISEASE_WORDS.noGene}
                   actions={
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => setDetails(true)}
                     >
-                      Open the record
+                      {DISEASE_WORDS.openRecord}
                     </Button>
                   }
                 />
@@ -568,6 +610,7 @@ export function DiseaseWorkspace({ diseaseId }: DiseaseWorkspaceProps) {
                 title={phenotype.label ?? phenotype.hpo_id}
               >
                 <PhenotypeDetail
+                  simple
                   phenotype={phenotype}
                   onClear={() => setParam("hp", null)}
                 />
@@ -653,7 +696,7 @@ export function DiseaseWorkspace({ diseaseId }: DiseaseWorkspaceProps) {
                     size="sm"
                     onClick={() => setDetails(false)}
                   >
-                    Summary
+                    {DISEASE_WORDS.summary}
                   </Button>
                 ) : null}
                 {gene ? (

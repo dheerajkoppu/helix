@@ -23,6 +23,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { EVIDENCE_DISPLAY_ORDER, isEvidenceClass } from "@/lib/evidence";
 import { formatTimestamp } from "@/lib/format";
+import {
+  PROJECT_WORDS,
+  plainDate,
+  plainSavedKind,
+  plainSavedLabel,
+} from "@/lib/plain-language";
 import type { ProjectItem } from "@/lib/state/projects";
 
 export interface ItemInspectorProps {
@@ -44,6 +50,7 @@ function ItemLink({
   item: ProjectItem;
   onSelect: (itemId: string) => void;
 }) {
+  const plain = !useAdvancedMode();
   return (
     <button
       type="button"
@@ -51,9 +58,14 @@ function ItemLink({
       className="flex max-w-full min-w-0 items-center gap-1.5 rounded-xs text-left underline decoration-border-strong underline-offset-[3px] outline-none hover:decoration-foreground focus-visible:ring-2 focus-visible:ring-ring/40"
     >
       <KindMark item={item} className="no-underline" />
-      <span className="truncate">{item.label}</span>
+      <span className="truncate">{plain ? plainSavedLabel(item.label) : item.label}</span>
     </button>
   );
+}
+
+function evidenceDatabase(record: Record<string, unknown>): string | null {
+  const source = record.source as Record<string, unknown> | null | undefined;
+  return source && typeof source.database === "string" ? source.database : null;
 }
 
 function evidenceSummary(record: Record<string, unknown>): string {
@@ -82,9 +94,7 @@ export function ItemInspector({
 }: ItemInspectorProps) {
   if (!item)
     return (
-      <EmptyState
-        title="Select a step"
-      />
+      <EmptyState title={PROJECT_WORDS.pickItem} />
     );
   return (
     <ItemInspectorBody
@@ -153,25 +163,27 @@ function ItemInspectorBody({
     <div className="flex min-h-0 flex-col">
       <div className="flex flex-col gap-1.5 border-b border-border px-3 py-2.5">
         <div className="flex items-center gap-2">
-          <KindMark item={item} />
+          {advanced ? <KindMark item={item} /> : null}
           <span className="text-2xs tracking-[0.04em] text-muted-foreground uppercase">
-            {KIND_META[item.kind].label}
+            {advanced ? KIND_META[item.kind].label : plainSavedKind(item.kind)}
           </span>
-          {isActive && !readOnly ? (
+          {advanced && isActive && !readOnly ? (
             <span className="ml-auto text-2xs text-muted-foreground">
               attach point
             </span>
           ) : null}
         </div>
         <p className="text-base font-medium break-words text-foreground">
-          {item.label}
+          {advanced ? item.label : plainSavedLabel(item.label)}
         </p>
-        {item.ref ? <MonoId value={item.ref} className="text-xs" /> : null}
+        {advanced && item.ref ? (
+          <MonoId value={item.ref} className="text-xs" />
+        ) : null}
         {origin ? <StructureOriginTag origin={origin} caption /> : null}
         <div className="mt-1 flex flex-wrap items-center gap-1.5">
           {item.href ? (
             <ButtonLink href={item.href} variant="default" size="sm">
-              Reopen view
+              {advanced ? "Reopen view" : PROJECT_WORDS.open}
             </ButtonLink>
           ) : null}
           {!readOnly && onSetActive && !isActive && item.kind !== "note" ? (
@@ -181,7 +193,7 @@ function ItemInspectorBody({
               disabled={busy}
               onClick={() => onSetActive(item.id)}
             >
-              Continue from here
+              {PROJECT_WORDS.continueHere}
             </Button>
           ) : null}
           {!readOnly && onRemove ? (
@@ -191,7 +203,7 @@ function ItemInspectorBody({
               disabled={busy}
               onClick={() => onRemove(item)}
             >
-              Remove
+              {PROJECT_WORDS.remove}
             </Button>
           ) : null}
         </div>
@@ -199,23 +211,31 @@ function ItemInspectorBody({
 
       {item.hypothesis ? (
         <>
-          <SectionHeader title="Hypothesis" />
+          <SectionHeader title={advanced ? "Hypothesis" : PROJECT_WORDS.ideas} />
           <div className="flex flex-col gap-2 px-3 py-2.5">
-            <EvidenceBadge
-              evidenceClass="orphafold_hypothesis"
-              detail={`status: ${item.hypothesis.status}`}
-              className="self-start"
-            />
+            {advanced ? (
+              <EvidenceBadge
+                evidenceClass="orphafold_hypothesis"
+                detail={`status: ${item.hypothesis.status}`}
+                className="self-start"
+              />
+            ) : null}
             <p className="text-sm text-foreground">
               {item.hypothesis.statement}
             </p>
-            <p className="text-2xs text-muted-foreground">
-              Authored in OrphaFold (
-              {item.hypothesis.record.authoring?.method === "llm_assisted"
-                ? "assistant-drafted"
-                : "written by a person"}
-              ). It rests on:
-            </p>
+            {advanced ? (
+              <p className="text-2xs text-muted-foreground">
+                Authored in OrphaFold (
+                {item.hypothesis.record.authoring?.method === "llm_assisted"
+                  ? "assistant-drafted"
+                  : "written by a person"}
+                ). It rests on:
+              </p>
+            ) : (
+              <p className="text-xs text-muted-foreground">
+                {PROJECT_WORDS.ideaCaveat} {PROJECT_WORDS.ideaRestsOn}:
+              </p>
+            )}
             <ul className="flex flex-col gap-1 text-xs">
               {item.hypothesis.supporting_item_ids.map((identifier) => {
                 const supporting = byId.get(identifier);
@@ -230,11 +250,13 @@ function ItemInspectorBody({
         </>
       ) : null}
 
-      <SectionHeader title="Provenance" />
+      {advanced ? <SectionHeader title="Provenance" /> : null}
       <DefinitionList termWidth="6.5rem">
+        {advanced ? (
         <DefinitionRow term="Saved from" mono>
           {item.origin.route ?? <Unknown reason="Not recorded" />}
         </DefinitionRow>
+        ) : null}
         {advanced ? (
         <DefinitionRow term="View state" mono>
           {urlState.length ? (
@@ -251,18 +273,26 @@ function ItemInspectorBody({
           )}
         </DefinitionRow>
         ) : null}
-        <DefinitionRow term="Added" mono>
-          {formatTimestamp(item.origin.created_at ?? item.created_at)}
-        </DefinitionRow>
-        <DefinitionRow term="Follows">
-          {parent ? (
-            <ItemLink item={parent} onSelect={onSelect} />
-          ) : (
-            <Unknown reason="Start of a trail" />
-          )}
-        </DefinitionRow>
+        {advanced ? (
+          <DefinitionRow term="Added" mono>
+            {formatTimestamp(item.origin.created_at ?? item.created_at)}
+          </DefinitionRow>
+        ) : (
+          <DefinitionRow term={PROJECT_WORDS.saved}>
+            {plainDate(item.origin.created_at ?? item.created_at)}
+          </DefinitionRow>
+        )}
+        {advanced || parent ? (
+          <DefinitionRow term={advanced ? "Follows" : PROJECT_WORDS.comesAfter}>
+            {parent ? (
+              <ItemLink item={parent} onSelect={onSelect} />
+            ) : (
+              <Unknown reason="Start of a trail" />
+            )}
+          </DefinitionRow>
+        ) : null}
         {steps.length ? (
-          <DefinitionRow term="Led to">
+          <DefinitionRow term={advanced ? "Led to" : PROJECT_WORDS.leadsTo}>
             <span className="flex flex-col gap-1">
               {steps.map((step) => (
                 <ItemLink key={step.id} item={step} onSelect={onSelect} />
@@ -271,7 +301,7 @@ function ItemInspectorBody({
           </DefinitionRow>
         ) : null}
         {supportsHypotheses.length ? (
-          <DefinitionRow term="Supports">
+          <DefinitionRow term={advanced ? "Supports" : PROJECT_WORDS.backs}>
             <span className="flex flex-col gap-1">
               {supportsHypotheses.map((hypothesis) => (
                 <ItemLink
@@ -283,10 +313,10 @@ function ItemInspectorBody({
             </span>
           </DefinitionRow>
         ) : null}
-        {item.origin.note ? (
+        {advanced && item.origin.note ? (
           <DefinitionRow term="Origin note">{item.origin.note}</DefinitionRow>
         ) : null}
-        {item.origin.forked_from_item_id ? (
+        {advanced && item.origin.forked_from_item_id ? (
           <DefinitionRow term="Copied from" mono>
             {item.origin.forked_from_item_id}
           </DefinitionRow>
@@ -301,7 +331,7 @@ function ItemInspectorBody({
       {item.kind !== "hypothesis" && item.kind !== "note" ? (
         <>
           <SectionHeader
-            title="Evidence carried"
+            title={advanced ? "Evidence carried" : PROJECT_WORDS.sources}
             count={item.evidence.length}
           />
           {item.evidence.length ? (
@@ -315,16 +345,20 @@ function ItemInspectorBody({
                     <EvidenceBadge
                       evidenceClass={record.evidence_class}
                       size="compact"
+                      source={evidenceDatabase(record)}
+                      detail={advanced ? undefined : evidenceSummary(record)}
                     />
                   ) : (
                     <Unknown reason="Unclassified" />
                   )}
-                  <span className="min-w-0 truncate font-mono text-muted-foreground">
-                    {evidenceSummary(record)}
-                  </span>
+                  {advanced ? (
+                    <span className="min-w-0 truncate font-mono text-muted-foreground">
+                      {evidenceSummary(record)}
+                    </span>
+                  ) : null}
                 </li>
               ))}
-              {item.evidence.length > 12 ? (
+              {advanced && item.evidence.length > 12 ? (
                 <li className="px-3 py-1 text-2xs text-muted-foreground">
                   {item.evidence.length - 12} more in the export (
                   {EVIDENCE_DISPLAY_ORDER.filter((entry) =>
@@ -338,14 +372,16 @@ function ItemInspectorBody({
             </ul>
           ) : (
             <p className="px-3 py-2 text-xs text-muted-foreground">
-              None attached. Reopen the view for its sources.
+              {advanced
+                ? "None attached. Reopen the view for its sources."
+                : PROJECT_WORDS.noSources}
             </p>
           )}
         </>
       ) : null}
 
       <SectionHeader
-        title={item.kind === "note" ? "Note" : "Notes"}
+        title={item.kind === "note" ? "Note" : PROJECT_WORDS.notes}
         count={
           item.kind === "note" ? undefined : notes.length + (item.note ? 1 : 0)
         }
@@ -365,7 +401,7 @@ function ItemInspectorBody({
               aria-label={`Note on ${item.label}`}
               value={note}
               maxLength={20000}
-              placeholder="Note on this item"
+              placeholder={advanced ? "Note on this item" : PROJECT_WORDS.writeNote}
               onChange={(event) => setNote(event.target.value)}
             />
             {(item.note ?? "") !== note ? (
@@ -375,7 +411,7 @@ function ItemInspectorBody({
                 disabled={busy}
                 onClick={() => run(() => onSaveNote(item, note.trim() || null))}
               >
-                Save note
+                {PROJECT_WORDS.saveNote}
               </Button>
             ) : null}
           </>
@@ -397,7 +433,7 @@ function ItemInspectorBody({
             ) : null}
           </button>
         ))}
-        {!readOnly && onAddNote && item.kind !== "note" ? (
+        {advanced && !readOnly && onAddNote && item.kind !== "note" ? (
           <form
             className="flex flex-col gap-1.5"
             onSubmit={(event) => {

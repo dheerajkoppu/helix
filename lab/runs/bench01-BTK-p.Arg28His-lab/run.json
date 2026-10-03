@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-BTK-p.Arg28His-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of BTK-p.Arg28His (BTK, UniProt Q06187) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "BTK",
+    "variant_id": "BTK-p.Arg28His",
+    "accession": "Q06187",
+    "position": 28,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "protein_change": "p.Arg28His"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:09:28Z",
+  "finished_at": "2026-10-03T22:12:27Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "9a7dc72e68814cbca0855c0696fb0dcd",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 8,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 179.0,
+    "tool_calls": 87,
+    "distinct_sources": 10,
+    "evidence_items": 21,
+    "hypotheses": 3,
+    "tests_considered": 3,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 12,
+      "literature": 14,
+      "knowledge_graph": 35,
+      "insight": 5,
+      "planner": 7,
+      "safety": 4,
+      "runner": 4,
+      "analysis": 6
+    },
+    "policy_denials": 0,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "ligand_binding",
+    "favoured_after": "ligand_binding",
+    "decision_changed": false,
+    "next_experiment": "Computational ΔΔG of binding for R28H versus wild type with Ins(1,3,4,5)P4 (or the 4IP/4PT analogue) on PDB 1B55 and 1BWN, using FoldX or MM/PBSA with the same protocol as the 2013 study. Run the R28C mutant as a control. Confirms H1 if ΔΔG(R28H) is at least about 0.5 kcal/mol less favourable than wild type and the R28C control is similar. Overturns H1 if the change is under 0.5 kcal/mol, which is the H1 refuting threshold.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

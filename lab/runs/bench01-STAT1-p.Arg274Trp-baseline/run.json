@@ -1,0 +1,62 @@
+{
+  "run_id": "bench01-STAT1-p.Arg274Trp-baseline",
+  "objective": "Find the molecular mechanism that best explains the loss of function of STAT1-p.Arg274Trp (STAT1, UniProt P42224) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "STAT1",
+    "variant_id": "STAT1-p.Arg274Trp",
+    "accession": "P42224",
+    "position": 274,
+    "reference_residue": "R",
+    "alternate_residue": "W",
+    "protein_change": "p.Arg274Trp"
+  },
+  "mode": "single_agent_baseline",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:21:06Z",
+  "finished_at": "2026-10-03T22:22:49Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "e879676f68ca432cba06cbf1ed7b327b",
+    "models": {
+      "generalist": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_baseline",
+    "sub_agent_sessions": 0,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+  "metrics": {
+    "wall_seconds": 102.3,
+    "tool_calls": 45,
+    "distinct_sources": 9,
+    "evidence_items": 12,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 45
+    },
+    "policy_denials": 1,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "protein_interaction",
+    "favoured_after": "domain_interface",
+    "decision_changed": true,
+    "next_experiment": "Run structure_comparison (T4) on the reference and R274W constructs, which needs human approval and 120 compute seconds, to measure local RMSD and contact changes at residue 274. An intrachain contact change at 274 that is confirmed in the comparison would support H2; a near-identical local fold would weaken H2 and leave H3 as the remaining option. Confirmation of H2 would need an experimental measure of the coiled-coil and domain contact in the variant protein.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H2",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

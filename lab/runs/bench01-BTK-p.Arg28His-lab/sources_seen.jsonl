@@ -1,0 +1,71 @@
+{"database": "Europe PMC", "record_id": "PMID:38971313", "url": "https://europepmc.org/article/MED/38971313", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:09:41Z"}
+{"database": "Europe PMC", "record_id": "PMID:39404906", "url": "https://europepmc.org/article/MED/39404906", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:09:41Z"}
+{"database": "Europe PMC", "record_id": "PMID:32552675", "url": "https://europepmc.org/article/MED/32552675", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:09:41Z"}
+{"database": "Europe PMC", "record_id": "PMID:27512878", "url": "https://europepmc.org/article/MED/27512878", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:09:41Z"}
+{"database": "Europe PMC", "record_id": "PMID:24307874", "url": "https://europepmc.org/article/MED/24307874", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:09:41Z"}
+{"database": "Europe PMC", "record_id": "PMID:33377626", "url": "https://europepmc.org/article/MED/33377626", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:09:41Z"}
+{"database": "ClinVar", "record_id": "VCV000011348.55", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/11348/", "tool": "get_variant", "agent": "knowledge_graph", "at": "2026-10-03T22:09:43Z"}
+{"database": "UniProtKB", "record_id": "VAR_006220", "url": "https://web.expasy.org/variant_pages/VAR_006220.html", "tool": "get_variant", "agent": "knowledge_graph", "at": "2026-10-03T22:09:43Z"}
+{"database": "gnomAD", "record_id": "X-101375202-C-T", "url": "https://gnomad.broadinstitute.org/variant/X-101375202-C-T?dataset=gnomad_r4", "tool": "get_variant", "agent": "knowledge_graph", "at": "2026-10-03T22:09:43Z"}
+{"database": "Ensembl VEP", "record_id": "NM_000061.3:c.83G>A", "url": "https://rest.ensembl.org/documentation/info/vep_hgvs_get", "tool": "get_variant", "agent": "knowledge_graph", "at": "2026-10-03T22:09:43Z"}
+{"database": "UniProtKB", "record_id": "Q06187", "url": "https://www.uniprot.org/uniprotkb/Q06187/entry", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-03T22:09:43Z"}
+{"database": "InterPro", "record_id": "IPR001849", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR001849/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-03T22:09:43Z"}
+{"database": "InterPro", "record_id": "IPR011993", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR011993/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-03T22:09:43Z"}
+{"database": "AlphaMissense", "record_id": "AF-Q06187-F1:R28H", "url": "https://alphafold.ebi.ac.uk/entry/AF-Q06187-F1", "tool": "get_variant_effect_values", "agent": "knowledge_graph", "at": "2026-10-03T22:09:43Z"}
+{"database": "EBI ProtVar", "record_id": "Q06187:28", "url": "https://www.ebi.ac.uk/ProtVar/query?search=Q06187:28:H", "tool": "get_variant_effect_values", "agent": "knowledge_graph", "at": "2026-10-03T22:09:43Z"}
+{"database": "EBI ProtVar", "record_id": "Q06187:28:H", "url": "https://www.ebi.ac.uk/ProtVar/query?search=Q06187:28:H", "tool": "get_variant_effect_values", "agent": "knowledge_graph", "at": "2026-10-03T22:09:43Z"}
+{"database": "PDBe SIFTS", "record_id": "Q06187", "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/Q06187", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-03T22:09:44Z"}
+{"database": "RCSB PDB", "record_id": "6TT2", "url": "https://www.rcsb.org/structure/6TT2", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-03T22:09:44Z"}
+{"database": "RCSB PDB", "record_id": "6TSE", "url": "https://www.rcsb.org/structure/6TSE", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-03T22:09:44Z"}
+{"database": "RCSB PDB", "record_id": "1BTK", "url": "https://www.rcsb.org/structure/1BTK", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-03T22:09:44Z"}
+{"database": "RCSB PDB", "record_id": "7I97", "url": "https://www.rcsb.org/structure/7I97", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-03T22:09:44Z"}
+{"database": "RCSB PDB", "record_id": "1BWN", "url": "https://www.rcsb.org/structure/1BWN", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-03T22:09:44Z"}
+{"database": "RCSB PDB", "record_id": "1B55", "url": "https://www.rcsb.org/structure/1B55", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-03T22:09:44Z"}
+{"database": "RCSB PDB", "record_id": "2Z0P", "url": "https://www.rcsb.org/structure/2Z0P", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-03T22:09:44Z"}
+{"database": "AlphaFold DB", "record_id": "AF-Q06187-F1", "url": "https://alphafold.ebi.ac.uk/entry/AF-Q06187-F1", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-03T22:09:44Z"}
+{"database": "ClinVar", "record_id": "VCV000946996.13", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/946996/", "tool": "list_variants_near", "agent": "knowledge_graph", "at": "2026-10-03T22:09:44Z"}
+{"database": "ClinVar", "record_id": "VCV001075550.10", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/1075550/", "tool": "list_variants_near", "agent": "knowledge_graph", "at": "2026-10-03T22:09:44Z"}
+{"database": "Europe PMC", "record_id": "PMID:9218782", "url": "https://europepmc.org/article/MED/9218782", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:09:45Z"}
+{"database": "Europe PMC", "record_id": "PMID:9260159", "url": "https://europepmc.org/article/MED/9260159", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:09:45Z"}
+{"database": "IUIS 2024 classification", "record_id": "Table 3.1 row 1 (btk-deficiency-x-linked-agammaglobulinemia)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12829761/table/tbl3/", "tool": "get_gene", "agent": "knowledge_graph", "at": "2026-10-03T22:09:45Z"}
+{"database": "IntAct", "record_id": "EBI-625110", "url": "https://www.ebi.ac.uk/intact/search?query=id:Q06187%20AND%20id:P78347", "tool": "get_interactions", "agent": "knowledge_graph", "at": "2026-10-03T22:09:45Z"}
+{"database": "IntAct", "record_id": "EBI-21836035", "url": "https://www.ebi.ac.uk/intact/search?query=id:Q06187%20AND%20id:Q6NXT1", "tool": "get_interactions", "agent": "knowledge_graph", "at": "2026-10-03T22:09:45Z"}
+{"database": "IntAct", "record_id": "EBI-624868", "url": "https://www.ebi.ac.uk/intact/search?query=id:Q06187%20AND%20id:O60239", "tool": "get_interactions", "agent": "knowledge_graph", "at": "2026-10-03T22:09:45Z"}
+{"database": "OpenAlex", "record_id": "W1865034106", "url": "https://openalex.org/W1865034106", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:09:46Z"}
+{"database": "OpenAlex", "record_id": "W4400316524", "url": "https://openalex.org/W4400316524", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:09:46Z"}
+{"database": "OpenAlex", "record_id": "W2596142963", "url": "https://openalex.org/W2596142963", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:09:46Z"}
+{"database": "OpenAlex", "record_id": "W2156080214", "url": "https://openalex.org/W2156080214", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:09:46Z"}
+{"database": "OpenAlex", "record_id": "W2127129384", "url": "https://openalex.org/W2127129384", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:09:46Z"}
+{"database": "OpenAlex", "record_id": "W1709671131", "url": "https://openalex.org/W1709671131", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:09:46Z"}
+{"database": "RCSB PDB", "record_id": "7I9G", "url": "https://www.rcsb.org/structure/7I9G", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "9T0T", "url": "https://www.rcsb.org/structure/9T0T", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "9RMO", "url": "https://www.rcsb.org/structure/9RMO", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I9D", "url": "https://www.rcsb.org/structure/7I9D", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "9T3M", "url": "https://www.rcsb.org/structure/9T3M", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I94", "url": "https://www.rcsb.org/structure/7I94", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I9I", "url": "https://www.rcsb.org/structure/7I9I", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "9RN5", "url": "https://www.rcsb.org/structure/9RN5", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "9T23", "url": "https://www.rcsb.org/structure/9T23", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "9T21", "url": "https://www.rcsb.org/structure/9T21", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I93", "url": "https://www.rcsb.org/structure/7I93", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I9E", "url": "https://www.rcsb.org/structure/7I9E", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "6YYF", "url": "https://www.rcsb.org/structure/6YYF", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I91", "url": "https://www.rcsb.org/structure/7I91", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I9C", "url": "https://www.rcsb.org/structure/7I9C", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "9T3G", "url": "https://www.rcsb.org/structure/9T3G", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "6YYG", "url": "https://www.rcsb.org/structure/6YYG", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I99", "url": "https://www.rcsb.org/structure/7I99", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I95", "url": "https://www.rcsb.org/structure/7I95", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I90", "url": "https://www.rcsb.org/structure/7I90", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "6YYK", "url": "https://www.rcsb.org/structure/6YYK", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I9F", "url": "https://www.rcsb.org/structure/7I9F", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I98", "url": "https://www.rcsb.org/structure/7I98", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I9A", "url": "https://www.rcsb.org/structure/7I9A", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "9RL9", "url": "https://www.rcsb.org/structure/9RL9", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "6TUH", "url": "https://www.rcsb.org/structure/6TUH", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "6TVN", "url": "https://www.rcsb.org/structure/6TVN", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "9T1V", "url": "https://www.rcsb.org/structure/9T1V", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I96", "url": "https://www.rcsb.org/structure/7I96", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I9H", "url": "https://www.rcsb.org/structure/7I9H", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I92", "url": "https://www.rcsb.org/structure/7I92", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}
+{"database": "RCSB PDB", "record_id": "7I9B", "url": "https://www.rcsb.org/structure/7I9B", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-03T22:11:26Z"}

@@ -2,10 +2,8 @@
 
 import { useMemo, useState } from "react";
 
-import { ExternalLink } from "@/components/data/external-link";
 import { TextLink } from "@/components/data/text-link";
 import { EvidencePopover } from "@/components/evidence/evidence-popover";
-import { StructureOriginTag } from "@/components/evidence/structure-origin-tag";
 import { QueryErrorState, RowsSkeleton } from "@/components/states/query-state";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,10 +12,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { routes } from "@/lib/ids";
+import {
+  PROTEIN_WORDS,
+  plainBuildingBlocks,
+  plainCoverage,
+  plainOriginCaveat,
+  plainStructureLine,
+} from "@/lib/plain-language";
 import { setWorkspaceHover } from "@/lib/state/hover";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import {
-  structureDetail,
   type ApiStructureDescriptor,
   type ProteinResponse,
   type StructureLedger,
@@ -30,12 +34,15 @@ const shortId = (id: string) => id.slice(id.indexOf(":") + 1);
 
 const LABEL = "text-2xs text-subtle-foreground";
 
-function coverage(descriptor: ApiStructureDescriptor): string | null {
+function coverage(
+  descriptor: ApiStructureDescriptor,
+  length: number,
+): string | null {
   const ranges = descriptor.coverage?.ranges ?? [];
   if (ranges.length === 0) return null;
   const start = Math.min(...ranges.map((range) => range.start));
   const end = Math.max(...ranges.map((range) => range.end));
-  return `${start}-${end}`;
+  return plainCoverage(start, end, length);
 }
 
 export interface ProteinSummaryProps {
@@ -76,7 +83,6 @@ export function ProteinSummary({
       ledger.predicted_external.length +
       ledger.predicted_orphafold.length
     : 0;
-  const span = active ? coverage(active) : null;
 
   if (!protein && loadError)
     return (
@@ -88,6 +94,7 @@ export function ProteinSummary({
   if (!protein) return <RowsSkeleton rows={8} />;
 
   const length = protein.sequence.value.length;
+  const span = active ? coverage(active, length) : null;
 
   return (
     <div data-slot="protein-summary" className="flex flex-col">
@@ -98,19 +105,14 @@ export function ProteinSummary({
           </p>
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
             {protein.gene ? (
-              <TextLink
-                href={routes.gene(protein.gene.id)}
-                className="font-mono"
-              >
-                {protein.gene.id}
-              </TextLink>
+              <span>
+                Made from the{" "}
+                <TextLink href={routes.gene(protein.gene.id)}>
+                  {protein.gene.id}
+                </TextLink>{" "}
+                gene
+              </span>
             ) : null}
-            <ExternalLink
-              href={`https://www.uniprot.org/uniprotkb/${accession}`}
-              className="font-mono"
-            >
-              {accession}
-            </ExternalLink>
             <EvidencePopover
               evidence={provenanceEvidence(
                 protein.provenance,
@@ -121,20 +123,14 @@ export function ProteinSummary({
             />
           </p>
         </div>
-        <div className="flex flex-col gap-1">
-          <span className={LABEL}>Length</span>
-          <span className="tabular font-mono text-2xl leading-6 font-medium text-foreground">
-            {length.toLocaleString("en-US")}
-            <span className="ml-1.5 text-xs font-normal text-muted-foreground">
-              aa
-            </span>
-          </span>
-        </div>
+        <p className="text-sm text-foreground">
+          {plainBuildingBlocks(length)}
+        </p>
       </div>
 
       <div className="flex flex-col gap-2 border-t border-border-subtle px-4 py-4">
         <div className="flex items-center justify-between gap-2">
-          <span className={LABEL}>Structure</span>
+          <span className={LABEL}>{PROTEIN_WORDS.structure}</span>
           {ledger && total > 1 ? (
             <Popover open={choosing} onOpenChange={setChoosing}>
               <PopoverTrigger
@@ -146,7 +142,7 @@ export function ProteinSummary({
                   />
                 }
               >
-                Change
+                {PROTEIN_WORDS.change}
               </PopoverTrigger>
               <PopoverContent
                 side="right"
@@ -177,28 +173,34 @@ export function ProteinSummary({
           ) : null}
         </div>
         {active ? (
-          <div className="flex flex-col gap-1">
-            <StructureOriginTag
-              origin={active.origin}
-              detail={shortId(active.id)}
-              className="text-xs"
-            />
-            <p className="text-xs text-muted-foreground">
-              {[structureDetail(active), span ? `residues ${span}` : null]
-                .filter(Boolean)
-                .join(" · ")}
+          <div className="flex flex-col gap-1" title={shortId(active.id)}>
+            <p className="text-sm text-foreground">
+              {plainStructureLine(
+                active.origin,
+                active.origin === "experimental"
+                  ? null
+                  : (active.provider_name ?? active.model_name),
+              )}
             </p>
+            <p className="text-xs text-muted-foreground">
+              {plainOriginCaveat(active.origin)}
+            </p>
+            {span ? (
+              <p className="text-xs text-muted-foreground">
+                {PROTEIN_WORDS.shown}: {span.toLowerCase()}
+              </p>
+            ) : null}
           </div>
         ) : ledger && total === 0 ? (
           <p className="text-xs text-muted-foreground">No structure found.</p>
         ) : (
-          <p className="text-xs text-muted-foreground">Resolving structure</p>
+          <p className="text-xs text-muted-foreground">Finding a structure</p>
         )}
       </div>
 
       {domains.length > 0 ? (
         <div className="flex flex-col border-t border-border-subtle py-3">
-          <span className={`${LABEL} px-4 pb-1`}>Domains</span>
+          <span className={`${LABEL} px-4 pb-1`}>{PROTEIN_WORDS.parts}</span>
           <ul>
             {domains.map((row) => {
               const selected =
@@ -226,8 +228,11 @@ export function ProteinSummary({
                     <span className="min-w-0 flex-1 truncate text-foreground">
                       {row.label}
                     </span>
-                    <span className="tabular shrink-0 font-mono text-xs text-muted-foreground">
-                      {row.start}-{row.end}
+                    <span
+                      className="tabular shrink-0 font-mono text-xs text-muted-foreground"
+                      title={`Positions ${row.start} to ${row.end}`}
+                    >
+                      {row.start}–{row.end}
                     </span>
                   </button>
                   <span className="flex shrink-0 justify-end pr-4 pl-1">

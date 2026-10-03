@@ -16,7 +16,6 @@ import { KeyHint } from "@/components/data/key-hint";
 import { ClinicalSignificanceChip } from "@/components/science/legends";
 import { EmptyState } from "@/components/states/empty-state";
 import { QueryErrorState } from "@/components/states/query-state";
-import { EvidenceMark } from "@/components/variant/evidence";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -33,6 +32,13 @@ import { Zone } from "@/components/workspace";
 import { apiDownloadUrl } from "@/lib/api/client";
 import type { Schema } from "@/lib/api/types";
 import { parseClinicalSignificance } from "@/lib/science/clinical-significance";
+import {
+  GENE_WORDS,
+  plainChangeKind,
+  plainClinicalClass,
+  plainHarmfulCount,
+  plainMutationRow,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useGeneVariants, type GeneVariantFilters } from "@/lib/workspace-data";
 
@@ -187,10 +193,25 @@ const COLUMNS: DataTableColumn<VariantRow>[] = [
 
 /** Simple mode: the change, its class in words and one evidence mark. */
 const SIMPLE_COLUMNS: DataTableColumn<VariantRow>[] = [
-  COLUMNS[0],
+  {
+    id: "change",
+    header: GENE_WORDS.mutation,
+    width: "minmax(5.5rem,1fr)",
+    sortable: false,
+    cell: (row) => (
+      <span
+        className="truncate"
+        title={row.protein_change ?? row.name ?? row.id}
+      >
+        {row.protein_change
+          ? plainMutationRow(row.protein_change)
+          : plainChangeKind(row.consequence)}
+      </span>
+    ),
+  },
   {
     id: "class",
-    header: "Class",
+    header: GENE_WORDS.classification,
     width: 132,
     sortable: false,
     cell: (row) => {
@@ -199,21 +220,10 @@ const SIMPLE_COLUMNS: DataTableColumn<VariantRow>[] = [
         <ClinicalSignificanceChip significance={significance} long />
       ) : (
         <span className="text-2xs text-subtle-foreground">
-          {row.in_uniprot ? "UniProt only" : "Not classified"}
+          {GENE_WORDS.notClassified}
         </span>
       );
     },
-  },
-  {
-    id: "source",
-    header: "Source",
-    width: 64,
-    sortable: false,
-    cell: (row) => (
-      <span onClick={(event) => event.stopPropagation()}>
-        <EvidenceMark evidence={row.evidence[0]} />
-      </span>
-    ),
   },
 ];
 
@@ -310,9 +320,13 @@ export function VariantLedger({
   const significanceValue =
     filters.significance.length === 0
       ? "All"
-      : filters.significance
-          .map((key) => SIGNIFICANCE_CODE[key] ?? key)
-          .join(", ");
+      : advanced
+        ? filters.significance
+            .map((key) => SIGNIFICANCE_CODE[key] ?? key)
+            .join(", ")
+        : filters.significance.length === 1
+          ? plainClinicalClass(filters.significance[0].replace(/_/g, " "))
+          : `${filters.significance.length} chosen`;
   const filtered =
     !sameSet(filters.significance, DEFAULT_SIGNIFICANCE) ||
     filters.consequence.length > 0 ||
@@ -337,18 +351,16 @@ export function VariantLedger({
   return (
     <Zone
       zone="ledger"
-      title="Variants"
-      count={total}
+      title={advanced ? "Variants" : "Mutations"}
+      count={advanced || filtered ? total : null}
       scroll={false}
       detail={
         !advanced ? (
-          <span className="truncate text-xs text-muted-foreground">
-            {sameSet(filters.significance, DEFAULT_SIGNIFICANCE)
-              ? "pathogenic, likely pathogenic"
-              : filtered
-                ? "filtered"
-                : null}
-          </span>
+          filtered ? (
+            <span className="truncate text-xs text-muted-foreground">
+              {GENE_WORDS.filtered}
+            </span>
+          ) : null
         ) : summary ? (
           <span
             className="truncate text-2xs text-muted-foreground"
@@ -373,9 +385,9 @@ export function VariantLedger({
           <Button
             variant="ghost"
             size="icon-sm"
-            aria-label="Filter variants"
+            aria-label={GENE_WORDS.filter}
             aria-pressed={filtersOpen}
-            title="Filter"
+            title={GENE_WORDS.filter}
             className={cn(filtersOpen && "bg-active")}
             onClick={() => setFiltersOpen((open) => !open)}
           >
@@ -396,12 +408,12 @@ export function VariantLedger({
           {total !== null && total > PAGE_SIZE ? (
             <span className="ml-auto flex items-center gap-1">
               <span className="tabular font-mono">
-                {first}-{last}
+                {advanced ? `${first}-${last}` : `${first}–${last} of ${total}`}
               </span>
               <Button
                 variant="ghost"
                 size="icon-xs"
-                aria-label="Previous page"
+                aria-label={GENE_WORDS.previous}
                 disabled={filters.page === 0}
                 onClick={() => update({ page: filters.page - 1 })}
               >
@@ -410,7 +422,7 @@ export function VariantLedger({
               <Button
                 variant="ghost"
                 size="icon-xs"
-                aria-label="Next page"
+                aria-label={GENE_WORDS.next}
                 disabled={!data?.has_more}
                 onClick={() => update({ page: filters.page + 1 })}
               >
@@ -423,6 +435,16 @@ export function VariantLedger({
       }
     >
       <div className="flex h-full min-h-0 flex-col">
+        {!advanced && !filtered && total !== null ? (
+          <p className="flex shrink-0 flex-col gap-0.5 border-b border-border-subtle px-3 py-3">
+            <span className="text-sm font-medium text-foreground">
+              {plainHarmfulCount(total, symbol)}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {GENE_WORDS.classifiedBy}
+            </span>
+          </p>
+        ) : null}
         <div
           hidden={!showFilters}
           className="flex shrink-0 flex-col gap-1.5 border-b border-border-subtle px-2 py-1.5 [&[hidden]]:hidden"
@@ -436,7 +458,11 @@ export function VariantLedger({
               type="search"
               value={text}
               onChange={(event) => setText(event.target.value)}
-              placeholder="Protein change, HGVS, VCV, rsID or condition"
+              placeholder={
+                advanced
+                  ? "Protein change, HGVS, VCV, rsID or condition"
+                  : GENE_WORDS.search
+              }
               aria-label={`Filter variants of ${symbol} by text`}
               className="h-7 w-full pl-7 text-xs"
             />
@@ -444,7 +470,7 @@ export function VariantLedger({
           <div className="flex flex-wrap items-center gap-1">
             <DropdownMenu>
               <FilterTrigger
-                label="Class"
+                label={advanced ? "Class" : GENE_WORDS.classification}
                 value={significanceValue}
                 active={!sameSet(filters.significance, DEFAULT_SIGNIFICANCE)}
               />
@@ -466,19 +492,21 @@ export function VariantLedger({
                 ))}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => update({ significance: [] })}>
-                  Every class
+                  {advanced ? "Every class" : "All mutations"}
                   <Count value={summary?.total ?? null} />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <DropdownMenu>
               <FilterTrigger
-                label="Consequence"
+                label={advanced ? "Consequence" : "Kind"}
                 value={
                   filters.consequence.length === 0
                     ? "Any"
                     : filters.consequence.length === 1
-                      ? (consequenceLabel(filters.consequence[0]) ?? "1")
+                      ? advanced
+                        ? (consequenceLabel(filters.consequence[0]) ?? "1")
+                        : plainChangeKind(filters.consequence[0])
                       : String(filters.consequence.length)
                 }
                 active={filters.consequence.length > 0}
@@ -495,7 +523,9 @@ export function VariantLedger({
                       })
                     }
                   >
-                    {consequenceLabel(row.keys[0])}
+                    {advanced
+                      ? consequenceLabel(row.keys[0])
+                      : plainChangeKind(row.keys[0])}
                     <Count value={row.count} />
                   </DropdownMenuCheckboxItem>
                 ))}
@@ -503,9 +533,13 @@ export function VariantLedger({
             </DropdownMenu>
             <DropdownMenu>
               <FilterTrigger
-                label="Review"
+                label={advanced ? "Review" : "Checked"}
                 value={
-                  filters.minStars > 0 ? `${filters.minStars}/4 or more` : "Any"
+                  filters.minStars > 0
+                    ? advanced
+                      ? `${filters.minStars}/4 or more`
+                      : `${filters.minStars} of 4 stars`
+                    : "Any"
                 }
                 active={filters.minStars > 0}
               />
@@ -585,9 +619,13 @@ export function VariantLedger({
               className={cn(query.isPlaceholderData && "opacity-60")}
               empty={
                 <EmptyState
-                  title="No variant matches these filters"
+                  title={
+                    advanced
+                      ? "No variant matches these filters"
+                      : GENE_WORDS.noMatch
+                  }
                   description={
-                    summary
+                    summary && advanced
                       ? `${summary.total} variants are recorded for ${symbol}; none passes the current class, consequence, review and text filters.`
                       : undefined
                   }
@@ -602,7 +640,7 @@ export function VariantLedger({
                           reset();
                         }}
                       >
-                        Reset filters
+                        {advanced ? "Reset filters" : GENE_WORDS.reset}
                       </Button>
                     ) : null
                   }

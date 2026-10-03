@@ -8,32 +8,49 @@ import {
 import { SectionHeader } from "@/components/data/section-header";
 import { TextLink } from "@/components/data/text-link";
 import { EvidencePopover } from "@/components/evidence/evidence-popover";
-import { LearnTerm } from "@/components/science/learn-term";
+import { Disclosure } from "@/components/protein/disclosure";
 import { Button } from "@/components/ui/button";
 import type { Schema } from "@/lib/api/types";
+import type { EvidenceItem } from "@/lib/evidence";
 import { formatCount } from "@/lib/format";
-import type { GlossaryTermId } from "@/lib/glossary";
 import { routes } from "@/lib/ids";
+import {
+  DETAILS_LABEL,
+  DISEASE_WORDS,
+  plainDiseaseLine,
+  plainFrequency,
+  plainInheritance,
+  plainLength,
+  plainSource,
+} from "@/lib/plain-language";
 import type { DiseaseResponse } from "@/lib/workspace-data";
 import { cn } from "cn";
 
-import { apiEvidence, recordEvidence } from "./evidence";
+import {
+  apiEvidence as fullApiEvidence,
+  recordEvidence as fullRecordEvidence,
+} from "./evidence";
 
 type Phenotype = Schema<"DiseasePhenotype">;
 
-const INHERITANCE_TERMS: Record<string, GlossaryTermId> = {
-  XL: "x-linked",
-  XLR: "x-linked",
-  XLD: "x-linked",
-  AR: "autosomal-recessive",
-  AD: "autosomal-dominant",
-};
+/** The same record with the database under the name people say. */
+function shortSource<T extends EvidenceItem | null>(item: T): T {
+  if (!item?.source) return item;
+  return {
+    ...item,
+    source: { ...item.source, database: plainSource(item.source.database) },
+  };
+}
+
+const recordEvidence = (...args: Parameters<typeof fullRecordEvidence>) =>
+  shortSource(fullRecordEvidence(...args));
+const apiEvidence = (...args: Parameters<typeof fullApiEvidence>) =>
+  shortSource(fullApiEvidence(...args));
 
 /** The counts a first reading needs, under labels short enough for one row. */
 const KEY_COUNTS: Array<[key: string, label: string]> = [
-  ["clinvar_pathogenic_count", "P / LP variants"],
-  ["experimental_structure_count", "Experimental structures"],
-  ["gene_disease_validity", "Gene validity"],
+  ["clinvar_pathogenic_count", DISEASE_WORDS.harmful],
+  ["experimental_structure_count", DISEASE_WORDS.labStructures],
 ];
 
 const PHENOTYPES_SHOWN = 6;
@@ -44,19 +61,17 @@ export interface DiseaseSummaryProps {
   phenotypes: Phenotype[];
   selectedPhenotypeId: string | null;
   onSelectPhenotype: (phenotype: Phenotype) => void;
-  frequencyCell: (phenotype: Phenotype) => React.ReactNode;
   stageHref: (path: string) => string;
   /** opens the full record: every phenotype, relationships, treatment records */
   onOpenRecord: () => void;
 }
 
-/** Simple mode: the disease in one column. Name, the sourced sentence, gene, protein, a few counts. */
+/** Simple mode: the disease in one column. Name, one plain line, gene, inheritance, a few symptoms. */
 export function DiseaseSummary({
   disease,
   phenotypes,
   selectedPhenotypeId,
   onSelectPhenotype,
-  frequencyCell,
   stageHref,
   onOpenRecord,
 }: DiseaseSummaryProps) {
@@ -78,29 +93,35 @@ export function DiseaseSummary({
         <h1 className="text-xl font-medium text-foreground">
           {disease.name}
         </h1>
-        {definition ? (
-          <p className="text-sm text-muted-foreground">
-            <span className="line-clamp-6">{definition.one_line}</span>
+        <p className="text-sm text-muted-foreground">
+          {plainDiseaseLine({
+            gene: gene?.symbol,
+            inherited: inheritance.codes.length > 0,
+            immune: Boolean(disease.category),
+          })}
+        </p>
+      </header>
+
+      {definition ? (
+        <Disclosure label={DISEASE_WORDS.medical}>
+          <p className="px-3 pb-3 text-xs text-muted-foreground">
+            {definition.one_line}
             {definitionEvidence ? (
               <EvidencePopover
                 size="compact"
                 evidence={definitionEvidence}
-                className="mt-1.5"
+                className="ml-2"
               />
             ) : null}
           </p>
-        ) : (
-          <p className="text-sm text-subtle-foreground">
-            No sourced definition
-          </p>
-        )}
-      </header>
+        </Disclosure>
+      ) : null}
 
       <DefinitionList
         termWidth="6rem"
         className="border-t border-border-subtle"
       >
-        <DefinitionRow term="Gene">
+        <DefinitionRow term={DISEASE_WORDS.gene}>
           {gene ? (
             <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
               <TextLink
@@ -121,48 +142,41 @@ export function DiseaseSummary({
               ) : null}
             </span>
           ) : (
-            <Unknown reason="No gene named" />
+            <Unknown reason={DISEASE_WORDS.noGene} />
           )}
         </DefinitionRow>
-        <DefinitionRow term="Protein">
+        <DefinitionRow term={DISEASE_WORDS.protein}>
           {protein ? (
-            <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="flex flex-col gap-0.5">
               <TextLink
                 href={stageHref(routes.protein(protein.accession))}
-                className="font-mono"
-                translate="no"
+                title={protein.accession}
               >
-                {protein.accession}
+                {protein.name ?? `${gene?.symbol ?? ""} protein`.trim()}
               </TextLink>
               {protein.length ? (
-                <span className="tabular font-mono text-muted-foreground">
-                  {protein.length} aa
+                <span className="text-muted-foreground">
+                  {plainLength(protein.length)}
                 </span>
               ) : null}
             </span>
           ) : (
-            <Unknown reason="No protein mapped" />
+            <Unknown reason={DISEASE_WORDS.noProtein} />
           )}
         </DefinitionRow>
-        <DefinitionRow term="Inheritance">
+        <DefinitionRow term={DISEASE_WORDS.inheritance}>
           {inheritance.terms.length > 0 || inheritance.raw ? (
             <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
               {inheritance.terms.length > 0
                 ? inheritance.terms.map((term, index) => {
-                    const glossary =
-                      INHERITANCE_TERMS[inheritance.codes[index] ?? ""];
                     const label = term.label ?? term.id;
                     return (
-                      <span key={term.id}>
-                        {glossary ? (
-                          <LearnTerm term={glossary}>{label}</LearnTerm>
-                        ) : (
-                          label
-                        )}
+                      <span key={term.id} title={label}>
+                        {plainInheritance(inheritance.codes[index]) ?? label}
                       </span>
                     );
                   })
-                : inheritance.raw}
+                : (plainInheritance(inheritance.raw) ?? inheritance.raw)}
               {inheritanceEvidence ? (
                 <EvidencePopover
                   size="compact"
@@ -171,15 +185,14 @@ export function DiseaseSummary({
               ) : null}
             </span>
           ) : (
-            <Unknown reason="Not stated" />
+            <Unknown reason={DISEASE_WORDS.inheritanceUnknown} />
           )}
         </DefinitionRow>
       </DefinitionList>
 
       {counts.length > 0 ? (
         <>
-          <SectionHeader title="Recorded" className="border-t" />
-          <ul>
+          <ul className="border-t border-border-subtle">
             {counts.map(({ item, label }) => {
               const evidence = item.evidence
                 ? apiEvidence(item.evidence, { sources: disease.sources })
@@ -188,9 +201,9 @@ export function DiseaseSummary({
                 <li
                   key={item.key}
                   title={item.label}
-                  className="flex items-baseline gap-2 border-b border-border-subtle px-3 py-2 last:border-b-0"
+                  className="flex flex-wrap items-baseline gap-x-2 gap-y-1 border-b border-border-subtle px-3 py-2 last:border-b-0"
                 >
-                  <span className="min-w-0 flex-1 text-xs text-muted-foreground">
+                  <span className="w-full text-xs text-muted-foreground">
                     {label}
                   </span>
                   <span
@@ -223,13 +236,13 @@ export function DiseaseSummary({
       ) : null}
 
       <SectionHeader
-        title="Phenotypes"
+        title={DISEASE_WORDS.symptoms}
         count={phenotypes.length}
         className="border-t"
       />
       {phenotypes.length === 0 ? (
         <p className="px-3 py-2 text-xs text-subtle-foreground">
-          No source found
+          {DISEASE_WORDS.noSymptoms}
         </p>
       ) : (
         <ul>
@@ -251,8 +264,11 @@ export function DiseaseSummary({
                 <span className="min-w-0 flex-1 truncate text-foreground">
                   {phenotype.label ?? phenotype.hpo_id}
                 </span>
-                <span className="tabular shrink-0 font-mono text-muted-foreground">
-                  {frequencyCell(phenotype)}
+                <span
+                  className="shrink-0 text-muted-foreground"
+                  title={phenotype.frequency ?? undefined}
+                >
+                  {plainFrequency(phenotype.frequency)}
                 </span>
               </button>
             </li>
@@ -261,7 +277,7 @@ export function DiseaseSummary({
       )}
       <div className="border-t border-border-subtle px-3 py-3">
         <Button variant="ghost" size="sm" onClick={onOpenRecord}>
-          Details
+          {DETAILS_LABEL}
         </Button>
       </div>
     </div>

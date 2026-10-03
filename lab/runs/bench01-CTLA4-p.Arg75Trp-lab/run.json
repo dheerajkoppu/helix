@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-CTLA4-p.Arg75Trp-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of CTLA4-p.Arg75Trp (CTLA4, UniProt P16410) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "CTLA4",
+    "variant_id": "CTLA4-p.Arg75Trp",
+    "accession": "P16410",
+    "position": 75,
+    "reference_residue": "R",
+    "alternate_residue": "W",
+    "protein_change": "p.Arg75Trp"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:30:38Z",
+  "finished_at": "2026-10-03T22:33:53Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "e18cc508e1f94759b6dee1e39217ab60",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 8,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 195.6,
+    "tool_calls": 91,
+    "distinct_sources": 11,
+    "evidence_items": 21,
+    "hypotheses": 2,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 16,
+      "literature": 14,
+      "knowledge_graph": 34,
+      "insight": 4,
+      "planner": 9,
+      "safety": 4,
+      "runner": 4,
+      "analysis": 6
+    },
+    "policy_denials": 0,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "protein_interaction",
+    "favoured_after": "protein_interaction",
+    "decision_changed": false,
+    "next_experiment": "Computational binding test of R75W on the experimental CTLA-4/B7-2 complex (PDB 1I85; CD80/CD86 analogues if available). Measure (a) the minimum heavy-atom distance from R75 side chain to any B7 atom, and (b) FoldX binding ddG (AnalyseComplex / BindingEnergy) for R75W on the complex. H1 is supported if R75 lies within about 5 Å of the B7 partner and the R75W binding ddG is at or above about 1 kcal/mol; H1 is refuted if R75 has no B7 atom within contact distance and binding ddG is near zero, matching its would_refute criterion. Report the value with its pLDDT or resolution control.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

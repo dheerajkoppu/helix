@@ -100,6 +100,16 @@ export const measuredValue = (summary: MeasuredAffinitySummary): string => {
   return `${row.standard_type} ${row.relation} ${trim(row.value)} ${row.units}`;
 };
 
+/** "0.72 nM": the measured amount and its unit, without the assay type. */
+export const measuredAmount = (summary: MeasuredAffinitySummary): string => {
+  const row = summary.representative;
+  const relation = row.relation === "=" ? "" : `${row.relation} `;
+  const amount = row.value.toLocaleString("en-US", {
+    maximumSignificantDigits: 3,
+  });
+  return `${relation}${amount} ${row.units}`;
+};
+
 /** "pChEMBL 8.29, median of 17 rows in 17 assays" */
 export const measuredBasis = (summary: MeasuredAffinitySummary): string =>
   `pChEMBL ${summary.median_pchembl.toFixed(2)}, median of ${summary.activity_count} ${

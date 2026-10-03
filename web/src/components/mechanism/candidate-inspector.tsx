@@ -16,6 +16,13 @@ import { EmptyState } from "@/components/states/empty-state";
 import { Button } from "@/components/ui/button";
 import { toThreeLetter } from "@/lib/ids";
 import { setWorkspaceHover } from "@/lib/state/hover";
+import {
+  CAUSE_WORDS,
+  plainCauseSentence,
+  plainProximity,
+  plainSupport,
+  plainSupportWhy,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 
 import {
@@ -86,7 +93,9 @@ function ObservationRow({
           }
           title={advanced ? undefined : observation.summary}
         >
-          {observation.summary}
+          {advanced
+            ? observation.summary
+            : plainProximity(observation.proximity)}
         </span>
         {advanced ? null : showIn3d}
       </div>
@@ -227,17 +236,17 @@ export function CandidateInspector({
       <>
         <div className="border-b border-border-subtle px-3 py-3">
           <p className="text-sm font-medium text-foreground">
-            No supporting data found
+            {advanced ? "No supporting data found" : CAUSE_WORDS.none}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
             {advanced
               ? `No retrieved record raises ${unsupported.label.toLowerCase()} as a candidate for this variant. That does not rule it out.`
-              : "This does not rule it out."}
+              : CAUSE_WORDS.notRuledOut}
           </p>
         </div>
         {advanced ? checked : null}
         <SectionHeader
-          title="Records read"
+          title={advanced ? "Records read" : CAUSE_WORDS.read}
           count={unsupported.observations.length}
           description={
             advanced && unsupported.observations.length
@@ -251,7 +260,12 @@ export function CandidateInspector({
             {...rowProps}
           />
         ) : (
-          <EmptyState size="inline" title="No record at this residue" />
+          <EmptyState
+            size="inline"
+            title={
+              advanced ? "No record at this residue" : CAUSE_WORDS.nothingHere
+            }
+          />
         )}
         {advanced ? null : (
           <Detail advanced={false} title="What was checked">
@@ -330,23 +344,45 @@ export function CandidateInspector({
       <div className="flex flex-col gap-2.5 border-b border-border-subtle px-3 py-3 text-xs">
         <div className="flex items-center gap-2">
           <EvidenceBadge evidenceClass="orphafold_hypothesis" size="compact" />
-          <span className="text-2xs tracking-[0.04em] text-subtle-foreground uppercase">
-            {advanced ? "Candidate to test, not a finding" : "To test"}
+          <span
+            className={
+              advanced
+                ? "text-2xs tracking-[0.04em] text-subtle-foreground uppercase"
+                : "text-xs text-muted-foreground"
+            }
+          >
+            {advanced ? "Candidate to test, not a finding" : CAUSE_WORDS.toTest}
           </span>
         </div>
-        <p className="text-sm leading-snug text-foreground">
-          {candidate.claim}
+        <p
+          className="text-sm leading-snug text-foreground"
+          title={advanced ? undefined : candidate.claim}
+        >
+          {advanced
+            ? candidate.claim
+            : plainCauseSentence(candidate.category)}
         </p>
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <span className="text-muted-foreground">Support</span>
-          <EvidenceBadge
-            evidenceClass={SUPPORT_CLASS[candidate.support]}
-            size={advanced ? "compact" : "standard"}
-          />
-          <span className="font-medium text-foreground">
-            {candidate.support_label}
-          </span>
-        </div>
+        {advanced ? (
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="text-muted-foreground">Support</span>
+            <EvidenceBadge
+              evidenceClass={SUPPORT_CLASS[candidate.support]}
+              size="compact"
+            />
+            <span className="font-medium text-foreground">
+              {candidate.support_label}
+            </span>
+          </div>
+        ) : (
+          <p>
+            <span className="font-medium text-foreground">
+              {plainSupport(candidate.support)}
+            </span>
+            <span className="ml-2 text-muted-foreground">
+              {plainSupportWhy(candidate.support)}
+            </span>
+          </p>
+        )}
         {advanced ? (
           <>
             <p className="text-muted-foreground">
@@ -364,7 +400,7 @@ export function CandidateInspector({
             onClick={() => setSaving(true)}
           >
             <FlaskConicalIcon data-icon="inline-start" />
-            Save as hypothesis
+            {advanced ? "Save as hypothesis" : CAUSE_WORDS.save}
           </Button>
         </div>
       </div>

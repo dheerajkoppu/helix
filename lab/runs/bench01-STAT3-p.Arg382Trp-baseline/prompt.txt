@@ -1,0 +1,4 @@
+Objective: Find the molecular mechanism that best explains the loss of function of STAT3-p.Arg382Trp (STAT3, UniProt P40763) and test it with one targeted computational test.
+Subject line: variant_id=STAT3-p.Arg382Trp gene=STAT3 accession=P40763 position=382 reference=R alternate=W
+Budget for the whole run: 160 lab tool calls and 300 compute seconds.
+Run the discovery loop to the final report.

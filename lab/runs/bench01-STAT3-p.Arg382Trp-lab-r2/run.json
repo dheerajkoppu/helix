@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-STAT3-p.Arg382Trp-lab-r2",
+  "objective": "Find the molecular mechanism that best explains the loss of function of STAT3-p.Arg382Trp (STAT3, UniProt P40763) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "STAT3",
+    "variant_id": "STAT3-p.Arg382Trp",
+    "accession": "P40763",
+    "position": 382,
+    "reference_residue": "R",
+    "alternate_residue": "W",
+    "protein_change": "p.Arg382Trp"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:28:17Z",
+  "finished_at": "2026-10-03T22:31:50Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "3217c02d957c4bbc96ff4f6f99547156",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 8,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 212.1,
+    "tool_calls": 92,
+    "distinct_sources": 11,
+    "evidence_items": 23,
+    "hypotheses": 3,
+    "tests_considered": 3,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 15,
+      "literature": 14,
+      "knowledge_graph": 36,
+      "insight": 5,
+      "planner": 8,
+      "safety": 4,
+      "runner": 4,
+      "analysis": 6
+    },
+    "policy_denials": 1,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "nucleic_acid_binding",
+    "favoured_after": "nucleic_acid_binding",
+    "decision_changed": false,
+    "next_experiment": "Computational check of H1 (agent-generated hypothesis) for STAT3 R382W: in the DNA-bound structure 6QHD, measure the minimum heavy-atom distance from the R382 side chain to any DNA atom. Then build a W382 model into that complex and count steric clashes with DNA and nearby protein atoms. H1 is refuted if R382 has no atom within about 4 Å of DNA and the W382 model shows no clash, or if an in silico R382W complex keeps DNA affinity at wild-type level. Outcome that supports H1: R382 contacts DNA and W382 clashes or loses those contacts.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

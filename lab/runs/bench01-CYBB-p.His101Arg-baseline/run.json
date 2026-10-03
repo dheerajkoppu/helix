@@ -1,0 +1,62 @@
+{
+  "run_id": "bench01-CYBB-p.His101Arg-baseline",
+  "objective": "Find the molecular mechanism that best explains the loss of function of CYBB-p.His101Arg (CYBB, UniProt P04839) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "CYBB",
+    "variant_id": "CYBB-p.His101Arg",
+    "accession": "P04839",
+    "position": 101,
+    "reference_residue": "H",
+    "alternate_residue": "R",
+    "protein_change": "p.His101Arg"
+  },
+  "mode": "single_agent_baseline",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:18:10Z",
+  "finished_at": "2026-10-03T22:19:33Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "2c6e1530e2ae443183a24acb15f0cd16",
+    "models": {
+      "generalist": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_baseline",
+    "sub_agent_sessions": 0,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+  "metrics": {
+    "wall_seconds": 82.7,
+    "tool_calls": 39,
+    "distinct_sources": 5,
+    "evidence_items": 10,
+    "hypotheses": 3,
+    "tests_considered": 3,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 39
+    },
+    "policy_denials": 2,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "ligand_binding",
+    "favoured_after": "ligand_binding",
+    "decision_changed": false,
+    "next_experiment": "Run the stability test (T2) to measure the FoldX folding free-energy change of H101R, which tests H2 directly. Then run the structural context test on the AlphaFold model to check whether residue 101 lies in a predicted interface with CYBA (H3). Outcome to confirm H1: a neutral stability value and no interface membership, leaving heme-ligand loss as the only mechanism the data support. Outcome to overturn it: a destabilising value at or above threshold would move H2 up.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

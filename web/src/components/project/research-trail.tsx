@@ -6,12 +6,14 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef } from "react";
 
 import { StructureOriginTag } from "@/components/evidence/structure-origin-tag";
-import {
-  KIND_META,
-  KindMark,
-  structureOriginOf,
-} from "@/components/project/kinds";
+import { KindMark, structureOriginOf } from "@/components/project/kinds";
 import { formatTimestamp } from "@/lib/format";
+import {
+  PROJECT_WORDS,
+  plainIdeaState,
+  plainSavedKind,
+  plainSavedLabel,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import type { ProjectItem, Trail, TrailNode } from "@/lib/state/projects";
 
@@ -176,7 +178,7 @@ export function ResearchTrail({
     >
       <div
         role="tree"
-        aria-label="Research trail"
+        aria-label={advanced ? "Research trail" : PROJECT_WORDS.savedItems}
         className="relative"
         style={{ width: layout.width, height: layout.height, minWidth: "100%" }}
       >
@@ -220,7 +222,7 @@ export function ResearchTrail({
                 />
               );
             })}
-            {showAttachPoint && active ? (
+            {showAttachPoint && advanced && active ? (
               <g>
                 <path
                   d={`M${active.x + 14} ${active.y + NODE_HEIGHT} v7`}
@@ -272,8 +274,8 @@ export function ResearchTrail({
                 ? `status: ${item.hypothesis.status}`
                 : formatTimestamp(node.created_at)))
             : item?.hypothesis
-              ? `${KIND_META[node.kind].label} · ${item.hypothesis.status}`
-              : KIND_META[node.kind].label;
+              ? `${plainSavedKind(node.kind)} · ${plainIdeaState(item.hypothesis.status)}`
+              : plainSavedKind(node.kind);
           const structureOrigin =
             node.kind === "structure" ? structureOriginOf(node.ref) : null;
           return (
@@ -308,7 +310,7 @@ export function ResearchTrail({
                 className="flex min-w-0 flex-1 flex-col justify-center gap-0.5 px-2 text-left outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/40"
               >
                 <span className="flex min-w-0 items-center gap-1.5">
-                  {advanced || node.kind === "hypothesis" ? (
+                  {advanced ? (
                     <KindMark item={node} />
                   ) : structureOrigin ? (
                     <StructureOriginTag origin={structureOrigin} size="compact" />
@@ -319,7 +321,7 @@ export function ResearchTrail({
                       advanced ? "text-xs" : "text-sm",
                     )}
                   >
-                    {node.label}
+                    {advanced ? node.label : plainSavedLabel(node.label)}
                   </span>
                 </span>
                 <span className="flex min-w-0 items-center gap-2 text-2xs text-muted-foreground">
@@ -337,7 +339,11 @@ export function ResearchTrail({
               {node.href ? (
                 <Link
                   href={node.href}
-                  title={`Reopen the view ${node.label} was saved from`}
+                  title={
+                    advanced
+                      ? `Reopen the view ${node.label} was saved from`
+                      : PROJECT_WORDS.open
+                  }
                   aria-label={`Reopen the view ${node.label} was saved from`}
                   className="flex w-6 shrink-0 items-center justify-center border-l border-border-subtle text-muted-foreground outline-none hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40"
                 >

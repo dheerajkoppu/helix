@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { API_BASE_URL, apiRequest, isApiError } from "@/lib/api/client";
 import type { Schema, SourceStatusState } from "@/lib/api/types";
+import { STATUS_WORDS, plainSourceSummary } from "@/lib/plain-language";
 import { site } from "@/lib/site";
 import { useWorkspaceHover } from "@/lib/state/hover";
 import { useAdvancedMode } from "@/lib/state/preferences";
@@ -181,13 +182,17 @@ export function ApiDot({ className }: { className?: string }) {
   const state: SourceStatusState =
     apiState === "ok" && summary.hasProblem ? "unavailable" : apiState;
   const apiText = health.isPending
-    ? "Checking the API"
+    ? STATUS_WORDS.checking
     : health.isError
-      ? "API not reachable"
-      : "API connected";
+      ? STATUS_WORDS.offline
+      : STATUS_WORDS.connected;
+  const answered = sources.filter(
+    (status) => status.state === "ok" || status.state === "empty",
+  ).length;
+  const sourceText = plainSourceSummary(answered, sources.length);
   const label =
     state === "unavailable" && apiState === "ok"
-      ? `${apiText}, ${summary.text}`
+      ? STATUS_WORDS.sourceDown
       : apiText;
 
   return (
@@ -213,16 +218,6 @@ export function ApiDot({ className }: { className?: string }) {
           >
             {apiText}
           </span>
-          {health.data?.version ? (
-            <span className="font-mono text-2xs text-muted-foreground">
-              {health.data.version}
-            </span>
-          ) : null}
-          {health.data?.data_release ? (
-            <span className="font-mono text-2xs text-subtle-foreground">
-              data {health.data.data_release}
-            </span>
-          ) : null}
         </div>
         {sources.length > 0 ? (
           <>
@@ -232,9 +227,9 @@ export function ApiDot({ className }: { className?: string }) {
                 summary.hasProblem ? "text-warning" : "text-muted-foreground",
               )}
             >
-              {summary.text}
+              {sourceText}
             </p>
-            <SourceStatusList sources={sources} />
+            <SourceStatusList sources={sources} plain />
           </>
         ) : null}
         <p className="border-t border-border-subtle px-3 py-2 text-2xs text-muted-foreground">

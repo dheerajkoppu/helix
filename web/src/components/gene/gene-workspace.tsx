@@ -26,10 +26,14 @@ import {
   toThreeLetter,
 } from "@/lib/ids";
 import { setWorkspaceHover } from "@/lib/state/hover";
+import { GENE_WORDS } from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import { useReportSources } from "@/lib/state/shell";
-import type { SubjectRef } from "@/lib/state/subject";
+import {
+  useWorkspaceSubjectStore,
+  type SubjectRef,
+} from "@/lib/state/subject";
 import {
   mergeSources,
   subjectChain,
@@ -176,6 +180,17 @@ export function GeneWorkspace({ symbol }: { symbol: string }) {
     };
   }, [activeVariant]);
 
+  // A gene opened from search still knows its disease, so the Disease step is not a dead end.
+  const knownDiseaseId = useWorkspaceSubjectStore(
+    (state) => state.chain.disease?.id ?? null,
+  );
+  const ownDiseases = geneData?.diseases;
+  const ownDisease = ownDiseases?.some(
+    (disease) => disease.id === knownDiseaseId,
+  )
+    ? null
+    : ownDiseases?.[0];
+
   useWorkspaceSubject({
     ...subjectChain({
       gene: geneData ?? undefined,
@@ -183,6 +198,9 @@ export function GeneWorkspace({ symbol }: { symbol: string }) {
       structure: structure.shown.descriptor ?? undefined,
     }),
     ...(geneData ? {} : { gene: { id: symbol, label: symbol } }),
+    ...(ownDisease
+      ? { disease: { id: ownDisease.id, label: ownDisease.name } }
+      : {}),
     variant: variantRef,
   });
 
@@ -293,8 +311,16 @@ export function GeneWorkspace({ symbol }: { symbol: string }) {
             <Zone zone="instrument" title="3D">
               <GeneHeader gene={geneData} />
               <EmptyState
-                title={`No UniProt protein for ${symbol}`}
-                description="The gene record names no canonical UniProt accession, so there is no sequence axis and no structure to show. The variant table is unaffected."
+                title={
+                  advanced
+                    ? `No UniProt protein for ${symbol}`
+                    : GENE_WORDS.noProtein
+                }
+                description={
+                  advanced
+                    ? "The gene record names no canonical UniProt accession, so there is no sequence axis and no structure to show. The variant table is unaffected."
+                    : undefined
+                }
                 searched={["UniProt"]}
               />
             </Zone>

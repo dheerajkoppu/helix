@@ -1,0 +1,28 @@
+{"database": "ClinVar", "record_id": "VCV000191102.15", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/191102/", "tool": "get_variant", "agent": "orchestrator", "at": "2026-10-03T22:15:54Z"}
+{"database": "gnomAD", "record_id": "19-17843777-C-T", "url": "https://gnomad.broadinstitute.org/variant/19-17843777-C-T?dataset=gnomad_r4", "tool": "get_variant", "agent": "orchestrator", "at": "2026-10-03T22:15:54Z"}
+{"database": "Ensembl VEP", "record_id": "NM_000215.4:c.308G>A", "url": "https://rest.ensembl.org/documentation/info/vep_hgvs_get", "tool": "get_variant", "agent": "orchestrator", "at": "2026-10-03T22:15:54Z"}
+{"database": "UniProtKB", "record_id": "P52333", "url": "https://www.uniprot.org/uniprotkb/P52333/entry", "tool": "get_residue_annotations", "agent": "orchestrator", "at": "2026-10-03T22:15:54Z"}
+{"database": "InterPro", "record_id": "IPR051286", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR051286/", "tool": "get_residue_annotations", "agent": "orchestrator", "at": "2026-10-03T22:15:54Z"}
+{"database": "InterPro", "record_id": "IPR016251", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR016251/", "tool": "get_residue_annotations", "agent": "orchestrator", "at": "2026-10-03T22:15:54Z"}
+{"database": "InterPro", "record_id": "IPR019749", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR019749/", "tool": "get_residue_annotations", "agent": "orchestrator", "at": "2026-10-03T22:15:54Z"}
+{"database": "InterPro", "record_id": "IPR000299", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR000299/", "tool": "get_residue_annotations", "agent": "orchestrator", "at": "2026-10-03T22:15:54Z"}
+{"database": "InterPro", "record_id": "IPR041155", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR041155/", "tool": "get_residue_annotations", "agent": "orchestrator", "at": "2026-10-03T22:15:54Z"}
+{"database": "AlphaMissense", "record_id": "AF-P52333-F1:R103H", "url": "https://alphafold.ebi.ac.uk/entry/AF-P52333-F1", "tool": "get_variant_effect_values", "agent": "orchestrator", "at": "2026-10-03T22:15:55Z"}
+{"database": "EBI ProtVar", "record_id": "P52333:103", "url": "https://www.ebi.ac.uk/ProtVar/query?search=P52333:103:H", "tool": "get_variant_effect_values", "agent": "orchestrator", "at": "2026-10-03T22:15:55Z"}
+{"database": "EBI ProtVar", "record_id": "P52333:103:H", "url": "https://www.ebi.ac.uk/ProtVar/query?search=P52333:103:H", "tool": "get_variant_effect_values", "agent": "orchestrator", "at": "2026-10-03T22:15:55Z"}
+{"database": "PDBe SIFTS", "record_id": "P52333", "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P52333", "tool": "get_structure_ledger", "agent": "orchestrator", "at": "2026-10-03T22:15:56Z"}
+{"database": "AlphaFold DB", "record_id": "AF-P52333-F1", "url": "https://alphafold.ebi.ac.uk/entry/AF-P52333-F1", "tool": "get_structure_ledger", "agent": "orchestrator", "at": "2026-10-03T22:15:56Z"}
+{"database": "ClinVar", "record_id": "VCV000384359.14", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/384359/", "tool": "list_variants_near", "agent": "orchestrator", "at": "2026-10-03T22:15:57Z"}
+{"database": "Europe PMC", "record_id": "PMID:36466884", "url": "https://europepmc.org/article/MED/36466884", "tool": "search_literature", "agent": "orchestrator", "at": "2026-10-03T22:16:09Z"}
+{"database": "Europe PMC", "record_id": "PMID:40140631", "url": "https://europepmc.org/article/MED/40140631", "tool": "search_literature", "agent": "orchestrator", "at": "2026-10-03T22:16:09Z"}
+{"database": "Europe PMC", "record_id": "PMID:33814980", "url": "https://europepmc.org/article/MED/33814980", "tool": "search_literature", "agent": "orchestrator", "at": "2026-10-03T22:16:09Z"}
+{"database": "Europe PMC", "record_id": "PMID:31892268", "url": "https://europepmc.org/article/MED/31892268", "tool": "search_literature", "agent": "orchestrator", "at": "2026-10-03T22:16:09Z"}
+{"database": "Europe PMC", "record_id": "PMID:22363534", "url": "https://europepmc.org/article/MED/22363534", "tool": "search_literature", "agent": "orchestrator", "at": "2026-10-03T22:16:09Z"}
+{"database": "Europe PMC", "record_id": "PMID:22130498", "url": "https://europepmc.org/article/MED/22130498", "tool": "search_literature", "agent": "orchestrator", "at": "2026-10-03T22:16:09Z"}
+{"database": "OpenAlex", "record_id": "W2068674478", "url": "https://openalex.org/W2068674478", "tool": "search_openalex", "agent": "orchestrator", "at": "2026-10-03T22:16:10Z"}
+{"database": "OpenAlex", "record_id": "W4306920875", "url": "https://openalex.org/W4306920875", "tool": "search_openalex", "agent": "orchestrator", "at": "2026-10-03T22:16:10Z"}
+{"database": "OpenAlex", "record_id": "W2042593266", "url": "https://openalex.org/W2042593266", "tool": "search_openalex", "agent": "orchestrator", "at": "2026-10-03T22:16:10Z"}
+{"database": "OpenAlex", "record_id": "W2903341269", "url": "https://openalex.org/W2903341269", "tool": "search_openalex", "agent": "orchestrator", "at": "2026-10-03T22:16:10Z"}
+{"database": "OpenAlex", "record_id": "W2396304782", "url": "https://openalex.org/W2396304782", "tool": "search_openalex", "agent": "orchestrator", "at": "2026-10-03T22:16:10Z"}
+{"database": "OpenAlex", "record_id": "W2099866349", "url": "https://openalex.org/W2099866349", "tool": "search_openalex", "agent": "orchestrator", "at": "2026-10-03T22:16:10Z"}
+{"database": "EBI ProtVar", "record_id": "P52333:103:C", "url": "https://www.ebi.ac.uk/ProtVar/query?search=P52333:103:C", "tool": "run_stability_test", "agent": "orchestrator", "at": "2026-10-03T22:16:43Z"}

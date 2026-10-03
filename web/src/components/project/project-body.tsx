@@ -25,6 +25,12 @@ import { Button } from "@/components/ui/button";
 import { TextLink } from "@/components/data/text-link";
 import { EVIDENCE_DISPLAY_ORDER, isEvidenceClass } from "@/lib/evidence";
 import { formatTimestamp } from "@/lib/format";
+import {
+  PROJECT_WORDS,
+  plainDate,
+  plainIdeaState,
+  plainSavedLabel,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import type {
   HypothesisStatus,
@@ -184,7 +190,7 @@ export function ProjectBody({
   return (
     <>
       <PageSection
-        title="Research trail"
+        title={advanced ? "Research trail" : PROJECT_WORDS.savedItems}
         count={trail.nodes.length}
       >
         {trail.nodes.length ? (
@@ -235,10 +241,8 @@ export function ProjectBody({
         ) : (
           <Plate className="h-56">
             <EmptyState
-              title="No steps yet"
-              description={
-                readOnly ? undefined : "Use Add to project on any page."
-              }
+              title={advanced ? "No steps yet" : PROJECT_WORDS.nothingSaved}
+              description={readOnly ? undefined : PROJECT_WORDS.noneHint}
               actions={
                 readOnly ? undefined : <TextLink href="/explore">Explore</TextLink>
               }
@@ -248,7 +252,7 @@ export function ProjectBody({
       </PageSection>
 
       <PageSection
-        title="Hypotheses"
+        title={advanced ? "Hypotheses" : PROJECT_WORDS.ideas}
         count={hypotheses.length}
         actions={
           actions && !advanced && !hypothesisOpen ? (
@@ -257,7 +261,7 @@ export function ProjectBody({
               size="sm"
               onClick={() => setHypothesisOpen(true)}
             >
-              New hypothesis
+              {PROJECT_WORDS.newIdea}
             </Button>
           ) : null
         }
@@ -278,7 +282,7 @@ export function ProjectBody({
                     status: hypothesis.status,
                     supporting_item_ids: hypothesis.supporting_item_ids,
                   }}
-                  submitLabel="Save hypothesis"
+                  submitLabel={advanced ? "Save hypothesis" : PROJECT_WORDS.saveIdea}
                   onCancel={() => setEditing(null)}
                   onSubmit={async (draft) => {
                     await actions.updateHypothesis(item, draft);
@@ -292,10 +296,16 @@ export function ProjectBody({
                 className="flex flex-col gap-2 border border-dotted border-ev-hypothesis p-3"
               >
                 <div className="flex flex-wrap items-center gap-2">
-                  <EvidenceBadge
-                    evidenceClass="orphafold_hypothesis"
-                    detail={advanced ? hypothesis.record.id : undefined}
-                  />
+                  {advanced ? (
+                    <EvidenceBadge
+                      evidenceClass="orphafold_hypothesis"
+                      detail={hypothesis.record.id}
+                    />
+                  ) : (
+                    <span className="text-xs text-muted-foreground">
+                      {PROJECT_WORDS.ideaCaveat}
+                    </span>
+                  )}
                   {actions ? (
                     <StatusControl
                       value={hypothesis.status}
@@ -305,7 +315,9 @@ export function ProjectBody({
                     />
                   ) : (
                     <span className="text-xs text-muted-foreground">
-                      Status: {STATUS_LABELS[hypothesis.status]}
+                      {advanced
+                        ? `Status: ${STATUS_LABELS[hypothesis.status]}`
+                        : plainIdeaState(hypothesis.status)}
                     </span>
                   )}
                   <span className="ml-auto flex items-center gap-1">
@@ -314,7 +326,7 @@ export function ProjectBody({
                       size="sm"
                       onClick={() => onSelect(item.id)}
                     >
-                      Show in trail
+                      {advanced ? "Show in trail" : PROJECT_WORDS.showSaved}
                     </Button>
                     {actions ? (
                       <Button
@@ -331,7 +343,9 @@ export function ProjectBody({
                   {hypothesis.statement}
                 </p>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-                  <span className="text-muted-foreground">Rests on</span>
+                  <span className="text-muted-foreground">
+                    {advanced ? "Rests on" : PROJECT_WORDS.ideaRestsOn}
+                  </span>
                   {hypothesis.supporting_item_ids.map((identifier) => {
                     const supporting = byId.get(identifier);
                     return supporting ? (
@@ -341,8 +355,12 @@ export function ProjectBody({
                         onClick={() => onSelect(identifier)}
                         className="flex min-w-0 items-center gap-1.5 rounded-xs underline decoration-border-strong underline-offset-[3px] outline-none hover:decoration-foreground focus-visible:ring-2 focus-visible:ring-ring/40"
                       >
-                        <KindMark item={supporting} />
-                        <span className="truncate">{supporting.label}</span>
+                        {advanced ? <KindMark item={supporting} /> : null}
+                        <span className="truncate">
+                          {advanced
+                            ? supporting.label
+                            : plainSavedLabel(supporting.label)}
+                        </span>
                       </button>
                     ) : null;
                   })}
@@ -352,7 +370,9 @@ export function ProjectBody({
           })}
           {actions && !advanced && !hypothesisOpen ? (
             hypotheses.length ? null : (
-              <p className="text-sm text-muted-foreground">None recorded.</p>
+              <p className="text-sm text-muted-foreground">
+                {PROJECT_WORDS.noIdeas}
+              </p>
             )
           ) : actions ? (
             <HypothesisEditor
@@ -365,7 +385,9 @@ export function ProjectBody({
                   ? [selected.id]
                   : []
               }
-              submitLabel="Record hypothesis"
+              submitLabel={
+                advanced ? "Record hypothesis" : PROJECT_WORDS.saveIdea
+              }
               onSubmit={(draft) =>
                 actions.addHypothesis(
                   draft,
@@ -376,7 +398,9 @@ export function ProjectBody({
               }
             />
           ) : hypotheses.length ? null : (
-            <p className="text-sm text-muted-foreground">None recorded.</p>
+            <p className="text-sm text-muted-foreground">
+              {advanced ? "None recorded." : PROJECT_WORDS.noIdeas}
+            </p>
           )}
         </div>
       </PageSection>
@@ -411,7 +435,7 @@ export function ProjectBody({
       </PageSection>
       ) : null}
 
-      <PageSection title="Notes" count={notes.length}>
+      <PageSection title={PROJECT_WORDS.notes} count={notes.length}>
         <div className="flex flex-col">
           {notes.map((note) => {
             const parent = note.parent_item_id
@@ -432,11 +456,19 @@ export function ProjectBody({
                       onClick={() => onSelect(parent.id)}
                       className="flex items-center gap-1.5 rounded-xs text-muted-foreground underline decoration-border-strong underline-offset-[3px] outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40"
                     >
-                      on <KindMark item={parent} /> {parent.label}
+                      on {advanced ? <KindMark item={parent} /> : null}{" "}
+                      {advanced ? parent.label : plainSavedLabel(parent.label)}
                     </button>
                   ) : null}
-                  <span className="tabular ml-auto font-mono text-2xs text-subtle-foreground">
-                    {formatTimestamp(note.created_at)}
+                  <span
+                    className={cn(
+                      "tabular ml-auto text-2xs text-subtle-foreground",
+                      advanced && "font-mono",
+                    )}
+                  >
+                    {advanced
+                      ? formatTimestamp(note.created_at)
+                      : plainDate(note.created_at)}
                   </span>
                   {actions ? (
                     <Button
@@ -444,7 +476,7 @@ export function ProjectBody({
                       size="sm"
                       onClick={() => void actions.removeItem(note)}
                     >
-                      Remove
+                      {PROJECT_WORDS.remove}
                     </Button>
                   ) : null}
                 </div>
@@ -466,7 +498,7 @@ export function ProjectBody({
               className={cn("self-start", notes.length > 0 && "mt-3")}
               onClick={() => setNoteOpen(true)}
             >
-              Add note
+              {PROJECT_WORDS.addNote}
             </Button>
           ) : actions ? (
             <form
@@ -488,9 +520,11 @@ export function ProjectBody({
                 value={newNote}
                 maxLength={20000}
                 placeholder={
-                  selected && selected.kind !== "note"
-                    ? `Note on ${selected.label}`
-                    : "Note on the project"
+                  !advanced
+                    ? PROJECT_WORDS.writeNote
+                    : selected && selected.kind !== "note"
+                      ? `Note on ${selected.label}`
+                      : "Note on the project"
                 }
                 onChange={(event) => setNewNote(event.target.value)}
                 className="min-h-16 w-full max-w-[72ch] resize-y rounded-md border border-input bg-input/20 px-2 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
@@ -501,7 +535,7 @@ export function ProjectBody({
                 className="self-start"
                 disabled={!newNote.trim()}
               >
-                Add note
+                {PROJECT_WORDS.addNote}
               </Button>
             </form>
           ) : null}

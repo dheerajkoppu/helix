@@ -22,6 +22,12 @@ import {
 } from "@/components/workspace";
 import { apiDownloadUrl } from "@/lib/api/client";
 import { formatProteinChange, routes, toThreeLetter } from "@/lib/ids";
+import {
+  MUTATION_WORDS,
+  PROTEIN_WORDS,
+  plainSelection,
+  plainUnit,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import { withSelection } from "@/lib/state/selection-url";
@@ -151,13 +157,17 @@ export function ProteinWorkspace({ accession }: { accession: string }) {
         ? "Ligands"
         : inspectorView === "literature"
           ? "Literature"
-          : (residueName ??
-            matchedFeature?.label ??
-            (range
-              ? `${range.start}-${range.end}`
-              : ranges.length > 1
-                ? `${ranges.length} ranges`
-                : label));
+          : simple
+            ? (matchedFeature?.label ??
+              plainSelection(ranges, sequence) ??
+              label)
+            : (residueName ??
+              matchedFeature?.label ??
+              (range
+                ? `${range.start}-${range.end}`
+                : ranges.length > 1
+                  ? `${ranges.length} ranges`
+                  : label));
 
   const compareHref =
     selectedVariant && geneSymbol && viewportVariant
@@ -186,12 +196,12 @@ export function ProteinWorkspace({ accession }: { accession: string }) {
           className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
         >
           <DownloadIcon data-icon="inline-start" />
-          FASTA
+          {simple ? PROTEIN_WORDS.download : "FASTA"}
         </a>
         <AddToProjectButton
           size="sm"
           variant="ghost"
-          label="Add protein"
+          label={simple ? undefined : "Add protein"}
           item={{
             kind: "protein",
             ref: accession,
@@ -319,7 +329,7 @@ export function ProteinWorkspace({ accession }: { accession: string }) {
                     size="sm"
                     data-action="compare-variant"
                   >
-                    Compare {viewportVariant?.label}
+                    {MUTATION_WORDS.compare}
                     <ArrowRightIcon data-icon="inline-end" />
                   </ButtonLink>
                 ) : null
@@ -360,7 +370,7 @@ export function ProteinWorkspace({ accession }: { accession: string }) {
                 title={`No structure for ${label}`}
                 description={
                   simple
-                    ? "No experimental entry or predicted model found."
+                    ? "No lab or predicted structure found."
                     : length > 2700
                     ? `No experimental entry exists, and AlphaFold DB holds no single model for proteins over 2,700 residues (this one has ${length}). A prediction job can be run on the sequence or on a residue window.`
                     : "No experimental entry and no existing predicted model were found. A prediction job can be run on the sequence."
@@ -430,9 +440,11 @@ export function ProteinWorkspace({ accession }: { accession: string }) {
                           ]
                         : []),
                       {
-                        label: "Residues",
+                        label: PROTEIN_WORDS.shown,
                         value: active.coverage?.covered_residues,
-                        unit: length ? `of ${length}` : null,
+                        unit: length
+                          ? `of ${length} ${plainUnit("aa")}`
+                          : plainUnit("aa"),
                         missingReason: "Not reported",
                       },
                     ]}

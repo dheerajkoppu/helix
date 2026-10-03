@@ -1,0 +1,126 @@
+{"at": "2026-10-03T22:20:17Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:18Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:20Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_session_send", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:21Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_session_send", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:23Z", "policy": "role_boundary", "agent": "literature", "tool": "search_literature", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:23Z", "policy": "role_boundary", "agent": "literature", "tool": "search_openalex", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:25Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "get_variant", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:26Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "get_residue_annotations", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:26Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "get_variant_effect_values", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:26Z", "policy": "role_boundary", "agent": "literature", "tool": "search_literature", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:26Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "get_structure_ledger", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:27Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "list_variants_near", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:27Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "get_protein", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:27Z", "policy": "role_boundary", "agent": "literature", "tool": "search_openalex", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:27Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "get_gene", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:28Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "get_interactions", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:30Z", "policy": "role_boundary", "agent": "literature", "tool": "get_publication", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:30Z", "policy": "role_boundary", "agent": "literature", "tool": "get_publication", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:35Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:36Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:36Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:37Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:38Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:39Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:40Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:41Z", "policy": "role_boundary", "agent": "literature", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:41Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:42Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:42Z", "policy": "role_boundary", "agent": "literature", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:42Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:43Z", "policy": "role_boundary", "agent": "literature", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:43Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:44Z", "policy": "role_boundary", "agent": "literature", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:44Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:44Z", "policy": "role_boundary", "agent": "literature", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:45Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:46Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:47Z", "policy": "role_boundary", "agent": "literature", "tool": "record_gap", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:47Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_evidence", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:48Z", "policy": "role_boundary", "agent": "literature", "tool": "record_gap", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:49Z", "policy": "role_boundary", "agent": "literature", "tool": "record_gap", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:49Z", "policy": "claims_guard", "agent": "literature", "tool": "record_gap", "verdict": "DENY", "reason": "Refused: clinical or treatment wording: \"dosage\". Rewrite and call again."}
+{"at": "2026-10-03T22:20:50Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_gap", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:51Z", "policy": "role_boundary", "agent": "literature", "tool": "record_gap", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:51Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_gap", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:51Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_gap", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:52Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "check_record_consistency", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:53Z", "policy": "role_boundary", "agent": "literature", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:55Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_read_inbox", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:56Z", "policy": "role_boundary", "agent": "knowledge_graph", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:20:58Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_read_inbox", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:00Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:02Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:05Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_session_send", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:08Z", "policy": "role_boundary", "agent": "insight", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:16Z", "policy": "role_boundary", "agent": "insight", "tool": "record_hypothesis", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:18Z", "policy": "role_boundary", "agent": "insight", "tool": "record_hypothesis", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:20Z", "policy": "role_boundary", "agent": "insight", "tool": "record_hypothesis", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:22Z", "policy": "role_boundary", "agent": "insight", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:24Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_read_inbox", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:26Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:28Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:31Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_session_send", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:34Z", "policy": "role_boundary", "agent": "planner", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:34Z", "policy": "role_boundary", "agent": "planner", "tool": "list_available_tests", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:45Z", "policy": "role_boundary", "agent": "planner", "tool": "record_test_candidate", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:47Z", "policy": "role_boundary", "agent": "planner", "tool": "record_test_candidate", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:49Z", "policy": "role_boundary", "agent": "planner", "tool": "record_test_candidate", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:51Z", "policy": "role_boundary", "agent": "planner", "tool": "record_test_candidate", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:56Z", "policy": "role_boundary", "agent": "planner", "tool": "record_plan", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:57Z", "policy": "role_boundary", "agent": "planner", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:21:59Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_read_inbox", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:01Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:03Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:05Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_session_send", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:09Z", "policy": "role_boundary", "agent": "safety", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:09Z", "policy": "role_boundary", "agent": "safety", "tool": "review_claims", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:11Z", "policy": "role_boundary", "agent": "safety", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:11Z", "policy": "claims_guard", "agent": "safety", "tool": "response", "verdict": "DENY", "reason": "Reply refused: clinical or treatment wording: \"dosage\". Reply with record IDs only, or cite the ID next to each fact."}
+{"at": "2026-10-03T22:22:19Z", "policy": "role_boundary", "agent": "safety", "tool": "record_safety_review", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:19Z", "policy": "claims_guard", "agent": "safety", "tool": "record_safety_review", "verdict": "DENY", "reason": "Refused: clinical or treatment wording: \"dosage\". Rewrite and call again."}
+{"at": "2026-10-03T22:22:19Z", "policy": "claims_guard", "agent": "safety", "tool": "response", "verdict": "DENY", "reason": "Reply refused: clinical or treatment wording: \"dosage\". Reply with record IDs only, or cite the ID next to each fact."}
+{"at": "2026-10-03T22:22:22Z", "policy": "role_boundary", "agent": "safety", "tool": "record_safety_review", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:24Z", "policy": "role_boundary", "agent": "safety", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:26Z", "policy": "claims_guard", "agent": "safety", "tool": "response", "verdict": "DENY", "reason": "Reply refused: clinical or treatment wording: \"dosage\". Reply with record IDs only, or cite the ID next to each fact."}
+{"at": "2026-10-03T22:22:27Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_read_inbox", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:29Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:33Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:33Z", "policy": "claims_guard", "agent": "orchestrator", "tool": "record_handoff", "verdict": "DENY", "reason": "Refused: clinical or treatment wording: \"dosage\". Rewrite and call again."}
+{"at": "2026-10-03T22:22:33Z", "policy": "claims_guard", "agent": "orchestrator", "tool": "response", "verdict": "DENY", "reason": "Reply refused: clinical or treatment wording: \"dosage\". Reply with record IDs only, or cite the ID next to each fact."}
+{"at": "2026-10-03T22:22:35Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:37Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_session_send", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:41Z", "policy": "role_boundary", "agent": "planner", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:41Z", "policy": "role_boundary", "agent": "planner", "tool": "list_available_tests", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:41Z", "policy": "role_boundary", "agent": "planner", "tool": "get_budget_status", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:48Z", "policy": "role_boundary", "agent": "planner", "tool": "record_plan", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:49Z", "policy": "role_boundary", "agent": "planner", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:51Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_read_inbox", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:54Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:56Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_session_send", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:22:59Z", "policy": "role_boundary", "agent": "safety", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:00Z", "policy": "role_boundary", "agent": "safety", "tool": "review_claims", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:02Z", "policy": "role_boundary", "agent": "safety", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:03Z", "policy": "claims_guard", "agent": "safety", "tool": "response", "verdict": "DENY", "reason": "Reply refused: clinical or treatment wording: \"dosage\". Reply with record IDs only, or cite the ID next to each fact."}
+{"at": "2026-10-03T22:23:09Z", "policy": "role_boundary", "agent": "safety", "tool": "record_safety_review", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:09Z", "policy": "claims_guard", "agent": "safety", "tool": "record_safety_review", "verdict": "DENY", "reason": "Refused: clinical or treatment wording: \"dosage\". Rewrite and call again."}
+{"at": "2026-10-03T22:23:09Z", "policy": "role_boundary", "agent": "safety", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:09Z", "policy": "claims_guard", "agent": "safety", "tool": "record_handoff", "verdict": "DENY", "reason": "Refused: clinical or treatment wording: \"dosage\". Rewrite and call again."}
+{"at": "2026-10-03T22:23:13Z", "policy": "role_boundary", "agent": "safety", "tool": "record_safety_review", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:14Z", "policy": "role_boundary", "agent": "safety", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:16Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_read_inbox", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:19Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:30Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "record_final_report", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:34Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:36Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_session_send", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:39Z", "policy": "role_boundary", "agent": "analysis", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:41Z", "policy": "role_boundary", "agent": "analysis", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:43Z", "policy": "role_boundary", "agent": "analysis", "tool": "get_test_result", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:46Z", "policy": "role_boundary", "agent": "analysis", "tool": "record_decision", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:50Z", "policy": "role_boundary", "agent": "analysis", "tool": "record_interpretation", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:52Z", "policy": "role_boundary", "agent": "analysis", "tool": "record_decision", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:55Z", "policy": "role_boundary", "agent": "analysis", "tool": "record_next_experiment", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:56Z", "policy": "role_boundary", "agent": "analysis", "tool": "record_handoff", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:23:58Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "sys_read_inbox", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:24:01Z", "policy": "role_boundary", "agent": "orchestrator", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T22:24:06Z", "policy": "claims_guard", "agent": "orchestrator", "tool": "response", "verdict": "DENY", "reason": "Reply refused: clinical or treatment wording: \"dosage\". Reply with record IDs only, or cite the ID next to each fact."}

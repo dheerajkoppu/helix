@@ -1,0 +1,47 @@
+{
+  "test_id": "T1",
+  "test_kind": "stability_effect",
+  "values": {
+    "headline": "FoldX predicts ΔΔG -0.79 kcal/mol for R404Q, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 93.56).",
+    "verdict": "not_predicted_destabilising",
+    "substitution": "R404Q",
+    "foldx_ddg_kcal_mol": -0.790617,
+    "destabilising_threshold_kcal_mol": 2.0,
+    "threshold_defined_by": "ProtVar display bins",
+    "model": "afdb:AF-P15918-F1",
+    "residue_plddt": 93.56,
+    "plddt_supports_interpretation": true,
+    "missense3d": {
+      "state": "not_covered",
+      "value": null
+    },
+    "other_substitutions_at_residue": [
+      {
+        "substitution": "R404W",
+        "foldx_ddg_kcal_mol": -0.787499
+      }
+    ]
+  },
+  "sources": [
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P15918:404:Q",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P15918:404:Q"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P15918:404:W",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P15918:404:W"
+    }
+  ],
+  "controls": [
+    "Within-site comparison: the same predictor for the other substitutions reported at this residue.",
+    "Applicability control: the model confidence (pLDDT) at the residue, because FoldX on a low-confidence region is not interpretable."
+  ],
+  "limitations": [
+    "FoldX on a predicted model is a computational prediction with errors near 1 kcal/mol.",
+    "A neutral stability prediction does not show the variant is tolerated."
+  ],
+  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments stability_effect --accession P15918 --position 404 --alternate-residue Q --reference-residue R --gene RAG1 --variant-id RAG1-p.Arg404Gln",
+  "elapsed_seconds": 0.1
+}

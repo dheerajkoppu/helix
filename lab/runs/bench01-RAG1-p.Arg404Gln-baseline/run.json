@@ -1,0 +1,62 @@
+{
+  "run_id": "bench01-RAG1-p.Arg404Gln-baseline",
+  "objective": "Find the molecular mechanism that best explains the loss of function of RAG1-p.Arg404Gln (RAG1, UniProt P15918) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "RAG1",
+    "variant_id": "RAG1-p.Arg404Gln",
+    "accession": "P15918",
+    "position": 404,
+    "reference_residue": "R",
+    "alternate_residue": "Q",
+    "protein_change": "p.Arg404Gln"
+  },
+  "mode": "single_agent_baseline",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:14:06Z",
+  "finished_at": "2026-10-03T22:15:39Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "f34254a525bc407b8a25465fcac1cfd3",
+    "models": {
+      "generalist": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_baseline",
+    "sub_agent_sessions": 0,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+  "metrics": {
+    "wall_seconds": 93.3,
+    "tool_calls": 36,
+    "distinct_sources": 6,
+    "evidence_items": 10,
+    "hypotheses": 3,
+    "tests_considered": 3,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 36
+    },
+    "policy_denials": 1,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "nucleic_acid_binding",
+    "favoured_after": "nucleic_acid_binding",
+    "decision_changed": false,
+    "next_experiment": "Run the structural context test (T2: P2Rank pocket and ProtVar interface membership for residue 404) to test H3, and when a DNA-bound RAG1 model or structure becomes available, measure whether R404 contacts the RSS backbone. Confirmation of H1 would be a DNA-contact distance under about 4 Å for the arginine side chain; overturning would be no contact and no change in predicted DNA binding for R404Q.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

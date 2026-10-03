@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-FOXP3-p.Ala384Thr-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of FOXP3-p.Ala384Thr (FOXP3, UniProt Q9BZS1) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "FOXP3",
+    "variant_id": "FOXP3-p.Ala384Thr",
+    "accession": "Q9BZS1",
+    "position": 384,
+    "reference_residue": "A",
+    "alternate_residue": "T",
+    "protein_change": "p.Ala384Thr"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:24:18Z",
+  "finished_at": "2026-10-03T22:27:22Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "f0b7f786e4014de794b6ecf85e693084",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 8,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 183.5,
+    "tool_calls": 88,
+    "distinct_sources": 10,
+    "evidence_items": 22,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 12,
+      "literature": 14,
+      "knowledge_graph": 34,
+      "insight": 5,
+      "planner": 9,
+      "safety": 4,
+      "runner": 4,
+      "analysis": 6
+    },
+    "policy_denials": 0,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "nucleic_acid_binding",
+    "favoured_after": "nucleic_acid_binding",
+    "decision_changed": false,
+    "next_experiment": "Computational DNA-contact check on the DNA-bound structure 4WK8 (FOXP3 domain-swapped dimer bridging DNA, E16): measure the minimum heavy-atom distance from Ala384 (and the Thr from the A384T model) to the bound DNA. Refutes H1 if no atom of residue 384 is within about 5 Å of DNA and the A384T model shows no change in predicted helix geometry or contacts. Supports H1 if residue 384 contacts DNA within about 5 Å.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

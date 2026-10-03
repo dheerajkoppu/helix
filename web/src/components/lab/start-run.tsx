@@ -19,6 +19,14 @@ import { apiFetch, isApiError } from "@/lib/api/client";
 import { apiQuery } from "@/lib/api/query";
 import type { Schema } from "@/lib/api/types";
 import { parseVariantId } from "@/lib/ids";
+import {
+  LAB_WORDS,
+  plainMutationLabel,
+  plainNoMatch,
+  plainNoMutations,
+  plainRunMode,
+  plainStepCaption,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 
 /** The lab's demonstration case. */
@@ -130,6 +138,12 @@ const API_NOTE: Record<Exclude<LabApiState, "ready">, string> = {
   not_served: "This API build does not serve the lab.",
 };
 
+const PLAIN_API_NOTE: Record<Exclude<LabApiState, "ready">, string> = {
+  checking: LAB_WORDS.labChecking,
+  unreachable: LAB_WORDS.labSilent,
+  not_served: LAB_WORDS.labMissing,
+};
+
 export interface StartRunProps {
   /** whether the lab routes answered: a run can be started only when they are ready */
   apiState: LabApiState;
@@ -185,7 +199,7 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
       router.push(`/lab/${encodeURIComponent(runId)}`);
     },
     onError: (error) => {
-      toast.error("Run not started", {
+      toast.error(advanced ? "Run not started" : LAB_WORDS.notStarted, {
         description: isApiError(error)
           ? error.message
           : "The lab API did not start the run.",
@@ -240,18 +254,23 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
   return (
     <form onSubmit={submit} noValidate className="flex flex-col gap-4">
       <div className="flex flex-col gap-2.5">
+        {advanced ? null : (
+          <p className="text-sm text-muted-foreground">
+            {LAB_WORDS.pickMutation}
+          </p>
+        )}
         <div
           role="group"
-          aria-label="Flagship gene"
+          aria-label={advanced ? "Flagship gene" : LAB_WORDS.pickGene}
           className="flex flex-wrap items-center gap-1"
         >
           {flagshipGenes.isPending ? (
             <span className="text-xs text-subtle-foreground">
-              Loading genes
+              {LAB_WORDS.loadingGenes}
             </span>
           ) : flagshipGenes.isError || flagshipGenes.data.length === 0 ? (
             <span className="text-xs text-subtle-foreground">
-              Flagship genes not available
+              {advanced ? "Flagship genes not available" : LAB_WORDS.noGenes}
             </span>
           ) : (
             flagshipGenes.data.map((symbol) => (
@@ -274,12 +293,14 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
         </div>
         <div
           role="radiogroup"
-          aria-label={`Flagship variants of ${gene}`}
+          aria-label={
+            advanced ? `Flagship variants of ${gene}` : LAB_WORDS.pickMutation
+          }
           className="flex min-h-10 flex-wrap items-center gap-2"
         >
           {flagshipVariants.isPending ? (
             <span className="text-sm text-subtle-foreground">
-              Loading variants
+              {advanced ? "Loading variants" : LAB_WORDS.loadingMutations}
             </span>
           ) : flagshipVariants.isError ? (
             <QueryErrorState
@@ -291,7 +312,9 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
             />
           ) : geneVariants.length === 0 ? (
             <span className="text-sm text-muted-foreground">
-              No flagship variant found for {gene}.
+              {advanced
+                ? `No flagship variant found for ${gene}.`
+                : plainNoMutations(gene)}
             </span>
           ) : (
             geneVariants.map((hit) => {
@@ -302,17 +325,20 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
                   type="button"
                   role="radio"
                   aria-checked={selected}
-                  title={hit.description ?? undefined}
+                  title={advanced ? (hit.description ?? undefined) : undefined}
                   onClick={() => setPicked(hit.id)}
                   className={cn(
-                    "h-10 rounded-md border px-3.5 font-mono text-base outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/40",
+                    "h-10 rounded-md border px-3.5 text-base outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/40",
+                    advanced && "font-mono",
                     selected
                       ? "border-foreground bg-active font-medium text-foreground"
                       : "border-border text-muted-foreground hover:border-border-strong hover:text-foreground",
                   )}
                   translate="no"
                 >
-                  {variantLabel(hit.id)}
+                  {advanced
+                    ? variantLabel(hit.id)
+                    : plainMutationLabel(variantLabel(hit.id))}
                 </button>
               );
             })
@@ -321,10 +347,15 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
           !flagshipVariants.isPending &&
           !geneVariants.some((hit) => hit.id === picked) ? (
             <span
-              className="flex h-10 items-center rounded-md border border-foreground bg-active px-3.5 font-mono text-base font-medium text-foreground"
+              className={cn(
+                "flex h-10 items-center rounded-md border border-foreground bg-active px-3.5 text-base font-medium text-foreground",
+                advanced && "font-mono",
+              )}
               translate="no"
             >
-              {variantLabel(picked)}
+              {advanced
+                ? variantLabel(picked)
+                : plainMutationLabel(variantLabel(picked))}
             </span>
           ) : null}
         </div>
@@ -338,7 +369,7 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
           className="h-10 px-5 text-sm"
         >
           <PlayIcon data-icon="inline-start" />
-          {start.isPending ? "Starting" : "Run"}
+          {start.isPending ? LAB_WORDS.starting : LAB_WORDS.run}
         </Button>
         <Button
           type="button"
@@ -349,7 +380,7 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
           onClick={() => setOptionsToggled(!optionsOpen)}
           className="h-10"
         >
-          Options
+          {LAB_WORDS.options}
           <ChevronDownIcon
             data-icon="inline-end"
             className={cn("transition-transform", optionsOpen && "rotate-180")}
@@ -357,7 +388,7 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
         </Button>
         {apiState !== "ready" ? (
           <p role="status" className="text-sm text-muted-foreground">
-            {API_NOTE[apiState]}
+            {(advanced ? API_NOTE : PLAIN_API_NOTE)[apiState]}
           </p>
         ) : null}
       </div>
@@ -368,7 +399,7 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
         className="divide-y divide-border-subtle border-y border-border"
       >
         <Field
-          label="Other variant"
+          label={advanced ? "Other variant" : LAB_WORDS.otherMutation}
           htmlFor={`${fieldId}-variant`}
           hint="One missense variant per run."
         >
@@ -400,8 +431,17 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
                 />
               ) : hits.length === 0 ? (
                 <p className="px-2.5 py-2 text-xs text-muted-foreground">
-                  No protein substitution matches{" "}
-                  <span className="font-mono text-foreground">{needle}</span>.
+                  {advanced ? (
+                    <>
+                      No protein substitution matches{" "}
+                      <span className="font-mono text-foreground">
+                        {needle}
+                      </span>
+                      .
+                    </>
+                  ) : (
+                    plainNoMatch(needle)
+                  )}
                 </p>
               ) : (
                 hits.map((hit) => {
@@ -433,7 +473,9 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
                         {variantLabel(hit.id)}
                       </span>
                       <span className="truncate text-muted-foreground">
-                        {hit.description ?? hit.match_reason}
+                        {advanced
+                          ? (hit.description ?? hit.match_reason)
+                          : null}
                       </span>
                     </button>
                   );
@@ -444,7 +486,7 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
         </Field>
 
         <Field
-          label="Objective"
+          label={advanced ? "Objective" : LAB_WORDS.question}
           htmlFor={`${fieldId}-objective`}
           hint="Empty uses the lab's question."
         >
@@ -452,13 +494,18 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
             id={`${fieldId}-objective`}
             value={objective}
             maxLength={600}
-            placeholder={DEFAULT_OBJECTIVE}
+            placeholder={
+              advanced ? DEFAULT_OBJECTIVE : plainStepCaption("Question")
+            }
             onChange={(event) => setObjective(event.target.value)}
             className="max-w-2xl"
           />
         </Field>
 
-        <Field label="Mode" hint={MODE_NOTE[mode]}>
+        <Field
+          label={advanced ? "Mode" : LAB_WORDS.whoRuns}
+          hint={MODE_NOTE[mode]}
+        >
           <ToggleGroup
             variant="outline"
             spacing={0}
@@ -468,23 +515,23 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
               if (next && (RUN_MODES as readonly string[]).includes(next))
                 setMode(next as RunMode);
             }}
-            aria-label="Mode"
+            aria-label={advanced ? "Mode" : LAB_WORDS.whoRuns}
           >
             {RUN_MODES.map((option) => (
               <ToggleGroupItem key={option} value={option}>
-                {modeLabel(option)}
+                {advanced ? modeLabel(option) : plainRunMode(option)}
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
         </Field>
 
         <Field
-          label="Budget"
+          label={advanced ? "Budget" : LAB_WORDS.limits}
           hint="The planner chooses its test inside it. Empty uses the default."
         >
           <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
             <label className="flex flex-col gap-1 text-2xs text-muted-foreground">
-              Tool calls
+              {advanced ? "Tool calls" : LAB_WORDS.steps}
               <Input
                 inputMode="numeric"
                 value={maxToolCalls}
@@ -497,7 +544,7 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
               />
             </label>
             <label className="flex flex-col gap-1 text-2xs text-muted-foreground">
-              Compute seconds
+              {LAB_WORDS.computeSeconds}
               <Input
                 inputMode="numeric"
                 value={maxComputeSeconds}
@@ -512,8 +559,9 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
           </div>
           {budgetInvalid ? (
             <p role="alert" className="text-xs text-destructive">
-              Tool calls: a whole number from {TOOL_CALL_LIMITS.minimum} to{" "}
-              {TOOL_CALL_LIMITS.maximum}. Compute seconds: from{" "}
+              {advanced ? "Tool calls" : LAB_WORDS.steps}: a whole number from{" "}
+              {TOOL_CALL_LIMITS.minimum} to{" "}
+              {TOOL_CALL_LIMITS.maximum}. {LAB_WORDS.computeSeconds}: from{" "}
               {COMPUTE_SECOND_LIMITS.minimum} to {COMPUTE_SECOND_LIMITS.maximum}
               .
             </p>

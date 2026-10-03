@@ -1,0 +1,14 @@
+{
+  "session_id": "43845d891a194bbf9378499fa69c86cc",
+  "sub_agent_sessions": [
+    "2685f8cde654467aaf8d2825002d73a7",
+    "3263c87836b04bfaa32f262d16dc530e",
+    "6207b96ce45e470bb298ff172d35bfcb",
+    "769e6c4320764be6a48b8f350c593fa9",
+    "8aad25b53a7344d9b450062a985acc0b",
+    "bc5bd01f27334f69afc53d8f1f1253ac",
+    "d23f8ce2c552403cab8464f9c1410945",
+    "e48b585aa4ae4944a76f28b436027d8e"
+  ],
+  "ended": "stalled"
+}

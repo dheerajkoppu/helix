@@ -16,7 +16,12 @@ import { QueryErrorState, RowsSkeleton } from "@/components/states/query-state";
 import type { Schema } from "@/lib/api/types";
 import { formatDate } from "@/lib/format";
 import { routes } from "@/lib/ids";
-import { parseClinicalSignificance } from "@/lib/science/clinical-significance";
+import { Swatch } from "@/components/science/swatch";
+import { plainClassifiedBy, plainReview } from "@/lib/plain-language";
+import {
+  CLINICAL_SIGNIFICANCE,
+  parseClinicalSignificance,
+} from "@/lib/science/clinical-significance";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import { withSelection } from "@/lib/state/selection-url";
 import { useResidue } from "@/lib/workspace-data";
@@ -133,6 +138,38 @@ export function ClassificationLine({
           </span>
         ) : null}
       </p>
+    </div>
+  );
+}
+
+/** Simple mode: the ClinVar class as one sentence, and how well it was checked. */
+export function PlainClassification({
+  classification,
+  reviewStatus,
+  reviewStars,
+  evidence,
+}: ClassificationLineProps) {
+  const significance = parseClinicalSignificance(classification);
+  const meta = significance ? CLINICAL_SIGNIFICANCE[significance] : null;
+  return (
+    <div className="flex flex-col gap-1 px-3 py-3">
+      <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-medium text-foreground">
+        {meta ? (
+          <Swatch swatchClass={meta.swatchClass} hatched={!meta.certain} />
+        ) : null}
+        {plainClassifiedBy(classification)}
+        <EvidenceMark evidence={evidence} />
+      </p>
+      {reviewStars !== null && reviewStars !== undefined ? (
+        <p
+          className="text-xs text-muted-foreground"
+          title={
+            reviewStatus ? `${reviewStatus} (${reviewStars} of 4 stars)` : undefined
+          }
+        >
+          {plainReview(reviewStars)}
+        </p>
+      ) : null}
     </div>
   );
 }

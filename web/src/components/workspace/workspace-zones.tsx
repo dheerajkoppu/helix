@@ -20,6 +20,8 @@ import {
 import { useHotkeys } from "@/hooks/use-hotkeys";
 import { useHydrated } from "@/hooks/use-hydrated";
 import { useIsDesktop } from "@/hooks/use-media-query";
+import { PANEL_WORDS, plainPanel } from "@/lib/plain-language";
+import { useAdvancedMode } from "@/lib/state/preferences";
 
 export interface WorkspaceZonesProps {
   /** left: the dense table for the stage. Omit for stages that have none. */
@@ -120,9 +122,20 @@ function MobileZones({
   ledger,
   instrument,
   inspector,
-  ledgerLabel = "Ledger",
-  inspectorLabel = "Inspector",
+  ledgerLabel: ledgerName,
+  inspectorLabel: inspectorName,
 }: WorkspaceZonesProps) {
+  const advanced = useAdvancedMode();
+  const ledgerLabel = advanced
+    ? (ledgerName ?? "Ledger")
+    : ledgerName
+      ? plainPanel(ledgerName)
+      : PANEL_WORDS.list;
+  const inspectorLabel = advanced
+    ? (inspectorName ?? "Inspector")
+    : inspectorName
+      ? plainPanel(inspectorName)
+      : PANEL_WORDS.details;
   const [sheet, setSheet] = useState<"ledger" | "inspector" | null>(null);
   const buttons = [
     ledger

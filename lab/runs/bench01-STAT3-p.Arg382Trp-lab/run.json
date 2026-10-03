@@ -1,0 +1,75 @@
+{
+  "run_id": "bench01-STAT3-p.Arg382Trp-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of STAT3-p.Arg382Trp (STAT3, UniProt P40763) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "STAT3",
+    "variant_id": "STAT3-p.Arg382Trp",
+    "accession": "P40763",
+    "position": 382,
+    "reference_residue": "R",
+    "alternate_residue": "W",
+    "protein_change": "p.Arg382Trp"
+  },
+  "mode": "specialist_lab",
+  "status": "failed",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:20:09Z",
+  "finished_at": "2026-10-03T22:28:12Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "43845d891a194bbf9378499fa69c86cc",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 8,
+    "loop_ended": "stalled"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 482.9,
+    "tool_calls": 94,
+    "distinct_sources": 10,
+    "evidence_items": 20,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 0,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 15,
+      "literature": 15,
+      "knowledge_graph": 28,
+      "insight": 5,
+      "planner": 13,
+      "safety": 10,
+      "analysis": 8
+    },
+    "policy_denials": 11,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "nucleic_acid_binding",
+    "favoured_after": null,
+    "decision_changed": false,
+    "next_experiment": "Run T1: FoldX predicted ΔΔG for R382W on the AlphaFold model (AF-P40763-F1) via EBI ProtVar, reporting pLDDT at residue 382 and the other disease substitutions at that position. Store the result so that the H2 would_refute criterion can be evaluated.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": null,
+    "decisions": 0
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": "The run ended without a recorded decision. See omnigent.log and final_reply.txt."
+}

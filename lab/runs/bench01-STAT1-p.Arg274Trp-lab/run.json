@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-STAT1-p.Arg274Trp-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of STAT1-p.Arg274Trp (STAT1, UniProt P42224) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "STAT1",
+    "variant_id": "STAT1-p.Arg274Trp",
+    "accession": "P42224",
+    "position": 274,
+    "reference_residue": "R",
+    "alternate_residue": "W",
+    "protein_change": "p.Arg274Trp"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:20:54Z",
+  "finished_at": "2026-10-03T22:24:13Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "15d85be6f2ee43a48e8b53f730bca1fd",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 8,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 198.5,
+    "tool_calls": 94,
+    "distinct_sources": 9,
+    "evidence_items": 23,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 15,
+      "literature": 15,
+      "knowledge_graph": 36,
+      "insight": 5,
+      "planner": 8,
+      "safety": 4,
+      "runner": 5,
+      "analysis": 6
+    },
+    "policy_denials": 0,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "protein_interaction",
+    "favoured_after": "protein_interaction",
+    "decision_changed": false,
+    "next_experiment": "Run T2 (structural_context): check whether residue 274 of P42224 (AF-P42224-F1) lies in a P2Rank or ProtVar predicted pocket and in a ProtVar predicted protein-protein interface, and whether it is within 5 Å of the Y701 region. Outcome that supports H1: 274 is in a predicted interface or pocket, near Y701 (within the 5 Å cutoff). Outcome that weakens H1: 274 is not in any predicted interface and is more than 5 Å from Y701.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

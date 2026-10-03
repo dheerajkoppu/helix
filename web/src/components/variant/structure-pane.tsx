@@ -22,6 +22,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { StructureViewport } from "@/components/viewer";
 import { Zone } from "@/components/workspace";
+import { plainNotCovered } from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import {
@@ -283,14 +284,18 @@ export function StructureInstrument({
                       </span>
                       {note ? (
                         <span className="shrink-0 text-2xs text-subtle-foreground">
-                          {note}
+                          {advanced
+                            ? note
+                            : note === "recommended"
+                              ? "Suggested"
+                              : `Shows position ${position}`}
                         </span>
                       ) : null}
                     </span>
                   </DropdownMenuRadioItem>
                 ))}
               </DropdownMenuRadioGroup>
-              {ledger?.recommended ? (
+              {advanced && ledger?.recommended ? (
                 <p className="border-t border-border-subtle px-2 py-1.5 text-2xs text-muted-foreground">
                   {ledger.recommended.reason}
                 </p>
@@ -307,11 +312,17 @@ export function StructureInstrument({
         {covered === false && descriptor ? (
           <div className="flex shrink-0 flex-wrap items-center gap-x-2 gap-y-1 border-b border-border-subtle bg-sunken px-3 py-1.5 text-xs">
             <span className="text-foreground">
-              {residueLabel ?? `Residue ${position}`} has no coordinates in{" "}
-              <span className="font-mono">
-                {descriptor.source_id ?? descriptor.id}
-              </span>
-              .
+              {advanced ? (
+                <>
+                  {residueLabel ?? `Residue ${position}`} has no coordinates in{" "}
+                  <span className="font-mono">
+                    {descriptor.source_id ?? descriptor.id}
+                  </span>
+                  .
+                </>
+              ) : (
+                plainNotCovered(position ?? 0)
+              )}
             </span>
             {fallback ? (
               <Button
@@ -319,11 +330,15 @@ export function StructureInstrument({
                 variant="outline"
                 onClick={() => setStructure(fallback.descriptor.id)}
               >
-                Show {fallback.descriptor.source_id ?? fallback.descriptor.id}
+                {advanced
+                  ? `Show ${fallback.descriptor.source_id ?? fallback.descriptor.id}`
+                  : "Show one that does"}
               </Button>
             ) : (
               <span className="text-muted-foreground">
-                No listed structure resolves it.
+                {advanced
+                  ? "No listed structure resolves it."
+                  : "No structure covers it."}
               </span>
             )}
           </div>

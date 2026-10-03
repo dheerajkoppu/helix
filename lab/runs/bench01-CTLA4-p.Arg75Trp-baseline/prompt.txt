@@ -1,0 +1,4 @@
+Objective: Find the molecular mechanism that best explains the loss of function of CTLA4-p.Arg75Trp (CTLA4, UniProt P16410) and test it with one targeted computational test.
+Subject line: variant_id=CTLA4-p.Arg75Trp gene=CTLA4 accession=P16410 position=75 reference=R alternate=W
+Budget for the whole run: 160 lab tool calls and 300 compute seconds.
+Run the discovery loop to the final report.

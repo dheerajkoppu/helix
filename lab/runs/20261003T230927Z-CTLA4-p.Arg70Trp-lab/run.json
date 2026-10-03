@@ -1,0 +1,75 @@
+{
+  "run_id": "20261003T230927Z-CTLA4-p.Arg70Trp-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of CTLA4-p.Arg70Trp (CTLA4, UniProt P16410) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "CTLA4",
+    "variant_id": "CTLA4-p.Arg70Trp",
+    "accession": "P16410",
+    "position": 70,
+    "reference_residue": "R",
+    "alternate_residue": "W",
+    "protein_change": "p.Arg70Trp"
+  },
+  "mode": "specialist_lab",
+  "status": "failed",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T23:09:27Z",
+  "finished_at": "2026-10-03T23:17:14Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "b9e36b967e0d448f8c9c61230b4fceab",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 8,
+    "loop_ended": "stalled"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 466.4,
+    "tool_calls": 83,
+    "distinct_sources": 10,
+    "evidence_items": 21,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 0,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 10,
+      "literature": 14,
+      "knowledge_graph": 30,
+      "insight": 5,
+      "planner": 13,
+      "safety": 9,
+      "analysis": 2
+    },
+    "policy_denials": 11,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "protein_interaction",
+    "favoured_after": null,
+    "decision_changed": false,
+    "next_experiment": null,
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": null,
+    "decisions": 0
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "waits for a human decision through the API",
+  "error": "The run ended without a recorded decision. See omnigent.log and final_reply.txt."
+}

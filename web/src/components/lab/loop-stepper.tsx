@@ -85,7 +85,7 @@ export function LoopStepper({
                   >
                     {STEP_LABEL[stage.id]}
                   </span>
-                  <span className="truncate text-2xs text-muted-foreground">
+                  <span className="hidden truncate text-2xs text-muted-foreground sm:block">
                     {notes[stage.id] ?? (pending ? "Waiting" : " ")}
                   </span>
                 </span>

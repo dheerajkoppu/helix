@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-JAK3-p.Arg103His-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of JAK3-p.Arg103His (JAK3, UniProt P52333) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "JAK3",
+    "variant_id": "JAK3-p.Arg103His",
+    "accession": "P52333",
+    "position": 103,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "protein_change": "p.Arg103His"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:17:11Z",
+  "finished_at": "2026-10-03T22:20:04Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "2ea966f00a44422382a9aae62063cfc5",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 8,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 172.9,
+    "tool_calls": 87,
+    "distinct_sources": 10,
+    "evidence_items": 22,
+    "hypotheses": 3,
+    "tests_considered": 3,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 12,
+      "literature": 15,
+      "knowledge_graph": 32,
+      "insight": 6,
+      "planner": 8,
+      "safety": 4,
+      "runner": 4,
+      "analysis": 6
+    },
+    "policy_denials": 0,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "stability_folding",
+    "favoured_after": "stability_folding",
+    "decision_changed": false,
+    "next_experiment": "Computational check on AF-P52333-F1: compute the relative solvent-accessible surface area (SASA) of R103 in wild type and list its side-chain partners (salt bridges, hydrogen bonds, contacts within 5 Å). H1 is refuted if relative SASA is above 25% with no polar or salt-bridge partner. H1 is supported if R103 is buried with a partner that R103H would lose. Run the T2 structural-context readout in the same step to also test H2 and H3 against the pocket and interface calls.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

@@ -20,6 +20,12 @@ import { QueryErrorState, RowsSkeleton } from "@/components/states/query-state";
 import { Button } from "@/components/ui/button";
 import type { EvidenceItem } from "@/lib/evidence";
 import { routes, toThreeLetter } from "@/lib/ids";
+import {
+  PROTEIN_WORDS,
+  plainMutationKind,
+  plainMutationRow,
+  plainPopulation,
+} from "@/lib/plain-language";
 import { setWorkspaceHover } from "@/lib/state/hover";
 import {
   useWorkspaceSelection,
@@ -47,16 +53,21 @@ const covers = (descriptor: ApiStructureDescriptor, position: number) =>
     (range) => position >= range.start && position <= range.end,
   );
 
-function variantEvidence(variant: SequenceVariant): EvidenceItem {
+function variantEvidence(
+  variant: SequenceVariant,
+  plain = false,
+): EvidenceItem {
   const recordId = variant.sourceId ?? variant.id;
+  const database =
+    variant.source ?? (variant.group === "clinical" ? "ClinVar" : "gnomAD");
   return {
     evidenceClass:
       variant.evidenceClass ??
       (variant.group === "clinical" ? "clinical_database" : "curated_database"),
     statement: variant.description ?? variant.label,
     source: {
-      database:
-        variant.source ?? (variant.group === "clinical" ? "ClinVar" : "gnomAD"),
+      // "ClinVar 2026-09-29" and "gnomAD v4.1" read as the database name alone
+      database: plain ? database.replace(/\s+v?\d[\w.-]*$/, "") : database,
       recordId,
       url: /^VCV\d+/.test(recordId)
         ? `https://www.ncbi.nlm.nih.gov/clinvar/variation/${recordId}/`
@@ -68,9 +79,11 @@ function variantEvidence(variant: SequenceVariant): EvidenceItem {
 function VariantRows({
   gene,
   variants,
+  simple = false,
 }: {
   gene: string | null;
   variants: SequenceVariant[];
+  simple?: boolean;
 }) {
   const selected = useWorkspaceSelection((state) => state.variant);
   const selectVariant = useWorkspaceSelection((state) => state.selectVariant);
@@ -88,23 +101,31 @@ function VariantRows({
             className="flex items-center gap-2 px-3 py-1 text-xs data-[active=true]:bg-active"
             data-active={active}
           >
-            <EvidencePopover
-              evidence={variantEvidence(variant)}
-              size="compact"
-              detail={null}
-              className="shrink-0"
-            />
+            {simple ? null : (
+              <EvidencePopover
+                evidence={variantEvidence(variant)}
+                size="compact"
+                detail={null}
+                className="shrink-0"
+              />
+            )}
             {variant.group === "clinical" && gene ? (
               <TextLink
                 href={routes.variant(variant.id)}
-                className="shrink-0 font-mono"
+                className={simple ? "shrink-0" : "shrink-0 font-mono"}
+                title={simple ? variant.label : undefined}
               >
-                {variant.label}
+                {simple ? plainMutationRow(variant.label) : variant.label}
               </TextLink>
             ) : (
-              <span className="shrink-0 font-mono">{variant.label}</span>
+              <span
+                className={simple ? "shrink-0" : "shrink-0 font-mono"}
+                title={simple ? variant.label : undefined}
+              >
+                {simple ? plainMutationRow(variant.label) : variant.label}
+              </span>
             )}
-            <span className="min-w-0 flex-1 truncate text-muted-foreground">
+            <span className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-0.5 text-muted-foreground">
               {variant.significance ? (
                 <ClinicalSignificanceChip
                   significance={variant.significance}
@@ -112,12 +133,33 @@ function VariantRows({
                 />
               ) : variant.alleleFrequency !== null &&
                 variant.alleleFrequency !== undefined ? (
-                <span className="tabular font-mono text-2xs">
-                  AF {variant.alleleFrequency.toExponential(2)}
-                </span>
+                simple ? (
+                  <span
+                    className="text-2xs"
+                    title={`Frequency ${variant.alleleFrequency.toExponential(2)}`}
+                  >
+                    {plainPopulation("observed")}
+                  </span>
+                ) : (
+                  <span className="tabular font-mono text-2xs">
+                    AF {variant.alleleFrequency.toExponential(2)}
+                  </span>
+                )
               ) : (
-                <span className="text-2xs">{variant.consequence}</span>
+                <span className="text-2xs">
+                  {simple
+                    ? plainMutationKind(variant.consequence)
+                    : variant.consequence}
+                </span>
               )}
+              {simple ? (
+                <EvidencePopover
+                  evidence={variantEvidence(variant, true)}
+                  size="compact"
+                  detail={null}
+                  className="shrink-0"
+                />
+              ) : null}
             </span>
             {substitution ? (
               <Button
@@ -137,7 +179,7 @@ function VariantRows({
                   )
                 }
               >
-                {active ? "Shown" : "Show in 3D"}
+                {active ? PROTEIN_WORDS.shownIn3d : PROTEIN_WORDS.showIn3d}
               </Button>
             ) : null}
           </li>
@@ -394,23 +436,37 @@ export function ResidueInspector({
   const variantBlock = (
     <>
       <SectionHeader
-        title={simple ? "Variants here" : "Variants at this position"}
+        title={
+          simple ? PROTEIN_WORDS.mutationsHere : "Variants at this position"
+        }
         count={variants ? here.length : null}
       />
       {variants === null ? (
         <EmptyState
           size="inline"
-          title="Variant sources have not answered"
-          description="ClinVar, UniProt and gnomAD rows appear here once they load."
+          title={
+            simple
+              ? PROTEIN_WORDS.loadingMutations
+              : "Variant sources have not answered"
+          }
+          description={
+            simple
+              ? undefined
+              : "ClinVar, UniProt and gnomAD rows appear here once they load."
+          }
         />
       ) : here.length === 0 ? (
         <EmptyState
           size="inline"
-          title="No variant recorded at this position"
-          searched={["ClinVar", "UniProt", "gnomAD v4.1"]}
+          title={
+            simple
+              ? PROTEIN_WORDS.noMutationsHere
+              : "No variant recorded at this position"
+          }
+          searched={simple ? undefined : ["ClinVar", "UniProt", "gnomAD v4.1"]}
         />
       ) : (
-        <VariantRows gene={gene} variants={here} />
+        <VariantRows gene={gene} variants={here} simple={simple} />
       )}
 
     </>

@@ -32,6 +32,13 @@ import { QueryErrorState, RowsSkeleton } from "@/components/states/query-state";
 import { SourceUnavailable } from "@/components/states/source-unavailable";
 import { Button } from "@/components/ui/button";
 import { isUniProtAccession, routes } from "@/lib/ids";
+import {
+  OPTIONS_WORDS,
+  plainConcentration,
+  plainDrugKind,
+  plainDrugStage,
+  plainLabTests,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useCompound, useCompounds } from "@/lib/workspace-data";
 
@@ -39,6 +46,7 @@ import { CompoundDepiction } from "./depiction";
 import {
   compoundName,
   measuredBasis,
+  measuredAmount,
   measuredValue,
   modalityLabel,
   phaseLabel,
@@ -123,7 +131,7 @@ function MeasuredForTarget({
         <p className="px-3 py-2 text-xs text-muted-foreground">
           {advanced
             ? `Reading ChEMBL activities for ${target}. The first request for a protein can take up to 45 seconds.`
-            : "Reading ChEMBL. The first load can take 45 s."}
+            : OPTIONS_WORDS.loading}
         </p>
         <RowsSkeleton rows={3} />
       </div>
@@ -156,7 +164,11 @@ function MeasuredForTarget({
     return (
       <EmptyState
         size="inline"
-        title={`No measured affinity against ${target} in the retrieved set`}
+        title={
+          advanced
+            ? `No measured affinity against ${target} in the retrieved set`
+            : OPTIONS_WORDS.none
+        }
         description={
           !advanced
             ? undefined
@@ -183,17 +195,19 @@ function MeasuredForTarget({
       <>
         <div className="flex flex-col gap-1 px-3 py-3">
           <span className="text-xs text-muted-foreground">
-            Measured affinity, {target}
+            {OPTIONS_WORDS.strength}
           </span>
           <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span className="tabular font-mono text-2xl leading-8 font-medium text-foreground">
-              {measuredValue(measured)}
+            <span
+              className="tabular font-mono text-2xl leading-8 font-medium text-foreground"
+              title={`${measuredValue(measured)} (${plainConcentration(measured.representative.units)})`}
+            >
+              {measuredAmount(measured)}
             </span>
             {evidence ? <EvidencePopover evidence={evidence} /> : null}
           </span>
           <span className="text-xs text-muted-foreground">
-            Median of {measured.assay_count}{" "}
-            {measured.assay_count === 1 ? "assay" : "assays"}
+            {plainLabTests(measured.assay_count)}. {OPTIONS_WORDS.lowerStronger}
           </span>
         </div>
         <Fold title="Details" tone="quiet" className="border-t border-border-subtle">
@@ -364,15 +378,25 @@ export function CompoundPage({ compoundId }: { compoundId: string }) {
   return (
     <Page>
       <PageHeader
-        kind="Compound"
+        kind={advanced ? "Compound" : OPTIONS_WORDS.molecule}
         title={name}
-        id={<MonoId value={core.inchikey ?? core.id} />}
-        description={[
-          modalityLabel(core),
-          status
-            ? `${status}${core.max_phase && core.max_phase >= 4 ? ", any indication" : ""}`
-            : "No clinical phase in ChEMBL",
-        ].join(" · ")}
+        id={
+          advanced ? <MonoId value={core.inchikey ?? core.id} /> : undefined
+        }
+        description={
+          advanced
+            ? [
+                modalityLabel(core),
+                status
+                  ? `${status}${core.max_phase && core.max_phase >= 4 ? ", any indication" : ""}`
+                  : "No clinical phase in ChEMBL",
+              ].join(" · ")
+            : [
+                plainDrugKind(modalityLabel(core)),
+                plainDrugStage(core.max_phase, core.first_approval) ??
+                  OPTIONS_WORDS.noStage,
+              ].join(" · ")
+        }
         meta={
           advanced && core.chembl_id ? (
             <SourceChip
@@ -389,7 +413,7 @@ export function CompoundPage({ compoundId }: { compoundId: string }) {
                 variant={advanced ? "outline" : "default"}
                 href={`${routes.interventions(target)}?compound=${encodeURIComponent(core.id)}`}
               >
-                Open with {target}
+                {advanced ? `Open with ${target}` : OPTIONS_WORDS.withProtein}
               </ButtonLink>
             ) : null}
             <AddToProjectButton
@@ -815,8 +839,8 @@ export function CompoundPage({ compoundId }: { compoundId: string }) {
                 name={name}
                 absentLabel={
                   core.modality === "small_molecule"
-                    ? "No 2D structure stored"
-                    : `${modalityLabel(core)}: no small-molecule structure`
+                    ? OPTIONS_WORDS.noDrawing
+                    : plainDrugKind(modalityLabel(core))
                 }
                 className="size-full"
               />
@@ -853,21 +877,25 @@ export function CompoundPage({ compoundId }: { compoundId: string }) {
               ) : null}
               <Plate>
                 <DefinitionList termWidth="8.5rem">
-                  <DefinitionRow term="Stage">{status}</DefinitionRow>
-                  <DefinitionRow term="Modality">
-                    {modalityLabel(core)}
+                  <DefinitionRow term={OPTIONS_WORDS.stage}>
+                    {plainDrugStage(core.max_phase, core.first_approval)}
                   </DefinitionRow>
-                  <DefinitionRow term="Weight" mono>
-                    {core.molecular_weight
-                      ? `${core.molecular_weight.toFixed(2)} Da`
-                      : null}
+                  <DefinitionRow term={OPTIONS_WORDS.kindRow}>
+                    {plainDrugKind(modalityLabel(core))}
                   </DefinitionRow>
-                  <DefinitionRow term="Formula" mono>
+                  <DefinitionRow term={OPTIONS_WORDS.weight} mono>
+                    {core.molecular_weight ? (
+                      <span title="daltons">
+                        {core.molecular_weight.toFixed(0)} Da
+                      </span>
+                    ) : null}
+                  </DefinitionRow>
+                  <DefinitionRow term={OPTIONS_WORDS.formula} mono>
                     {core.molecular_formula}
                   </DefinitionRow>
                 </DefinitionList>
                 <Fold
-                  title="Identifiers"
+                  title={OPTIONS_WORDS.codes}
                   tone="quiet"
                   className="border-t border-border-subtle"
                 >
@@ -902,7 +930,10 @@ export function CompoundPage({ compoundId }: { compoundId: string }) {
           </div>
         </section>
 
-        <PageSection title="Mechanisms" count={detail.mechanisms.length}>
+        <PageSection
+          title={OPTIONS_WORDS.howItWorks}
+          count={detail.mechanisms.length}
+        >
           {detail.mechanisms.length > 0 ? (
             <Plate>
               {detail.mechanisms.map((mechanism) => {
@@ -969,7 +1000,10 @@ export function CompoundPage({ compoundId }: { compoundId: string }) {
           )}
         </PageSection>
 
-        <PageSection title="Targets" count={detail.targets.length}>
+        <PageSection
+          title={OPTIONS_WORDS.actsOn}
+          count={detail.targets.length}
+        >
           {detail.targets.length > 0 ? (
             <Plate>
               {detail.targets.map((entry) => (
@@ -1018,7 +1052,7 @@ export function CompoundPage({ compoundId }: { compoundId: string }) {
           )}
         </PageSection>
 
-        <PageFold title="Indications" count={indications.length}>
+        <PageFold title={OPTIONS_WORDS.usedFor} count={indications.length}>
           <div className="mb-2 flex justify-end">
             <ShowAll
               total={indications.length}
@@ -1041,8 +1075,8 @@ export function CompoundPage({ compoundId }: { compoundId: string }) {
                     </span>
                   </span>
                   <span className="text-muted-foreground">
-                    {phaseLabel(indication.max_phase_for_indication) ??
-                      "Phase unknown"}
+                    {plainDrugStage(indication.max_phase_for_indication) ??
+                      OPTIONS_WORDS.noStage}
                   </span>
                   <span className="flex gap-x-2">
                     {indication.references.slice(0, 2).map((reference) =>
@@ -1069,7 +1103,7 @@ export function CompoundPage({ compoundId }: { compoundId: string }) {
         </PageFold>
 
         <PageFold
-          title="Analogs"
+          title={OPTIONS_WORDS.similar}
           count={analogs.data && !analogsDown ? analogRows.length : null}
         >
           <div className="mb-2 flex justify-end">
@@ -1142,7 +1176,10 @@ export function CompoundPage({ compoundId }: { compoundId: string }) {
           )}
         </PageFold>
 
-        <PageFold title="Cross-references" count={xrefs.length}>
+        <PageFold
+          title={OPTIONS_WORDS.otherDatabases}
+          count={xrefs.length}
+        >
           <div className="mb-2 flex justify-end">
             <ShowAll
               total={xrefs.length}

@@ -1,0 +1,62 @@
+{
+  "test_id": "T2",
+  "test_kind": "structural_context",
+  "values": {
+    "headline": "Residue 226: lines none of the 1 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar).",
+    "verdict": "in_predicted_pocket",
+    "in_predicted_interface": null,
+    "p2rank_status": "ready",
+    "p2rank_model": "afdb:AF-P31785-F1",
+    "p2rank_pockets_total": 1,
+    "p2rank_pockets_containing_residue": [],
+    "protvar_pockets_containing_residue": [
+      {
+        "pocket": 3,
+        "score": 752.7,
+        "buriedness": 0.77,
+        "mean_plddt": 97.3,
+        "residues": [
+          63,
+          65,
+          153,
+          154,
+          155,
+          156,
+          224,
+          226,
+          235,
+          236,
+          237,
+          238,
+          239,
+          240
+        ]
+      }
+    ],
+    "protvar_interface": {
+      "state": null,
+      "message": null
+    }
+  },
+  "sources": [
+    {
+      "database": "PrankWeb",
+      "record_id": "AF-P31785-F1",
+      "url": "https://prankweb.cz"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P31785:pocket:3",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P31785:226"
+    }
+  ],
+  "controls": [
+    "Rank control: the rank and probability of the pocket among all predicted pockets of the model.",
+    "Confidence control: mean pLDDT of the pocket residues."
+  ],
+  "limitations": [
+    "Predicted pockets and interfaces are computational predictions, not measured binding sites."
+  ],
+  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments structural_context --accession P31785 --position 226 --alternate-residue C --reference-residue R --gene IL2RG --variant-id IL2RG-p.Arg226Cys",
+  "elapsed_seconds": 0.5
+}

@@ -35,7 +35,13 @@ import {
   CLINICAL_SIGNIFICANCE,
   type ClinicalSignificanceGroup,
 } from "@/lib/science/clinical-significance";
+import {
+  SEQUENCE_WORDS,
+  plainSequenceRow,
+  plainWindow,
+} from "@/lib/plain-language";
 import { plddtBand } from "@/lib/science/plddt";
+import { useAdvancedMode } from "@/lib/state/preferences";
 import { STRUCTURE_ORIGIN_META } from "@/lib/structure-origin";
 
 import {
@@ -227,6 +233,7 @@ function AxisDock({
     variants: SequenceVariant[];
   } | null>(null);
   const [showTable, setShowTable] = useState(false);
+  const advanced = useAdvancedMode();
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [activeResult, setActiveResult] = useState(0);
@@ -1134,13 +1141,19 @@ function AxisDock({
         data-slot="axis-toolbar"
         className="flex h-7 shrink-0 items-center gap-1.5 border-b border-border px-2 text-2xs"
       >
-        <span className="tabular hidden shrink-0 font-mono text-muted-foreground md:inline">
-          win{" "}
-          <span className="text-foreground">
-            {windowStart}-{windowEnd}
-          </span>{" "}
-          of {length}, {pxPerResidue.toFixed(pxPerResidue < 10 ? 1 : 0)} px/aa
-        </span>
+        {advanced ? (
+          <span className="tabular hidden shrink-0 font-mono text-muted-foreground md:inline">
+            win{" "}
+            <span className="text-foreground">
+              {windowStart}-{windowEnd}
+            </span>{" "}
+            of {length}, {pxPerResidue.toFixed(pxPerResidue < 10 ? 1 : 0)} px/aa
+          </span>
+        ) : (
+          <span className="tabular hidden shrink-0 text-muted-foreground md:inline">
+            {plainWindow(windowStart, windowEnd)}
+          </span>
+        )}
         <div className="relative min-w-0 flex-1 sm:max-w-64">
           <input
             ref={searchRef}
@@ -1152,7 +1165,9 @@ function AxisDock({
             aria-autocomplete="list"
             autoComplete="off"
             spellCheck={false}
-            placeholder="165, D165G, 150-180, SH2"
+            placeholder={
+              advanced ? "165, D165G, 150-180, SH2" : SEQUENCE_WORDS.find
+            }
             value={query}
             onChange={(event) => {
               setQuery(event.target.value);
@@ -1265,14 +1280,18 @@ function AxisDock({
               }
             >
               <Rows3Icon />
-              <span className="hidden sm:inline">Tracks</span>
-              <span className="tabular font-mono text-muted-foreground">
-                {visibleTracks.length}/{tracks.length}
+              <span className="hidden sm:inline">
+                {advanced ? "Tracks" : SEQUENCE_WORDS.rows}
               </span>
+              {advanced ? (
+                <span className="tabular font-mono text-muted-foreground">
+                  {visibleTracks.length}/{tracks.length}
+                </span>
+              ) : null}
             </PopoverTrigger>
             <PopoverContent align="end" side="top" className="w-80 gap-1 p-2">
               <p className="px-1 text-2xs font-medium tracking-[0.04em] text-muted-foreground uppercase">
-                Tracks
+                {advanced ? "Tracks" : SEQUENCE_WORDS.rows}
               </p>
               {tracks.map((track) => {
                 const shown = visibleTracks.includes(track);
@@ -1327,14 +1346,22 @@ function AxisDock({
               }
             >
               <FilterIcon />
-              <span className="hidden sm:inline">Variants</span>
+              <span className="hidden sm:inline">
+                {advanced ? "Variants" : SEQUENCE_WORDS.mutations}
+              </span>
               <span
                 className={cn(
                   "tabular font-mono",
                   filterActive ? "text-foreground" : "text-muted-foreground",
                 )}
               >
-                {variantNote ? "none" : `${filtered.length}/${variants.length}`}
+                {variantNote
+                  ? "none"
+                  : advanced
+                    ? `${filtered.length}/${variants.length}`
+                    : filterActive
+                      ? `${filtered.length} of ${variants.length}`
+                      : variants.length}
               </span>
             </PopoverTrigger>
             <PopoverContent align="end" side="top" className="w-80 gap-2 p-2">
@@ -1535,7 +1562,9 @@ function AxisDock({
                 )}
                 style={{ top: row.y, height: row.height }}
               >
-                <span className="truncate">{row.label}</span>
+                <span className="truncate">
+                  {advanced ? row.label : plainSequenceRow(row.label)}
+                </span>
                 {row.lanes && row.lanes.length > 0 ? (
                   <span className="flex shrink-0 flex-col justify-center font-mono text-foreground">
                     {row.lanes.map((lane) => (
@@ -1605,6 +1634,7 @@ function AxisDock({
       )}
 
       <AxisLegend
+        plain={!advanced}
         hasClinical={hasClinical}
         hasPopulation={hasPopulation}
         binned={pxPerResidue < BIN_BELOW_PX}

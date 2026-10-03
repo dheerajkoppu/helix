@@ -14,6 +14,7 @@ import {
 } from "@/components/lab/section";
 import { Plate } from "@/components/shell/page";
 import { isEvidenceClass, type EvidenceClass } from "@/lib/evidence";
+import { useAdvancedMode } from "@/lib/state/preferences";
 
 const CLASS_ALIASES: Record<string, EvidenceClass> = {
   exp: "experimental",
@@ -40,6 +41,11 @@ export function toEvidenceClass(raw: string | null): EvidenceClass | null {
 
 const ROW_GRID =
   "grid grid-cols-[3.25rem_3.5rem_minmax(0,1fr)] gap-x-3 px-3 text-xs";
+// the class is a word outside Advanced, so its column is wider
+const PLAIN_ROW_GRID =
+  "grid grid-cols-[3.25rem_8.5rem_minmax(0,1fr)] gap-x-3 px-3 text-xs";
+
+const useRowGrid = () => (useAdvancedMode() ? ROW_GRID : PLAIN_ROW_GRID);
 
 /** Record items the line was linked to when it was written: hypotheses, tests, other evidence. */
 function Refs({ refs }: { refs: string[] }) {
@@ -54,9 +60,10 @@ function Refs({ refs }: { refs: string[] }) {
 function EvidenceRow({ entry }: { entry: EvidenceEntry }) {
   const { run } = useRun();
   const evidenceClass = toEvidenceClass(entry.evidence_class);
+  const rowGrid = useRowGrid();
   const props = useEntryProps(
     entry.event.seq,
-    `${ROW_GRID} border-b border-border-subtle py-2 last:border-b-0`,
+    `${rowGrid} border-b border-border-subtle py-2 last:border-b-0`,
   );
   return (
     <li {...props}>
@@ -98,9 +105,10 @@ function EvidenceRow({ entry }: { entry: EvidenceEntry }) {
 
 function GapRow({ entry }: { entry: GapEntry }) {
   const { run } = useRun();
+  const rowGrid = useRowGrid();
   const props = useEntryProps(
     entry.event.seq,
-    `${ROW_GRID} border-b border-border-subtle py-2 last:border-b-0`,
+    `${rowGrid} border-b border-border-subtle py-2 last:border-b-0`,
   );
   return (
     <li {...props}>
@@ -137,6 +145,7 @@ function GapRow({ entry }: { entry: GapEntry }) {
 /** Every evidence item the agents recorded, with its class, its source records and who found it. */
 export function EvidenceLedger() {
   const { view } = useRun();
+  const rowGrid = useRowGrid();
   const cited = view.databases;
   return (
     <LoopSection
@@ -157,7 +166,7 @@ export function EvidenceLedger() {
     >
       <Plate>
         <div
-          className={`${ROW_GRID} h-7 items-center border-b border-border bg-muted text-2xs font-medium tracking-[0.02em] text-muted-foreground uppercase`}
+          className={`${rowGrid} h-7 items-center border-b border-border bg-muted text-2xs font-medium tracking-[0.02em] text-muted-foreground uppercase`}
         >
           <span>ID</span>
           <span>Class</span>

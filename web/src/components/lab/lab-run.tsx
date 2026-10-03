@@ -30,6 +30,7 @@ import {
 } from "@/components/lab/loop";
 import { LoopRail } from "@/components/lab/loop-rail";
 import { LoopStepper } from "@/components/lab/loop-stepper";
+import { stepCounts } from "@/components/lab/plain";
 import {
   buildRecordView,
   overallOutcome,
@@ -64,6 +65,13 @@ import { Page, PageBody, PageHeader, Plate } from "@/components/shell/page";
 import { QueryErrorState, RowsSkeleton } from "@/components/states/query-state";
 import { Button } from "@/components/ui/button";
 import { formatTimestamp } from "@/lib/format";
+import {
+  LOOP_STEPS,
+  STEP_WORDS,
+  plainCount,
+  plainMutationLabel,
+  plainStepCaption,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 
 const STEP_PARAM = "step";
@@ -162,6 +170,29 @@ function stepNotes(
         : "Recorded"
       : null,
     decision: outcome ? (outcome.changed ? "Changed" : "Unchanged") : null,
+  };
+}
+
+/** The same captions in everyday words, built from counts in the record. */
+function plainStepNotes(
+  view: RecordView,
+  pendingApproval: boolean,
+): Record<LoopStageId, string | null> {
+  const counts = stepCounts(view);
+  return {
+    question: view.objective ? plainStepCaption(LOOP_STEPS[0]) : null,
+    evidence: counts.facts ? plainStepCaption(LOOP_STEPS[1], counts) : null,
+    hypothesis: counts.causes ? plainStepCaption(LOOP_STEPS[2], counts) : null,
+    experiment: pendingApproval
+      ? STEP_WORDS.needsApproval
+      : counts.tests
+        ? plainStepCaption(LOOP_STEPS[3], counts)
+        : view.tests.length
+          ? plainCount(view.tests.length, "test")
+          : null,
+    result: counts.finished ? plainStepCaption(LOOP_STEPS[4], counts) : null,
+    decision:
+      counts.changed == null ? null : plainStepCaption(LOOP_STEPS[5], counts),
   };
 }
 
@@ -276,8 +307,11 @@ function RunView({
     ? variantLabel(run.subject.variant_id)
     : "Lab run";
   const notes = useMemo(
-    () => stepNotes(run, view, pendingNow),
-    [run, view, pendingNow],
+    () =>
+      advanced
+        ? stepNotes(run, view, pendingNow)
+        : plainStepNotes(view, pendingNow),
+    [advanced, run, view, pendingNow],
   );
 
   const startReplay = useCallback(() => {
@@ -324,12 +358,18 @@ function RunView({
                 className="text-2xl font-semibold tracking-[-0.015em] text-foreground"
                 translate="no"
               >
-                {subjectLabel}
+                {advanced ? subjectLabel : plainMutationLabel(subjectLabel)}
               </h1>
-              <span className="font-mono text-sm text-muted-foreground">
-                {run.run_id}
-              </span>
-              <RunStatusTag status={run.status} />
+              {advanced ? (
+                <span className="font-mono text-sm text-muted-foreground">
+                  {run.run_id}
+                </span>
+              ) : null}
+              <RunStatusTag
+                status={run.status}
+                plain={!advanced}
+                className={advanced ? undefined : "text-sm"}
+              />
               {advanced ? (
                 <span className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
                   {modeLabel(run.mode) ? (
@@ -370,12 +410,12 @@ function RunView({
                 ))}
               </div>
               <ButtonLink href="/lab" variant="ghost" size="lg">
-                All runs
+                {STEP_WORDS.allRuns}
               </ButtonLink>
               {finished && events.length > 0 && !replaying ? (
                 <Button size="lg" onClick={startReplay}>
                   <PlayIcon data-icon="inline-start" />
-                  Replay
+                  {STEP_WORDS.replay}
                 </Button>
               ) : null}
             </div>
@@ -434,28 +474,37 @@ function RunView({
               {pendingNow && selected !== "experiment" ? (
                 <p className="mb-4 flex flex-wrap items-baseline gap-x-3 text-base">
                   <span className="font-medium text-foreground">
-                    Approval needed.
+                    {advanced ? "Approval needed." : STEP_WORDS.needsApproval}
                   </span>
                   <button
                     type="button"
                     onClick={() => setPinned("experiment")}
                     className="rounded-xs text-foreground underline decoration-border-strong underline-offset-[3px] hover:decoration-foreground"
                   >
-                    Review
+                    {STEP_WORDS.review}
                   </button>
                 </p>
               ) : null}
               {run.status === "failed" && !replaying ? (
                 <p className="mb-4 text-base">
                   <span className="font-medium text-destructive">
-                    The run failed.
+                    {STEP_WORDS.failed}
                   </span>{" "}
-                  <span className="text-muted-foreground">
-                    {run.error ??
-                      (lastEvent
-                        ? `No error text was recorded. The record ends at line ${lastEvent.seq}.`
-                        : "It wrote nothing to its record.")}
-                  </span>
+                  {advanced ? (
+                    <span className="text-muted-foreground">
+                      {run.error ??
+                        (lastEvent
+                          ? `No error text was recorded. The record ends at line ${lastEvent.seq}.`
+                          : "It wrote nothing to its record.")}
+                    </span>
+                  ) : (
+                    <span
+                      className="text-muted-foreground"
+                      title={run.error ?? undefined}
+                    >
+                      {STEP_WORDS.noAnswer}
+                    </span>
+                  )}
                 </p>
               ) : null}
               <StepPanel stage={selected} onDetails={openRecord} />
@@ -477,6 +526,7 @@ function RunView({
               computeSeconds={finished ? run.metrics.compute_seconds : null}
               maxComputeSeconds={run.budget.max_compute_seconds}
               databases={view.databases}
+              plain={!advanced}
               active={active}
               totalsOnly={replaying && !atEnd}
               className="order-2 border-t border-border lg:order-3 lg:border-t-0 lg:border-l"
@@ -538,11 +588,12 @@ function Frame({
   runId: string;
   children: React.ReactNode;
 }) {
+  const advanced = useAdvancedMode();
   return (
     <Page>
       <PageHeader
         title="Lab run"
-        id={runId}
+        id={advanced ? runId : undefined}
         actions={
           <ButtonLink href="/lab" variant="ghost">
             All runs

@@ -18,10 +18,13 @@ import {
   resultValue,
 } from "@/components/search/result-row";
 import { useEntitySearch } from "@/components/search/use-entity-search";
-import { SEARCH_PLACEHOLDER } from "@/components/shell/search-trigger";
+import { PlainResultRow } from "@/components/shell/plain-result-row";
+import { useSearchPlaceholder } from "@/components/shell/search-trigger";
 import { CommandGroup, CommandItem } from "@/components/ui/command";
 import { isApiError } from "@/lib/api/client";
 import { routes } from "@/lib/ids";
+import { SEARCH_WORDS, plainCommandGroup } from "@/lib/plain-language";
+import { useAdvancedMode } from "@/lib/state/preferences";
 
 const LIST_ID = "home-search-results";
 
@@ -38,6 +41,8 @@ export function HomeSearch({
   initialQuery?: string;
 }) {
   const router = useRouter();
+  const advanced = useAdvancedMode();
+  const placeholder = useSearchPlaceholder();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState(initialQuery);
   const [focused, setFocused] = useState(false);
@@ -117,7 +122,7 @@ export function HomeSearch({
             onValueChange={setQuery}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            placeholder={SEARCH_PLACEHOLDER}
+            placeholder={placeholder}
             aria-controls={LIST_ID}
             autoComplete="off"
             autoCorrect="off"
@@ -152,7 +157,9 @@ export function HomeSearch({
             className="max-h-[min(26rem,55dvh)] scroll-py-1 overflow-x-hidden overflow-y-auto outline-none"
           >
             {parsed.length > 0 ? (
-              <CommandGroup heading="Parsed input">
+              <CommandGroup
+                heading={advanced ? "Parsed input" : SEARCH_WORDS.goTo}
+              >
                 {parsed.map((entry) => (
                   <CommandItem
                     key={entry.id}
@@ -168,7 +175,7 @@ export function HomeSearch({
                       data-slot="command-shortcut"
                       className="ml-auto truncate text-2xs text-subtle-foreground"
                     >
-                      {entry.detail}
+                      {advanced ? entry.detail : null}
                     </span>
                   </CommandItem>
                 ))}
@@ -179,9 +186,11 @@ export function HomeSearch({
               <CommandGroup
                 key={group.type}
                 heading={
-                  group.total > group.results.length
-                    ? `${group.label} · ${group.results.length} of ${group.total}`
-                    : group.label
+                  !advanced
+                    ? plainCommandGroup(group.label)
+                    : group.total > group.results.length
+                      ? `${group.label} · ${group.results.length} of ${group.total}`
+                      : group.label
                 }
               >
                 {group.results.map((result) => (
@@ -191,13 +200,28 @@ export function HomeSearch({
                     onSelect={() => openSearchResult(result, navigate)}
                     className="min-h-8"
                   >
-                    <SearchResultRow result={result} size="roomy" />
+                    {advanced ? (
+                      <SearchResultRow result={result} size="roomy" />
+                    ) : (
+                      <PlainResultRow result={result} />
+                    )}
                   </CommandItem>
                 ))}
               </CommandGroup>
             ))}
 
-            {nothing ? (
+            {nothing && !advanced ? (
+              <div className="px-3.5 py-3 text-sm text-muted-foreground">
+                <p className="text-foreground">{SEARCH_WORDS.nothing}</p>
+                <p className="mt-1">
+                  {SEARCH_WORDS.tryThis}{" "}
+                  <TextLink href={routes.explore()}>
+                    {SEARCH_WORDS.browse}
+                  </TextLink>
+                </p>
+              </div>
+            ) : null}
+            {nothing && advanced ? (
               <div className="px-3.5 py-3 text-xs text-muted-foreground">
                 <p className="text-foreground">
                   No source found for &ldquo;{text}&rdquo;.
@@ -222,16 +246,18 @@ export function HomeSearch({
             {failed ? (
               <div className="px-3.5 py-3 text-xs text-muted-foreground">
                 <p className="text-foreground">
-                  {isApiError(failed) && failed.isUnreachable
-                    ? "The OrphaFold API did not answer, so names and aliases cannot be resolved."
-                    : `Search failed: ${failed.message}`}
+                  {!advanced
+                    ? SEARCH_WORDS.offline
+                    : isApiError(failed) && failed.isUnreachable
+                      ? "The OrphaFold API did not answer, so names and aliases cannot be resolved."
+                      : `Search failed: ${failed.message}`}
                 </p>
                 <button
                   type="button"
                   onClick={() => search.retry()}
                   className="mt-1 underline decoration-border-strong underline-offset-[3px] hover:text-foreground"
                 >
-                  Retry
+                  {advanced ? "Retry" : SEARCH_WORDS.retry}
                 </button>
               </div>
             ) : null}
@@ -240,7 +266,9 @@ export function HomeSearch({
           <div className="flex h-7 items-center gap-4 border-t border-border-subtle bg-sunken px-3">
             <KeyHint keys="enter" label="Open" />
             <span className="hidden items-center gap-4 sm:flex">
-              <KeyHint keys="mod+enter" label="Open at source" />
+              {advanced ? (
+                <KeyHint keys="mod+enter" label="Open at source" />
+              ) : null}
               <span className="inline-flex items-center">
                 <KeyHint keys="up" />
                 <KeyHint keys="down" label="Move" />
@@ -248,11 +276,15 @@ export function HomeSearch({
             </span>
             <span className="ml-auto truncate text-2xs text-subtle-foreground">
               {search.pending
-                ? "Searching the catalog"
-                : unanswered.length > 0
+                ? advanced
+                  ? "Searching the catalog"
+                  : SEARCH_WORDS.searching
+                : unanswered.length > 0 && advanced
                   ? `${unanswered.map((source) => source.name ?? source.source).join(", ")} did not answer`
                   : search.answer?.outside_catalog
-                    ? "Outside the IEI catalog"
+                    ? advanced
+                      ? "Outside the IEI catalog"
+                      : SEARCH_WORDS.outside
                     : null}
             </span>
             <KeyHint

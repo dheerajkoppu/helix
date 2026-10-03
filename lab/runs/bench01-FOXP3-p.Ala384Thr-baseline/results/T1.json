@@ -1,0 +1,59 @@
+{
+  "test_id": "T1",
+  "test_kind": "structural_context",
+  "values": {
+    "headline": "Residue 384: lines none of the 3 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar).",
+    "verdict": "in_predicted_pocket",
+    "in_predicted_interface": null,
+    "p2rank_status": "ready",
+    "p2rank_model": "afdb:AF-Q9BZS1-F1",
+    "p2rank_pockets_total": 3,
+    "p2rank_pockets_containing_residue": [],
+    "protvar_pockets_containing_residue": [
+      {
+        "pocket": 13,
+        "score": 566.1,
+        "buriedness": 0.84,
+        "mean_plddt": 87.9,
+        "residues": [
+          337,
+          342,
+          373,
+          374,
+          375,
+          376,
+          377,
+          378,
+          380,
+          381,
+          384
+        ]
+      }
+    ],
+    "protvar_interface": {
+      "state": null,
+      "message": null
+    }
+  },
+  "sources": [
+    {
+      "database": "PrankWeb",
+      "record_id": "AF-Q9BZS1-F1",
+      "url": "https://prankweb.cz"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "Q9BZS1:pocket:13",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=Q9BZS1:384"
+    }
+  ],
+  "controls": [
+    "Rank control: the rank and probability of the pocket among all predicted pockets of the model.",
+    "Confidence control: mean pLDDT of the pocket residues."
+  ],
+  "limitations": [
+    "Predicted pockets and interfaces are computational predictions, not measured binding sites."
+  ],
+  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments structural_context --accession Q9BZS1 --position 384 --alternate-residue T --reference-residue A --gene FOXP3 --variant-id FOXP3-p.Ala384Thr",
+  "elapsed_seconds": 0.5
+}

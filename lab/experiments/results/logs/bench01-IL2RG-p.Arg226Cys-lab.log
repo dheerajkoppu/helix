@@ -1,0 +1,83 @@
+run bench01-IL2RG-p.Arg226Cys-lab (specialist_lab) started; record: /Users/dheeraj/Downloads/alphafold/lab/runs/bench01-IL2RG-p.Arg226Cys-lab/record.jsonl
+[  1] human           objective           Find the molecular mechanism that best explains the loss of function of IL2RG-p.Arg226Cys (IL2RG, UniProt P31785) and test it with one targeted comput
+[  2] orchestrator    handoff             orchestrator -> literature: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. Collect 4 to 7 lit
+[  3] orchestrator    handoff             orchestrator -> knowledge_graph: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. COLLECT mode:
+[  4] knowledge_graph evidence            E1 clinical_database ClinVar classifies NM_000206.3(IL2RG):c.676C>T (p.Arg226Cys) as Pathogenic (reviewed by expert panel; 3 of 4 stars; 10 submission
+[  5] knowledge_graph evidence            E2 experimental UniProtKB natural variant VAR_002690 at residue 226 (R to C): X-linked severe combined immunodeficiency; Combined immunodeficiency, X-
+[  6] knowledge_graph evidence            E3 computational_prediction Ensembl VEP predicts missense_variant for NM_000206.3:c.676C>T (NP_000197.1:p.Arg226Cys; exon 5/8; MANE Select ENST0000037
+[  7] knowledge_graph evidence            E4 experimental UniProtKB annotates residues 219-226 of P31785 as Beta strand; evidence: combinatorial computational and experimental evidence used in
+[  8] literature      evidence            E5 literature The study reports that Arg226Cys (R226C) is located in the extracellular domain, a region the authors describe as important for receptor
+[  9] knowledge_graph evidence            E6 computational_prediction UniProtKB annotates residues 156-253 of P31785 as Domain: Fibronectin type-III; evidence: match to sequence model evidence
+[ 10] literature      evidence            E7 literature Molecular dynamics simulations of a homology model showed that the variant exhibited structural instability, whereas wild-type IL2RG rem
+[ 11] knowledge_graph evidence            E8 computational_prediction InterPro annotates residues 154-253 of P31785 as domain: Fibronectin type III; evidence: match to sequence model evidence 
+[ 12] literature      evidence            E9 literature The study reports that R226C reduced hydrogen bonds to decrease binding in protein-protein docking with IL-2, and that both variants dis
+[ 13] knowledge_graph evidence            E10 computational_prediction AlphaMissense gives p.Arg226Cys of P31785 a AlphaMissense pathogenicity of 0.5785, classed as likely pathogenic (AlphaMis
+[ 14] literature      evidence            E11 literature MM/PBSA binding free energy analysis gave wild-type complexes better binding (IL-2: -40.87 kJ/mol; IL-21: -45.88 kcal/mol) than R226C (
+[ 15] knowledge_graph evidence            E12 computational_prediction ScoreCons gives p.Arg226Cys of P31785 a Conservation (ScoreCons, UniRef90) of 0.717 (scale: 0 to 1; higher = more conserv
+[ 16] literature      evidence            E13 literature The authors state that the study is an in-silico analysis using homology modelling, molecular dynamics and docking, and no experimental
+[ 17] knowledge_graph evidence            E14 computational_prediction popEVE gives p.Arg226Cys of P31785 a popEVE of -5.048 (scale: proteome-wide scale; more negative = more deleterious).
+[ 18] knowledge_graph evidence            E15 computational_prediction EVE gives p.Arg226Cys of P31785 a EVE of 0.853, classed as pathogenic (EVE class) (scale: 0 to 1; higher = more pathogeni
+[ 19] knowledge_graph evidence            E16 experimental 14 of 14 experimental structures of P31785 in the Protein Data Bank observe residue 226.
+[ 20] knowledge_graph evidence            E17 experimental PDB entry 9E2T (X-RAY DIFFRACTION, 2.28 Å, deposited 2024-10-22) observes residue 226 of P31785: Structure of a de novo designed inte
+[ 21] literature      gap                 G1 No retrieved experimental study measures R226C protein expression, surface trafficking, or cytokine-binding affinity; the only mechanistic source i
+[ 22] literature      gap                 G2 The retrieved literature does not report whether R226C impairs downstream JAK3/STAT5 signalling in cells.
+[ 23] knowledge_graph evidence            E18 experimental PDB entry 5M5E (X-RAY DIFFRACTION, 2.3 Å, deposited 2016-10-21) observes residue 226 of P31785: Crystal structure of a interleukin-2 
+[ 24] knowledge_graph evidence            E19 computational_prediction AlphaFold DB model AF-P31785-F1 covers the full sequence of P31785 (mean pLDDT 75.5).
+[ 25] literature      gap                 G3 The binding-energy differences (MM/PBSA) and hydrogen-bond changes come from a single homology model; the retrieved literature has no independent s
+[ 26] knowledge_graph evidence            E20 experimental IntAct curates a physical interaction of P31785 with IL4R (5 experiments; MI score 0.67; anti bait coimmunoprecipitation, x-ray cryst
+[ 27] knowledge_graph gap                 G4 get_variant_effect_values reports 0 functional assays covering residue 226 of P31785.
+[ 28] knowledge_graph gap                 G5 get_structure_ledger reports 0 of 14 experimental structures of P31785 with residue 226 mutated (residue_mutated_in_structure is null in the listed
+[ 29] knowledge_graph gap                 G6 IntAct rows for P31785 do not map interaction surfaces to residues, so it is not reported whether residue 226 lies at any interface.
+[ 30] literature      handoff             literature -> orchestrator: Literature for IL2RG p.Arg226Cys is thin and comes from one computational study (PMID 42027176; journal version OpenAlex W
+[ 31] knowledge_graph handoff             knowledge_graph -> orchestrator: COLLECT for IL2RG-p.Arg226Cys (P31785, R226C) is done: 15 evidence items (E1-E4, E6, E8, E10, E12, E14-E20) and gaps 
+[ 32] orchestrator    handoff             orchestrator -> insight: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. Read evidence E1 to E
+[ 33] insight         hypothesis          H1 stability_folding The Arg226Cys substitution sits in a beta strand (residues 219-226) of the fibronectin type-III domain of IL2RG. Losing the charg
+[ 34] insight         hypothesis          H2 protein_interaction Residue 226 lies at or near the IL-2 / IL-21 / IL-4R-binding surface of IL2RG. Arg226Cys removes the Arg side chain's hydrogen 
+[ 35] insight         handoff             insight -> orchestrator: Two agent-generated hypotheses are recorded: H1 stability_folding (rank 1) and H2 protein_interaction (rank 2). Both are test
+[ 36] orchestrator    handoff             orchestrator -> planner: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. Read hypotheses H1 (s
+[ 37] planner         test_candidate      T1 stability_effect learning=0.6 feasibility=0.9 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 38] planner         test_candidate      T2 structural_context learning=0.35 feasibility=0.9 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 39] planner         test_candidate      T3 ligand_contact learning=0.1 feasibility=0.9 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 40] planner         test_candidate      T4 structure_comparison learning=0.3 feasibility=0.1 cost={'compute_seconds': 120, 'tool_calls': 3}
+[ 41] planner         plan                chose T1: The objective asks for one targeted computational test to pick the mechanism, so I compared the four candidates on expected learning, feasib
+[ 42] planner         handoff             planner -> orchestrator: Planner chose T1 (stability_effect, FoldX ddG on the AlphaFold model via ProtVar) as the single targeted test. It is the only
+[ 43] orchestrator    handoff             orchestrator -> safety: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. Review the plan that c
+[ 44] safety          note                safety_review: Claims: review_claims checked 42 statements (20 evidence items, 2 hypotheses). No clinical or treatment wording, no evidence without a 
+[ 45] safety          handoff             safety -> orchestrator: Safety review recorded (seq 44): T1 (stability_effect) cleared. No clinical wording, uncited evidence or unlabelled hypotheses
+[ 46] orchestrator    handoff             orchestrator -> runner: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. Execute exactly test T
+[ 47] runner          experiment_started  T1 run_stability_test
+[ 48] runner          experiment_result   T1 FoldX predicts ΔΔG +0.51 kcal/mol for R226C, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 96.69).
+[ 49] runner          handoff             runner -> orchestrator: T1 (stability_effect) executed and recorded. R226C FoldX ΔΔG is +0.51 kcal/mol, not destabilising by the 2.0 kcal/mol threshol
+[ 50] orchestrator    handoff             orchestrator -> analysis: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. Read hypotheses H1 a
+[ 51] orchestrator    handoff             orchestrator -> knowledge_graph: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. UPDATE mode f
+[ 52] knowledge_graph evidence            E21 computational_prediction FoldX predicts ΔΔG +0.51 kcal/mol for R226C on AF-P31785-F1 (residue pLDDT 96.69), below the 2.0 kcal/mol destabilising t
+[ 53] knowledge_graph evidence            E22 computational_prediction Within-site control: FoldX predicts ΔΔG +10.76 kcal/mol for R226H on AF-P31785-F1 under the same predictor as R226C.
+[ 54] knowledge_graph evidence            E23 computational_prediction Within-site control: FoldX predicts ΔΔG +0.59 kcal/mol for R226L on AF-P31785-F1 under the same predictor as R226C.
+[ 55] knowledge_graph handoff             knowledge_graph -> orchestrator: UPDATE for T1 (FoldX stability_effect, computational_prediction): R226C ΔΔG +0.51 kcal/mol, below the 2.0 kcal/mol th
+[ 56] analysis        interpretation      H1 weakened; H2 unchanged
+[ 57] analysis        decision            stability_folding -> protein_interaction (changed: True)
+[ 58] analysis        next_experiment     computational: Computational contact and interface test on the experimental cytokine complexes 5M5E (IL-2 / IL2RG) and 9E2T (IL-21 / IL-21R / IL2RG). 
+[ 59] analysis        handoff             analysis -> orchestrator: T1 (FoldX ddG +0.51 kcal/mol for R226C, below 2.0 threshold, pLDDT 96.69) weakened H1 (stability) but did not refute it, sin
+[ 60] orchestrator    note                reopened_assumption: Test T1 (FoldX ddG +0.51 kcal/mol for R226C, below threshold) weakened H1 (stability_folding), which was favoured before the test
+[ 61] orchestrator    handoff             orchestrator -> planner: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. REOPENED: H1 was favo
+[ 62] planner         plan                chose T2: T1 (stability_effect, executed) returned FoldX ddG +0.51 kcal/mol for R226C, below the 2.0 threshold, so H1 (stability_folding) is weakened 
+[ 63] planner         handoff             planner -> orchestrator: Reopened plan: chose T2 (structural_context) as the next test. It is the only runnable open candidate that bears directly on 
+[ 64] orchestrator    handoff             orchestrator -> safety: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. Reopened round: review
+[ 65] safety          note                safety_review: Checked 62 statements in the record. No clinical or treatment wording, no evidence items without a source (23 evidence items checked), 
+[ 66] safety          handoff             safety -> orchestrator: Safety review recorded as cleared (seq 65) for T2 structural_context. No flagged clinical wording, uncited evidence or unlabel
+[ 67] orchestrator    handoff             orchestrator -> runner: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. Reopened round: execut
+[ 68] runner          experiment_started  T2 run_structural_context_test
+[ 69] runner          experiment_result   T2 Residue 226: lines none of the 1 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar).
+[ 70] runner          handoff             runner -> orchestrator: T2 (structural_context) executed and recorded; no compute job, so no job ID or manifest. Residue 226 is in ProtVar pocket 3 (s
+[ 71] orchestrator    handoff             orchestrator -> analysis: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. Reopened round: read
+[ 72] orchestrator    handoff             orchestrator -> knowledge_graph: Subject: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C. UPDATE mode f
+[ 73] knowledge_graph evidence            E24 computational_prediction Residue 226 lines none of the 1 P2Rank pockets on AF-P31785-F1 (p2rank_status ready, p2rank_pockets_total 1).
+[ 74] knowledge_graph evidence            E25 computational_prediction Residue 226 lies in ProtVar predicted pocket 3 (score 752.7, buriedness 0.77, mean pLDDT 97.3; pocket residues 63, 65, 15
+[ 75] knowledge_graph handoff             knowledge_graph -> orchestrator: T2 (structural_context) is recorded as E24 (PrankWeb AF-P31785-F1: residue 226 lines none of the 1 P2Rank pocket) and
+[ 76] analysis        interpretation      H1 unchanged; H2 weakened
+[ 77] analysis        decision            protein_interaction -> protein_interaction (changed: False)
+[ 78] analysis        next_experiment     computational: Computational contact check on the experimental complexes: measure the minimum heavy-atom distance from the R226 side chain to every IL
+[ 79] analysis        handoff             analysis -> orchestrator: T2 (structural_context) is interpreted: R226 lies in ProtVar pocket 3 (buriedness 0.77, pLDDT 97.3), is in no predicted prot
+[ 80] orchestrator    note                policy_denial: Refused: factual statement without a recorded source ID: "FoldX on one predicted model has errors near 1 kcal/mol.". Rewrite and call a
+[ 81] orchestrator    note                final_report: ## Question Which molecular mechanism best explains the loss of function of IL2RG p.Arg226Cys (UniProt P31785), and does one targeted co
+run bench01-IL2RG-p.Arg226Cys-lab succeeded in 272.2s: 122 tool calls, 25 evidence items from 13 databases, 4 tests considered, favoured stability_folding -> protein_interaction (changed: True)

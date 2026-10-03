@@ -31,6 +31,7 @@ import {
   Zone,
 } from "@/components/workspace";
 import { routes } from "@/lib/ids";
+import { OPTIONS_WORDS, plainBindingSpot } from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import { useReportSources } from "@/lib/state/shell";
@@ -349,7 +350,11 @@ export function InterventionStage({ accession }: { accession: string }) {
   const inspectorTitle =
     row?.name ??
     treatment?.name ??
-    (pocket ? `Pocket ${pocket.rank}` : null) ??
+    (pocket
+      ? advanced
+        ? `Pocket ${pocket.rank}`
+        : plainBindingSpot(pocket.rank)
+      : null) ??
     curatedPartner?.partner_symbol ??
     physicalPartner?.partner_symbol ??
     mechanismClass?.mechanism ??
@@ -390,7 +395,7 @@ export function InterventionStage({ accession }: { accession: string }) {
         ledger={
           <Zone
             zone="ledger"
-            title="Evidence"
+            title={advanced ? "Evidence" : OPTIONS_WORDS.more}
             detail={
               advanced ? (
                 <span className="text-2xs text-muted-foreground">
@@ -445,7 +450,7 @@ export function InterventionStage({ accession }: { accession: string }) {
                 ? "3D"
                 : advanced
                   ? "Compound comparison"
-                  : "Compounds"
+                  : OPTIONS_WORDS.title
             }
             count={
               view === "table" && !compounds.isPending ? rows.length : null
@@ -457,7 +462,7 @@ export function InterventionStage({ accession }: { accession: string }) {
                   <span className="flex min-w-0 items-center gap-2">
                     <StructureOriginTag
                       origin={shown.structure.origin}
-                      detail={shown.structure.id}
+                      detail={advanced ? shown.structure.id : undefined}
                       size="compact"
                       caption={
                         advanced && shown.structure.origin !== "experimental"
@@ -504,7 +509,7 @@ export function InterventionStage({ accession }: { accession: string }) {
               <span>
                 {advanced
                   ? "Exploratory. Predicted pockets, poses and affinities are computational hypotheses, not measurements."
-                  : "Predictions are hypotheses, not measurements."}
+                  : OPTIONS_WORDS.footer}
               </span>
             }
           >
@@ -514,7 +519,7 @@ export function InterventionStage({ accession }: { accession: string }) {
                   <p className="px-3 py-2 text-xs text-muted-foreground">
                     {advanced
                       ? "ChEMBL and PDBe are answering. The first request for a protein can take up to 45 seconds."
-                      : "Reading ChEMBL and PDBe. The first load can take 45 s."}
+                      : OPTIONS_WORDS.loading}
                   </p>
                   <RowsSkeleton rows={8} />
                 </div>
@@ -569,7 +574,9 @@ export function InterventionStage({ accession }: { accession: string }) {
               />
             ) : scene.structure || axis.isPending ? (
               <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
-                Resolving a structure for {accession}
+                {advanced
+                  ? `Resolving a structure for ${accession}`
+                  : OPTIONS_WORDS.findingStructure}
               </div>
             ) : (
               <EmptyState
@@ -607,7 +614,7 @@ export function InterventionStage({ accession }: { accession: string }) {
                   <Button
                     variant="ghost"
                     size="icon-sm"
-                    aria-label="Close the detail"
+                    aria-label="Close"
                     onClick={() => select(null)}
                   >
                     <XIcon aria-hidden />

@@ -7,3 +7,15 @@ export function AdvancedOnly({ children }: { children: React.ReactNode }) {
   const advanced = useAdvancedMode();
   return advanced ? <>{children}</> : null;
 }
+
+/** Picks the wording for the current mode, so a server page can print either. */
+export function ByMode({
+  simple,
+  advanced,
+}: {
+  simple: React.ReactNode;
+  advanced: React.ReactNode;
+}) {
+  const isAdvanced = useAdvancedMode();
+  return <>{isAdvanced ? advanced : simple}</>;
+}

@@ -27,6 +27,13 @@ import {
 import { aminoAcidName, routes, toThreeLetter } from "@/lib/ids";
 import { setWorkspaceHover } from "@/lib/state/hover";
 import { startJobWatcher, useJobs, type JobOut } from "@/lib/state/jobs";
+import {
+  COMPARE_WORDS,
+  DETAILS_LABEL,
+  plainChange,
+  plainMutationRow,
+  plainSpot,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import {
   resolveColorMode,
@@ -68,6 +75,12 @@ const MODES: Array<[CompareMode, string]> = [
   ["overlay", "Overlay"],
   ["difference", "Difference"],
 ];
+
+const PLAIN_MODES: Record<CompareMode, string> = {
+  split: COMPARE_WORDS.sideBySide,
+  overlay: COMPARE_WORDS.overlaid,
+  difference: COMPARE_WORDS.difference,
+};
 
 const SPLIT_COLORS: Array<[ColorMode, string]> = [
   ["confidence", "Confidence"],
@@ -275,26 +288,30 @@ function NoComparison({
       <div data-slot="no-comparison" className="mx-auto max-w-xl py-10">
         <div className="flex flex-col items-start gap-3 px-4 pb-6">
           <h2 className="text-base font-medium text-foreground">
-            No predicted models yet
+            {COMPARE_WORDS.none}
           </h2>
           <p className="text-sm text-muted-foreground">
             {jobs.length
-              ? "A run is in progress. The models load here when it ends."
+              ? COMPARE_WORDS.running
               : first
-                ? `${first.name} can predict both models.`
-                : "No provider can run this comparison now."}
+                ? `${first.name} can predict both shapes.`
+                : COMPARE_WORDS.cannotRun}
           </p>
           {jobs.length ? null : first ? (
             <RunJobButton
               kind={plan.job_kind}
               params={first.job_params ?? { variant_id: variant.variant_id }}
-              label={first.performs_inference ? "Run comparison" : "Load cached"}
+              label={
+                first.performs_inference
+                  ? COMPARE_WORDS.run
+                  : COMPARE_WORDS.loadSaved
+              }
               variant="default"
             />
           ) : null}
         </div>
         <JobLines jobs={jobs} />
-        <Disclosure label="Providers">
+        <Disclosure label={DETAILS_LABEL}>
           <ul>
             {plan.providers.map((provider) => (
               <ProviderRow
@@ -567,7 +584,10 @@ export function CompareStage({ gene, change }: CompareStageProps) {
       <WorkspaceZones
         layoutId="compare"
         instrument={
-          <Zone zone="instrument" title="Reference and variant">
+          <Zone
+            zone="instrument"
+            title={simple ? COMPARE_WORDS.title : "Reference and variant"}
+          >
             <QueryErrorState
               error={plan.error}
               subject={`the comparison plan for ${gene} ${change}`}
@@ -603,7 +623,7 @@ export function CompareStage({ gene, change }: CompareStageProps) {
     >
       {MODES.map(([value, label]) => (
         <ToggleGroupItem key={value} value={value}>
-          {label}
+          {simple ? PLAIN_MODES[value] : label}
         </ToggleGroupItem>
       ))}
     </ToggleGroup>
@@ -612,10 +632,11 @@ export function CompareStage({ gene, change }: CompareStageProps) {
   return (
     <>
       <SubjectBarActions>
+        {simple && result ? null : (
         <AddToProjectButton
           size="sm"
           variant="ghost"
-          label="Add variant"
+          label={simple ? undefined : "Add variant"}
           item={{
             kind: "variant",
             ref: variant.variant_id ?? `${gene}-${change}`,
@@ -627,11 +648,12 @@ export function CompareStage({ gene, change }: CompareStageProps) {
             },
           }}
         />
+        )}
         {result ? (
           <AddToProjectButton
             size="sm"
             variant="ghost"
-            label="Add comparison"
+            label={simple ? undefined : "Add comparison"}
             item={{
               kind: "job",
               ref: result.job_id,
@@ -654,17 +676,24 @@ export function CompareStage({ gene, change }: CompareStageProps) {
         inspectorLabel="Residue"
         ledger={
           simple ? (
-            <Zone zone="ledger" title={variantLabel}>
+            <Zone zone="ledger" title={variant.gene_symbol}>
               <div className="flex flex-col items-start gap-3 px-4 py-4">
                 <div className="flex flex-col gap-1">
-                  <p className="font-mono text-2xl leading-7 font-medium text-foreground">
-                    {toThreeLetter(variant.reference)} →{" "}
-                    {toThreeLetter(variant.alternate)}
+                  <p
+                    className="text-base font-medium text-foreground"
+                    title={variant.hgvs_p}
+                  >
+                    {plainChange(
+                      aminoAcidName(variant.reference),
+                      aminoAcidName(variant.alternate),
+                      variant.position,
+                    ) ?? plainMutationRow(variant.hgvs_p)}
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    Residue {variant.position}
-                    {siteDomain ? ` · ${siteDomain.name} domain` : ""}
-                  </p>
+                  {siteDomain ? (
+                    <p className="text-xs text-muted-foreground">
+                      In the {siteDomain.name} region
+                    </p>
+                  ) : null}
                 </div>
                 <Button
                   size="sm"
@@ -675,7 +704,7 @@ export function CompareStage({ gene, change }: CompareStageProps) {
                     setSiteDetails(true);
                   }}
                 >
-                  Site details
+                  {DETAILS_LABEL}
                 </Button>
               </div>
               {!summary ? null : resultQuery.isPending ? (
@@ -689,7 +718,7 @@ export function CompareStage({ gene, change }: CompareStageProps) {
               ) : (
                 <div className="flex flex-col border-t border-border-subtle py-3">
                   <span className="flex items-center gap-2 px-4 pb-1 text-2xs text-subtle-foreground">
-                    Largest predicted Cα shifts
+                    {COMPARE_WORDS.movedMost}
                     <ClaimLabel
                       evidenceClass="computational_prediction"
                       className="sr-only"
@@ -714,10 +743,13 @@ export function CompareStage({ gene, change }: CompareStageProps) {
                           onMouseLeave={() => setWorkspaceHover(null)}
                           className="flex h-8 w-full cursor-pointer items-center gap-2 px-4 text-left text-sm outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset aria-pressed:bg-active"
                         >
-                          <span className="min-w-0 flex-1 truncate font-mono text-foreground">
-                            {row.residue}
+                          <span className="min-w-0 flex-1 truncate text-foreground">
+                            {plainSpot(sequence?.[row.position - 1], row.position)}
                           </span>
-                          <span className="tabular shrink-0 font-mono text-xs text-muted-foreground">
+                          <span
+                            className="tabular shrink-0 font-mono text-xs text-muted-foreground"
+                            title={COMPARE_WORDS.angstrom}
+                          >
                             {formatAngstrom(row.displacement ?? 0)}
                           </span>
                         </button>
@@ -847,7 +879,7 @@ export function CompareStage({ gene, change }: CompareStageProps) {
         instrument={
           <Zone
             zone="instrument"
-            title={simple ? "Predicted models" : planData.title}
+            title={simple ? COMPARE_WORDS.title : planData.title}
             scroll={!summary}
             actions={
               summary ? (
@@ -929,7 +961,10 @@ export function CompareStage({ gene, change }: CompareStageProps) {
               )
             }
             footer={
-              <CaveatLine caveats={result?.caveats ?? planData.caveats} />
+              <CaveatLine
+                caveats={result?.caveats ?? planData.caveats}
+                simple={simple}
+              />
             }
           >
             {!summary ? (
@@ -966,13 +1001,17 @@ export function CompareStage({ gene, change }: CompareStageProps) {
             zone="inspector"
             title={
               position && selectedLetter
-                ? isSite
-                  ? `${toThreeLetter(variant.reference)}${position} → ${toThreeLetter(variant.alternate)}`
-                  : `${toThreeLetter(selectedLetter) ?? selectedLetter}${position}`
+                ? simple
+                  ? isSite
+                    ? plainMutationRow(variant.hgvs_p)
+                    : plainSpot(selectedLetter, position)
+                  : isSite
+                    ? `${toThreeLetter(variant.reference)}${position} → ${toThreeLetter(variant.alternate)}`
+                    : `${toThreeLetter(selectedLetter) ?? selectedLetter}${position}`
                 : "Residue"
             }
             detail={
-              position ? (
+              simple ? null : position ? (
                 <span className="text-2xs text-muted-foreground">
                   {isSite
                     ? "variant site"
@@ -987,7 +1026,7 @@ export function CompareStage({ gene, change }: CompareStageProps) {
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  aria-label="Close residue details"
+                  aria-label="Close"
                   title="Close"
                   onClick={() => {
                     setSiteDetails(false);

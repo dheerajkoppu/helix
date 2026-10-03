@@ -1,0 +1,4 @@
+Objective: Find the molecular mechanism that best explains the loss of function of RAG1-p.Arg404Gln (RAG1, UniProt P15918) and test it with one targeted computational test.
+Subject line: variant_id=RAG1-p.Arg404Gln gene=RAG1 accession=P15918 position=404 reference=R alternate=Q
+Budget for the whole run: 160 lab tool calls and 300 compute seconds.
+Run the discovery loop to the final report.

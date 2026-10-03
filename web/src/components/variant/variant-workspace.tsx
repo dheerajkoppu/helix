@@ -22,7 +22,6 @@ import { RunJobButton } from "@/components/jobs/run-job";
 import { LiteraturePanel } from "@/components/literature/literature-panel";
 import { AddToProjectButton } from "@/components/project/add-to-project";
 import { LearnTerm } from "@/components/science/learn-term";
-import { ClinicalSignificanceChip } from "@/components/science/legends";
 import { MetricReadout } from "@/components/science/metric-readout";
 import {
   ModelResultStrip,
@@ -39,8 +38,26 @@ import {
   useWorkspaceSubject,
 } from "@/components/workspace";
 import { formatDate } from "@/lib/format";
-import { parseVariantId, routes, toThreeLetter } from "@/lib/ids";
-import { parseClinicalSignificance } from "@/lib/science/clinical-significance";
+import {
+  aminoAcidName,
+  parseVariantId,
+  routes,
+  toThreeLetter,
+} from "@/lib/ids";
+import {
+  DETAILS_LABEL,
+  MUTATION_WORDS,
+  PREDICTION_CAVEAT,
+  plainChange,
+  plainChangeKind,
+  plainClassifiedBy,
+  plainImpact,
+  plainMutationRow,
+  plainPopulation,
+  plainPrediction,
+  plainSpot,
+  plainStabilityLine,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import { useReportSources } from "@/lib/state/shell";
@@ -63,6 +80,7 @@ import { EffectGroups } from "./effect-groups";
 import { EvidenceMark } from "./evidence";
 import {
   ClassificationLine,
+  PlainClassification,
   ConditionList,
   PopulationObservation,
   ResidueContext,
@@ -562,63 +580,107 @@ function ComparisonStatus({
   );
 }
 
-/** Simple mode: what ClinVar says, the first named condition and whether gnomAD saw the variant. */
-function VariantSummary({ record }: { record: VariantDetail }) {
+/** Simple mode: what ClinVar says, the disease, the population data and the predictions as plain statements. */
+function VariantSummary({
+  record,
+  effects,
+}: {
+  record: VariantDetail;
+  effects: ResidueEffectsResponse | null;
+}) {
   const { clinvar, gnomad } = record;
-  const significance = parseClinicalSignificance(clinvar?.classification);
   const conditions = clinvar?.conditions ?? [];
   const condition =
     conditions.find((entry) => entry.name !== "not provided") ?? conditions[0];
+  const seen = gnomad.alleles.reduce(
+    (total, allele) =>
+      total +
+      (allele.exome?.allele_count ?? 0) +
+      (allele.genome?.allele_count ?? 0),
+    0,
+  );
+  const predictions = predictionLines(effects);
   return (
     <>
-      <SectionHeader title="Classification" />
+      <SectionHeader title={MUTATION_WORDS.classification} />
       {clinvar ? (
-        <p className="flex flex-wrap items-center gap-x-2.5 gap-y-1 px-3 py-3">
-          {significance ? (
-            <ClinicalSignificanceChip
-              significance={significance}
-              long
-              className="text-base font-medium"
-            />
-          ) : (
-            <span className="text-base font-medium text-foreground">
-              {clinvar.classification ?? "No classification"}
-            </span>
-          )}
-          {clinvar.review_stars !== null ? (
-            <span
-              className="tabular font-mono text-xs text-muted-foreground"
-              title={clinvar.review_status ?? undefined}
-            >
-              {clinvar.review_stars}/4 review
-            </span>
-          ) : null}
-          <EvidenceMark evidence={clinvar.evidence} />
-        </p>
+        <PlainClassification
+          classification={clinvar.classification}
+          reviewStatus={clinvar.review_status}
+          reviewStars={clinvar.review_stars}
+          evidence={clinvar.evidence}
+        />
       ) : (
         <p className="px-3 py-3 text-sm text-subtle-foreground">
-          No ClinVar record
+          {plainClassifiedBy(null)}
         </p>
       )}
-      <SectionHeader
-        title="Condition"
-        count={conditions.length > 1 ? conditions.length : null}
-      />
+      <SectionHeader title={MUTATION_WORDS.disease} />
       <p className="px-3 py-3 text-sm text-foreground">
         {condition?.name ?? (
-          <span className="text-subtle-foreground">No condition named</span>
+          <span className="text-subtle-foreground">
+            {MUTATION_WORDS.noDisease}
+          </span>
         )}
       </p>
-      <SectionHeader title="Population" />
-      <p className="flex flex-wrap items-center gap-x-2 gap-y-1 px-3 py-3 text-sm text-foreground">
-        {gnomad.label}
+      <SectionHeader title={MUTATION_WORDS.population} />
+      <p
+        className="flex flex-wrap items-center gap-x-2 gap-y-1 px-3 py-3 text-sm text-foreground"
+        title={gnomad.label}
+      >
+        {plainPopulation(
+          gnomad.status,
+          gnomad.alleles.length > 0 ? seen : null,
+        )}
         <EvidenceMark evidence={gnomad.alleles[0]?.evidence} />
+      </p>
+      <SectionHeader title={MUTATION_WORDS.predictions} />
+      {predictions.length > 0 ? (
+        <ul className="flex flex-col gap-1.5 px-3 pt-3 text-sm text-foreground">
+          {predictions.map((prediction) => (
+            <li key={prediction.text} title={prediction.detail}>
+              {prediction.text}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <p className="px-3 py-3 text-xs text-muted-foreground">
+        {predictions.length > 0
+          ? PREDICTION_CAVEAT
+          : MUTATION_WORDS.noPredictions}
       </p>
     </>
   );
 }
 
 const STRIP_KEYS = ["alphamissense.pathogenicity", "foldx.ddg"];
+
+/** Simple mode: each prediction as one statement with its model named. The numbers are in the strips. */
+function predictionLines(
+  effects: ResidueEffectsResponse | null,
+): Array<{ text: string; detail: string }> {
+  const values =
+    effects?.groups
+      .find((group) => group.id === "computational_predictions")
+      ?.values.filter((value) => value.state === "ok") ?? [];
+  const lines: Array<{ text: string; detail: string }> = [];
+  const pathogenicity = values.find((value) => value.key === STRIP_KEYS[0]);
+  if (pathogenicity && typeof pathogenicity.value === "number")
+    lines.push({
+      text: plainPrediction(
+        pathogenicity.tool ?? "AlphaMissense",
+        plainImpact(pathogenicity.normalized_class),
+      ),
+      detail: `${pathogenicity.tool ?? "AlphaMissense"} score ${pathogenicity.value} of 1`,
+    });
+  const stability = values.find((value) => value.key === STRIP_KEYS[1]);
+  if (stability && typeof stability.value === "number")
+    lines.push({
+      text: plainStabilityLine(stability.value),
+      detail: `${stability.tool ?? "FoldX"} ${stability.value.toFixed(2)} ${stability.unit ?? "kcal/mol"}`,
+    });
+  return lines;
+}
 
 /** One strip per model: the predicted values at this substitution, each on its own scale. */
 function predictionStrips(
@@ -814,12 +876,12 @@ export function VariantWorkspace({ variantId }: { variantId: string }) {
       </SubjectBarActions>
       <WorkspaceZones
         layoutId="variant"
-        ledgerLabel={advanced ? "Record" : "Variant"}
+        ledgerLabel={advanced ? "Record" : MUTATION_WORDS.title}
         inspectorLabel="Analysis"
         ledger={
           <Zone
             zone="ledger"
-            title={advanced ? "Record" : "Variant"}
+            title={advanced ? "Record" : MUTATION_WORDS.title}
             detail={
               record && advanced ? (
                 <span className="text-2xs text-muted-foreground">
@@ -836,28 +898,26 @@ export function VariantWorkspace({ variantId }: { variantId: string }) {
             ) : !full ? (
               <>
                 <div className="flex flex-col gap-1.5 px-3 pt-4 pb-3">
-                  <h1 className="flex flex-wrap items-baseline gap-x-2 font-mono text-xl font-semibold text-foreground">
-                    <TextLink
-                      href={routes.gene(record.gene.id)}
-                      className="font-mono"
-                    >
-                      {record.gene.id}
-                    </TextLink>
-                    <span>{label}</span>
+                  <h1
+                    className="text-xl font-medium text-foreground"
+                    title={label}
+                  >
+                    {(substitution
+                      ? plainChange(
+                          aminoAcidName(reference ?? ""),
+                          aminoAcidName(alternate ?? ""),
+                          position,
+                        )
+                      : null) ?? plainMutationRow(label)}
                   </h1>
                   <p className="text-sm text-muted-foreground">
-                    <LearnTerm
-                      term={
-                        record.consequence === "missense_variant"
-                          ? "missense-mutation"
-                          : "variant"
-                      }
-                    >
-                      {consequenceText(record.consequence) ?? "Variant"}
-                    </LearnTerm>
+                    {plainChangeKind(record.consequence)} in{" "}
+                    <TextLink href={routes.gene(record.gene.id)}>
+                      {record.gene.id}
+                    </TextLink>
                   </p>
                 </div>
-                <VariantSummary record={record} />
+                <VariantSummary record={record} effects={effectsData} />
                 <div className="border-t border-border-subtle px-3 py-3">
                   <Button
                     variant="ghost"
@@ -865,7 +925,7 @@ export function VariantWorkspace({ variantId }: { variantId: string }) {
                     aria-expanded={false}
                     onClick={() => setDetails(true)}
                   >
-                    Details
+                    {DETAILS_LABEL}
                   </Button>
                 </div>
               </>
@@ -925,8 +985,16 @@ export function VariantWorkspace({ variantId }: { variantId: string }) {
           record && !accession ? (
             <Zone zone="instrument" title="3D">
               <EmptyState
-                title="No protein mapped for this variant"
-                description="The record names no UniProt accession, so the variant cannot be placed on a sequence or a structure."
+                title={
+                  advanced
+                    ? "No protein mapped for this variant"
+                    : MUTATION_WORDS.noProtein
+                }
+                description={
+                  advanced
+                    ? "The record names no UniProt accession, so the variant cannot be placed on a sequence or a structure."
+                    : undefined
+                }
                 searched={["UniProt"]}
               />
             </Zone>
@@ -944,7 +1012,10 @@ export function VariantWorkspace({ variantId }: { variantId: string }) {
               caption={
                 residueLabel ? (
                   <span className="hidden truncate text-xs text-muted-foreground sm:inline">
-                    {residueLabel} highlighted
+                    {position !== null
+                      ? plainSpot(reference, position)
+                      : residueLabel}{" "}
+                    {MUTATION_WORDS.highlighted}
                   </span>
                 ) : null
               }
@@ -957,7 +1028,7 @@ export function VariantWorkspace({ variantId }: { variantId: string }) {
                       className="hidden sm:inline-flex"
                       href={stagePath(routes.mechanism(record.id))}
                     >
-                      Mechanism
+                      {MUTATION_WORDS.cause}
                     </ButtonLink>
                     <ButtonLink
                       size="sm"
@@ -965,7 +1036,7 @@ export function VariantWorkspace({ variantId }: { variantId: string }) {
                       className="mr-1"
                       href={stagePath(routes.compare(symbol, change))}
                     >
-                      Compare structures
+                      {MUTATION_WORDS.compare}
                       <ArrowRightIcon data-icon="inline-end" />
                     </ButtonLink>
                   </>
@@ -1028,7 +1099,7 @@ export function VariantWorkspace({ variantId }: { variantId: string }) {
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  aria-label="Close the details"
+                  aria-label={MUTATION_WORDS.close}
                   onClick={() => setDetails(false)}
                 >
                   <XIcon />

@@ -1,0 +1,31 @@
+{"database": "ClinVar", "record_id": "VCV000191102.15", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/191102/", "tool": "get_variant", "agent": "knowledge_graph", "at": "2026-10-03T22:17:25Z"}
+{"database": "gnomAD", "record_id": "19-17843777-C-T", "url": "https://gnomad.broadinstitute.org/variant/19-17843777-C-T?dataset=gnomad_r4", "tool": "get_variant", "agent": "knowledge_graph", "at": "2026-10-03T22:17:25Z"}
+{"database": "Ensembl VEP", "record_id": "NM_000215.4:c.308G>A", "url": "https://rest.ensembl.org/documentation/info/vep_hgvs_get", "tool": "get_variant", "agent": "knowledge_graph", "at": "2026-10-03T22:17:25Z"}
+{"database": "UniProtKB", "record_id": "P52333", "url": "https://www.uniprot.org/uniprotkb/P52333/entry", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-03T22:17:25Z"}
+{"database": "InterPro", "record_id": "IPR051286", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR051286/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-03T22:17:25Z"}
+{"database": "InterPro", "record_id": "IPR016251", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR016251/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-03T22:17:25Z"}
+{"database": "InterPro", "record_id": "IPR019749", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR019749/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-03T22:17:25Z"}
+{"database": "InterPro", "record_id": "IPR000299", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR000299/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-03T22:17:25Z"}
+{"database": "InterPro", "record_id": "IPR041155", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR041155/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-03T22:17:25Z"}
+{"database": "AlphaMissense", "record_id": "AF-P52333-F1:R103H", "url": "https://alphafold.ebi.ac.uk/entry/AF-P52333-F1", "tool": "get_variant_effect_values", "agent": "knowledge_graph", "at": "2026-10-03T22:17:26Z"}
+{"database": "EBI ProtVar", "record_id": "P52333:103", "url": "https://www.ebi.ac.uk/ProtVar/query?search=P52333:103:H", "tool": "get_variant_effect_values", "agent": "knowledge_graph", "at": "2026-10-03T22:17:26Z"}
+{"database": "EBI ProtVar", "record_id": "P52333:103:H", "url": "https://www.ebi.ac.uk/ProtVar/query?search=P52333:103:H", "tool": "get_variant_effect_values", "agent": "knowledge_graph", "at": "2026-10-03T22:17:26Z"}
+{"database": "PDBe SIFTS", "record_id": "P52333", "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P52333", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-03T22:17:26Z"}
+{"database": "AlphaFold DB", "record_id": "AF-P52333-F1", "url": "https://alphafold.ebi.ac.uk/entry/AF-P52333-F1", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-03T22:17:26Z"}
+{"database": "ClinVar", "record_id": "VCV000384359.14", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/384359/", "tool": "list_variants_near", "agent": "knowledge_graph", "at": "2026-10-03T22:17:26Z"}
+{"database": "Europe PMC", "record_id": "PMID:40140631", "url": "https://europepmc.org/article/MED/40140631", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:17:27Z"}
+{"database": "Europe PMC", "record_id": "PMID:32639993", "url": "https://europepmc.org/article/MED/32639993", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:17:27Z"}
+{"database": "Europe PMC", "record_id": "PMID:32316399", "url": "https://europepmc.org/article/MED/32316399", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:17:27Z"}
+{"database": "Europe PMC", "record_id": "PMID:30355579", "url": "https://europepmc.org/article/MED/30355579", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:17:27Z"}
+{"database": "Europe PMC", "record_id": "PMID:15143194", "url": "https://europepmc.org/article/MED/15143194", "tool": "search_literature", "agent": "literature", "at": "2026-10-03T22:17:27Z"}
+{"database": "OpenAlex", "record_id": "W2042593266", "url": "https://openalex.org/W2042593266", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:17:28Z"}
+{"database": "OpenAlex", "record_id": "W2068674478", "url": "https://openalex.org/W2068674478", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:17:28Z"}
+{"database": "OpenAlex", "record_id": "W2076071094", "url": "https://openalex.org/W2076071094", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:17:28Z"}
+{"database": "OpenAlex", "record_id": "W4306920875", "url": "https://openalex.org/W4306920875", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:17:28Z"}
+{"database": "OpenAlex", "record_id": "W2127833817", "url": "https://openalex.org/W2127833817", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:17:28Z"}
+{"database": "OpenAlex", "record_id": "W2903341269", "url": "https://openalex.org/W2903341269", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:17:28Z"}
+{"database": "OpenAlex", "record_id": "W2396304782", "url": "https://openalex.org/W2396304782", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:17:28Z"}
+{"database": "OpenAlex", "record_id": "W4392376817", "url": "https://openalex.org/W4392376817", "tool": "search_openalex", "agent": "literature", "at": "2026-10-03T22:17:28Z"}
+{"database": "Europe PMC", "record_id": "PMID:21821710", "url": "https://europepmc.org/article/MED/21821710", "tool": "get_publication", "agent": "literature", "at": "2026-10-03T22:17:31Z"}
+{"database": "Europe PMC", "record_id": "PMID:38474223", "url": "https://europepmc.org/article/MED/38474223", "tool": "get_publication", "agent": "literature", "at": "2026-10-03T22:17:32Z"}
+{"database": "EBI ProtVar", "record_id": "P52333:103:C", "url": "https://www.ebi.ac.uk/ProtVar/query?search=P52333:103:C", "tool": "run_stability_test", "agent": "runner", "at": "2026-10-03T22:19:14Z"}

@@ -3,6 +3,11 @@ import { cn } from "cn";
 import { AlphaMissenseLegend, PlddtLegend } from "@/components/science/legends";
 import { Swatch } from "@/components/science/swatch";
 import {
+  SEQUENCE_WORDS,
+  plainClassGroup,
+  plainMutationKind,
+} from "@/lib/plain-language";
+import {
   CLINICAL_SIGNIFICANCE,
   type ClinicalSignificanceGroup,
 } from "@/lib/science/clinical-significance";
@@ -109,6 +114,8 @@ export interface AxisLegendProps {
     consequences: VariantConsequence[],
     isolate: boolean,
   ) => void;
+  /** simple mode: shapes and colours in everyday words, nothing else */
+  plain?: boolean;
 }
 
 /** One scrolling line of legends for the rows on screen. Every colour and shape has its text beside it. */
@@ -121,7 +128,78 @@ export function AxisLegend({
   consequences,
   onToggleGroup,
   onToggleConsequences,
+  plain = false,
 }: AxisLegendProps) {
+  if (plain) {
+    return (
+      <div
+        data-slot="axis-legend"
+        className="scroll-thin flex h-6 shrink-0 items-center gap-3 overflow-x-auto overflow-y-hidden border-t border-border bg-sunken px-3 text-2xs whitespace-nowrap text-muted-foreground"
+      >
+        {hasClinical ? (
+          <>
+            <span className="flex items-center gap-1">
+              <span className={TITLE}>{SEQUENCE_WORDS.colour}</span>
+              {SIGNIFICANCE_GROUPS.map((group) => (
+                <button
+                  key={group}
+                  type="button"
+                  aria-pressed={groups.has(group)}
+                  onClick={(event) => onToggleGroup(group, event.shiftKey)}
+                  className={ENTRY}
+                >
+                  <Swatch swatchClass={GROUP_SHORT[group].swatchClass} />
+                  {plainClassGroup(group)}
+                </button>
+              ))}
+              <span className="flex items-center gap-1 px-1">
+                <Swatch swatchClass="bg-clin-other" hatched />
+                {SEQUENCE_WORDS.striped}
+              </span>
+            </span>
+            <span className={RULE} />
+          </>
+        ) : null}
+        {hasClinical || hasPopulation ? (
+          <span className="flex items-center gap-1">
+            <span className={TITLE}>{SEQUENCE_WORDS.shape}</span>
+            {SHAPE_ENTRIES.map((entry) => (
+              <button
+                key={entry.label}
+                type="button"
+                aria-pressed={entry.consequences.some((consequence) =>
+                  consequences.has(consequence),
+                )}
+                onClick={(event) =>
+                  onToggleConsequences(entry.consequences, event.shiftKey)
+                }
+                className={ENTRY}
+              >
+                <ConsequenceGlyph consequence={entry.consequences[0]} />
+                {plainMutationKind(entry.consequences[0])}
+              </button>
+            ))}
+          </span>
+        ) : null}
+        {trackKinds.has("confidence") ? (
+          <>
+            <span className={RULE} />
+            <PlddtLegend wrap={false} showRanges={false} className="shrink-0" />
+          </>
+        ) : null}
+        {trackKinds.has("pathogenicity") ? (
+          <>
+            <span className={RULE} />
+            <AlphaMissenseLegend
+              wrap={false}
+              showRanges={false}
+              className="shrink-0 pr-3"
+            />
+          </>
+        ) : null}
+      </div>
+    );
+  }
   return (
     <div
       data-slot="axis-legend"

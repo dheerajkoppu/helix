@@ -5,6 +5,13 @@ import { cn } from "cn";
 import { SectionHeader } from "@/components/data/section-header";
 import { EvidenceBadge } from "@/components/evidence/evidence-badge";
 import { Fold } from "@/components/intervention/fold";
+import {
+  CAUSE_WORDS,
+  plainCause,
+  plainCount,
+  plainSupport,
+  plainSupportWhy,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 
 import {
@@ -93,22 +100,13 @@ function CandidateRow({
         selected={selected}
         onSelect={onSelect}
         lead={candidate.rank}
-        title={candidate.label}
-        trailing={
-          <>
-            <EvidenceBadge
-              evidenceClass={SUPPORT_CLASS[candidate.support]}
-              title={candidate.support_label}
-            />
-            <span
-              className="tabular w-5 text-right font-mono text-xs text-muted-foreground"
-              title={plural(candidate.supporting_count, "supporting record")}
-            >
-              {candidate.supporting_count}
-            </span>
-          </>
-        }
-      />
+        title={plainCause(candidate.category)}
+      >
+        <span title={plainSupportWhy(candidate.support)}>
+          {plainSupport(candidate.support)} ·{" "}
+          {plainCount(candidate.supporting_count, "fact")}
+        </span>
+      </Row>
     );
   return (
     <Row
@@ -143,7 +141,12 @@ function UnsupportedRow({
 }) {
   const read = entry.observations.length;
   return (
-    <Row selected={selected} onSelect={onSelect} lead="–" title={entry.label}>
+    <Row
+      selected={selected}
+      onSelect={onSelect}
+      lead="–"
+      title={advanced ? entry.label : plainCause(entry.category)}
+    >
       {advanced
         ? entry.not_checked.length
           ? `Not checked: ${entry.not_checked.join(", ")}`
@@ -184,7 +187,7 @@ export function CandidateLedger({
   if (!advanced)
     return (
       <div>
-        <div role="listbox" aria-label="Candidate mechanisms">
+        <div role="listbox" aria-label={CAUSE_WORDS.title}>
           {data.candidates.map((candidate) => (
             <CandidateRow
               key={candidate.id}
@@ -197,13 +200,13 @@ export function CandidateLedger({
         </div>
         {data.unsupported.length ? (
           <Fold
-            title="No data found"
+            title={CAUSE_WORDS.none}
             count={data.unsupported.length}
             defaultOpen={data.unsupported.some(
               (entry) => entry.category === selectedId,
             )}
           >
-            <div role="listbox" aria-label="Categories with no supporting data">
+            <div role="listbox" aria-label={CAUSE_WORDS.none}>
               {unsupported}
             </div>
           </Fold>

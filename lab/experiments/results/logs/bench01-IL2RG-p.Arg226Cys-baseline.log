@@ -1,0 +1,29 @@
+run bench01-IL2RG-p.Arg226Cys-baseline (single_agent_baseline) started; record: /Users/dheeraj/Downloads/alphafold/lab/runs/bench01-IL2RG-p.Arg226Cys-baseline/record.jsonl
+[  1] human           objective           Find the molecular mechanism that best explains the loss of function of IL2RG-p.Arg226Cys (IL2RG, UniProt P31785) and test it with one targeted comput
+[  2] orchestrator    evidence            E1 clinical_database ClinVar classifies NM_000206.3(IL2RG):c.676C>T (p.Arg226Cys) as Pathogenic (reviewed by expert panel; 3 of 4 stars; 10 submission
+[  3] orchestrator    evidence            E2 experimental UniProtKB natural variant VAR_002690 at residue 226 (R to C) is annotated as X-linked severe combined immunodeficiency (XSCID), citing
+[  4] orchestrator    evidence            E3 computational_prediction AlphaMissense gives p.Arg226Cys of P31785 a pathogenicity score of 0.5785, classed as likely pathogenic (scale 0 to 1).
+[  5] orchestrator    evidence            E4 computational_prediction EVE gives p.Arg226Cys of P31785 a score of 0.853, classed as pathogenic (scale 0 to 1, higher more pathogenic); popEVE giv
+[  6] orchestrator    evidence            E5 computational_prediction ScoreCons conservation at P31785 position 226 is 0.717 (UniRef90, 0 to 1, higher more conserved).
+[  7] orchestrator    evidence            E6 experimental 14 of 14 experimental PDB structures of P31785 observe residue 226, and none of them carries the R226C mutation; the structures includ
+[  8] orchestrator    evidence            E7 experimental UniProtKB annotates residues 219-226 of P31785 as a beta strand, within the fibronectin type-III domain at residues 156-253.
+[  9] orchestrator    evidence            E8 computational_prediction The AlphaFold DB model AF-P31785-F1 covers the full 369-residue sequence of P31785 with mean pLDDT 75.5.
+[ 10] orchestrator    evidence            E9 clinical_database ClinVar lists the other substitutions at residue 226, R226H and R226L, as Pathogenic (3 stars) and Likely pathogenic (1 star) res
+[ 11] orchestrator    evidence            E10 literature A 2026 Europe PMC paper uses an in-silico approach to study the structural and functional impact of the IL2RG variants Trp240Arg and Ar
+[ 12] orchestrator    gap                 G1 No functional assay (cell signalling, STAT5 phosphorylation or protein expression) covering residue 226 was found; the functional-assay count for t
+[ 13] orchestrator    gap                 G2 The full text of PMID 42027176 was not retrieved; the abstract was cut off before its conclusions on R226C.
+[ 14] orchestrator    gap                 G3 None of the 14 experimental structures carries an R226C mutation, and no structure has a ligand or partner contact annotated at residue 226 beyond 
+[ 15] orchestrator    hypothesis          H1 stability_folding R226C destabilises the fibronectin type-III fold of IL2RG: residue 226 lies in the beta strand 219-226 of the FN-III domain, and 
+[ 16] orchestrator    hypothesis          H2 protein_interaction R226C abolishes a contact between the IL2RG extracellular FN-III domain and a cytokine or partner chain (IL-2, IL-4, IL-7, IL-1
+[ 17] orchestrator    test_candidate      T1 stability_effect learning=0.7 feasibility=0.9 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 18] orchestrator    test_candidate      T2 structural_context learning=0.5 feasibility=0.85 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 19] orchestrator    test_candidate      T3 structure_comparison learning=0.4 feasibility=0.1 cost={'compute_seconds': 120, 'tool_calls': 3}
+[ 20] orchestrator    plan                chose T1: T1 (FoldX stability) directly discriminates H1 from H2, costs no compute seconds, needs no approval and is feasible now. T3 cannot run becau
+[ 21] orchestrator    note                safety_review: review_claims checked 19 statements: no clinical or treatment wording, no evidence without a source, no unlabelled hypotheses. T1 is a 
+[ 22] orchestrator    experiment_started  T1 run_stability_test
+[ 23] orchestrator    experiment_result   T1 FoldX predicts ΔΔG +0.51 kcal/mol for R226C, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 96.69).
+[ 24] orchestrator    interpretation      H1 weakened; H2 unchanged
+[ 25] orchestrator    decision            stability_folding -> protein_interaction (changed: True)
+[ 26] orchestrator    next_experiment     computational: Run structural_context (T2) to test whether residue 226 lies in a ProtVar-predicted protein-protein interface or a P2Rank pocket on the
+[ 27] orchestrator    note                final_report: ## Question What molecular mechanism best explains the loss of function of IL2RG p.Arg226Cys (P31785), and which single computational te
+run bench01-IL2RG-p.Arg226Cys-baseline succeeded in 75.2s: 36 tool calls, 10 evidence items from 7 databases, 3 tests considered, favoured stability_folding -> protein_interaction (changed: True)

@@ -36,6 +36,7 @@ import {
   useWorkspaceSubject,
 } from "@/components/workspace";
 import { routes, toThreeLetter } from "@/lib/ids";
+import { CAUSE_WORDS, plainCause } from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import { useReportSources } from "@/lib/state/shell";
@@ -314,8 +315,8 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
         ledger={
           <Zone
             zone="ledger"
-            title={advanced ? "Candidate mechanisms" : "Mechanisms"}
-            count={data?.applicable ? data.candidates.length : null}
+            title={advanced ? "Candidate mechanisms" : CAUSE_WORDS.heading}
+            count={advanced && data?.applicable ? data.candidates.length : null}
             actions={data && advanced ? <RuleSet data={data} /> : null}
             footer={
               advanced ? (
@@ -325,6 +326,11 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
               ) : undefined
             }
           >
+            {advanced ? null : (
+              <p className="border-b border-border-subtle px-3 py-3 text-sm font-medium text-foreground">
+                {CAUSE_WORDS.title}
+              </p>
+            )}
             {mechanisms.isPending ? (
               <RowsSkeleton rows={8} />
             ) : mechanisms.isError ? (
@@ -335,15 +341,21 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
               />
             ) : !data?.applicable ? (
               <EmptyState
-                title="No candidate mechanisms derived"
-                description={data?.message}
+                title={
+                  advanced
+                    ? "No candidate mechanisms derived"
+                    : CAUSE_WORDS.noCause
+                }
+                description={advanced ? data?.message : undefined}
                 actions={
                   <Button
                     size="sm"
                     variant="outline"
                     render={<Link href={routes.variant(variantId)} />}
                   >
-                    Open the variant record
+                    {advanced
+                      ? "Open the variant record"
+                      : CAUSE_WORDS.openMutation}
                   </Button>
                 }
               />
@@ -352,7 +364,9 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
                 {data.candidates.length === 0 ? (
                   <EmptyState
                     size="inline"
-                    title="No supported candidate"
+                    title={
+                      advanced ? "No supported candidate" : CAUSE_WORDS.none
+                    }
                     description={
                       advanced
                         ? "Every category below was checked. An absence here does not rule a mechanism out."
@@ -382,7 +396,11 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
             title={
               advanced
                 ? "What might this mutation disrupt?"
-                : (candidate?.label ?? unsupported?.label ?? "Structure")
+                : candidate
+                  ? plainCause(candidate.category)
+                  : unsupported
+                    ? plainCause(unsupported.category)
+                    : CAUSE_WORDS.structure
             }
             scroll={false}
             actions={
@@ -390,9 +408,9 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
                 <DropdownMenu>
                   <DropdownMenuTrigger
                     aria-label={`Structure shown: ${structureName(shownId)}`}
-                    className="inline-flex h-6 cursor-pointer items-center gap-1 rounded-md px-1.5 font-mono text-xs text-muted-foreground hover:bg-accent hover:text-foreground aria-expanded:bg-active aria-expanded:text-foreground"
+                    className="inline-flex h-6 cursor-pointer items-center gap-1 rounded-md px-1.5 text-xs text-muted-foreground hover:bg-accent hover:text-foreground aria-expanded:bg-active aria-expanded:text-foreground"
                   >
-                    {structureName(shownId)}
+                    {CAUSE_WORDS.structure}
                     <ChevronDownIcon className="size-3" aria-hidden />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
@@ -407,9 +425,10 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
                           key={id}
                           value={id}
                           closeOnClick
-                          className="font-mono"
                         >
-                          {structureName(id)}
+                          {id.startsWith("afdb:")
+                            ? structureName(id)
+                            : `${CAUSE_WORDS.labStructure} ${structureName(id)}`}
                         </DropdownMenuRadioItem>
                       ))}
                     </DropdownMenuRadioGroup>
@@ -421,7 +440,7 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
               shown.structure ? (
                 <StructureOriginTag
                   origin={shown.structure.origin}
-                  detail={shown.structure.id}
+                  detail={advanced ? shown.structure.id : undefined}
                   size="compact"
                   caption={advanced}
                 />
@@ -456,9 +475,17 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
               ) : undefined
             }
             footer={
-              candidate && marked ? (
+              !advanced ? (
+                residueLabel ? (
+                  <span>
+                    {candidate && marked
+                      ? CAUSE_WORDS.shown
+                      : CAUSE_WORDS.spotShown}
+                  </span>
+                ) : undefined
+              ) : candidate && marked ? (
                 <span>
-                  {advanced ? `${candidate.label}: ` : "Shown: "}
+                  {`${candidate.label}: `}
                   {residueLabel} with {marked}.
                 </span>
               ) : residueLabel ? (
@@ -516,9 +543,11 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
               <EmptyState
                 title="No structure to show"
                 description={
-                  data?.applicable === false
-                    ? data.message
-                    : "No experimental entry or AlphaFold DB model found."
+                  !advanced
+                    ? CAUSE_WORDS.noStructure
+                    : data?.applicable === false
+                      ? data.message
+                      : "No experimental entry or AlphaFold DB model found."
                 }
                 searched={["RCSB PDB", "AlphaFold DB"]}
               />
@@ -530,7 +559,15 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
           !showInspector ? undefined : (
           <Zone
             zone="inspector"
-            title={candidate?.label ?? unsupported?.label ?? "Evidence"}
+            title={
+              advanced
+                ? (candidate?.label ?? unsupported?.label ?? "Evidence")
+                : candidate
+                  ? plainCause(candidate.category)
+                  : unsupported
+                    ? plainCause(unsupported.category)
+                    : CAUSE_WORDS.evidence
+            }
             detail={
               candidate && advanced ? (
                 <span className="text-2xs text-muted-foreground">
@@ -543,7 +580,7 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  aria-label="Close the evidence"
+                  aria-label="Close"
                   onClick={() => setInspectorOpen(false)}
                 >
                   <XIcon aria-hidden />

@@ -24,6 +24,7 @@ import { EvidenceMark } from "@/components/variant/evidence";
 import {
   ClassificationLine,
   ConditionList,
+  PlainClassification,
   PopulationObservation,
   ResidueContext,
   VariantRoutes,
@@ -34,6 +35,14 @@ import { Zone } from "@/components/workspace";
 import type { Schema } from "@/lib/api/types";
 import { aminoAcidName, routes, toThreeLetter } from "@/lib/ids";
 import { parseClinicalSignificance } from "@/lib/science/clinical-significance";
+import {
+  DETAILS_LABEL,
+  MUTATION_WORDS,
+  plainChangeKind,
+  plainClassifiedBy,
+  plainMutationRow,
+  plainSpot,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import {
   useResidueEffects,
@@ -78,7 +87,7 @@ function DetailsToggle({ onOpen }: { onOpen: () => void }) {
   return (
     <div className="px-3 py-3">
       <Button variant="ghost" size="sm" aria-expanded={false} onClick={onOpen}>
-        Details
+        {DETAILS_LABEL}
       </Button>
     </div>
   );
@@ -90,12 +99,14 @@ function ResidueConfidence({
   alternate,
   reference,
   predictions,
+  simple = false,
 }: {
   accession: string;
   position: number;
   alternate: string | null;
   reference: string | null;
   predictions: boolean;
+  simple?: boolean;
 }) {
   const effects = useResidueEffects(accession, position, {
     alt: alternate,
@@ -118,11 +129,19 @@ function ResidueConfidence({
         <MetricReadout
           metric="plddt"
           value={data.residue.plddt}
-          missingReason="No AlphaFold DB model covers this residue"
+          missingReason={
+            simple
+              ? "No prediction covers this spot"
+              : "No AlphaFold DB model covers this residue"
+          }
           label={
-            <>
-              <LearnTerm term="plddt">pLDDT</LearnTerm> at residue {position}
-            </>
+            simple ? (
+              MUTATION_WORDS.confidenceHere
+            ) : (
+              <>
+                <LearnTerm term="plddt">pLDDT</LearnTerm> at residue {position}
+              </>
+            )
           }
           producedBy={data.residue.plddt_structure_id}
         />
@@ -143,11 +162,13 @@ function VariantsAtResidue({
   axisVariants,
   excludeId,
   onSelectVariant,
+  simple = false,
 }: {
   position: number;
   axisVariants: AxisVariantsResponse | null;
   excludeId: string | null;
   onSelectVariant: (variant: AxisClinicalVariant) => void;
+  simple?: boolean;
 }) {
   if (!axisVariants) return null;
   const clinical = axisVariants.clinical.filter(
@@ -160,9 +181,11 @@ function VariantsAtResidue({
     <>
       <SectionHeader
         title={
-          excludeId
-            ? "Other variants at this residue"
-            : "Variants at this residue"
+          simple
+            ? "Mutations at this spot"
+            : excludeId
+              ? "Other variants at this residue"
+              : "Variants at this residue"
         }
         count={clinical.length}
       />
@@ -182,13 +205,23 @@ function VariantsAtResidue({
                   onClick={() => onSelectVariant(variant)}
                   className="flex w-full cursor-pointer items-center gap-2 px-3 py-1.5 text-left hover:bg-accent"
                 >
-                  <span className="w-24 shrink-0 font-mono">
-                    {variant.protein_change ?? variant.id}
-                  </span>
+                  {simple ? (
+                    <span
+                      className="w-28 shrink-0 truncate"
+                      title={variant.protein_change ?? variant.id}
+                    >
+                      {plainMutationRow(variant.protein_change ?? variant.id)}
+                    </span>
+                  ) : (
+                    <span className="w-24 shrink-0 font-mono">
+                      {variant.protein_change ?? variant.id}
+                    </span>
+                  )}
                   {significance ? (
                     <ClinicalSignificanceChip
                       significance={significance}
-                      reviewStars={variant.review_stars}
+                      reviewStars={simple ? undefined : variant.review_stars}
+                      long={simple}
                     />
                   ) : (
                     <span className="text-2xs text-subtle-foreground">
@@ -207,14 +240,16 @@ function VariantsAtResidue({
         <EmptyState
           size="inline"
           title={
-            excludeId
-              ? "No other clinical variant at this residue"
-              : "No clinical variant at this residue"
+            simple
+              ? "No known mutation at this spot"
+              : excludeId
+                ? "No other clinical variant at this residue"
+                : "No clinical variant at this residue"
           }
           searched={["ClinVar", "UniProt natural variants"]}
         />
       )}
-      {population.length > 0 ? (
+      {population.length > 0 && !simple ? (
         <p className="border-t border-border-subtle px-3 py-1.5 text-2xs text-muted-foreground">
           {axisVariants.population_dataset} lists{" "}
           {population.map((variant) => variant.hgvs_p).join(", ")} at this
@@ -301,28 +336,45 @@ function VariantBody({
       <>
         <div className="flex flex-col gap-3 px-3 py-3">
           <p className="text-sm text-muted-foreground">
-            {symbol} {consequence}
+            {plainChangeKind(
+              row?.consequence ?? slim?.consequence ?? record?.consequence,
+            )}
           </p>
           <ButtonLink
             variant="default"
             className="self-start"
             href={stagePath(routes.variant(active.id))}
           >
-            Open variant
+            Open this mutation
             <ArrowRightIcon data-icon="inline-end" />
           </ButtonLink>
         </div>
-        <SectionHeader title="Classification" />
-        {classificationLine ?? (
+        {pendingRecord ? (
+          <RowsSkeleton rows={2} />
+        ) : inClinvar ? (
+          <PlainClassification
+            classification={classification}
+            reviewStatus={
+              row?.review_status ??
+              slim?.review_status ??
+              record?.clinvar?.review_status
+            }
+            reviewStars={
+              row?.review_stars ??
+              slim?.review_stars ??
+              record?.clinvar?.review_stars
+            }
+            evidence={clinvarEvidence}
+          />
+        ) : (
           <p className="px-3 py-2 text-xs text-subtle-foreground">
-            No ClinVar record
+            {plainClassifiedBy(null)}
           </p>
         )}
         {conditions?.[0] ?? slim?.condition ? (
           <>
             <SectionHeader
-              title="Condition"
-              count={conditions && conditions.length > 1 ? conditions.length : null}
+              title={MUTATION_WORDS.disease}
             />
             <p className="px-3 py-2 text-sm text-foreground">
               {conditions?.find((condition) => condition.name !== "not provided")
@@ -495,6 +547,7 @@ function ResidueBody({
     return (
       <>
         <ResidueConfidence
+          simple
           accession={accession}
           position={position}
           alternate={null}
@@ -502,6 +555,7 @@ function ResidueBody({
           predictions={false}
         />
         <VariantsAtResidue
+          simple
           position={position}
           axisVariants={axisVariants}
           excludeId={null}
@@ -557,8 +611,13 @@ export function SelectionInspector({
   const full = advanced || details;
   const residueLetter =
     active?.kind === "residue" ? sequence?.[active.position - 1] : null;
-  const title =
-    active?.kind === "variant"
+  const title = !full
+    ? active?.kind === "variant"
+      ? plainMutationRow(active.label)
+      : active?.kind === "residue"
+        ? plainSpot(residueLetter, active.position)
+        : "Selection"
+    : active?.kind === "variant"
       ? active.label
       : active?.kind === "residue"
         ? `${residueLetter ? (toThreeLetter(residueLetter) ?? residueLetter) : "Residue "}${active.position}`
@@ -567,9 +626,9 @@ export function SelectionInspector({
   return (
     <Zone
       zone="inspector"
-      title={<span className="font-mono">{title}</span>}
+      title={full ? <span className="font-mono">{title}</span> : title}
       detail={
-        active?.kind === "residue" && residueLetter ? (
+        !full ? null : active?.kind === "residue" && residueLetter ? (
           <span className="text-2xs text-muted-foreground">
             {aminoAcidName(residueLetter)}
           </span>
@@ -618,7 +677,7 @@ export function SelectionInspector({
           <Button
             variant="ghost"
             size="icon-sm"
-            aria-label="Close and clear the selection"
+            aria-label="Close"
             onClick={onClose}
           >
             <XIcon />

@@ -22,6 +22,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { isApiError } from "@/lib/api/client";
 import { routes } from "@/lib/ids";
 import {
+  PROJECT_WORDS,
+  plainSavedCount,
+  plainSavedKind,
+  plainSavedLabel,
+  plainSavedTo,
+} from "@/lib/plain-language";
+import { useAdvancedMode } from "@/lib/state/preferences";
+import {
   getLastProjectId,
   projectsApi,
   setLastProjectId,
@@ -68,6 +76,7 @@ function AddToProjectDialog() {
   const open = useProjects((state) => state.addOpen);
   const closeAdd = useProjects((state) => state.closeAdd);
   const touch = useProjects((state) => state.touch);
+  const advanced = useAdvancedMode();
 
   const [projects, setProjects] = useState<ProjectSummary[] | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -100,10 +109,16 @@ function AddToProjectDialog() {
     const controller = new AbortController();
     // eslint-disable-next-line react-hooks/set-state-in-effect -- reset the form each time the dialog opens
     setNote("");
-    setTitle(draft ? `${draft.label} investigation` : "");
+    setTitle(
+      draft
+        ? advanced
+          ? `${draft.label} investigation`
+          : plainSavedLabel(draft.label)
+        : "",
+    );
     void load(controller.signal);
     return () => controller.abort();
-  }, [open, draft, load]);
+  }, [open, draft, load, advanced]);
 
   async function save() {
     if (!draft || saving) return;
@@ -137,22 +152,31 @@ function AddToProjectDialog() {
       touch();
       closeAdd();
       const href = `${routes.project(projectId)}?item=${item.id}`;
-      toast.success(`Added ${draft.label} to ${projectTitle}`, {
-        description: item.parent_item_id
-          ? "Attached after the active trail node."
-          : "Started a new trail.",
+      toast.success(
+        advanced
+          ? `Added ${draft.label} to ${projectTitle}`
+          : plainSavedTo(projectTitle),
+        {
+        description: advanced
+          ? item.parent_item_id
+            ? "Attached after the active trail node."
+            : "Started a new trail."
+          : undefined,
         action: {
-          label: "Open trail",
+          label: advanced ? "Open trail" : PROJECT_WORDS.openProject,
           // The dialog lives in its own root, outside the app router
           // eslint-disable-next-line @next/next/no-location-assign-relative-destination
           onClick: () => window.location.assign(href),
         },
-      });
+        },
+      );
     } catch (error) {
-      toast.error("Not added", {
-        description: isApiError(error)
-          ? error.message
-          : "The item could not be saved.",
+      toast.error(advanced ? "Not added" : PROJECT_WORDS.notSaved, {
+        description: advanced
+          ? isApiError(error)
+            ? error.message
+            : "The item could not be saved."
+          : undefined,
       });
     } finally {
       setSaving(false);
@@ -165,8 +189,10 @@ function AddToProjectDialog() {
     <Dialog open={open} onOpenChange={(next) => (next ? null : closeAdd())}>
       <DialogContent className="gap-3 rounded-lg sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add to project</DialogTitle>
-          <DialogDescription>
+          <DialogTitle>
+            {advanced ? "Add to project" : PROJECT_WORDS.save}
+          </DialogTitle>
+          <DialogDescription className={advanced ? undefined : "sr-only"}>
             The item is attached after the project&apos;s active trail node,
             with the view it was saved from.
           </DialogDescription>
@@ -174,21 +200,32 @@ function AddToProjectDialog() {
 
         {draft ? (
           <div className="flex min-w-0 items-center gap-2 border-y border-border-subtle py-2">
-            <KindMark item={draft} />
-            <span className="truncate text-xs font-medium text-foreground">
-              {draft.label}
+            {advanced ? <KindMark item={draft} /> : null}
+            <span
+              className={cn(
+                "truncate font-medium text-foreground",
+                advanced ? "text-xs" : "text-sm",
+              )}
+            >
+              {advanced ? draft.label : plainSavedLabel(draft.label)}
             </span>
-            <MonoId
-              value={draft.ref}
-              copyable={false}
-              className="ml-auto max-w-[45%] truncate text-muted-foreground"
-            />
+            {advanced ? (
+              <MonoId
+                value={draft.ref}
+                copyable={false}
+                className="ml-auto max-w-[45%] truncate text-muted-foreground"
+              />
+            ) : (
+              <span className="ml-auto shrink-0 text-xs text-muted-foreground">
+                {plainSavedKind(draft.kind)}
+              </span>
+            )}
           </div>
         ) : null}
 
         <fieldset className="flex flex-col gap-1" disabled={saving}>
           <legend className="mb-1 text-2xs font-medium tracking-[0.04em] text-muted-foreground uppercase">
-            Project
+            {PROJECT_WORDS.project}
           </legend>
           <div
             role="radiogroup"
@@ -197,7 +234,9 @@ function AddToProjectDialog() {
           >
             {projects === null ? (
               <p className="px-2 py-1.5 text-xs text-muted-foreground">
-                Loading projects of this workspace
+                {advanced
+                  ? "Loading projects of this workspace"
+                  : PROJECT_WORDS.loading}
               </p>
             ) : null}
             {(projects ?? []).map((project) => (
@@ -206,17 +245,23 @@ function AddToProjectDialog() {
                 selected={choice === project.id}
                 onSelect={() => setChoice(project.id)}
                 title={project.title}
-                detail={`${project.item_count} ${project.item_count === 1 ? "item" : "items"}`}
+                detail={
+                  advanced
+                    ? `${project.item_count} ${project.item_count === 1 ? "item" : "items"}`
+                    : plainSavedCount(project.item_count)
+                }
+                plain={!advanced}
               />
             ))}
             <ProjectChoice
               selected={creating}
               onSelect={() => setChoice(NEW_PROJECT)}
-              title="New project"
-              detail="start a trail"
+              title={PROJECT_WORDS.newProject}
+              detail={advanced ? "start a trail" : ""}
+              plain={!advanced}
             />
           </div>
-          {loadError ? (
+          {loadError && advanced ? (
             <p className="text-xs text-muted-foreground">
               {loadError} A new project can still be created.
             </p>
@@ -224,7 +269,7 @@ function AddToProjectDialog() {
           {creating ? (
             <Input
               aria-label="Title of the new project"
-              placeholder="Project title"
+              placeholder={advanced ? "Project title" : PROJECT_WORDS.projectName}
               value={title}
               maxLength={300}
               onChange={(event) => setTitle(event.target.value)}
@@ -235,12 +280,16 @@ function AddToProjectDialog() {
 
         <label className="flex flex-col gap-1">
           <span className="text-2xs font-medium tracking-[0.04em] text-muted-foreground uppercase">
-            Note (optional)
+            {PROJECT_WORDS.note}
           </span>
           <Textarea
             value={note}
             maxLength={2000}
-            placeholder="Why this matters to the investigation"
+            placeholder={
+              advanced
+                ? "Why this matters to the investigation"
+                : PROJECT_WORDS.noteHint
+            }
             onChange={(event) => setNote(event.target.value)}
             className="min-h-14"
           />
@@ -254,7 +303,15 @@ function AddToProjectDialog() {
             onClick={save}
             disabled={saving || !draft || projects === null}
           >
-            {saving ? "Adding" : creating ? "Create and add" : "Add"}
+            {advanced
+              ? saving
+                ? "Adding"
+                : creating
+                  ? "Create and add"
+                  : "Add"
+              : saving
+                ? PROJECT_WORDS.saving
+                : PROJECT_WORDS.saveButton}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -267,11 +324,14 @@ function ProjectChoice({
   onSelect,
   title,
   detail,
+  plain = false,
 }: {
   selected: boolean;
   onSelect: () => void;
   title: string;
   detail: string;
+  /** everyday wording: no monospace */
+  plain?: boolean;
 }) {
   return (
     <button
@@ -291,7 +351,12 @@ function ProjectChoice({
         />
       ) : null}
       <span className="min-w-0 flex-1 truncate text-foreground">{title}</span>
-      <span className="tabular shrink-0 font-mono text-2xs text-subtle-foreground">
+      <span
+        className={cn(
+          "tabular shrink-0 text-2xs text-subtle-foreground",
+          !plain && "font-mono",
+        )}
+      >
         {detail}
       </span>
     </button>

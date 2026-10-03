@@ -28,6 +28,7 @@ import {
   PageSection,
 } from "@/components/shell/page";
 import { Button } from "@/components/ui/button";
+import { LAB_TAGLINE, LAB_WORDS } from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 
 const ACTIVE_INTERVAL_MS = 3000;
@@ -71,14 +72,17 @@ export function LabHome() {
     (benchmark.data.data.arms.length > 0 ||
       benchmark.data.data.per_variant.length > 0),
   );
-  const fullRuns = advanced || allRuns;
   const fullComparison = advanced || comparisonDetails;
 
   return (
     <Page>
       <PageHeader
-        title="Discovery lab"
-        description="Agents take one variant from question to an updated decision."
+        title={LAB_WORDS.title}
+        description={
+          advanced
+            ? "Agents take one variant from question to an updated decision."
+            : LAB_TAGLINE
+        }
       />
       <PageBody>
         {advanced ? (
@@ -121,8 +125,8 @@ export function LabHome() {
 
         <PageSection
           id="runs"
-          title="Recent runs"
-          count={runCount}
+          title={LAB_WORDS.recentRuns}
+          count={advanced ? runCount : undefined}
           className="py-7"
           actions={
             !advanced && runCount !== undefined && runCount > SHORT_LIST ? (
@@ -132,17 +136,21 @@ export function LabHome() {
                 aria-expanded={allRuns}
                 onClick={() => setAllRuns((current) => !current)}
               >
-                {allRuns ? "Recent only" : "All runs"}
+                {allRuns ? LAB_WORDS.recentOnly : LAB_WORDS.allRuns}
               </Button>
             ) : null
           }
         >
-          {fullRuns ? <RunsList runs={runs} /> : <RecentRuns runs={runs} />}
+          {advanced ? (
+            <RunsList runs={runs} />
+          ) : (
+            <RecentRuns runs={runs} all={allRuns} />
+          )}
         </PageSection>
 
         <PageSection
           id="benchmark"
-          title="Measured comparison"
+          title={advanced ? "Measured comparison" : LAB_WORDS.comparison}
           description={
             advanced
               ? "The specialist lab against a single agent with the same tools, over flagship variants. The numbers are printed as measured, with the conditions they were measured under."
@@ -157,7 +165,7 @@ export function LabHome() {
                 aria-expanded={comparisonDetails}
                 onClick={() => setComparisonDetails((current) => !current)}
               >
-                {comparisonDetails ? "Hide details" : "Details"}
+                {comparisonDetails ? LAB_WORDS.hideDetails : LAB_WORDS.details}
               </Button>
             ) : null
           }
@@ -172,8 +180,8 @@ export function LabHome() {
 
         <PageSection
           id="agents"
-          title="Agents"
-          count={agentCount}
+          title={advanced ? "Agents" : LAB_WORDS.agents}
+          count={advanced ? agentCount : undefined}
           description={
             advanced
               ? "The specifications the orchestrator runs, served as data. Each agent owns one scientific decision and can call only the tools listed for it."

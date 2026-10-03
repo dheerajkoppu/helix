@@ -4,9 +4,16 @@ import { SearchIcon } from "lucide-react";
 import { cn } from "cn";
 
 import { KeyHint } from "@/components/data/key-hint";
+import { SEARCH_HINT } from "@/lib/plain-language";
+import { useAdvancedMode } from "@/lib/state/preferences";
 import { useShell } from "@/lib/state/shell";
 
 export const SEARCH_PLACEHOLDER = "Search a disease, gene, protein, or variant";
+
+/** The search field's hint: everyday words in simple mode, the full list in Advanced. */
+export function useSearchPlaceholder(): string {
+  return useAdvancedMode() ? SEARCH_PLACEHOLDER : SEARCH_HINT;
+}
 
 export interface SearchTriggerProps {
   /** "bar": 28px control in the top bar. "hero": the home page's one action. "icon": phones. */
@@ -20,6 +27,7 @@ export function SearchTrigger({
   className,
 }: SearchTriggerProps) {
   const setPaletteOpen = useShell((state) => state.setPaletteOpen);
+  const placeholder = useSearchPlaceholder();
 
   if (variant === "icon") {
     return (
@@ -58,7 +66,7 @@ export function SearchTrigger({
         )}
         aria-hidden
       />
-      <span className="min-w-0 flex-1 truncate">{SEARCH_PLACEHOLDER}</span>
+      <span className="min-w-0 flex-1 truncate">{placeholder}</span>
       <KeyHint keys="mod+k" className="shrink-0" />
     </button>
   );

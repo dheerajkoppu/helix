@@ -1,0 +1,30 @@
+run bench01-WAS-p.Thr45Met-baseline (single_agent_baseline) started; record: /Users/dheeraj/Downloads/alphafold/lab/runs/bench01-WAS-p.Thr45Met-baseline/record.jsonl
+[  1] human           objective           Find the molecular mechanism that best explains the loss of function of WAS-p.Thr45Met (WAS, UniProt P42768) and test it with one targeted computation
+[  2] orchestrator    evidence            E1 clinical_database ClinVar classifies NM_000377.3(WAS):c.134C>T (p.Thr45Met) as Pathogenic (criteria provided, multiple submitters, no conflicts; 2 
+[  3] orchestrator    evidence            E2 experimental UniProtKB natural variant VAR_008106 at residue 45 (T to M) is annotated for Wiskott-Aldrich syndrome and X-linked severe congenital n
+[  4] orchestrator    evidence            E3 curated_database The WAS protein residue 45 lies within the WH1/EVH1 domain (residues 39-148) in the UniProtKB annotation, which is an computationa
+[  5] orchestrator    evidence            E4 computational_prediction AlphaMissense gives p.Thr45Met of P42768 a pathogenicity score of 0.5907, classed as likely pathogenic.
+[  6] orchestrator    evidence            E5 computational_prediction EVE gives p.Thr45Met of P42768 a score of 0.679, classed as pathogenic, and popEVE gives -4.341 (more negative = more dele
+[  7] orchestrator    evidence            E6 experimental In the only experimental structure observing residue 45 (solution NMR of the human WASP/WIP complex), no non-solvent ligand is bound.
+[  8] orchestrator    evidence            E7 computational_prediction AlphaFold DB model AF-P42768-F1 covers the full 502-residue sequence with mean pLDDT 69.38.
+[  9] orchestrator    evidence            E8 literature In a Syrian-Lebanese family with X-linked thrombocytopenia, affected men carried the missense C168T (Thr45Met) mutation in exon 2 of the
+[ 10] orchestrator    gap                 G1 No functional assay in the record covers residue 45 (functional_assays_covering_residue = 0), so no measured effect of T45M on WASP activity, stabi
+[ 11] orchestrator    gap                 G2 The only experimental structure observing residue 45 (9S9X) has no reference-versus-mutant comparison, and it is unknown whether T45 contacts WIP o
+[ 12] orchestrator    hypothesis          H1 stability_folding T45M destabilises the WH1/EVH1 fold: the larger hydrophobic methionine at a Thr position perturbs local packing and hydrogen bond
+[ 13] orchestrator    hypothesis          H2 protein_interaction T45M removes or alters a surface contact of the WH1 domain with a partner protein (for example WIP), so the mutant WASP fails t
+[ 14] orchestrator    test_candidate      T1 stability_effect learning=0.6 feasibility=0.85 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 15] orchestrator    test_candidate      T2 structural_context learning=0.4 feasibility=0.6 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 16] orchestrator    test_candidate      T3 structure_comparison learning=0.3 feasibility=0.2 cost={'compute_seconds': 120, 'tool_calls': 3}
+[ 17] orchestrator    test_candidate      T4 ligand_contact learning=0.05 feasibility=0.05 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 18] orchestrator    plan                chose T1: T1 (FoldX stability, runnable, no approval, 0 compute seconds) gives a numeric destabilisation value that directly tests H1, and its within-
+[ 19] orchestrator    note                safety_review: review_claims checked 17 statements: no clinical or treatment wording, no evidence without a source, and both hypotheses are labelled a
+[ 20] orchestrator    experiment_started  T1 run_stability_test
+[ 21] orchestrator    experiment_result   T1 FoldX predicts ΔΔG +3.56 kcal/mol for T45M, at or above the destabilising threshold of 2.0 kcal/mol.
+[ 22] orchestrator    evidence            E9 computational_prediction FoldX predicts a folding free-energy change of +3.56 kcal/mol for T45M on the AlphaFold model, above the 2.0 kcal/mol dest
+[ 23] orchestrator    evidence            E10 computational_prediction The missense3d structural call for T45M is Neutral, which does not support a structural destabilisation.
+[ 24] orchestrator    evidence            E11 computational_prediction FoldX predicts a folding free-energy change of +7.43 kcal/mol for T45R, the other disease substitution at residue 45.
+[ 25] orchestrator    interpretation      H1 supported; H2 unchanged
+[ 26] orchestrator    decision            stability_folding -> stability_folding (changed: False)
+[ 27] orchestrator    next_experiment     computational: Run the structural context test (T2) to check whether residue 45 lies in a predicted protein-protein interface with WIP or in a buried 
+[ 28] orchestrator    note                final_report: ## Question By what molecular mechanism does WAS-p.Thr45Met (UniProt P42768) lose function, and what one computational test best discrim
+run bench01-WAS-p.Thr45Met-baseline succeeded in 88.7s: 41 tool calls, 11 evidence items from 7 databases, 4 tests considered, favoured stability_folding -> stability_folding (changed: False)

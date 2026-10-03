@@ -1,0 +1,28 @@
+run bench01-CTLA4-p.Arg75Trp-baseline (single_agent_baseline) started; record: /Users/dheeraj/Downloads/alphafold/lab/runs/bench01-CTLA4-p.Arg75Trp-baseline/record.jsonl
+[  1] human           objective           Find the molecular mechanism that best explains the loss of function of CTLA4-p.Arg75Trp (CTLA4, UniProt P16410) and test it with one targeted computa
+[  2] orchestrator    evidence            E1 clinical_database ClinVar classifies NM_005214.5(CTLA4):c.223C>T (p.Arg75Trp) as Pathogenic (reviewed by expert panel; 3 of 4 stars; 6 submissions)
+[  3] orchestrator    evidence            E2 computational_prediction AlphaMissense gives p.Arg75Trp of P16410 a pathogenicity score of 0.2572, classed as likely benign.
+[  4] orchestrator    evidence            E3 computational_prediction EVE gives p.Arg75Trp of P16410 a score of 0.658, classed as pathogenic; popEVE gives -4.839 (more negative = more deleteri
+[  5] orchestrator    evidence            E4 computational_prediction Residue 75 of P16410 has ScoreCons conservation of 0.823 (UniRef90, 0-1 scale).
+[  6] orchestrator    evidence            E5 curated_database UniProtKB annotates residues 68-77 of P16410 as a beta strand, and residue 75 lies inside this strand, within the Ig-like V-type d
+[  7] orchestrator    evidence            E6 curated_database UniProtKB states CTLA4 is a homodimer disulfide-linked, interacts with ICOSLG, and acts as a decoy receptor with stronger affinity
+[  8] orchestrator    evidence            E7 experimental PDB 1I85 (X-ray, 3.2 Å) is a crystal structure of the CTLA-4/B7-2 complex, and 20 of 22 experimental PDB structures of P16410 observe 
+[  9] orchestrator    evidence            E8 experimental Of 20 experimental structures observing residue 75, only ligands listed are NAG, MAN and FLC (glycan/citrate artefact-type ligands); n
+[ 10] orchestrator    evidence            E9 literature A large family carrying a single CTLA-4 point mutation causing an amino acid change shows variable phenotype, with some heterozygotes se
+[ 11] orchestrator    evidence            E10 literature CTLA-4 haploinsufficiency is reported in a patient with autoimmune lymphoproliferative disorder.
+[ 12] orchestrator    gap                 G1 No functional assay covers residue 75 (functional_assays_covering_residue = 0), and no measured surface expression, ligand binding or stability dat
+[ 13] orchestrator    gap                 G2 The literature search found no paper that names CTLA4 p.Arg75Trp and reports its biochemical mechanism.
+[ 14] orchestrator    hypothesis          H1 stability_folding CTLA4 p.Arg75Trp lies in the beta strand (68-77) of the Ig-like V domain and the bulky tryptophan destabilises the fold, so less 
+[ 15] orchestrator    hypothesis          H2 protein_interaction CTLA4 p.Arg75Trp sits on the Ig V domain surface that contacts CD80/CD86 and, by substituting the Arg side chain, removes a lig
+[ 16] orchestrator    test_candidate      T1 stability_effect learning=0.6 feasibility=0.9 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 17] orchestrator    test_candidate      T2 structural_context learning=0.4 feasibility=0.5 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 18] orchestrator    test_candidate      T3 ligand_contact learning=0.15 feasibility=0.9 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 19] orchestrator    plan                chose T1: T1 (FoldX stability_effect) is the only candidate that directly separates the favoured fold hypothesis H1 from the rest. It needs no approva
+[ 20] orchestrator    note                safety_review: review_claims checked 18 statements: no clinical or treatment wording, no evidence without a source, no unlabelled hypotheses. T1 is a 
+[ 21] orchestrator    experiment_started  T1 run_stability_test
+[ 22] orchestrator    experiment_result   T1 FoldX predicts ΔΔG -0.11 kcal/mol for R75W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 95.38).
+[ 23] orchestrator    interpretation      H1 weakened; H2 unchanged
+[ 24] orchestrator    decision            stability_folding -> protein_interaction (changed: True)
+[ 25] orchestrator    next_experiment     computational: Run the structural_context test (T2) on residue 75 to check predicted protein-protein interface membership. Confirmation for H2 would b
+[ 26] orchestrator    note                final_report: ## Question What molecular mechanism best explains the loss of function of CTLA4 p.Arg75Trp (UniProt P16410), and which single computati
+run bench01-CTLA4-p.Arg75Trp-baseline succeeded in 78.3s: 37 tool calls, 10 evidence items from 7 databases, 3 tests considered, favoured stability_folding -> protein_interaction (changed: True)

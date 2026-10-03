@@ -6,6 +6,11 @@ import { TextLink } from "@/components/data/text-link";
 import { HomeSearch } from "@/components/home/home-search";
 import { Wordmark } from "@/components/shell/wordmark";
 import { routes } from "@/lib/ids";
+import {
+  EXAMPLES_LABEL,
+  HOME_LINE,
+  OPEN_LAB_LABEL,
+} from "@/lib/plain-language";
 import { site } from "@/lib/site";
 
 import { MissionLine } from "./mission-line";
@@ -22,14 +27,14 @@ export default async function HomePage({
     <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col px-5 pt-[16vh] pb-6">
       <h1 className="sr-only">{site.name}</h1>
       <Wordmark size="lg" />
-      <p className="mt-4 text-lg text-muted-foreground">{site.tagline}</p>
+      <p className="mt-4 text-lg text-muted-foreground">{HOME_LINE}</p>
 
       <HomeSearch
         className="mt-10"
         initialQuery={typeof q === "string" ? q.slice(0, 200) : ""}
       />
       <p className="mt-3 flex flex-wrap items-center gap-1.5 text-xs text-subtle-foreground">
-        <span className="mr-1">Examples</span>
+        <span className="mr-1">{EXAMPLES_LABEL}</span>
         {EXAMPLES.map((symbol) => (
           <Link
             key={symbol}
@@ -49,7 +54,7 @@ export default async function HomePage({
           variant="default"
           className="h-10 gap-2 px-4 text-base"
         >
-          Open the Lab
+          {OPEN_LAB_LABEL}
           <ArrowRightIcon aria-hidden className="size-4" />
         </ButtonLink>
       </div>

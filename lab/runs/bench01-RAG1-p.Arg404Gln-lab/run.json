@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-RAG1-p.Arg404Gln-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of RAG1-p.Arg404Gln (RAG1, UniProt P15918) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "RAG1",
+    "variant_id": "RAG1-p.Arg404Gln",
+    "accession": "P15918",
+    "position": 404,
+    "reference_residue": "R",
+    "alternate_residue": "Q",
+    "protein_change": "p.Arg404Gln"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:13:52Z",
+  "finished_at": "2026-10-03T22:18:05Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "63e6f5366c094bc3b3f5c62c03873a3a",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 10,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 252.7,
+    "tool_calls": 105,
+    "distinct_sources": 11,
+    "evidence_items": 22,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 17,
+      "literature": 16,
+      "knowledge_graph": 33,
+      "insight": 5,
+      "planner": 14,
+      "safety": 10,
+      "runner": 4,
+      "analysis": 6
+    },
+    "policy_denials": 9,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "nucleic_acid_binding",
+    "favoured_after": "nucleic_acid_binding",
+    "decision_changed": false,
+    "next_experiment": "Computational DNA-contact check: in an experimentally determined RAG1 (or RAG1-RAG2 core) structure with bound RSS DNA, measure the minimum distance between any R404 side-chain atom and any DNA phosphate or base atom, and compare with the R404Q model (Gln side chain, same backbone). Outcome that confirms H1: an R404 side-chain atom within about 4 Å of DNA. Outcome that refutes H1 (its pre-stated criterion): no R404 atom within about 4 Å of DNA and no change in predicted DNA-contact energy. Follow with a laboratory EMSA of purified RAG1 WT vs R404Q binding to an RSS to check the prediction experimentally.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

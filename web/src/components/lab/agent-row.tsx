@@ -12,6 +12,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
+import { plainAgentName, plainAgentRole } from "@/lib/plain-language";
+import { useAdvancedMode } from "@/lib/state/preferences";
 
 /** What each agent is for, in a few words. The served specification opens on click. */
 const ROLE: Record<string, string> = {
@@ -98,6 +100,7 @@ export function AgentRow({
 }: {
   roster: UseQueryResult<Served<LabRoster | null>>;
 }) {
+  const advanced = useAdvancedMode();
   if (roster.isPending) return <Skeleton className="h-16 w-full" />;
   if (roster.isError) {
     return (
@@ -128,10 +131,12 @@ export function AgentRow({
                 {index + 1}
               </span>
               <span className="w-full truncate text-base font-medium text-foreground">
-                {agentLabel(agent.id)}
+                {advanced ? agentLabel(agent.id) : plainAgentName(agent.id)}
               </span>
               <span className="w-full truncate text-xs text-muted-foreground">
-                {ROLE[agent.id] ?? agent.title}
+                {advanced
+                  ? (ROLE[agent.id] ?? agent.title)
+                  : plainAgentRole(agent.id) || agent.title}
               </span>
             </PopoverTrigger>
             <PopoverContent

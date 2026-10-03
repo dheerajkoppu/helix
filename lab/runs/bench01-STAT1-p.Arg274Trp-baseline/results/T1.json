@@ -1,0 +1,121 @@
+{
+  "test_id": "T1",
+  "test_kind": "structural_context",
+  "values": {
+    "headline": "Residue 274: lines P2Rank pocket rank 5 of 11 (probability 0.028); lies in 3 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar).",
+    "verdict": "in_predicted_pocket",
+    "in_predicted_interface": null,
+    "p2rank_status": "ready",
+    "p2rank_model": "afdb:AF-P42224-F1",
+    "p2rank_pockets_total": 11,
+    "p2rank_pockets_containing_residue": [
+      {
+        "pocket": "pocket5",
+        "rank": 5,
+        "of": 11,
+        "probability": 0.028,
+        "residues": 9,
+        "mean_plddt": 92.47
+      }
+    ],
+    "protvar_pockets_containing_residue": [
+      {
+        "pocket": 16,
+        "score": 721.0,
+        "buriedness": 0.75,
+        "mean_plddt": 96.6,
+        "residues": [
+          157,
+          158,
+          160,
+          161,
+          164,
+          272,
+          274,
+          275,
+          276,
+          277,
+          278,
+          279,
+          281,
+          282,
+          285,
+          298,
+          302
+        ]
+      },
+      {
+        "pocket": 22,
+        "score": 613.1,
+        "buriedness": 0.74,
+        "mean_plddt": 92.1,
+        "residues": [
+          274,
+          281,
+          298,
+          299,
+          302,
+          303,
+          306,
+          307,
+          442,
+          443,
+          444,
+          445
+        ]
+      },
+      {
+        "pocket": 29,
+        "score": 546.0,
+        "buriedness": 0.86,
+        "mean_plddt": 88.3,
+        "residues": [
+          271,
+          274,
+          275,
+          278,
+          353,
+          441,
+          442,
+          443,
+          444
+        ]
+      }
+    ],
+    "protvar_interface": {
+      "state": null,
+      "message": null
+    }
+  },
+  "sources": [
+    {
+      "database": "PrankWeb",
+      "record_id": "AF-P42224-F1",
+      "url": "https://prankweb.cz"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P42224:pocket:16",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P42224:274"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P42224:pocket:22",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P42224:274"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P42224:pocket:29",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P42224:274"
+    }
+  ],
+  "controls": [
+    "Rank control: the rank and probability of the pocket among all predicted pockets of the model.",
+    "Confidence control: mean pLDDT of the pocket residues."
+  ],
+  "limitations": [
+    "Predicted pockets and interfaces are computational predictions, not measured binding sites."
+  ],
+  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments structural_context --accession P42224 --position 274 --alternate-residue W --reference-residue R --gene STAT1 --variant-id STAT1-p.Arg274Trp",
+  "elapsed_seconds": 0.6
+}

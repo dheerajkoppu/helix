@@ -2,6 +2,7 @@ import { cn } from "cn";
 
 import type { SourceStatus, SourceStatusState } from "@/lib/api/types";
 import { formatDate } from "@/lib/format";
+import { plainSourceState } from "@/lib/plain-language";
 
 interface StateMeta {
   label: string;
@@ -95,6 +96,8 @@ export interface SourceStatusListProps {
   sources: SourceStatus[];
   /** hide sources that answered normally and show only the exceptions */
   exceptionsOnly?: boolean;
+  /** everyday words only: name and state, no release, date or cache note */
+  plain?: boolean;
   className?: string;
 }
 
@@ -105,6 +108,7 @@ export interface SourceStatusListProps {
 export function SourceStatusList({
   sources,
   exceptionsOnly = false,
+  plain = false,
   className,
 }: SourceStatusListProps) {
   const rows = exceptionsOnly
@@ -141,20 +145,25 @@ export function SourceStatusList({
                     : meta.textClass,
                 )}
               >
-                {meta.label}
+                {plain ? plainSourceState(status.state) : meta.label}
               </span>
-              {status.message ? (
+              {status.message && !plain ? (
                 <span className="ml-1 text-muted-foreground">
                   ({status.message})
                 </span>
               ) : null}
-              {status.stale ? (
+              {plain ? null : status.stale ? (
                 <span className="ml-2 text-warning">stale copy</span>
               ) : status.from_cache ? (
                 <span className="ml-2 text-subtle-foreground">cached</span>
               ) : null}
             </div>
-            <div className="tabular flex items-baseline gap-2 font-mono text-2xs text-muted-foreground">
+            <div
+              className={cn(
+                "tabular items-baseline gap-2 font-mono text-2xs text-muted-foreground",
+                plain ? "hidden" : "flex",
+              )}
+            >
               {status.release ? <span>{status.release}</span> : null}
               {formatDate(status.retrieved_at) ? (
                 <span className="text-subtle-foreground">

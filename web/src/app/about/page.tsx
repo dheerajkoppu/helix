@@ -192,7 +192,7 @@ export default function AboutPage() {
                 return (
                   <li
                     key={id}
-                    className="grid items-baseline gap-x-4 gap-y-1 border-b border-border-subtle px-3 py-2 text-sm last:border-b-0 sm:grid-cols-[4.5rem_13rem_minmax(0,1fr)_14rem]"
+                    className="grid items-baseline gap-x-4 gap-y-1 border-b border-border-subtle px-3 py-2 text-sm last:border-b-0 sm:grid-cols-[10rem_13rem_minmax(0,1fr)_14rem]"
                   >
                     <EvidenceBadge
                       evidenceClass={id}
@@ -226,7 +226,7 @@ export default function AboutPage() {
                 return (
                   <li
                     key={id}
-                    className="grid items-baseline gap-x-4 gap-y-1 border-b border-border-subtle px-3 py-2 text-sm last:border-b-0 sm:grid-cols-[4.5rem_17rem_minmax(0,1fr)]"
+                    className="grid items-baseline gap-x-4 gap-y-1 border-b border-border-subtle px-3 py-2 text-sm last:border-b-0 sm:grid-cols-[10rem_17rem_minmax(0,1fr)]"
                   >
                     <StructureOriginTag
                       origin={id}

@@ -1,0 +1,65 @@
+{
+  "test_id": "T1",
+  "test_kind": "stability_effect",
+  "values": {
+    "headline": "FoldX predicts ΔΔG +1.96 kcal/mol for R382W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 88.0).",
+    "verdict": "not_predicted_destabilising",
+    "substitution": "R382W",
+    "foldx_ddg_kcal_mol": 1.96177,
+    "destabilising_threshold_kcal_mol": 2.0,
+    "threshold_defined_by": "ProtVar display bins",
+    "model": "afdb:AF-P40763-F1",
+    "residue_plddt": 88.0,
+    "plddt_supports_interpretation": true,
+    "missense3d": {
+      "state": "ok",
+      "value": "Damaging"
+    },
+    "other_substitutions_at_residue": [
+      {
+        "substitution": "R382L",
+        "foldx_ddg_kcal_mol": 0.804217
+      },
+      {
+        "substitution": "R382P",
+        "foldx_ddg_kcal_mol": 1.78873
+      },
+      {
+        "substitution": "R382Q",
+        "foldx_ddg_kcal_mol": 2.23206
+      }
+    ]
+  },
+  "sources": [
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P40763:382:W",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P40763:382:W"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P40763:382:L",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P40763:382:L"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P40763:382:P",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P40763:382:P"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P40763:382:Q",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P40763:382:Q"
+    }
+  ],
+  "controls": [
+    "Within-site comparison: the same predictor for the other substitutions reported at this residue.",
+    "Applicability control: the model confidence (pLDDT) at the residue, because FoldX on a low-confidence region is not interpretable."
+  ],
+  "limitations": [
+    "FoldX on a predicted model is a computational prediction with errors near 1 kcal/mol.",
+    "A neutral stability prediction does not show the variant is tolerated."
+  ],
+  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments stability_effect --accession P40763 --position 382 --alternate-residue W --reference-residue R --gene STAT3 --variant-id STAT3-p.Arg382Trp",
+  "elapsed_seconds": 0.6
+}

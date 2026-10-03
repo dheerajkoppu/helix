@@ -1,5 +1,7 @@
 import { cn } from "cn";
 
+import { plainRunState, plainVerdict } from "@/lib/plain-language";
+
 const AGENT_LABEL: Record<string, string> = {
   orchestrator: "Orchestrator",
   literature: "Literature",
@@ -111,9 +113,12 @@ const STATUS_META: Record<
 /** Run status exactly as the record reports it; the glyph vocabulary matches job status. */
 export function RunStatusTag({
   status,
+  plain = false,
   className,
 }: {
   status: string;
+  /** everyday wording: "Finished" */
+  plain?: boolean;
   className?: string;
 }) {
   const meta = STATUS_META[status] ?? {
@@ -133,7 +138,7 @@ export function RunStatusTag({
       <span aria-hidden className="font-mono text-[0.625rem]">
         {meta.glyph}
       </span>
-      {meta.label}
+      {plain ? plainRunState(status) : meta.label}
     </span>
   );
 }
@@ -148,13 +153,20 @@ const VERDICT_META: Record<string, { glyph: string; label: string }> = {
 /** What the test did to a hypothesis. Word and glyph, no colour. */
 export function VerdictTag({
   verdict,
+  plain = false,
   className,
 }: {
   verdict: string | null;
+  /** everyday wording: "More likely" */
+  plain?: boolean;
   className?: string;
 }) {
   if (!verdict)
-    return <span className="text-subtle-foreground">No verdict recorded</span>;
+    return (
+      <span className="text-subtle-foreground">
+        {plain ? plainVerdict(verdict) : "No verdict recorded"}
+      </span>
+    );
   const meta = VERDICT_META[verdict] ?? {
     glyph: "·",
     label: humanise(verdict),
@@ -173,7 +185,7 @@ export function VerdictTag({
       >
         {meta.glyph}
       </span>
-      {meta.label}
+      {plain ? plainVerdict(verdict) : meta.label}
     </span>
   );
 }

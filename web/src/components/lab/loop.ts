@@ -200,6 +200,13 @@ export function agentStatuses(
       agent.state = "done";
   }
 
+  // the supervisor starts with the run, before it has written its first line
+  const lead = order.length ? entry(order[0]) : null;
+  const started = [...status.values()].some(
+    (agent) => agent.state !== "waiting",
+  );
+  if (lead && !options.complete && !started) lead.state = "working";
+
   return order.map((id) => {
     const agent = entry(id);
     if (!options.complete) return agent;

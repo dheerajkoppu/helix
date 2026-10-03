@@ -1,0 +1,3999 @@
+{
+  "generated_at": "2026-10-03T22:48:08Z",
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested? Measured here: what a supervised team of specialist agents changes, against one generalist agent with the same tools, model, policies and budget.",
+  "conditions": {
+    "started_at": "2026-10-03T22:07:39Z",
+    "arms": "specialist_lab and single_agent_baseline through lab/run_lab.py",
+    "budget": {
+      "max_tool_calls": 160,
+      "max_compute_seconds": 300
+    },
+    "parallel_runs": 3,
+    "order": "Catalogue order; the lab starts first on odd-numbered variants, the control on even-numbered ones; one worker pool for both arms.",
+    "approvals": "Pre-approved with --approve under protocol.md section 5; every decision is written to the record with the operator below.",
+    "operator": "benchmark pre-approval rule (lab/experiments/protocol.md section 5), batch started by an automated build agent in dheeraj's session",
+    "run_timeout_seconds": 1500,
+    "retries_after_failure": 1,
+    "api_url": "http://localhost:8000",
+    "repeats_per_cell": 1,
+    "resumed_at": [],
+    "batch": "bench01",
+    "models": [
+      "claude-sonnet-5"
+    ],
+    "spec_hashes": {
+      "specialist_lab": [
+        "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992"
+      ],
+      "single_agent_baseline": [
+        "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18"
+      ]
+    },
+    "reference_labels": {
+      "file": "lab/experiments/reference/labels.json",
+      "derived_at": "2026-10-03T22:02:04Z",
+      "sha256": "b5e06136467d250697f79ce1c50f3a3ccc39beccf1c5fec2d779b5fc77765656",
+      "rule_sha256": "04d68308cf2f0c9ab7c2e2595515d98eb8ef8967eae4413016655f6d638e2fce"
+    },
+    "variant_selection": "First-listed flagship variant of every gene in data/seed/catalog.json.",
+    "runs_succeeded": 26,
+    "runs_planned": 26,
+    "complete": true
+  },
+  "n_variants": 13,
+  "arms": [
+    {
+      "id": "specialist_lab",
+      "label": "Specialist lab: Omnigent supervisor and seven specialist agents",
+      "runs": 13,
+      "median_wall_seconds": 198.5,
+      "mean_tool_calls": 99.62,
+      "mean_distinct_sources": 10.69,
+      "mean_evidence_items": 22.15,
+      "agreement": {
+        "n_with_reference": 6,
+        "n_agree": 5
+      },
+      "decision_changed": 4,
+      "runs_planned": 13,
+      "runs_not_succeeded": 0,
+      "runs_in_progress": 0,
+      "runs_not_started": 0,
+      "failed_attempts": 1,
+      "complete_records": 13,
+      "min_wall_seconds": 172.9,
+      "max_wall_seconds": 285.8,
+      "mean_wall_seconds": 217.17,
+      "median_seconds_to_first_hypothesis": 68.0,
+      "median_seconds_to_first_plan": 104.0,
+      "median_seconds_to_first_result": 132.0,
+      "median_seconds_to_first_decision": 158.0,
+      "median_seconds_to_final_report": 195.0,
+      "median_tool_calls": 93,
+      "median_distinct_sources": 11,
+      "median_evidence_items": 22,
+      "mean_starting_evidence_items": 19.31,
+      "mean_starting_distinct_sources": 10.38,
+      "mean_hypotheses": 2.69,
+      "mean_tests_considered": 3.77,
+      "mean_tests_executed": 1.23,
+      "runs_with_reopening": 4,
+      "approvals_approved": 1,
+      "approvals_rejected": 0,
+      "policy_denials": 12,
+      "safety_reviews_blocked": 2,
+      "plans_without_result": 2,
+      "mean_tool_calls_by_purpose": {
+        "retrieval": 14.62,
+        "evidence_record": 28.0,
+        "reasoning_record": 13.38,
+        "safety": 3.0,
+        "test": 4.92,
+        "coordination": 36.38,
+        "omnigent_dispatch": 19.85,
+        "other": 0.0
+      },
+      "median_wall_seconds_per_lab_tool_call": 2.1,
+      "mean_output_tokens": 41573.85,
+      "mean_omnigent_reported_cost_usd": 1.01,
+      "mean_databases_returned_by_scripted_pass": 12.77,
+      "mean_share_of_scripted_pass_databases_cited": 0.77,
+      "runs_citing_database": {
+        "AlphaFold DB": 11,
+        "AlphaMissense": 13,
+        "ClinVar": 13,
+        "EBI ProtVar": 13,
+        "Ensembl VEP": 6,
+        "Europe PMC": 13,
+        "IUIS 2024 classification": 3,
+        "IntAct": 5,
+        "InterPro": 10,
+        "OpenAlex": 10,
+        "PDBe SIFTS": 7,
+        "PrankWeb": 4,
+        "RCSB PDB": 11,
+        "UniProtKB": 13,
+        "gnomAD": 7
+      },
+      "first_chosen_test": {
+        "ligand_contact": 2,
+        "stability_effect": 10,
+        "structural_context": 1
+      },
+      "favoured_after_classes": {
+        "stability_folding": 4,
+        "protein_interaction": 3,
+        "ligand_binding": 3,
+        "nucleic_acid_binding": 3
+      },
+      "agreement_before_test": {
+        "n_with_reference": 6,
+        "n_agree": 5
+      },
+      "agreement_residue_specific_reference": {
+        "n_with_reference": 3,
+        "n_agree": 3
+      }
+    },
+    {
+      "id": "single_agent_baseline",
+      "label": "Control: one generalist agent with every tool",
+      "runs": 13,
+      "median_wall_seconds": 84.2,
+      "mean_tool_calls": 39.62,
+      "mean_distinct_sources": 7.46,
+      "mean_evidence_items": 11.31,
+      "agreement": {
+        "n_with_reference": 6,
+        "n_agree": 4
+      },
+      "decision_changed": 5,
+      "runs_planned": 13,
+      "runs_not_succeeded": 0,
+      "runs_in_progress": 0,
+      "runs_not_started": 0,
+      "failed_attempts": 0,
+      "complete_records": 13,
+      "min_wall_seconds": 75.2,
+      "max_wall_seconds": 102.3,
+      "mean_wall_seconds": 87.23,
+      "median_seconds_to_first_hypothesis": 35.0,
+      "median_seconds_to_first_plan": 52.0,
+      "median_seconds_to_first_result": 60.0,
+      "median_seconds_to_first_decision": 65.0,
+      "median_seconds_to_final_report": 76.0,
+      "median_tool_calls": 40,
+      "median_distinct_sources": 7,
+      "median_evidence_items": 11,
+      "mean_starting_evidence_items": 11.08,
+      "mean_starting_distinct_sources": 7.23,
+      "mean_hypotheses": 2.69,
+      "mean_tests_considered": 3.31,
+      "mean_tests_executed": 1.0,
+      "runs_with_reopening": 0,
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 7,
+      "safety_reviews_blocked": 0,
+      "plans_without_result": 0,
+      "mean_tool_calls_by_purpose": {
+        "retrieval": 9.77,
+        "evidence_record": 14.31,
+        "reasoning_record": 11.46,
+        "safety": 2.0,
+        "test": 2.15,
+        "coordination": 0.15,
+        "omnigent_dispatch": 0.0,
+        "other": 0.0
+      },
+      "median_wall_seconds_per_lab_tool_call": 2.2,
+      "mean_output_tokens": 13900.23,
+      "mean_omnigent_reported_cost_usd": 0.33,
+      "mean_databases_returned_by_scripted_pass": 12.77,
+      "mean_share_of_scripted_pass_databases_cited": 0.55,
+      "runs_citing_database": {
+        "AlphaFold DB": 7,
+        "AlphaMissense": 13,
+        "ClinVar": 13,
+        "EBI ProtVar": 12,
+        "Europe PMC": 13,
+        "InterPro": 1,
+        "OpenAlex": 7,
+        "PDBe SIFTS": 8,
+        "PrankWeb": 2,
+        "RCSB PDB": 8,
+        "UniProtKB": 13
+      },
+      "first_chosen_test": {
+        "stability_effect": 8,
+        "ligand_contact": 3,
+        "structural_context": 2
+      },
+      "favoured_after_classes": {
+        "stability_folding": 5,
+        "protein_interaction": 3,
+        "ligand_binding": 2,
+        "nucleic_acid_binding": 2,
+        "domain_interface": 1
+      },
+      "agreement_before_test": {
+        "n_with_reference": 6,
+        "n_agree": 4
+      },
+      "agreement_residue_specific_reference": {
+        "n_with_reference": 3,
+        "n_agree": 3
+      }
+    }
+  ],
+  "comparison": {
+    "metric": "Median wall seconds from launch to a complete cited record (launcher clock)",
+    "baseline": 84.2,
+    "lab": 198.5,
+    "ratio": 0.42,
+    "note": "ratio = baseline ÷ lab on the median of all succeeded runs of each arm; above 1 the lab reaches a complete cited record faster than the single agent, below 1 slower. Observed on 13 variants with one run per cell: the lab took longer than the single agent in 13 of 13 pairs (median paired ratio lab ÷ single agent 2.5, exact sign test p = 0.0002). No human was timed, so this is not a speed-up or slow-down against manual work. What the lab returned for the extra time: more databases cited in 12 of 13 pairs (median 3 more) and more evidence items in 13 of 13 (median 11 more). The favoured mechanism after the test was the same class in both arms for 10 of 13 variants.",
+    "paired": [
+      {
+        "metric": "wall_seconds",
+        "n_pairs": 13,
+        "lab_higher": 13,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 117.3,
+        "median_ratio_lab_over_baseline": 2.5,
+        "sign_test_two_sided_p": 0.0002
+      },
+      {
+        "metric": "tool_calls",
+        "n_pairs": 13,
+        "lab_higher": 13,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 53,
+        "median_ratio_lab_over_baseline": 2.33,
+        "sign_test_two_sided_p": 0.0002
+      },
+      {
+        "metric": "distinct_sources",
+        "n_pairs": 13,
+        "lab_higher": 12,
+        "baseline_higher": 0,
+        "ties": 1,
+        "median_difference_lab_minus_baseline": 3,
+        "median_ratio_lab_over_baseline": 1.43,
+        "sign_test_two_sided_p": 0.0005
+      },
+      {
+        "metric": "evidence_items",
+        "n_pairs": 13,
+        "lab_higher": 13,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 11,
+        "median_ratio_lab_over_baseline": 2.0,
+        "sign_test_two_sided_p": 0.0002
+      },
+      {
+        "metric": "starting_evidence_items",
+        "n_pairs": 13,
+        "lab_higher": 13,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 9,
+        "median_ratio_lab_over_baseline": 1.8,
+        "sign_test_two_sided_p": 0.0002
+      },
+      {
+        "metric": "starting_distinct_sources",
+        "n_pairs": 13,
+        "lab_higher": 13,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 3,
+        "median_ratio_lab_over_baseline": 1.38,
+        "sign_test_two_sided_p": 0.0002
+      },
+      {
+        "metric": "hypotheses",
+        "n_pairs": 13,
+        "lab_higher": 1,
+        "baseline_higher": 1,
+        "ties": 11,
+        "median_difference_lab_minus_baseline": 0,
+        "median_ratio_lab_over_baseline": 1.0,
+        "sign_test_two_sided_p": 1.0
+      },
+      {
+        "metric": "tests_considered",
+        "n_pairs": 13,
+        "lab_higher": 6,
+        "baseline_higher": 0,
+        "ties": 7,
+        "median_difference_lab_minus_baseline": 0,
+        "median_ratio_lab_over_baseline": 1.0,
+        "sign_test_two_sided_p": 0.0312
+      },
+      {
+        "metric": "output_tokens",
+        "n_pairs": 13,
+        "lab_higher": 13,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 23944,
+        "median_ratio_lab_over_baseline": 2.85,
+        "sign_test_two_sided_p": 0.0002
+      }
+    ]
+  },
+  "arm_concordance": {
+    "n_pairs": 13,
+    "same_favoured_before": 8,
+    "same_favoured_after": 10,
+    "same_first_test": 8,
+    "variants_differing_after": [
+      "STAT1-p.Arg274Trp",
+      "FOXP3-p.Ala384Thr",
+      "PIK3CD-p.Glu1021Lys"
+    ]
+  },
+  "per_variant": [
+    {
+      "variant_id": "ADA-p.Arg211His",
+      "arm": "specialist_lab",
+      "run_id": "bench01-ADA-p.Arg211His-lab",
+      "wall_seconds": 246.6,
+      "distinct_sources": 11,
+      "favoured_after": "stability_folding",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": true,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:07:45Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "ligand_binding",
+      "agrees_before": null,
+      "tool_calls": 104,
+      "evidence_items": 20,
+      "hypotheses": 3,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 1,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 10,
+      "complete_record": true,
+      "record_events": 68,
+      "missing_from_record": [],
+      "starting_evidence_items": 18,
+      "starting_distinct_sources": 11,
+      "gaps": 5,
+      "hypothesis_classes": [
+        "ligand_binding",
+        "stability_folding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.6,
+          "feasibility": 0.95,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.4,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.3,
+          "feasibility": 0.85,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.35,
+          "feasibility": 0.1,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "ligand_contact",
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "verdict": "no_ligand_contact",
+          "headline": "Residue 211 is not within 4.5 Å of any non-solvent ligand in the 2 ligand-bound structures examined."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "ligand_binding",
+          "favoured_after": "stability_folding",
+          "changed": true
+        }
+      ],
+      "reopenings": 1,
+      "reopened": [
+        {
+          "hypothesis_id": "H1",
+          "mechanism_class": "ligand_binding",
+          "reason": "Test T1 (ligand_contact) returned no_ligand_contact: residue 211 had 0 contacts within 4.5 Å of 3D1, NI or ZN. H1 (ligand_binding) is weakened, and the favoured hypothesis changed to H2 (stability_folding). Planning is reopened to choose among tests not yet executed, such as a stability test for H2."
+        }
+      ],
+      "safety_reviews_blocked": 1,
+      "approval_requests": [
+        {
+          "id": "A1",
+          "action": "Run run_stability_test (Predicted stability change of the substitution) for ADA-p.Arg211His",
+          "tool": "run_stability_test",
+          "decision": "approved"
+        }
+      ],
+      "approvals_approved": 1,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 383,
+      "report_cited_ids": 21,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 24.0,
+      "seconds_to_first_hypothesis": 64.0,
+      "seconds_to_first_plan": 97.0,
+      "seconds_to_first_result": 124.0,
+      "seconds_to_first_decision": 149.0,
+      "seconds_to_final_report": 241.0,
+      "tool_calls_by_purpose": {
+        "omnigent_dispatch": 23,
+        "coordination": 39,
+        "retrieval": 14,
+        "evidence_record": 25,
+        "reasoning_record": 16,
+        "safety": 6,
+        "test": 4
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "InterPro",
+        "OpenAlex",
+        "RCSB PDB",
+        "UniProtKB",
+        "gnomAD"
+      ],
+      "databases_returned_by_scripted_pass": 13,
+      "share_of_scripted_pass_databases_cited": 0.77,
+      "usage": {
+        "input_tokens": 192,
+        "output_tokens": 44810,
+        "cache_read_input_tokens": 1149233,
+        "cache_creation_input_tokens": 152774,
+        "omnigent_reported_cost_usd": 1.0603
+      },
+      "output_tokens": 44810,
+      "omnigent_reported_cost_usd": 1.0603
+    },
+    {
+      "variant_id": "ADA-p.Arg211His",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-ADA-p.Arg211His-baseline",
+      "wall_seconds": 93.2,
+      "distinct_sources": 7,
+      "favoured_after": "stability_folding",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:07:50Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "stability_folding",
+      "agrees_before": null,
+      "tool_calls": 42,
+      "evidence_items": 13,
+      "hypotheses": 3,
+      "tests_considered": 3,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 30,
+      "missing_from_record": [],
+      "starting_evidence_items": 13,
+      "starting_distinct_sources": 7,
+      "gaps": 2,
+      "hypothesis_classes": [
+        "stability_folding",
+        "ligand_binding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.7,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.5,
+          "feasibility": 0.95,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.4,
+          "feasibility": 0.6,
+          "compute_seconds": 0
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG +8.21 kcal/mol for R211H, at or above the destabilising threshold of 2.0 kcal/mol."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "stability_folding",
+          "favoured_after": "stability_folding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 384,
+      "report_cited_ids": 18,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 24.0,
+      "seconds_to_first_hypothesis": 43.0,
+      "seconds_to_first_plan": 56.0,
+      "seconds_to_first_result": 65.0,
+      "seconds_to_first_decision": 71.0,
+      "seconds_to_final_report": 85.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 11,
+        "evidence_record": 16,
+        "reasoning_record": 11,
+        "safety": 2,
+        "test": 2
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 13,
+      "share_of_scripted_pass_databases_cited": 0.54,
+      "usage": {
+        "input_tokens": 28,
+        "output_tokens": 14794,
+        "cache_read_input_tokens": 396363,
+        "cache_creation_input_tokens": 40696,
+        "omnigent_reported_cost_usd": 0.329
+      },
+      "output_tokens": 14794,
+      "omnigent_reported_cost_usd": 0.329
+    },
+    {
+      "variant_id": "IL2RG-p.Arg226Cys",
+      "arm": "specialist_lab",
+      "run_id": "bench01-IL2RG-p.Arg226Cys-lab",
+      "wall_seconds": 272.2,
+      "distinct_sources": 13,
+      "favoured_after": "protein_interaction",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": true,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:09:15Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "stability_folding",
+      "agrees_before": null,
+      "tool_calls": 122,
+      "evidence_items": 25,
+      "hypotheses": 2,
+      "tests_considered": 4,
+      "tests_executed": 2,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 13,
+      "complete_record": true,
+      "record_events": 81,
+      "missing_from_record": [],
+      "starting_evidence_items": 20,
+      "starting_distinct_sources": 12,
+      "gaps": 6,
+      "hypothesis_classes": [
+        "stability_folding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.35,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.1,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.3,
+          "feasibility": 0.1,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect",
+        "structural_context"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "not_predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG +0.51 kcal/mol for R226C, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 96.69)."
+        },
+        {
+          "test_kind": "structural_context",
+          "verdict": "in_predicted_pocket",
+          "headline": "Residue 226: lines none of the 1 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "stability_folding",
+          "favoured_after": "protein_interaction",
+          "changed": true
+        },
+        {
+          "favoured_before": "protein_interaction",
+          "favoured_after": "protein_interaction",
+          "changed": false
+        }
+      ],
+      "reopenings": 1,
+      "reopened": [
+        {
+          "hypothesis_id": "H1",
+          "mechanism_class": "stability_folding",
+          "reason": "Test T1 (FoldX ddG +0.51 kcal/mol for R226C, below threshold) weakened H1 (stability_folding), which was favoured before the test. The favoured hypothesis changed to H2 (protein_interaction). Reconsider which test to run next among tests not yet executed, to bear on H2 directly."
+        }
+      ],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 1,
+      "report_words": 408,
+      "report_cited_ids": 25,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 28.0,
+      "seconds_to_first_hypothesis": 71.0,
+      "seconds_to_first_plan": 104.0,
+      "seconds_to_first_result": 131.0,
+      "seconds_to_first_decision": 157.0,
+      "seconds_to_final_report": 267.0,
+      "tool_calls_by_purpose": {
+        "omnigent_dispatch": 27,
+        "coordination": 49,
+        "retrieval": 14,
+        "evidence_record": 31,
+        "reasoning_record": 17,
+        "safety": 4,
+        "test": 8
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IntAct",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "PrankWeb",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 13,
+      "share_of_scripted_pass_databases_cited": 0.92,
+      "usage": {
+        "input_tokens": 226,
+        "output_tokens": 50820,
+        "cache_read_input_tokens": 1520125,
+        "cache_creation_input_tokens": 187581,
+        "omnigent_reported_cost_usd": 1.2816
+      },
+      "output_tokens": 50820,
+      "omnigent_reported_cost_usd": 1.2816
+    },
+    {
+      "variant_id": "IL2RG-p.Arg226Cys",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-IL2RG-p.Arg226Cys-baseline",
+      "wall_seconds": 75.2,
+      "distinct_sources": 7,
+      "favoured_after": "protein_interaction",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": true,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:07:55Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "stability_folding",
+      "agrees_before": null,
+      "tool_calls": 36,
+      "evidence_items": 10,
+      "hypotheses": 2,
+      "tests_considered": 3,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 27,
+      "missing_from_record": [],
+      "starting_evidence_items": 10,
+      "starting_distinct_sources": 7,
+      "gaps": 3,
+      "hypothesis_classes": [
+        "stability_folding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.7,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.5,
+          "feasibility": 0.85,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.4,
+          "feasibility": 0.1,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "not_predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG +0.51 kcal/mol for R226C, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 96.69)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "stability_folding",
+          "favoured_after": "protein_interaction",
+          "changed": true
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 416,
+      "report_cited_ids": 15,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 14.0,
+      "seconds_to_first_hypothesis": 30.0,
+      "seconds_to_first_plan": 42.0,
+      "seconds_to_first_result": 50.0,
+      "seconds_to_first_decision": 53.0,
+      "seconds_to_final_report": 67.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 9,
+        "evidence_record": 13,
+        "reasoning_record": 10,
+        "safety": 2,
+        "test": 2
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "PDBe SIFTS",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 13,
+      "share_of_scripted_pass_databases_cited": 0.54,
+      "usage": {
+        "input_tokens": 26,
+        "output_tokens": 12140,
+        "cache_read_input_tokens": 338734,
+        "cache_creation_input_tokens": 37040,
+        "omnigent_reported_cost_usd": 0.2818
+      },
+      "output_tokens": 12140,
+      "omnigent_reported_cost_usd": 0.2818
+    },
+    {
+      "variant_id": "BTK-p.Arg28His",
+      "arm": "specialist_lab",
+      "run_id": "bench01-BTK-p.Arg28His-lab",
+      "wall_seconds": 179.0,
+      "distinct_sources": 10,
+      "favoured_after": "ligand_binding",
+      "reference_mechanism": "ligand_binding",
+      "agrees": true,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "residue_specific",
+      "started_at": "2026-10-03T22:09:28Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "ligand_binding",
+      "agrees_before": true,
+      "tool_calls": 87,
+      "evidence_items": 21,
+      "hypotheses": 3,
+      "tests_considered": 3,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 8,
+      "complete_record": true,
+      "record_events": 57,
+      "missing_from_record": [],
+      "starting_evidence_items": 18,
+      "starting_distinct_sources": 10,
+      "gaps": 6,
+      "hypothesis_classes": [
+        "ligand_binding",
+        "protein_interaction",
+        "stability_folding"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.5,
+          "feasibility": 0.7,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.35,
+          "feasibility": 0.6,
+          "compute_seconds": 0
+        }
+      ],
+      "chosen_tests": [
+        "ligand_contact"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "verdict": "contact_with_organic_ligand",
+          "headline": "Residue 28 is within 4.5 Å of an organic ligand in 32 of 39 ligand-bound structures (4IP, 4PT, A1B6F, A1B6G, A1B6H, A1B6I); closest 2.58 Å to 4PT ((2R)-3-{[(S)-{[(2S,3R,5S,6S)-2,6-DIHYDROXY-3,4,5-TRIS(PHOSPHONOOXY)CY…) in PDB 2Z0P."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "ligand_binding",
+          "favoured_after": "ligand_binding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 485,
+      "report_cited_ids": 18,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 23.0,
+      "seconds_to_first_hypothesis": 62.0,
+      "seconds_to_first_plan": 96.0,
+      "seconds_to_first_result": 121.0,
+      "seconds_to_first_decision": 149.0,
+      "seconds_to_final_report": 175.0,
+      "tool_calls_by_purpose": {
+        "coordination": 28,
+        "omnigent_dispatch": 16,
+        "retrieval": 15,
+        "evidence_record": 27,
+        "reasoning_record": 11,
+        "safety": 2,
+        "test": 4
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "IntAct",
+        "InterPro",
+        "RCSB PDB",
+        "UniProtKB",
+        "gnomAD"
+      ],
+      "databases_returned_by_scripted_pass": 14,
+      "share_of_scripted_pass_databases_cited": 0.71,
+      "usage": {
+        "input_tokens": 134,
+        "output_tokens": 36212,
+        "cache_read_input_tokens": 798661,
+        "cache_creation_input_tokens": 145693,
+        "omnigent_reported_cost_usd": 0.8864
+      },
+      "output_tokens": 36212,
+      "omnigent_reported_cost_usd": 0.8864
+    },
+    {
+      "variant_id": "BTK-p.Arg28His",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-BTK-p.Arg28His-baseline",
+      "wall_seconds": 84.2,
+      "distinct_sources": 8,
+      "favoured_after": "ligand_binding",
+      "reference_mechanism": "ligand_binding",
+      "agrees": true,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "residue_specific",
+      "started_at": "2026-10-03T22:11:57Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "ligand_binding",
+      "agrees_before": true,
+      "tool_calls": 39,
+      "evidence_items": 13,
+      "hypotheses": 2,
+      "tests_considered": 3,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 30,
+      "missing_from_record": [],
+      "starting_evidence_items": 13,
+      "starting_distinct_sources": 8,
+      "gaps": 3,
+      "hypothesis_classes": [
+        "ligand_binding",
+        "stability_folding"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.7,
+          "feasibility": 0.95,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.5,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.3,
+          "feasibility": 0.85,
+          "compute_seconds": 0
+        }
+      ],
+      "chosen_tests": [
+        "ligand_contact"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "verdict": "contact_with_organic_ligand",
+          "headline": "Residue 28 is within 4.5 Å of an organic ligand in 32 of 39 ligand-bound structures (4IP, 4PT, A1B6F, A1B6G, A1B6H, A1B6I); closest 2.58 Å to 4PT ((2R)-3-{[(S)-{[(2S,3R,5S,6S)-2,6-DIHYDROXY-3,4,5-TRIS(PHOSPHONOOXY)CY…) in PDB 2Z0P."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "ligand_binding",
+          "favoured_after": "ligand_binding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 394,
+      "report_cited_ids": 18,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 15.0,
+      "seconds_to_first_hypothesis": 35.0,
+      "seconds_to_first_plan": 50.0,
+      "seconds_to_first_result": 61.0,
+      "seconds_to_first_decision": 65.0,
+      "seconds_to_final_report": 76.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 9,
+        "evidence_record": 16,
+        "reasoning_record": 10,
+        "safety": 2,
+        "test": 2
+      },
+      "databases_cited": [
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 14,
+      "share_of_scripted_pass_databases_cited": 0.57,
+      "usage": {
+        "input_tokens": 32,
+        "output_tokens": 13071,
+        "cache_read_input_tokens": 506465,
+        "cache_creation_input_tokens": 42989,
+        "omnigent_reported_cost_usd": 0.3395
+      },
+      "output_tokens": 13071,
+      "omnigent_reported_cost_usd": 0.3395
+    },
+    {
+      "variant_id": "WAS-p.Thr45Met",
+      "arm": "specialist_lab",
+      "run_id": "bench01-WAS-p.Thr45Met-lab",
+      "wall_seconds": 248.2,
+      "distinct_sources": 13,
+      "favoured_after": "stability_folding",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": true,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:13:26Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "protein_interaction",
+      "agrees_before": null,
+      "tool_calls": 118,
+      "evidence_items": 22,
+      "hypotheses": 2,
+      "tests_considered": 4,
+      "tests_executed": 2,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 13,
+      "complete_record": true,
+      "record_events": 77,
+      "missing_from_record": [],
+      "starting_evidence_items": 17,
+      "starting_distinct_sources": 12,
+      "gaps": 6,
+      "hypothesis_classes": [
+        "protein_interaction",
+        "stability_folding"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.35,
+          "feasibility": 0.6,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.3,
+          "feasibility": 0.2,
+          "compute_seconds": 120
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.05,
+          "feasibility": 0.05,
+          "compute_seconds": 0
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect",
+        "structural_context"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG +3.56 kcal/mol for T45M, at or above the destabilising threshold of 2.0 kcal/mol."
+        },
+        {
+          "test_kind": "structural_context",
+          "verdict": "in_predicted_pocket",
+          "headline": "Residue 45: lines none of the 1 P2Rank pockets; lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "protein_interaction",
+          "favoured_after": "stability_folding",
+          "changed": true
+        },
+        {
+          "favoured_before": "stability_folding",
+          "favoured_after": "stability_folding",
+          "changed": false
+        }
+      ],
+      "reopenings": 1,
+      "reopened": [
+        {
+          "hypothesis_id": "H1",
+          "mechanism_class": "protein_interaction",
+          "reason": "After T1 (stability_effect, predicted_destabilising), the favoured hypothesis changed from H1 (protein_interaction) to H2 (stability_folding) [D53]. H1 has no direct test support, so the choice of test is reconsidered: a second single test should discriminate H1 from H2 directly."
+        }
+      ],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 424,
+      "report_cited_ids": 22,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 22.0,
+      "seconds_to_first_hypothesis": 60.0,
+      "seconds_to_first_plan": 91.0,
+      "seconds_to_first_result": 117.0,
+      "seconds_to_first_decision": 140.0,
+      "seconds_to_final_report": 243.0,
+      "tool_calls_by_purpose": {
+        "coordination": 48,
+        "omnigent_dispatch": 26,
+        "retrieval": 14,
+        "evidence_record": 28,
+        "reasoning_record": 16,
+        "safety": 4,
+        "test": 8
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "PrankWeb",
+        "RCSB PDB",
+        "UniProtKB",
+        "gnomAD"
+      ],
+      "databases_returned_by_scripted_pass": 14,
+      "share_of_scripted_pass_databases_cited": 0.86,
+      "usage": {
+        "input_tokens": 222,
+        "output_tokens": 47358,
+        "cache_read_input_tokens": 1227149,
+        "cache_creation_input_tokens": 168356,
+        "omnigent_reported_cost_usd": 1.1403
+      },
+      "output_tokens": 47358,
+      "omnigent_reported_cost_usd": 1.1403
+    },
+    {
+      "variant_id": "WAS-p.Thr45Met",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-WAS-p.Thr45Met-baseline",
+      "wall_seconds": 88.7,
+      "distinct_sources": 7,
+      "favoured_after": "stability_folding",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:12:32Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "stability_folding",
+      "agrees_before": null,
+      "tool_calls": 41,
+      "evidence_items": 11,
+      "hypotheses": 2,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 28,
+      "missing_from_record": [],
+      "starting_evidence_items": 8,
+      "starting_distinct_sources": 7,
+      "gaps": 2,
+      "hypothesis_classes": [
+        "stability_folding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.6,
+          "feasibility": 0.85,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.4,
+          "feasibility": 0.6,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.3,
+          "feasibility": 0.2,
+          "compute_seconds": 120
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.05,
+          "feasibility": 0.05,
+          "compute_seconds": 0
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG +3.56 kcal/mol for T45M, at or above the destabilising threshold of 2.0 kcal/mol."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "stability_folding",
+          "favoured_after": "stability_folding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 376,
+      "report_cited_ids": 19,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 13.0,
+      "seconds_to_first_hypothesis": 28.0,
+      "seconds_to_first_plan": 41.0,
+      "seconds_to_first_result": 48.0,
+      "seconds_to_first_decision": 70.0,
+      "seconds_to_final_report": 80.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 9,
+        "evidence_record": 16,
+        "reasoning_record": 11,
+        "safety": 2,
+        "test": 3
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 14,
+      "share_of_scripted_pass_databases_cited": 0.5,
+      "usage": {
+        "input_tokens": 40,
+        "output_tokens": 13686,
+        "cache_read_input_tokens": 543302,
+        "cache_creation_input_tokens": 35455,
+        "omnigent_reported_cost_usd": 0.3342
+      },
+      "output_tokens": 13686,
+      "omnigent_reported_cost_usd": 0.3342
+    },
+    {
+      "variant_id": "RAG1-p.Arg404Gln",
+      "arm": "specialist_lab",
+      "run_id": "bench01-RAG1-p.Arg404Gln-lab",
+      "wall_seconds": 252.7,
+      "distinct_sources": 11,
+      "favoured_after": "nucleic_acid_binding",
+      "reference_mechanism": "nucleic_acid_binding",
+      "agrees": true,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "region_level",
+      "started_at": "2026-10-03T22:13:52Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "nucleic_acid_binding",
+      "agrees_before": true,
+      "tool_calls": 105,
+      "evidence_items": 22,
+      "hypotheses": 3,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 10,
+      "complete_record": true,
+      "record_events": 73,
+      "missing_from_record": [],
+      "starting_evidence_items": 19,
+      "starting_distinct_sources": 11,
+      "gaps": 5,
+      "hypothesis_classes": [
+        "nucleic_acid_binding",
+        "stability_folding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.7,
+          "feasibility": 0.8,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.3,
+          "feasibility": 0.6,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.1,
+          "feasibility": 0.0,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.4,
+          "feasibility": 0.1,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect",
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "not_predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG -0.79 kcal/mol for R404Q, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 93.56)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "nucleic_acid_binding",
+          "favoured_after": "nucleic_acid_binding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 1,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 9,
+      "report_words": 429,
+      "report_cited_ids": 22,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 29.0,
+      "seconds_to_first_hypothesis": 73.0,
+      "seconds_to_first_plan": 112.0,
+      "seconds_to_first_result": 192.0,
+      "seconds_to_first_decision": 218.0,
+      "seconds_to_final_report": 248.0,
+      "tool_calls_by_purpose": {
+        "omnigent_dispatch": 21,
+        "coordination": 44,
+        "retrieval": 16,
+        "evidence_record": 27,
+        "reasoning_record": 15,
+        "safety": 5,
+        "test": 4
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "UniProtKB",
+        "gnomAD"
+      ],
+      "databases_returned_by_scripted_pass": 12,
+      "share_of_scripted_pass_databases_cited": 0.83,
+      "usage": {
+        "input_tokens": 196,
+        "output_tokens": 48550,
+        "cache_read_input_tokens": 1421676,
+        "cache_creation_input_tokens": 166456,
+        "omnigent_reported_cost_usd": 1.1864
+      },
+      "output_tokens": 48550,
+      "omnigent_reported_cost_usd": 1.1864
+    },
+    {
+      "variant_id": "RAG1-p.Arg404Gln",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-RAG1-p.Arg404Gln-baseline",
+      "wall_seconds": 93.3,
+      "distinct_sources": 6,
+      "favoured_after": "nucleic_acid_binding",
+      "reference_mechanism": "nucleic_acid_binding",
+      "agrees": true,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "region_level",
+      "started_at": "2026-10-03T22:14:06Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "nucleic_acid_binding",
+      "agrees_before": true,
+      "tool_calls": 36,
+      "evidence_items": 10,
+      "hypotheses": 3,
+      "tests_considered": 3,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 28,
+      "missing_from_record": [],
+      "starting_evidence_items": 10,
+      "starting_distinct_sources": 6,
+      "gaps": 2,
+      "hypothesis_classes": [
+        "nucleic_acid_binding",
+        "stability_folding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.4,
+          "feasibility": 0.8,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.1,
+          "feasibility": 0.0,
+          "compute_seconds": 0
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "not_predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG -0.79 kcal/mol for R404Q, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 93.56)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "nucleic_acid_binding",
+          "favoured_after": "nucleic_acid_binding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 1,
+      "report_words": 405,
+      "report_cited_ids": 17,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 15.0,
+      "seconds_to_first_hypothesis": 32.0,
+      "seconds_to_first_plan": 50.0,
+      "seconds_to_first_result": 60.0,
+      "seconds_to_first_decision": 67.0,
+      "seconds_to_final_report": 85.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 9,
+        "evidence_record": 12,
+        "reasoning_record": 12,
+        "safety": 2,
+        "test": 2
+      },
+      "databases_cited": [
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "PDBe SIFTS",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 12,
+      "share_of_scripted_pass_databases_cited": 0.5,
+      "usage": {
+        "input_tokens": 42,
+        "output_tokens": 13109,
+        "cache_read_input_tokens": 522903,
+        "cache_creation_input_tokens": 33098,
+        "omnigent_reported_cost_usd": 0.3185
+      },
+      "output_tokens": 13109,
+      "omnigent_reported_cost_usd": 0.3185
+    },
+    {
+      "variant_id": "JAK3-p.Arg103His",
+      "arm": "specialist_lab",
+      "run_id": "bench01-JAK3-p.Arg103His-lab",
+      "wall_seconds": 172.9,
+      "distinct_sources": 10,
+      "favoured_after": "stability_folding",
+      "reference_mechanism": "protein_interaction",
+      "agrees": false,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "region_level",
+      "started_at": "2026-10-03T22:17:11Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "stability_folding",
+      "agrees_before": false,
+      "tool_calls": 87,
+      "evidence_items": 22,
+      "hypotheses": 3,
+      "tests_considered": 3,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 8,
+      "complete_record": true,
+      "record_events": 59,
+      "missing_from_record": [],
+      "starting_evidence_items": 20,
+      "starting_distinct_sources": 10,
+      "gaps": 6,
+      "hypothesis_classes": [
+        "stability_folding",
+        "protein_interaction",
+        "domain_interface"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.7,
+          "feasibility": 0.8,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.35,
+          "feasibility": 0.6,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.5,
+          "feasibility": 0.1,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG +4.15 kcal/mol for R103H, at or above the destabilising threshold of 2.0 kcal/mol."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "stability_folding",
+          "favoured_after": "stability_folding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 425,
+      "report_cited_ids": 17,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 23.0,
+      "seconds_to_first_hypothesis": 64.0,
+      "seconds_to_first_plan": 99.0,
+      "seconds_to_first_result": 125.0,
+      "seconds_to_first_decision": 147.0,
+      "seconds_to_final_report": 169.0,
+      "tool_calls_by_purpose": {
+        "coordination": 29,
+        "omnigent_dispatch": 16,
+        "retrieval": 13,
+        "evidence_record": 28,
+        "reasoning_record": 11,
+        "safety": 2,
+        "test": 4
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "UniProtKB",
+        "gnomAD"
+      ],
+      "databases_returned_by_scripted_pass": 11,
+      "share_of_scripted_pass_databases_cited": 0.73,
+      "usage": {
+        "input_tokens": 152,
+        "output_tokens": 34272,
+        "cache_read_input_tokens": 775850,
+        "cache_creation_input_tokens": 116850,
+        "omnigent_reported_cost_usd": 0.7903
+      },
+      "output_tokens": 34272,
+      "omnigent_reported_cost_usd": 0.7903
+    },
+    {
+      "variant_id": "JAK3-p.Arg103His",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-JAK3-p.Arg103His-baseline",
+      "wall_seconds": 81.2,
+      "distinct_sources": 8,
+      "favoured_after": "stability_folding",
+      "reference_mechanism": "protein_interaction",
+      "agrees": false,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "region_level",
+      "started_at": "2026-10-03T22:15:45Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "stability_folding",
+      "agrees_before": false,
+      "tool_calls": 41,
+      "evidence_items": 12,
+      "hypotheses": 3,
+      "tests_considered": 3,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 30,
+      "missing_from_record": [],
+      "starting_evidence_items": 12,
+      "starting_distinct_sources": 8,
+      "gaps": 2,
+      "hypothesis_classes": [
+        "stability_folding",
+        "domain_interface",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.7,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.4,
+          "feasibility": 0.8,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.5,
+          "feasibility": 0.05,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG +4.15 kcal/mol for R103H, at or above the destabilising threshold of 2.0 kcal/mol."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "stability_folding",
+          "favoured_after": "stability_folding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 1,
+      "report_words": 423,
+      "report_cited_ids": 16,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 15.0,
+      "seconds_to_first_hypothesis": 38.0,
+      "seconds_to_first_plan": 52.0,
+      "seconds_to_first_result": 60.0,
+      "seconds_to_first_decision": 64.0,
+      "seconds_to_final_report": 73.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 10,
+        "evidence_record": 15,
+        "coordination": 1,
+        "reasoning_record": 11,
+        "safety": 2,
+        "test": 2
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 11,
+      "share_of_scripted_pass_databases_cited": 0.55,
+      "usage": {
+        "input_tokens": 34,
+        "output_tokens": 12028,
+        "cache_read_input_tokens": 456603,
+        "cache_creation_input_tokens": 36337,
+        "omnigent_reported_cost_usd": 0.3025
+      },
+      "output_tokens": 12028,
+      "omnigent_reported_cost_usd": 0.3025
+    },
+    {
+      "variant_id": "CYBB-p.His101Arg",
+      "arm": "specialist_lab",
+      "run_id": "bench01-CYBB-p.His101Arg-lab",
+      "wall_seconds": 189.5,
+      "distinct_sources": 7,
+      "favoured_after": "ligand_binding",
+      "reference_mechanism": "ligand_binding",
+      "agrees": true,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "residue_specific",
+      "started_at": "2026-10-03T22:17:40Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "ligand_binding",
+      "agrees_before": true,
+      "tool_calls": 91,
+      "evidence_items": 22,
+      "hypotheses": 3,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 8,
+      "complete_record": true,
+      "record_events": 59,
+      "missing_from_record": [],
+      "starting_evidence_items": 20,
+      "starting_distinct_sources": 7,
+      "gaps": 5,
+      "hypothesis_classes": [
+        "ligand_binding",
+        "stability_folding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.35,
+          "feasibility": 1.0,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.3,
+          "feasibility": 0.8,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.4,
+          "feasibility": 0.1,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "not_predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG -1.04 kcal/mol for H101R, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 97.0)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "ligand_binding",
+          "favoured_after": "ligand_binding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 396,
+      "report_cited_ids": 21,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 25.0,
+      "seconds_to_first_hypothesis": 64.0,
+      "seconds_to_first_plan": 99.0,
+      "seconds_to_first_result": 129.0,
+      "seconds_to_first_decision": 158.0,
+      "seconds_to_final_report": 185.0,
+      "tool_calls_by_purpose": {
+        "omnigent_dispatch": 17,
+        "coordination": 31,
+        "retrieval": 15,
+        "evidence_record": 27,
+        "reasoning_record": 12,
+        "safety": 2,
+        "test": 4
+      },
+      "databases_cited": [
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "OpenAlex",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 11,
+      "share_of_scripted_pass_databases_cited": 0.45,
+      "usage": {
+        "input_tokens": 158,
+        "output_tokens": 36131,
+        "cache_read_input_tokens": 1029034,
+        "cache_creation_input_tokens": 137928,
+        "omnigent_reported_cost_usd": 0.9123
+      },
+      "output_tokens": 36131,
+      "omnigent_reported_cost_usd": 0.9123
+    },
+    {
+      "variant_id": "CYBB-p.His101Arg",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-CYBB-p.His101Arg-baseline",
+      "wall_seconds": 82.7,
+      "distinct_sources": 5,
+      "favoured_after": "ligand_binding",
+      "reference_mechanism": "ligand_binding",
+      "agrees": true,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "residue_specific",
+      "started_at": "2026-10-03T22:18:10Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "ligand_binding",
+      "agrees_before": true,
+      "tool_calls": 39,
+      "evidence_items": 10,
+      "hypotheses": 3,
+      "tests_considered": 3,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 29,
+      "missing_from_record": [],
+      "starting_evidence_items": 10,
+      "starting_distinct_sources": 5,
+      "gaps": 2,
+      "hypothesis_classes": [
+        "ligand_binding",
+        "stability_folding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.6,
+          "feasibility": 0.95,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.5,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.3,
+          "feasibility": 0.8,
+          "compute_seconds": 0
+        }
+      ],
+      "chosen_tests": [
+        "ligand_contact"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "verdict": "contact_with_organic_ligand",
+          "headline": "Residue 101 is within 4.5 Å of an organic ligand in 5 of 5 ligand-bound structures (HEM); closest 2.0 Å to HEM (PROTOPORPHYRIN IX CONTAINING FE) in PDB 8GZ3."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "ligand_binding",
+          "favoured_after": "ligand_binding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 2,
+      "report_words": 402,
+      "report_cited_ids": 15,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 13.0,
+      "seconds_to_first_hypothesis": 34.0,
+      "seconds_to_first_plan": 52.0,
+      "seconds_to_first_result": 59.0,
+      "seconds_to_first_decision": 63.0,
+      "seconds_to_final_report": 76.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 12,
+        "evidence_record": 12,
+        "reasoning_record": 12,
+        "safety": 2,
+        "test": 2
+      },
+      "databases_cited": [
+        "AlphaMissense",
+        "ClinVar",
+        "Europe PMC",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 11,
+      "share_of_scripted_pass_databases_cited": 0.36,
+      "usage": {
+        "input_tokens": 32,
+        "output_tokens": 13149,
+        "cache_read_input_tokens": 487649,
+        "cache_creation_input_tokens": 42785,
+        "omnigent_reported_cost_usd": 0.336
+      },
+      "output_tokens": 13149,
+      "omnigent_reported_cost_usd": 0.336
+    },
+    {
+      "variant_id": "STAT3-p.Arg382Trp",
+      "arm": "specialist_lab",
+      "run_id": "bench01-STAT3-p.Arg382Trp-lab-r2",
+      "wall_seconds": 212.1,
+      "distinct_sources": 11,
+      "favoured_after": "nucleic_acid_binding",
+      "reference_mechanism": "nucleic_acid_binding",
+      "agrees": true,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 2,
+      "failed_attempts": [
+        {
+          "run_id": "bench01-STAT3-p.Arg382Trp-lab",
+          "status": "failed",
+          "error": "The run ended without a recorded decision. See omnigent.log and final_reply.txt.",
+          "wall_seconds": 482.9
+        }
+      ],
+      "reference_tier": "residue_specific",
+      "started_at": "2026-10-03T22:28:17Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "nucleic_acid_binding",
+      "agrees_before": true,
+      "tool_calls": 92,
+      "evidence_items": 23,
+      "hypotheses": 3,
+      "tests_considered": 3,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 8,
+      "complete_record": true,
+      "record_events": 59,
+      "missing_from_record": [],
+      "starting_evidence_items": 21,
+      "starting_distinct_sources": 11,
+      "gaps": 6,
+      "hypothesis_classes": [
+        "nucleic_acid_binding",
+        "protein_interaction",
+        "stability_folding"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.4,
+          "feasibility": 0.85,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.25,
+          "feasibility": 0.6,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "not_predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG +1.96 kcal/mol for R382W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 88.0)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "nucleic_acid_binding",
+          "favoured_after": "nucleic_acid_binding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 1,
+      "report_words": 430,
+      "report_cited_ids": 18,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 28.0,
+      "seconds_to_first_hypothesis": 71.0,
+      "seconds_to_first_plan": 117.0,
+      "seconds_to_first_result": 149.0,
+      "seconds_to_first_decision": 176.0,
+      "seconds_to_final_report": 208.0,
+      "tool_calls_by_purpose": {
+        "coordination": 32,
+        "omnigent_dispatch": 17,
+        "retrieval": 14,
+        "evidence_record": 29,
+        "reasoning_record": 12,
+        "safety": 2,
+        "test": 4
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 13,
+      "share_of_scripted_pass_databases_cited": 0.85,
+      "usage": {
+        "input_tokens": 146,
+        "output_tokens": 40108,
+        "cache_read_input_tokens": 876638,
+        "cache_creation_input_tokens": 134504,
+        "omnigent_reported_cost_usd": 0.913
+      },
+      "output_tokens": 40108,
+      "omnigent_reported_cost_usd": 0.913
+    },
+    {
+      "variant_id": "STAT3-p.Arg382Trp",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-STAT3-p.Arg382Trp-baseline",
+      "wall_seconds": 82.7,
+      "distinct_sources": 8,
+      "favoured_after": "nucleic_acid_binding",
+      "reference_mechanism": "nucleic_acid_binding",
+      "agrees": true,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "residue_specific",
+      "started_at": "2026-10-03T22:19:38Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "nucleic_acid_binding",
+      "agrees_before": true,
+      "tool_calls": 40,
+      "evidence_items": 12,
+      "hypotheses": 3,
+      "tests_considered": 3,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 30,
+      "missing_from_record": [],
+      "starting_evidence_items": 12,
+      "starting_distinct_sources": 8,
+      "gaps": 3,
+      "hypothesis_classes": [
+        "nucleic_acid_binding",
+        "stability_folding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.7,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.4,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.5,
+          "feasibility": 0.1,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "not_predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG +1.96 kcal/mol for R382W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 88.0)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "nucleic_acid_binding",
+          "favoured_after": "nucleic_acid_binding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 405,
+      "report_cited_ids": 16,
+      "mentions_gain_of_function": true,
+      "seconds_to_first_evidence": 16.0,
+      "seconds_to_first_hypothesis": 36.0,
+      "seconds_to_first_plan": 52.0,
+      "seconds_to_first_result": 57.0,
+      "seconds_to_first_decision": 60.0,
+      "seconds_to_final_report": 75.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 9,
+        "evidence_record": 16,
+        "reasoning_record": 11,
+        "safety": 2,
+        "test": 2
+      },
+      "databases_cited": [
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "InterPro",
+        "OpenAlex",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 13,
+      "share_of_scripted_pass_databases_cited": 0.62,
+      "usage": {
+        "input_tokens": 22,
+        "output_tokens": 14593,
+        "cache_read_input_tokens": 292905,
+        "cache_creation_input_tokens": 40503,
+        "omnigent_reported_cost_usd": 0.3058
+      },
+      "output_tokens": 14593,
+      "omnigent_reported_cost_usd": 0.3058
+    },
+    {
+      "variant_id": "STAT1-p.Arg274Trp",
+      "arm": "specialist_lab",
+      "run_id": "bench01-STAT1-p.Arg274Trp-lab",
+      "wall_seconds": 198.5,
+      "distinct_sources": 9,
+      "favoured_after": "protein_interaction",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:20:54Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "protein_interaction",
+      "agrees_before": null,
+      "tool_calls": 94,
+      "evidence_items": 23,
+      "hypotheses": 3,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 8,
+      "complete_record": true,
+      "record_events": 61,
+      "missing_from_record": [],
+      "starting_evidence_items": 20,
+      "starting_distinct_sources": 9,
+      "gaps": 6,
+      "hypothesis_classes": [
+        "protein_interaction",
+        "domain_interface",
+        "stability_folding"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.35,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.6,
+          "feasibility": 0.1,
+          "compute_seconds": 120
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.1,
+          "feasibility": 0.8,
+          "compute_seconds": 0
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "not_predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG -0.60 kcal/mol for R274W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 94.62)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "protein_interaction",
+          "favoured_after": "protein_interaction",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 421,
+      "report_cited_ids": 25,
+      "mentions_gain_of_function": true,
+      "seconds_to_first_evidence": 26.0,
+      "seconds_to_first_hypothesis": 74.0,
+      "seconds_to_first_plan": 113.0,
+      "seconds_to_first_result": 147.0,
+      "seconds_to_first_decision": 171.0,
+      "seconds_to_final_report": 195.0,
+      "tool_calls_by_purpose": {
+        "coordination": 32,
+        "omnigent_dispatch": 16,
+        "retrieval": 15,
+        "evidence_record": 29,
+        "reasoning_record": 12,
+        "safety": 2,
+        "test": 4
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "InterPro",
+        "OpenAlex",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 13,
+      "share_of_scripted_pass_databases_cited": 0.69,
+      "usage": {
+        "input_tokens": 152,
+        "output_tokens": 40680,
+        "cache_read_input_tokens": 994660,
+        "cache_creation_input_tokens": 141820,
+        "omnigent_reported_cost_usd": 0.9606
+      },
+      "output_tokens": 40680,
+      "omnigent_reported_cost_usd": 0.9606
+    },
+    {
+      "variant_id": "STAT1-p.Arg274Trp",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-STAT1-p.Arg274Trp-baseline",
+      "wall_seconds": 102.3,
+      "distinct_sources": 9,
+      "favoured_after": "domain_interface",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": true,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:21:06Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "protein_interaction",
+      "agrees_before": null,
+      "tool_calls": 45,
+      "evidence_items": 12,
+      "hypotheses": 3,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 31,
+      "missing_from_record": [],
+      "starting_evidence_items": 12,
+      "starting_distinct_sources": 7,
+      "gaps": 2,
+      "hypothesis_classes": [
+        "protein_interaction",
+        "domain_interface",
+        "stability_folding"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.5,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.1,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.7,
+          "feasibility": 0.2,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "structural_context"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "structural_context",
+          "verdict": "in_predicted_pocket",
+          "headline": "Residue 274: lines P2Rank pocket rank 5 of 11 (probability 0.028); lies in 3 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "protein_interaction",
+          "favoured_after": "domain_interface",
+          "changed": true
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 1,
+      "report_words": 453,
+      "report_cited_ids": 18,
+      "mentions_gain_of_function": true,
+      "seconds_to_first_evidence": 14.0,
+      "seconds_to_first_hypothesis": 48.0,
+      "seconds_to_first_plan": 60.0,
+      "seconds_to_first_result": 70.0,
+      "seconds_to_first_decision": 82.0,
+      "seconds_to_final_report": 94.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 11,
+        "evidence_record": 15,
+        "reasoning_record": 14,
+        "safety": 2,
+        "test": 3
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "PrankWeb",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 13,
+      "share_of_scripted_pass_databases_cited": 0.62,
+      "usage": {
+        "input_tokens": 30,
+        "output_tokens": 17590,
+        "cache_read_input_tokens": 460731,
+        "cache_creation_input_tokens": 46485,
+        "omnigent_reported_cost_usd": 0.3843
+      },
+      "output_tokens": 17590,
+      "omnigent_reported_cost_usd": 0.3843
+    },
+    {
+      "variant_id": "FOXP3-p.Ala384Thr",
+      "arm": "specialist_lab",
+      "run_id": "bench01-FOXP3-p.Ala384Thr-lab",
+      "wall_seconds": 183.5,
+      "distinct_sources": 10,
+      "favoured_after": "nucleic_acid_binding",
+      "reference_mechanism": "nucleic_acid_binding",
+      "agrees": true,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "region_level",
+      "started_at": "2026-10-03T22:24:18Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "nucleic_acid_binding",
+      "agrees_before": true,
+      "tool_calls": 88,
+      "evidence_items": 22,
+      "hypotheses": 3,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 8,
+      "complete_record": true,
+      "record_events": 60,
+      "missing_from_record": [],
+      "starting_evidence_items": 20,
+      "starting_distinct_sources": 10,
+      "gaps": 6,
+      "hypothesis_classes": [
+        "nucleic_acid_binding",
+        "stability_folding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.35,
+          "feasibility": 0.85,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.3,
+          "feasibility": 0.6,
+          "compute_seconds": 120
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.1,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "not_predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG +1.16 kcal/mol for A384T, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 95.38)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "nucleic_acid_binding",
+          "favoured_after": "nucleic_acid_binding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 445,
+      "report_cited_ids": 22,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 27.0,
+      "seconds_to_first_hypothesis": 66.0,
+      "seconds_to_first_plan": 103.0,
+      "seconds_to_first_result": 132.0,
+      "seconds_to_first_decision": 154.0,
+      "seconds_to_final_report": 178.0,
+      "tool_calls_by_purpose": {
+        "omnigent_dispatch": 17,
+        "coordination": 29,
+        "retrieval": 13,
+        "evidence_record": 28,
+        "reasoning_record": 12,
+        "safety": 2,
+        "test": 4
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "InterPro",
+        "OpenAlex",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 13,
+      "share_of_scripted_pass_databases_cited": 0.77,
+      "usage": {
+        "input_tokens": 138,
+        "output_tokens": 36635,
+        "cache_read_input_tokens": 756613,
+        "cache_creation_input_tokens": 128062,
+        "omnigent_reported_cost_usd": 0.8381
+      },
+      "output_tokens": 36635,
+      "omnigent_reported_cost_usd": 0.8381
+    },
+    {
+      "variant_id": "FOXP3-p.Ala384Thr",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-FOXP3-p.Ala384Thr-baseline",
+      "wall_seconds": 91.7,
+      "distinct_sources": 9,
+      "favoured_after": "stability_folding",
+      "reference_mechanism": "nucleic_acid_binding",
+      "agrees": false,
+      "decision_changed": true,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "region_level",
+      "started_at": "2026-10-03T22:22:54Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "protein_interaction",
+      "agrees_before": false,
+      "tool_calls": 40,
+      "evidence_items": 13,
+      "hypotheses": 3,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 31,
+      "missing_from_record": [],
+      "starting_evidence_items": 13,
+      "starting_distinct_sources": 8,
+      "gaps": 2,
+      "hypothesis_classes": [
+        "protein_interaction",
+        "stability_folding",
+        "nucleic_acid_binding"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.5,
+          "feasibility": 0.85,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.4,
+          "feasibility": 0.1,
+          "compute_seconds": 120
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.1,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        }
+      ],
+      "chosen_tests": [
+        "structural_context"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "structural_context",
+          "verdict": "in_predicted_pocket",
+          "headline": "Residue 384: lines none of the 3 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "protein_interaction",
+          "favoured_after": "stability_folding",
+          "changed": true
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 400,
+      "report_cited_ids": 17,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 16.0,
+      "seconds_to_first_hypothesis": 33.0,
+      "seconds_to_first_plan": 52.0,
+      "seconds_to_first_result": 62.0,
+      "seconds_to_first_decision": 68.0,
+      "seconds_to_final_report": 84.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 9,
+        "evidence_record": 15,
+        "reasoning_record": 12,
+        "safety": 2,
+        "test": 2
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "OpenAlex",
+        "PrankWeb",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 13,
+      "share_of_scripted_pass_databases_cited": 0.62,
+      "usage": {
+        "input_tokens": 32,
+        "output_tokens": 15337,
+        "cache_read_input_tokens": 472920,
+        "cache_creation_input_tokens": 40666,
+        "omnigent_reported_cost_usd": 0.3497
+      },
+      "output_tokens": 15337,
+      "omnigent_reported_cost_usd": 0.3497
+    },
+    {
+      "variant_id": "CD40LG-p.Thr254Met",
+      "arm": "specialist_lab",
+      "run_id": "bench01-CD40LG-p.Thr254Met-lab",
+      "wall_seconds": 285.8,
+      "distinct_sources": 10,
+      "favoured_after": "stability_folding",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": true,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:24:31Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "protein_interaction",
+      "agrees_before": null,
+      "tool_calls": 123,
+      "evidence_items": 22,
+      "hypotheses": 2,
+      "tests_considered": 4,
+      "tests_executed": 2,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 13,
+      "complete_record": true,
+      "record_events": 78,
+      "missing_from_record": [],
+      "starting_evidence_items": 18,
+      "starting_distinct_sources": 9,
+      "gaps": 6,
+      "hypothesis_classes": [
+        "protein_interaction",
+        "stability_folding"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.4,
+          "feasibility": 0.75,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.05,
+          "feasibility": 1.0,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.2,
+          "feasibility": 0.6,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect",
+        "structural_context"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG +2.74 kcal/mol for T254M, at or above the destabilising threshold of 2.0 kcal/mol."
+        },
+        {
+          "test_kind": "structural_context",
+          "verdict": "in_predicted_pocket",
+          "headline": "Residue 254: lines none of the 1 P2Rank pockets; lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "protein_interaction",
+          "favoured_after": "stability_folding",
+          "changed": true
+        },
+        {
+          "favoured_before": "stability_folding",
+          "favoured_after": "stability_folding",
+          "changed": false
+        }
+      ],
+      "reopenings": 1,
+      "reopened": [
+        {
+          "hypothesis_id": "H1",
+          "mechanism_class": "protein_interaction",
+          "reason": "Changed favourite: T1 (FoldX ddG +2.74 kcal/mol for T254M, residue pLDDT 98.31) supports H2 (stability_folding) directly and does not bear on H1's contact-face criterion, so H1 was displaced as favourite. Reconsider the plan among tests not yet executed (T2, T3, T4), with H2 now favoured and the result from T1 taken into account."
+        }
+      ],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 1,
+      "report_words": 423,
+      "report_cited_ids": 20,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 25.0,
+      "seconds_to_first_hypothesis": 68.0,
+      "seconds_to_first_plan": 105.0,
+      "seconds_to_first_result": 140.0,
+      "seconds_to_first_decision": 166.0,
+      "seconds_to_final_report": 280.0,
+      "tool_calls_by_purpose": {
+        "omnigent_dispatch": 28,
+        "coordination": 50,
+        "retrieval": 17,
+        "evidence_record": 28,
+        "reasoning_record": 17,
+        "safety": 4,
+        "test": 8
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "PrankWeb",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 11,
+      "share_of_scripted_pass_databases_cited": 0.73,
+      "usage": {
+        "input_tokens": 240,
+        "output_tokens": 51779,
+        "cache_read_input_tokens": 1864514,
+        "cache_creation_input_tokens": 193940,
+        "omnigent_reported_cost_usd": 1.376
+      },
+      "output_tokens": 51779,
+      "omnigent_reported_cost_usd": 1.376
+    },
+    {
+      "variant_id": "CD40LG-p.Thr254Met",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-CD40LG-p.Thr254Met-baseline",
+      "wall_seconds": 82.7,
+      "distinct_sources": 7,
+      "favoured_after": "stability_folding",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:27:27Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "stability_folding",
+      "agrees_before": null,
+      "tool_calls": 39,
+      "evidence_items": 10,
+      "hypotheses": 3,
+      "tests_considered": 3,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 28,
+      "missing_from_record": [],
+      "starting_evidence_items": 10,
+      "starting_distinct_sources": 7,
+      "gaps": 2,
+      "hypothesis_classes": [
+        "stability_folding",
+        "protein_interaction",
+        "ligand_binding"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.6,
+          "feasibility": 0.85,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.4,
+          "feasibility": 0.6,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.4,
+          "feasibility": 0.5,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG +2.74 kcal/mol for T254M, at or above the destabilising threshold of 2.0 kcal/mol."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "stability_folding",
+          "favoured_after": "stability_folding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 1,
+      "report_words": 472,
+      "report_cited_ids": 18,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 20.0,
+      "seconds_to_first_hypothesis": 34.0,
+      "seconds_to_first_plan": 46.0,
+      "seconds_to_first_result": 52.0,
+      "seconds_to_first_decision": 60.0,
+      "seconds_to_final_report": 75.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 11,
+        "evidence_record": 12,
+        "reasoning_record": 13,
+        "safety": 2,
+        "test": 2
+      },
+      "databases_cited": [
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 11,
+      "share_of_scripted_pass_databases_cited": 0.55,
+      "usage": {
+        "input_tokens": 28,
+        "output_tokens": 13694,
+        "cache_read_input_tokens": 386491,
+        "cache_creation_input_tokens": 39271,
+        "omnigent_reported_cost_usd": 0.3125
+      },
+      "output_tokens": 13694,
+      "omnigent_reported_cost_usd": 0.3125
+    },
+    {
+      "variant_id": "PIK3CD-p.Glu1021Lys",
+      "arm": "specialist_lab",
+      "run_id": "bench01-PIK3CD-p.Glu1021Lys-lab",
+      "wall_seconds": 186.6,
+      "distinct_sources": 13,
+      "favoured_after": "ligand_binding",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:29:22Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "ligand_binding",
+      "agrees_before": null,
+      "tool_calls": 93,
+      "evidence_items": 23,
+      "hypotheses": 3,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 8,
+      "complete_record": true,
+      "record_events": 62,
+      "missing_from_record": [],
+      "starting_evidence_items": 21,
+      "starting_distinct_sources": 12,
+      "gaps": 7,
+      "hypothesis_classes": [
+        "ligand_binding",
+        "domain_interface",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.3,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.08,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.5,
+          "feasibility": 0.85,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.25,
+          "feasibility": 0.6,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "structural_context"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "structural_context",
+          "verdict": "in_predicted_pocket",
+          "headline": "Residue 1021: lines none of the 22 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "ligand_binding",
+          "favoured_after": "ligand_binding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 380,
+      "report_cited_ids": 20,
+      "mentions_gain_of_function": true,
+      "seconds_to_first_evidence": 24.0,
+      "seconds_to_first_hypothesis": 68.0,
+      "seconds_to_first_plan": 105.0,
+      "seconds_to_first_result": 134.0,
+      "seconds_to_first_decision": 159.0,
+      "seconds_to_final_report": 181.0,
+      "tool_calls_by_purpose": {
+        "coordination": 30,
+        "omnigent_dispatch": 17,
+        "retrieval": 15,
+        "evidence_record": 30,
+        "reasoning_record": 12,
+        "safety": 2,
+        "test": 4
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "PDBe SIFTS",
+        "PrankWeb",
+        "RCSB PDB",
+        "UniProtKB",
+        "gnomAD"
+      ],
+      "databases_returned_by_scripted_pass": 14,
+      "share_of_scripted_pass_databases_cited": 0.86,
+      "usage": {
+        "input_tokens": 144,
+        "output_tokens": 37282,
+        "cache_read_input_tokens": 781888,
+        "cache_creation_input_tokens": 131251,
+        "omnigent_reported_cost_usd": 0.8576
+      },
+      "output_tokens": 37282,
+      "omnigent_reported_cost_usd": 0.8576
+    },
+    {
+      "variant_id": "PIK3CD-p.Glu1021Lys",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-PIK3CD-p.Glu1021Lys-baseline",
+      "wall_seconds": 97.8,
+      "distinct_sources": 9,
+      "favoured_after": "protein_interaction",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": true,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:28:55Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "ligand_binding",
+      "agrees_before": null,
+      "tool_calls": 40,
+      "evidence_items": 11,
+      "hypotheses": 3,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 30,
+      "missing_from_record": [],
+      "starting_evidence_items": 11,
+      "starting_distinct_sources": 9,
+      "gaps": 2,
+      "hypothesis_classes": [
+        "ligand_binding",
+        "protein_interaction",
+        "stability_folding"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.5,
+          "feasibility": 0.95,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.35,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.3,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.3,
+          "feasibility": 0.7,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "ligand_contact"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "verdict": "no_ligand_contact",
+          "headline": "Residue 1021 is not within 4.5 Å of any non-solvent ligand in the 20 ligand-bound structures examined."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "ligand_binding",
+          "favoured_after": "protein_interaction",
+          "changed": true
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 1,
+      "report_words": 350,
+      "report_cited_ids": 15,
+      "mentions_gain_of_function": true,
+      "seconds_to_first_evidence": 29.0,
+      "seconds_to_first_hypothesis": 51.0,
+      "seconds_to_first_plan": 63.0,
+      "seconds_to_first_result": 71.0,
+      "seconds_to_first_decision": 78.0,
+      "seconds_to_final_report": 87.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 10,
+        "evidence_record": 14,
+        "reasoning_record": 12,
+        "safety": 2,
+        "test": 2
+      },
+      "databases_cited": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 14,
+      "share_of_scripted_pass_databases_cited": 0.64,
+      "usage": {
+        "input_tokens": 32,
+        "output_tokens": 15633,
+        "cache_read_input_tokens": 551825,
+        "cache_creation_input_tokens": 45365,
+        "omnigent_reported_cost_usd": 0.3802
+      },
+      "output_tokens": 15633,
+      "omnigent_reported_cost_usd": 0.3802
+    },
+    {
+      "variant_id": "CTLA4-p.Arg75Trp",
+      "arm": "specialist_lab",
+      "run_id": "bench01-CTLA4-p.Arg75Trp-lab",
+      "wall_seconds": 195.6,
+      "distinct_sources": 11,
+      "favoured_after": "protein_interaction",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:30:38Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "protein_interaction",
+      "agrees_before": null,
+      "tool_calls": 91,
+      "evidence_items": 21,
+      "hypotheses": 2,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 8,
+      "complete_record": true,
+      "record_events": 58,
+      "missing_from_record": [],
+      "starting_evidence_items": 19,
+      "starting_distinct_sources": 11,
+      "gaps": 6,
+      "hypothesis_classes": [
+        "protein_interaction",
+        "stability_folding"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.7,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.3,
+          "feasibility": 0.5,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.1,
+          "feasibility": 1.0,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.2,
+          "feasibility": 0.6,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "not_predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG -0.11 kcal/mol for R75W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 95.38)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "protein_interaction",
+          "favoured_after": "protein_interaction",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 485,
+      "report_cited_ids": 22,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 30.0,
+      "seconds_to_first_hypothesis": 69.0,
+      "seconds_to_first_plan": 107.0,
+      "seconds_to_first_result": 142.0,
+      "seconds_to_first_decision": 166.0,
+      "seconds_to_final_report": 191.0,
+      "tool_calls_by_purpose": {
+        "omnigent_dispatch": 17,
+        "coordination": 32,
+        "retrieval": 15,
+        "evidence_record": 27,
+        "reasoning_record": 11,
+        "safety": 2,
+        "test": 4
+      },
+      "databases_cited": [
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IntAct",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB",
+        "gnomAD"
+      ],
+      "databases_returned_by_scripted_pass": 14,
+      "share_of_scripted_pass_databases_cited": 0.79,
+      "usage": {
+        "input_tokens": 148,
+        "output_tokens": 35823,
+        "cache_read_input_tokens": 918592,
+        "cache_creation_input_tokens": 131491,
+        "omnigent_reported_cost_usd": 0.871
+      },
+      "output_tokens": 35823,
+      "omnigent_reported_cost_usd": 0.871
+    },
+    {
+      "variant_id": "CTLA4-p.Arg75Trp",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-CTLA4-p.Arg75Trp-baseline",
+      "wall_seconds": 78.3,
+      "distinct_sources": 7,
+      "favoured_after": "protein_interaction",
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": true,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": null,
+      "started_at": "2026-10-03T22:31:55Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "stability_folding",
+      "agrees_before": null,
+      "tool_calls": 37,
+      "evidence_items": 10,
+      "hypotheses": 2,
+      "tests_considered": 3,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 26,
+      "missing_from_record": [],
+      "starting_evidence_items": 10,
+      "starting_distinct_sources": 7,
+      "gaps": 2,
+      "hypothesis_classes": [
+        "stability_folding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.4,
+          "feasibility": 0.5,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.15,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        }
+      ],
+      "chosen_tests": [
+        "stability_effect"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "stability_effect",
+          "verdict": "not_predicted_destabilising",
+          "headline": "FoldX predicts ΔΔG -0.11 kcal/mol for R75W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 95.38)."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "stability_folding",
+          "favoured_after": "protein_interaction",
+          "changed": true
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 381,
+      "report_cited_ids": 16,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 20.0,
+      "seconds_to_first_hypothesis": 44.0,
+      "seconds_to_first_plan": 53.0,
+      "seconds_to_first_result": 58.0,
+      "seconds_to_first_decision": 61.0,
+      "seconds_to_final_report": 70.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 8,
+        "coordination": 1,
+        "evidence_record": 14,
+        "reasoning_record": 10,
+        "safety": 2,
+        "test": 2
+      },
+      "databases_cited": [
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Europe PMC",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB"
+      ],
+      "databases_returned_by_scripted_pass": 14,
+      "share_of_scripted_pass_databases_cited": 0.5,
+      "usage": {
+        "input_tokens": 20,
+        "output_tokens": 11879,
+        "cache_read_input_tokens": 248091,
+        "cache_creation_input_tokens": 36622,
+        "omnigent_reported_cost_usd": 0.26
+      },
+      "output_tokens": 11879,
+      "omnigent_reported_cost_usd": 0.26
+    }
+  ],
+  "controls": [
+    "Same tools: the control agent holds every tool of the lab, generated from the same registry.",
+    "Same model in every agent of both arms; the model names are read from each run.json.",
+    "Same policies in both arms: role boundary, approval gate, claims guard, run budget.",
+    "Same budget per run: tool calls and compute seconds, enforced by policy.",
+    "Same objective text and subject line for a variant in both arms, built by lab/run_lab.py.",
+    "Same approval rule in both arms: pre-approved by the documented rule of protocol.md section 5.",
+    "Variant set fixed before any run: the first-listed flagship variant of every gene in data/seed/catalog.json.",
+    "Reference labels derived from UniProtKB by a fixed script before any benchmark run, never shown to an agent.",
+    "API caches filled for every variant by a scripted preflight before the first run, so neither arm pays for a cold upstream database.",
+    "Arms interleaved in one worker pool with the starting arm alternating by variant, so both arms see the same concurrency.",
+    "Citations can only name a database record a tool returned in that run (source ledger), in both arms.",
+    "spec_hash of the agent bundle, policies and tool package recorded per run; a change during the batch is reported.",
+    "Failed attempts are kept in lab/runs/ and counted; a failed run is retried at most once."
+  ],
+  "caveats": [
+    "Small sample: 13 variants, one run per variant and arm in the main comparison; run-to-run variation of a language-model agent is not estimated beyond the repeat study on one variant.",
+    "Both arms use the same model, so the comparison says nothing about a different model in either role.",
+    "The reference covers 6 of 13 variants (3 from a residue-specific UniProtKB annotation, 3 only from membership of an annotated region). The label is never shown to an agent, but the UniProtKB annotation behind it is returned by tools both arms hold, so agreement is consistency with curated annotation, not blind rediscovery.",
+    "Pathogenicity predictors in the starting evidence (AlphaMissense, EVE, popEVE) share training signal with clinical labels; they say a variant is damaging, not by which mechanism.",
+    "Wall time includes the start of a per-run Omnigent server and the export of session transcripts, in both arms.",
+    "No human was timed. The benchmark does not measure a speed-up over manual work.",
+    "The lab can run a second test after a reopening; the control prompt has no reopening step. Counts of decisions that changed are therefore not like for like.",
+    "One of 27 attempts in the main batch failed (specialist lab, STAT3 p.Arg382Trp, 482.9 s) and was retried once; the medians use the retry. Cause: the claims guard matched the word \"dosage\", its refusal notes quote the matched word, and the safety agent then blocked the plan twice because of those notes.",
+    "No approved compute job ran. The only approval request of the batch (specialist lab, ADA p.Arg211His, for a test that needs no approval) was answered by the pre-approval rule, and the safety agent did not accept an approval granted by an automated agent as a human decision. Compute seconds were 0 in all 26 runs, so the structure-comparison test is not covered by this benchmark.",
+    "Repeats on BTK p.Arg28His (three runs per arm): the lab favoured ligand_binding in 2 runs and protein_interaction in 1; the single agent favoured ligand_binding in 3. A difference of one variant in agreement between the arms is the size of the variation seen between repeats of one cell.",
+    "In the lab arm the test did not change the favoured class for any of the 6 variants with a reference; all 4 lab runs where it changed are variants without a reference, so whether those changes are improvements is not known."
+  ],
+  "next_experiment": "A third arm on the same 13 variants, three repeats per cell: evidence assembled by the scripted pass (14 tool calls, median 0.56 s here) and written to the record in one batch, with agents kept for hypotheses, test choice and interpretation. It tests whether the time before the first hypothesis (median 68 s in the lab, 35 s for the single agent) can be removed without changing the favoured mechanism. In the same batch, add a test of DNA and partner-protein contacts in experimental structures: 10 of 13 lab runs chose the stability prediction first, and no test in the catalogue bears directly on the nucleic-acid or protein-interaction hypotheses that 6 of 13 lab runs favoured after the test.",
+  "reference": [
+    {
+      "variant_id": "ADA-p.Arg211His",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "IL2RG-p.Arg226Cys",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "BTK-p.Arg28His",
+      "reference_mechanism": "ligand_binding",
+      "reference_tier": "residue_specific",
+      "derivation": "R2 binding-site feature at the residue (ligand: 1D-myo-inositol 1,3,4,5-tetrakisphosphate) [UniProtKB Q06187 Binding site 28]",
+      "structural_corroboration": "corroborated",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "WAS-p.Thr45Met",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "RAG1-p.Arg404Gln",
+      "reference_mechanism": "nucleic_acid_binding",
+      "reference_tier": "region_level",
+      "derivation": "R5 inside a DNA-binding region [UniProtKB P15918 DNA binding 392-459]",
+      "structural_corroboration": "not observed",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "JAK3-p.Arg103His",
+      "reference_mechanism": "protein_interaction",
+      "reference_tier": "region_level",
+      "derivation": "R6 inside an interaction region [UniProtKB P52333 Region 1-223]",
+      "structural_corroboration": "not observed",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "CYBB-p.His101Arg",
+      "reference_mechanism": "ligand_binding",
+      "reference_tier": "residue_specific",
+      "derivation": "R2 binding-site feature at the residue (ligand: heme b) [UniProtKB P04839 Binding site 101]",
+      "structural_corroboration": "corroborated",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "STAT3-p.Arg382Trp",
+      "reference_mechanism": "nucleic_acid_binding",
+      "reference_tier": "residue_specific",
+      "derivation": "R4 description of this substitution: 'reduced DNA-binding ability' [UniProtKB P40763 Natural variant 382 VAR_037367]",
+      "structural_corroboration": "corroborated",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "STAT1-p.Arg274Trp",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB describes this substitution as a gain of function ('in IMD31C; gain of function; increases phosphorylation in response to IFNG, IFNA and IL27 due to a loss of dephosphorylation; dbSNP:rs387906758'), which the lab's loss-of-function classes do not cover.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": "gain_of_function"
+    },
+    {
+      "variant_id": "FOXP3-p.Ala384Thr",
+      "reference_mechanism": "nucleic_acid_binding",
+      "reference_tier": "region_level",
+      "derivation": "R5 inside a DNA-binding region [UniProtKB Q9BZS1 DNA binding 337-423]",
+      "structural_corroboration": "corroborated",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "CD40LG-p.Thr254Met",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "PIK3CD-p.Glu1021Lys",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB describes this substitution as a gain of function ('in IMD14A; results in gain of function causing enhanced membrane association and kinase activity; dbSNP:rs397518423'), which the lab's loss-of-function classes do not cover.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": "gain_of_function"
+    },
+    {
+      "variant_id": "CTLA4-p.Arg75Trp",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": null
+    }
+  ],
+  "preflight": {
+    "generated_at": "2026-10-03T22:04:11Z",
+    "what": "Per variant: 11 retrieval tool calls and 3 retrieval-only tests in a fixed order, no agent, twice. The first pass also fills the API caches before the benchmark.",
+    "median_first_pass_seconds": 1.74,
+    "median_second_pass_seconds": 0.56
+  },
+  "repeat_study": [
+    {
+      "variant_id": "BTK-p.Arg28His",
+      "arm": "specialist_lab",
+      "runs": 3,
+      "succeeded": 3,
+      "wall_seconds_min": 179.0,
+      "wall_seconds_max": 206.1,
+      "favoured_before": [
+        "ligand_binding",
+        "protein_interaction",
+        "ligand_binding"
+      ],
+      "favoured_after": [
+        "ligand_binding",
+        "protein_interaction",
+        "ligand_binding"
+      ],
+      "decision_changed": 0,
+      "per_run": [
+        {
+          "run_id": "bench01-BTK-p.Arg28His-lab",
+          "status": "succeeded",
+          "wall_seconds": 179.0,
+          "tool_calls": 87,
+          "distinct_sources": 10,
+          "evidence_items": 21,
+          "favoured_before": "ligand_binding",
+          "favoured_after": "ligand_binding",
+          "decision_changed": false,
+          "agrees": true,
+          "chosen_tests": [
+            "ligand_contact"
+          ],
+          "reopenings": 0
+        },
+        {
+          "run_id": "bench01-repeat2-BTK-p.Arg28His-lab",
+          "status": "succeeded",
+          "wall_seconds": 192.5,
+          "tool_calls": 89,
+          "distinct_sources": 10,
+          "evidence_items": 21,
+          "favoured_before": "protein_interaction",
+          "favoured_after": "protein_interaction",
+          "decision_changed": false,
+          "agrees": false,
+          "chosen_tests": [
+            "ligand_contact"
+          ],
+          "reopenings": 0
+        },
+        {
+          "run_id": "bench01-repeat3-BTK-p.Arg28His-lab",
+          "status": "succeeded",
+          "wall_seconds": 206.1,
+          "tool_calls": 88,
+          "distinct_sources": 9,
+          "evidence_items": 23,
+          "favoured_before": "ligand_binding",
+          "favoured_after": "ligand_binding",
+          "decision_changed": false,
+          "agrees": true,
+          "chosen_tests": [
+            "ligand_contact"
+          ],
+          "reopenings": 0
+        }
+      ]
+    },
+    {
+      "variant_id": "BTK-p.Arg28His",
+      "arm": "single_agent_baseline",
+      "runs": 3,
+      "succeeded": 3,
+      "wall_seconds_min": 78.2,
+      "wall_seconds_max": 85.7,
+      "favoured_before": [
+        "ligand_binding",
+        "ligand_binding",
+        "ligand_binding"
+      ],
+      "favoured_after": [
+        "ligand_binding",
+        "ligand_binding",
+        "ligand_binding"
+      ],
+      "decision_changed": 0,
+      "per_run": [
+        {
+          "run_id": "bench01-BTK-p.Arg28His-baseline",
+          "status": "succeeded",
+          "wall_seconds": 84.2,
+          "tool_calls": 39,
+          "distinct_sources": 8,
+          "evidence_items": 13,
+          "favoured_before": "ligand_binding",
+          "favoured_after": "ligand_binding",
+          "decision_changed": false,
+          "agrees": true,
+          "chosen_tests": [
+            "ligand_contact"
+          ],
+          "reopenings": 0
+        },
+        {
+          "run_id": "bench01-repeat2-BTK-p.Arg28His-baseline",
+          "status": "succeeded",
+          "wall_seconds": 85.7,
+          "tool_calls": 41,
+          "distinct_sources": 8,
+          "evidence_items": 14,
+          "favoured_before": "ligand_binding",
+          "favoured_after": "ligand_binding",
+          "decision_changed": false,
+          "agrees": true,
+          "chosen_tests": [
+            "ligand_contact"
+          ],
+          "reopenings": 0
+        },
+        {
+          "run_id": "bench01-repeat3-BTK-p.Arg28His-baseline",
+          "status": "succeeded",
+          "wall_seconds": 78.2,
+          "tool_calls": 36,
+          "distinct_sources": 7,
+          "evidence_items": 12,
+          "favoured_before": "ligand_binding",
+          "favoured_after": "ligand_binding",
+          "decision_changed": false,
+          "agrees": true,
+          "chosen_tests": [
+            "stability_effect"
+          ],
+          "reopenings": 0
+        }
+      ]
+    }
+  ]
+}

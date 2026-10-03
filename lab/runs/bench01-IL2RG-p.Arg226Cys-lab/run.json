@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-IL2RG-p.Arg226Cys-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of IL2RG-p.Arg226Cys (IL2RG, UniProt P31785) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "IL2RG",
+    "variant_id": "IL2RG-p.Arg226Cys",
+    "accession": "P31785",
+    "position": 226,
+    "reference_residue": "R",
+    "alternate_residue": "C",
+    "protein_change": "p.Arg226Cys"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:09:15Z",
+  "finished_at": "2026-10-03T22:13:47Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "e1b10100616343089bac626b8708686f",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 13,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 272.2,
+    "tool_calls": 122,
+    "distinct_sources": 13,
+    "evidence_items": 25,
+    "hypotheses": 2,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 2,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 19,
+      "literature": 13,
+      "knowledge_graph": 43,
+      "insight": 4,
+      "planner": 14,
+      "safety": 8,
+      "runner": 9,
+      "analysis": 12
+    },
+    "policy_denials": 1,
+    "reopenings": 1
+  },
+  "outcome": {
+    "favoured_before": "stability_folding",
+    "favoured_after": "protein_interaction",
+    "decision_changed": true,
+    "next_experiment": "Computational contact check on the experimental complexes: measure the minimum heavy-atom distance from the R226 side chain to every IL-2, IL-21 and IL-4R partner chain in PDB 5M5E and PDB 9E2T, then run FoldX AnalyseComplex (or an equivalent docking/MM-GBSA) on R226C versus wild type in the cytokine complex. Refutation of H2: no partner atom within 4.5 Å and no interface energy change beyond replicate spread. Support for H2: partner atoms within 4.5 Å with the R226C change lowering interface energy. Caveat: the result is a prediction, and the verdict should be checked against the literature MM/PBSA values (E11) before any wet-lab step.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H2",
+    "decisions": 2
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

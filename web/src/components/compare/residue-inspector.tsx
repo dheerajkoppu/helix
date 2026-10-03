@@ -23,6 +23,12 @@ import {
   type EvidenceItem,
 } from "@/lib/evidence";
 import { aminoAcidName, routes, toThreeLetter } from "@/lib/ids";
+import {
+  COMPARE_WORDS,
+  DETAILS_LABEL,
+  plainChange,
+  plainSpot,
+} from "@/lib/plain-language";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import { withSelection } from "@/lib/state/selection-url";
 import {
@@ -252,11 +258,13 @@ function SimpleResidueInspector(props: ResidueInspectorBodyProps) {
     <div data-slot="compare-inspector">
       <p className="px-4 pt-4 pb-3 text-xs text-muted-foreground">
         {isSite
-          ? `${aminoAcidName(variant.reference)} to ${aminoAcidName(variant.alternate)}, residue ${position}`
-          : referenceLetter
-            ? `${aminoAcidName(referenceLetter)}, same in both models`
-            : `Residue ${position}`}
-        {domain ? ` · ${domain.name} domain` : ""}
+          ? (plainChange(
+              aminoAcidName(variant.reference),
+              aminoAcidName(variant.alternate),
+              position,
+            ) ?? plainSpot(referenceLetter, position))
+          : `${plainSpot(referenceLetter, position)}. ${COMPARE_WORDS.sameInBoth}`}
+        {domain ? ` · ${domain.name} region` : ""}
       </p>
       {result && difference ? (
         row ? (
@@ -265,21 +273,21 @@ function SimpleResidueInspector(props: ResidueInspectorBodyProps) {
               <MetricReadout
                 metric="plddt"
                 value={row.plddt_reference}
-                label="pLDDT, reference"
+                label={`pLDDT, ${COMPARE_WORDS.normal.toLowerCase()}`}
                 producedBy={provider}
                 terse
               />
               <MetricReadout
                 metric="plddt"
                 value={row.plddt_variant}
-                label="pLDDT, variant"
+                label={`pLDDT, ${COMPARE_WORDS.mutated.toLowerCase()}`}
                 producedBy={provider}
                 terse
               />
             </div>
             <div className="flex flex-col gap-1 border-t border-border-subtle px-4 py-3">
               <span className="flex items-center gap-2 text-2xs text-subtle-foreground">
-                Predicted Cα shift
+                {COMPARE_WORDS.spotMoved}
                 <EvidencePopover
                   size="compact"
                   side="left"
@@ -290,11 +298,17 @@ function SimpleResidueInspector(props: ResidueInspectorBodyProps) {
                 />
               </span>
               {row.masked || row.ca_displacement === null ? (
-                <span className="text-sm text-muted-foreground">
-                  Masked, pLDDT below {difference.masking.plddt_threshold}
+                <span
+                  className="text-sm text-muted-foreground"
+                  title={`pLDDT below ${difference.masking.plddt_threshold}`}
+                >
+                  {COMPARE_WORDS.unsure}
                 </span>
               ) : (
-                <span className="tabular font-mono text-2xl leading-6 font-medium text-foreground">
+                <span
+                  className="tabular font-mono text-2xl leading-6 font-medium text-foreground"
+                  title={COMPARE_WORDS.angstrom}
+                >
                   {row.ca_displacement.toFixed(2)}
                   <span className="ml-1.5 text-xs font-normal text-muted-foreground">
                     Å
@@ -306,9 +320,9 @@ function SimpleResidueInspector(props: ResidueInspectorBodyProps) {
               <dl className="flex gap-6 border-t border-border-subtle px-4 py-3 text-xs">
                 {(
                   [
-                    ["Contacts gained", contacts.gained.length],
-                    ["Lost", contacts.lost.length],
-                    ["Kept", contacts.kept.length],
+                    [COMPARE_WORDS.touchesGained, contacts.gained.length],
+                    [COMPARE_WORDS.touchesLost, contacts.lost.length],
+                    [COMPARE_WORDS.touchesKept, contacts.kept.length],
                   ] as const
                 ).map(([term, count]) => (
                   <div key={term} className="flex flex-col gap-0.5">
@@ -323,12 +337,11 @@ function SimpleResidueInspector(props: ResidueInspectorBodyProps) {
           </>
         ) : (
           <p className="border-t border-border-subtle px-4 py-3 text-xs text-muted-foreground">
-            Outside the modelled residues {result.construct.start}-
-            {result.construct.end}.
+            {COMPARE_WORDS.notModelled}
           </p>
         )
       ) : null}
-      <Disclosure label="Details">
+      <Disclosure label={DETAILS_LABEL}>
         <FullResidueInspector {...props} />
       </Disclosure>
     </div>

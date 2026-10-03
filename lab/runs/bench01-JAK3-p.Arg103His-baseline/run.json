@@ -1,0 +1,62 @@
+{
+  "run_id": "bench01-JAK3-p.Arg103His-baseline",
+  "objective": "Find the molecular mechanism that best explains the loss of function of JAK3-p.Arg103His (JAK3, UniProt P52333) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "JAK3",
+    "variant_id": "JAK3-p.Arg103His",
+    "accession": "P52333",
+    "position": 103,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "protein_change": "p.Arg103His"
+  },
+  "mode": "single_agent_baseline",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:15:45Z",
+  "finished_at": "2026-10-03T22:17:06Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "86ee2b464e1c4779b5c8115a7ce32c11",
+    "models": {
+      "generalist": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_baseline",
+    "sub_agent_sessions": 0,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+  "metrics": {
+    "wall_seconds": 81.2,
+    "tool_calls": 41,
+    "distinct_sources": 8,
+    "evidence_items": 12,
+    "hypotheses": 3,
+    "tests_considered": 3,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 41
+    },
+    "policy_denials": 1,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "stability_folding",
+    "favoured_after": "stability_folding",
+    "decision_changed": false,
+    "next_experiment": "Express wild-type and R103H versions of the JAK3 FERM domain construct (residues 14-366) and compare soluble yield and thermal melting temperature by differential scanning fluorimetry. A lower melting temperature or reduced soluble yield for R103H would support H1; equal values would weaken H1 and point toward H2 or H3, which would then need a binding or interface assay.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

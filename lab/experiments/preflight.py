@@ -45,7 +45,12 @@ def timed(name: str, call: Any) -> tuple[dict[str, Any], Any]:
             error = str(result["error"])[:300]
     except Exception as failure:
         error = f"{type(failure).__name__}: {failure}"[:300]
-    return {"tool": name, "seconds": round(time.monotonic() - started, 2), "ok": error is None, "error": error}, result
+    return {
+        "tool": name,
+        "seconds": round(time.monotonic() - started, 2),
+        "ok": error is None,
+        "error": error,
+    }, result
 
 
 def one_pass(subject: dict[str, Any]) -> dict[str, Any]:
@@ -144,7 +149,9 @@ def main() -> None:
     second_totals = sorted(
         row["second_pass"]["retrieval_seconds"] + row["second_pass"]["test_seconds"] for row in rows
     )
-    first_totals = sorted(row["first_pass"]["retrieval_seconds"] + row["first_pass"]["test_seconds"] for row in rows)
+    first_totals = sorted(
+        row["first_pass"]["retrieval_seconds"] + row["first_pass"]["test_seconds"] for row in rows
+    )
     middle = len(rows) // 2
     body = {
         "generated_at": now(),

@@ -26,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { COLOUR_BY, VIEWER_WORDS, plainShape } from "@/lib/plain-language";
 import { REPRESENTATIONS, type Representation } from "@/lib/state/selection";
 
 import type { ViewerDomain } from "./colorings";
@@ -120,7 +121,7 @@ export function ViewerToolbar({
       >
         {REPRESENTATIONS.map((value) => (
           <ToggleGroupItem key={value} value={value} disabled={disabled}>
-            {REPRESENTATION_LABEL[value]}
+            {compact ? plainShape(value) : REPRESENTATION_LABEL[value]}
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
@@ -131,7 +132,9 @@ export function ViewerToolbar({
           disabled={disabled}
           data-action="color-mode"
         >
-          <span className="text-muted-foreground">Colour</span>
+          <span className="text-muted-foreground">
+            {compact ? COLOUR_BY : "Colour"}
+          </span>
           {activeColor?.label ?? "Choose"}
           <ChevronDownIcon
             className="size-3 text-muted-foreground"
@@ -199,8 +202,8 @@ export function ViewerToolbar({
         <Button
           variant="ghost"
           size="icon-sm"
-          aria-label="Reset camera"
-          title="Reset camera"
+          aria-label={compact ? VIEWER_WORDS.resetView : "Reset camera"}
+          title={compact ? VIEWER_WORDS.resetView : "Reset camera"}
           data-action="reset-camera"
           disabled={disabled}
           onClick={onReset}
@@ -212,8 +215,8 @@ export function ViewerToolbar({
             <Button
               variant="ghost"
               size="icon-sm"
-              aria-label="Save figure as PNG"
-              title="Save figure as PNG"
+              aria-label={VIEWER_WORDS.saveImage}
+              title={VIEWER_WORDS.saveImage}
               data-action="screenshot"
               disabled={disabled}
               onClick={() => onScreenshot("canvas")}
@@ -223,8 +226,8 @@ export function ViewerToolbar({
             <DropdownMenu>
               <DropdownMenuTrigger
                 className={ICON_TRIGGER}
-                aria-label="More viewer controls"
-                title="More"
+                aria-label={VIEWER_WORDS.more}
+                title={VIEWER_WORDS.more}
                 data-action="more"
               >
                 <EllipsisIcon className="size-3.5" aria-hidden />
@@ -233,7 +236,7 @@ export function ViewerToolbar({
                 {hasDomains ? (
                   <DropdownMenuSub>
                     <DropdownMenuSubTrigger disabled={disabled}>
-                      Select domain
+                      {VIEWER_WORDS.selectRegion}
                     </DropdownMenuSubTrigger>
                     <DropdownMenuSubContent className="min-w-56">
                       {domains?.map((domain) => (
@@ -242,9 +245,6 @@ export function ViewerToolbar({
                           onClick={() => onDomainSelect?.(domain)}
                         >
                           {domain.label}
-                          <span className="tabular ml-auto pl-4 font-mono text-2xs text-muted-foreground">
-                            {domain.start}-{domain.end}
-                          </span>
                         </DropdownMenuItem>
                       ))}
                     </DropdownMenuSubContent>
@@ -256,14 +256,16 @@ export function ViewerToolbar({
                   onClick={onFocus}
                 >
                   <CrosshairIcon />
-                  Focus selection
+                  {VIEWER_WORDS.zoomToSelection}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   data-action="fullscreen"
                   onClick={onFullscreenToggle}
                 >
                   {fullscreen ? <Minimize2Icon /> : <Maximize2Icon />}
-                  {fullscreen ? "Exit full screen" : "Full screen"}
+                  {fullscreen
+                    ? VIEWER_WORDS.exitFullScreen
+                    : VIEWER_WORDS.fullScreen}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   data-action="screenshot-white"
@@ -271,17 +273,20 @@ export function ViewerToolbar({
                   onClick={() => onScreenshot("white")}
                 >
                   <CameraIcon />
-                  PNG, white background
+                  {VIEWER_WORDS.saveImageWhite}
                 </DropdownMenuItem>
                 {downloads.length > 0 ? <DropdownMenuSeparator /> : null}
-                {downloads.map((download) => (
+                {downloads.map((download, index) => (
                   <DropdownMenuItem
                     key={download.id}
                     disabled={disabled}
+                    title={download.label}
                     onClick={() => onDownload(download.id)}
                   >
                     <DownloadIcon />
-                    <span className="font-mono">{download.label}</span>
+                    {downloads.length > 1
+                      ? `${VIEWER_WORDS.download} ${index + 1}`
+                      : VIEWER_WORDS.download}
                   </DropdownMenuItem>
                 ))}
                 {moreItems}

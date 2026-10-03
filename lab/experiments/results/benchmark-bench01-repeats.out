@@ -1,0 +1,12 @@
+batch bench01-repeat2: 2 cells, 3 in parallel, operator: benchmark pre-approval rule (lab/experiments/protocol.md section 5), batch started by an automated build agent in dheeraj's session
+2026-10-03T22:35:59Z bench01-repeat2-BTK-p.Arg28His-baseline              succeeded  85.7s (active at launch: 1)
+2026-10-03T22:37:43Z bench01-repeat2-BTK-p.Arg28His-lab                   succeeded  192.5s (active at launch: 0)
+specialist_lab         runs 1/13  median wall 192.5s  sources 10.0  evidence 21.0  agreement 0/1  changed 0
+single_agent_baseline  runs 1/13  median wall 85.7s  sources 8.0  evidence 14.0  agreement 1/1  changed 0
+wrote /Users/dheeraj/Downloads/alphafold/lab/experiments/results/bench01-repeat2.json
+batch bench01-repeat3: 2 cells, 3 in parallel, operator: benchmark pre-approval rule (lab/experiments/protocol.md section 5), batch started by an automated build agent in dheeraj's session
+2026-10-03T22:39:12Z bench01-repeat3-BTK-p.Arg28His-baseline              succeeded  78.2s (active at launch: 1)
+2026-10-03T22:41:15Z bench01-repeat3-BTK-p.Arg28His-lab                   succeeded  206.1s (active at launch: 0)
+specialist_lab         runs 1/13  median wall 206.1s  sources 9.0  evidence 23.0  agreement 1/1  changed 0
+single_agent_baseline  runs 1/13  median wall 78.2s  sources 7.0  evidence 12.0  agreement 1/1  changed 0
+wrote /Users/dheeraj/Downloads/alphafold/lab/experiments/results/bench01-repeat3.json

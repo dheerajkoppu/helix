@@ -1,0 +1,3 @@
+Run complete. Favoured before: H1. Favoured after: H2. Decision changed: yes. Report recorded.
+
+Caveat: the recorded report cites a decision ID "[D1]" that does not exist, and I have no tool to edit the report. The decision itself is recorded as seq 28. The premise of loss of function is also contradicted by the curated gain-of-function annotation (VAR_070918), which is recorded as gap G1.

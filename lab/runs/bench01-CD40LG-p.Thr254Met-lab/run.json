@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-CD40LG-p.Thr254Met-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of CD40LG-p.Thr254Met (CD40LG, UniProt P29965) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "CD40LG",
+    "variant_id": "CD40LG-p.Thr254Met",
+    "accession": "P29965",
+    "position": 254,
+    "reference_residue": "T",
+    "alternate_residue": "M",
+    "protein_change": "p.Thr254Met"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:24:31Z",
+  "finished_at": "2026-10-03T22:29:17Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "2bba7d9044764396a3a447dbfc61f933",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 13,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 285.8,
+    "tool_calls": 123,
+    "distinct_sources": 10,
+    "evidence_items": 22,
+    "hypotheses": 2,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 2,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 22,
+      "literature": 15,
+      "knowledge_graph": 40,
+      "insight": 4,
+      "planner": 13,
+      "safety": 9,
+      "runner": 8,
+      "analysis": 12
+    },
+    "policy_denials": 1,
+    "reopenings": 1
+  },
+  "outcome": {
+    "favoured_before": "protein_interaction",
+    "favoured_after": "stability_folding",
+    "decision_changed": true,
+    "next_experiment": "Computational check of H2's refutation criterion for residue 254 on the same structures: compute relative solvent accessibility of Thr254 in AF-P29965-F1 and in the 8 PDB structures that observe it (including 3QD6 and 1ALY), and repeat the T254M folding energy change with a second stability predictor on the AlphaFold model. H2 is overturned if relative solvent accessibility is above 50% outside the strand core, or if the second predictor's ddG magnitude is below 1 kcal/mol. H2 is confirmed if residue 254 is buried (below about 25% relative solvent accessibility) and both predictors give ddG of at least 2 kcal/mol.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H2",
+    "decisions": 2
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

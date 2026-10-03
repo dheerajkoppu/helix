@@ -3,92 +3,84 @@
 import type { UseQueryResult } from "@tanstack/react-query";
 
 import type { Served } from "@/components/lab/api";
-import { formatMeasure, humanise, modeLabel } from "@/components/lab/format";
-import type { BenchmarkArm, LabBenchmark } from "@/components/lab/types";
+import { formatMeasure } from "@/components/lab/format";
+import {
+  readNumber,
+  type BenchmarkArm,
+  type LabBenchmark,
+} from "@/components/lab/types";
 import { QueryErrorState } from "@/components/states/query-state";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatDuration } from "@/lib/format";
+import {
+  LAB_WORDS,
+  plainCount,
+  plainProgress,
+  plainShare,
+} from "@/lib/plain-language";
 
-interface Figure {
+interface Measure {
   label: string;
-  value: string;
-  unit?: string;
-  /** the control arm's value for the same measure */
-  against?: string | null;
+  /** what the number is, on hover */
+  hint?: string;
+  team: string | null;
+  oneAgent: string | null;
 }
 
-const armLabel = (arm: BenchmarkArm | undefined, fallback: string) =>
-  arm?.label ?? modeLabel(arm?.id) ?? fallback;
+const share = (part: number | null, whole: number | null): string | null =>
+  part !== null && whole !== null && whole > 0 ? plainShare(part, whole) : null;
 
-/** Three figures from the benchmark file: the headline comparison when it records one, else the lab arm. */
-function figuresOf(data: LabBenchmark): {
-  caption: string | null;
-  figures: Figure[];
-} {
-  const lab =
-    data.arms.find((arm) => arm.id === "specialist_lab") ?? data.arms[0];
-  const baseline = data.arms.find((arm) => arm !== lab);
-  const comparison = data.comparison;
-  if (
-    comparison &&
-    comparison.lab !== null &&
-    comparison.baseline !== null &&
-    comparison.ratio !== null
-  ) {
-    return {
-      caption: comparison.metric ? humanise(comparison.metric) : null,
-      figures: [
-        {
-          label: armLabel(lab, "Lab"),
-          value: formatMeasure(comparison.lab, 2),
-        },
-        {
-          label: armLabel(baseline, "Single agent"),
-          value: formatMeasure(comparison.baseline, 2),
-        },
-        {
-          label: "Ratio",
-          value: formatMeasure(comparison.ratio, 2),
-          unit: "×",
-        },
-      ],
-    };
-  }
-  if (!lab) return { caption: null, figures: [] };
-  const figures: Figure[] = [];
-  if (lab.median_wall_seconds !== null)
-    figures.push({
-      label: "Median time",
-      value: formatMeasure(lab.median_wall_seconds, 0),
-      unit: "s",
-      against:
-        baseline?.median_wall_seconds != null
-          ? `${formatMeasure(baseline.median_wall_seconds, 0)} s`
-          : null,
-    });
-  if (lab.mean_distinct_sources !== null)
-    figures.push({
-      label: "Sources cited",
-      value: formatMeasure(lab.mean_distinct_sources, 1),
-      against:
-        baseline?.mean_distinct_sources != null
-          ? formatMeasure(baseline.mean_distinct_sources, 1)
-          : null,
-    });
-  if (lab.agreement.n_agree !== null && lab.agreement.n_with_reference !== null)
-    figures.push({
-      label: "Agrees with reference",
-      value: `${lab.agreement.n_agree} of ${lab.agreement.n_with_reference}`,
-      against:
-        baseline &&
-        baseline.agreement.n_agree !== null &&
-        baseline.agreement.n_with_reference !== null
-          ? `${baseline.agreement.n_agree} of ${baseline.agreement.n_with_reference}`
-          : null,
-    });
-  return { caption: armLabel(lab, "Lab"), figures: figures.slice(0, 3) };
+const mean = (value: number | null | undefined): string | null =>
+  value == null ? null : formatMeasure(value, 1);
+
+const time = (value: number | null | undefined): string | null =>
+  value == null ? null : formatDuration(value);
+
+/** The measures both arms report, as the benchmark file wrote them. */
+function measuresOf(
+  team: BenchmarkArm,
+  oneAgent: BenchmarkArm | undefined,
+): Measure[] {
+  const rows: Measure[] = [
+    {
+      label: LAB_WORDS.timePerMutation,
+      hint: LAB_WORDS.typicalTime,
+      team: time(team.median_wall_seconds),
+      oneAgent: time(oneAgent?.median_wall_seconds),
+    },
+    {
+      label: LAB_WORDS.sourcesChecked,
+      hint: LAB_WORDS.average,
+      team: mean(team.mean_distinct_sources),
+      oneAgent: mean(oneAgent?.mean_distinct_sources),
+    },
+    {
+      label: LAB_WORDS.factsGathered,
+      hint: LAB_WORDS.average,
+      team: mean(team.mean_evidence_items),
+      oneAgent: mean(oneAgent?.mean_evidence_items),
+    },
+    {
+      label: LAB_WORDS.changedAnswer,
+      team: share(team.decision_changed, team.runs),
+      oneAgent: share(
+        oneAgent?.decision_changed ?? null,
+        oneAgent?.runs ?? null,
+      ),
+    },
+    {
+      label: LAB_WORDS.matchedKnown,
+      team: share(team.agreement.n_agree, team.agreement.n_with_reference),
+      oneAgent: share(
+        oneAgent?.agreement.n_agree ?? null,
+        oneAgent?.agreement.n_with_reference ?? null,
+      ),
+    },
+  ];
+  return rows.filter((row) => row.team !== null || row.oneAgent !== null);
 }
 
-/** The measured comparison as three large numbers and one caveat. The full table sits behind Details. */
+/** The measured comparison in everyday words: team against one agent. The full table sits behind Details. */
 export function ComparisonSummary({
   benchmark,
 }: {
@@ -107,61 +99,82 @@ export function ComparisonSummary({
     );
   }
   const data = benchmark.data.data;
-  const { caption, figures } = data
-    ? figuresOf(data)
-    : { caption: null, figures: [] };
-  if (!data || figures.length === 0) {
+  const team =
+    data?.arms.find((arm) => arm.id === "specialist_lab") ?? data?.arms[0];
+  const oneAgent = data?.arms.find((arm) => arm !== team);
+  const measures = team ? measuresOf(team, oneAgent) : [];
+  if (!data || !team || measures.length === 0) {
     return (
-      <p className="text-base text-muted-foreground">
-        Not measured yet. Nothing is reported until the comparison has run.
-      </p>
+      <p className="text-base text-muted-foreground">{LAB_WORDS.notMeasured}</p>
     );
   }
-  const caveat = data.caveats[0] ?? data.comparison?.note ?? null;
+  const done = readNumber(data.conditions.runs_succeeded);
+  const planned = readNumber(data.conditions.runs_planned);
+  const unfinished = done !== null && planned !== null && done < planned;
+  const heads = [
+    { name: LAB_WORDS.team, runs: team.runs },
+    { name: LAB_WORDS.oneAgent, runs: oneAgent?.runs ?? null },
+  ];
   return (
     <div className="flex flex-col gap-3">
-      <dl className="flex flex-wrap gap-x-14 gap-y-5 border-y border-border py-5">
-        {figures.map((figure) => (
-          <div key={figure.label} className="flex min-w-0 flex-col gap-1.5">
-            <dt className="text-xs text-muted-foreground">{figure.label}</dt>
-            <dd className="tabular font-mono text-3xl leading-8 font-medium text-foreground">
-              {figure.value}
-              {figure.unit ? (
-                <span className="ml-1.5 text-base font-normal text-muted-foreground">
-                  {figure.unit}
-                </span>
-              ) : null}
-            </dd>
-            {figure.against ? (
-              <dd className="text-xs text-muted-foreground">
-                Single agent{" "}
-                <span className="tabular font-mono text-foreground">
-                  {figure.against}
-                </span>
-              </dd>
-            ) : null}
-          </div>
-        ))}
-      </dl>
-      <p className="text-sm text-muted-foreground">
-        {caption ? (
-          <span className="text-foreground">{sentenceCase(caption)}</span>
-        ) : null}
-        {caption && data.n_variants !== null ? ", " : null}
-        {data.n_variants !== null ? `${data.n_variants} variants` : null}
-        {caveat ? (
-          <>
-            {caption || data.n_variants !== null ? ". " : null}
-            <span className="line-clamp-1 inline" title={caveat}>
-              {caveat}
-            </span>
-          </>
-        ) : null}
-      </p>
+      <div className="overflow-x-auto border-y border-border">
+        <table className="w-full min-w-[30rem] max-w-3xl border-collapse text-left">
+          <thead>
+            <tr className="border-b border-border-subtle">
+              <th className="py-2.5 pr-4 font-normal">
+                <span className="sr-only">{LAB_WORDS.comparison}</span>
+              </th>
+              {heads.map((head) => (
+                <th
+                  key={head.name}
+                  scope="col"
+                  className="py-2.5 pr-4 text-sm font-medium text-foreground"
+                >
+                  {head.name}
+                  {head.runs !== null ? (
+                    <span className="ml-2 text-xs font-normal text-muted-foreground">
+                      {plainCount(head.runs, "run")}
+                    </span>
+                  ) : null}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {measures.map((measure) => (
+              <tr
+                key={measure.label}
+                className="border-b border-border-subtle last:border-b-0"
+              >
+                <th
+                  scope="row"
+                  title={measure.hint}
+                  className="py-3 pr-4 text-base font-normal text-muted-foreground"
+                >
+                  {measure.label}
+                </th>
+                {[measure.team, measure.oneAgent].map((value, index) => (
+                  <td
+                    key={heads[index].name}
+                    className="tabular py-3 pr-4 font-mono text-xl font-medium text-foreground"
+                  >
+                    {value ?? (
+                      <span className="font-sans text-base font-normal text-subtle-foreground">
+                        {LAB_WORDS.notMeasured}
+                      </span>
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {unfinished ? (
+        <p className="text-sm text-muted-foreground">
+          {plainProgress(done, planned)}
+        </p>
+      ) : null}
     </div>
   );
-}
-
-function sentenceCase(value: string) {
-  return value.replace(/^./, (first) => first.toUpperCase());
 }

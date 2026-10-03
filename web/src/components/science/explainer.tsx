@@ -14,7 +14,14 @@ import {
   type GlossaryEntry,
   type GlossaryTermId,
 } from "@/lib/glossary";
+import {
+  MORE_LABEL,
+  PREDICTION_CAVEAT,
+  plainMetricLabel,
+  plainMetricMeaning,
+} from "@/lib/plain-language";
 import { METRICS, type MetricId } from "@/lib/science/metrics";
+import { useAdvancedMode } from "@/lib/state/preferences";
 
 /** A metric id from `@/lib/science/metrics` or a glossary term id from `@/lib/glossary`. */
 export type ExplainerKey = MetricId | GlossaryTermId;
@@ -39,8 +46,16 @@ export interface ExplainerProps {
  * The `?` beside a number or a term. Explanations live here, never inline.
  */
 export function Explainer({ term, producedBy, className }: ExplainerProps) {
+  const advanced = useAdvancedMode();
   if (!isExplainerKey(term)) return null;
-  const name = isMetricId(term) ? METRICS[term].label : GLOSSARY[term].term;
+  const entry: GlossaryEntry | null = isMetricId(term) ? null : GLOSSARY[term];
+  const name = isMetricId(term)
+    ? advanced
+      ? METRICS[term].label
+      : plainMetricLabel(term)
+    : advanced
+      ? GLOSSARY[term].term
+      : plainTermName(GLOSSARY[term]);
 
   return (
     <Popover>
@@ -58,13 +73,74 @@ export function Explainer({ term, producedBy, className }: ExplainerProps) {
         align="start"
         className="w-[23rem] max-w-[calc(100vw-1.5rem)] gap-0 p-0"
       >
-        {isMetricId(term) ? (
-          <MetricExplanation metric={term} producedBy={producedBy} />
+        {advanced ? (
+          isMetricId(term) ? (
+            <MetricExplanation metric={term} producedBy={producedBy} />
+          ) : (
+            <TermExplanation entry={GLOSSARY[term]} />
+          )
         ) : (
-          <TermExplanation entry={GLOSSARY[term]} />
+          <PlainExplanation
+            title={name}
+            sentences={
+              isMetricId(term)
+                ? [
+                    plainMetricMeaning(term) ?? METRICS[term].what,
+                    PREDICTION_CAVEAT,
+                  ]
+                : [entry?.plain ?? firstSentences(entry?.definition ?? "")]
+            }
+          >
+            {isMetricId(term) ? (
+              <MetricExplanation metric={term} producedBy={producedBy} />
+            ) : (
+              <TermExplanation entry={GLOSSARY[term]} />
+            )}
+          </PlainExplanation>
         )}
       </PopoverContent>
     </Popover>
+  );
+}
+
+/** A glossary term's name in simple mode. */
+export function plainTermName(entry: GlossaryEntry): string {
+  return entry.plainTerm ?? entry.term;
+}
+
+/** At most two sentences of a longer definition. */
+export function firstSentences(text: string, count = 2): string {
+  const sentences = text.match(/[^.!?]+[.!?]+(\s|$)/g);
+  return sentences ? sentences.slice(0, count).join("").trim() : text;
+}
+
+/** Simple mode: a plain line or two, with the technical definition folded under "More". */
+export function PlainExplanation({
+  title,
+  sentences,
+  children,
+}: {
+  title: string;
+  sentences: string[];
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <p className="border-b border-border-subtle px-3 py-2 font-medium text-foreground">
+        {title}
+      </p>
+      <div className="flex flex-col gap-1 px-3 py-2 text-sm text-foreground">
+        {sentences.map((sentence) => (
+          <p key={sentence}>{sentence}</p>
+        ))}
+      </div>
+      <details className="group/more border-t border-border-subtle">
+        <summary className="cursor-pointer list-none px-3 py-2 text-xs text-muted-foreground hover:text-foreground [&::-webkit-details-marker]:hidden">
+          {MORE_LABEL}
+        </summary>
+        <div className="border-t border-border-subtle text-xs">{children}</div>
+      </details>
+    </>
   );
 }
 

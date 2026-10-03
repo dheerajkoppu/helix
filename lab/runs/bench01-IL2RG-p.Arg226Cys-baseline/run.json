@@ -1,0 +1,62 @@
+{
+  "run_id": "bench01-IL2RG-p.Arg226Cys-baseline",
+  "objective": "Find the molecular mechanism that best explains the loss of function of IL2RG-p.Arg226Cys (IL2RG, UniProt P31785) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "IL2RG",
+    "variant_id": "IL2RG-p.Arg226Cys",
+    "accession": "P31785",
+    "position": 226,
+    "reference_residue": "R",
+    "alternate_residue": "C",
+    "protein_change": "p.Arg226Cys"
+  },
+  "mode": "single_agent_baseline",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:07:55Z",
+  "finished_at": "2026-10-03T22:09:10Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "dada0e56d57a4f69802a06e378de21a7",
+    "models": {
+      "generalist": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_baseline",
+    "sub_agent_sessions": 0,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+  "metrics": {
+    "wall_seconds": 75.2,
+    "tool_calls": 36,
+    "distinct_sources": 7,
+    "evidence_items": 10,
+    "hypotheses": 2,
+    "tests_considered": 3,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 36
+    },
+    "policy_denials": 0,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "stability_folding",
+    "favoured_after": "protein_interaction",
+    "decision_changed": true,
+    "next_experiment": "Run structural_context (T2) to test whether residue 226 lies in a ProtVar-predicted protein-protein interface or a P2Rank pocket on the AlphaFold model. Interface membership would confirm H2 and a non-interface result would weaken it. Overturning evidence would be a residue that is buried in the core with no predicted interface.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H2",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

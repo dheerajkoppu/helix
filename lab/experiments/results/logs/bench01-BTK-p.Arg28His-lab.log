@@ -1,0 +1,59 @@
+run bench01-BTK-p.Arg28His-lab (specialist_lab) started; record: /Users/dheeraj/Downloads/alphafold/lab/runs/bench01-BTK-p.Arg28His-lab/record.jsonl
+[  1] human           objective           Find the molecular mechanism that best explains the loss of function of BTK-p.Arg28His (BTK, UniProt Q06187) and test it with one targeted computation
+[  2] orchestrator    handoff             orchestrator -> literature: Collect published evidence on BTK p.Arg28His (Q06187, R28H, N-terminal PH/TH region) and its effect on BTK function, stabi
+[  3] orchestrator    handoff             orchestrator -> knowledge_graph: Collect database records for BTK (Q06187) variant p.Arg28His (R28H), including ClinVar, UniProt domain annotations, a
+[  4] knowledge_graph evidence            E1 clinical_database ClinVar classifies NM_000061.3(BTK):c.83G>A (p.Arg28His) as Pathogenic (criteria provided, multiple submitters, no conflicts; 2 o
+[  5] knowledge_graph evidence            E2 curated_database UniProtKB natural variant VAR_006220 at residue 28 (R to H): Autosomal recessive agammaglobulinemia 1; XLA; moderate; X-linked aga
+[  6] knowledge_graph evidence            E3 curated_database gnomAD v4.1: allele X-101375202-C-T observed 1 times in 1097783 alleles (frequency 9.11e-07; 0 hemizygotes, 0 homozygotes).
+[  7] knowledge_graph evidence            E4 experimental UniProtKB annotates residues 28 of Q06187 as Binding site: 1D-myo-inositol 1,3,4,5-tetrakisphosphate; evidence: experimental evidence 
+[  8] literature      evidence            E5 literature The 2024 JBC study reports that a downregulating PH-TH domain mutation linked to X-linked agammaglobulinemia (R28H) impairs BTK activati
+[  9] literature      evidence            E6 literature A 2013 molecular dynamics and MM/PBSA study classified the R28C/H mutants of the Btk PH domain as "functional mutations" (binding-site c
+[ 10] knowledge_graph evidence            E7 experimental UniProtKB annotates residues 25-32 of Q06187 as Beta strand; evidence: combinatorial computational and experimental evidence used in a
+[ 11] knowledge_graph evidence            E8 computational_prediction InterPro annotates residues 3-135 of Q06187 as domain: Pleckstrin homology domain; evidence: match to sequence model evide
+[ 12] literature      evidence            E9 literature The 1997 EMBO J study determined the 1.6 Å X-ray crystal structure of the N-terminal part of Btk containing the PH domain and Btk motif,
+[ 13] knowledge_graph evidence            E10 computational_prediction AlphaMissense gives p.Arg28His of Q06187 a AlphaMissense pathogenicity of 0.9978, classed as likely pathogenic (AlphaMiss
+[ 14] literature      evidence            E11 literature The 1997 Mol Med study of five novel BTK mutations in XLA patients reports that mutations have been observed in each of the Btk subdoma
+[ 15] knowledge_graph evidence            E12 computational_prediction ScoreCons gives p.Arg28His of Q06187 a Conservation (ScoreCons, UniRef90) of 0.962 (scale: 0 to 1; higher = more conserve
+[ 16] knowledge_graph evidence            E13 computational_prediction popEVE gives p.Arg28His of Q06187 a popEVE of -5.634 (scale: proteome-wide scale; more negative = more deleterious).
+[ 17] knowledge_graph evidence            E14 experimental PDB entry 6TT2 (X-RAY DIFFRACTION, 1.36 Å, deposited 2019-12-23) observes residue 28 of Q06187: The PH domain of Bruton's tyrosine ki
+[ 18] literature      gap                 G1 None of the retrieved abstracts measures how R28H changes inositol phosphate (IP6 or Ins(1,3,4,5)P4) binding affinity experimentally; the only bind
+[ 19] knowledge_graph evidence            E15 experimental PDB entry 1B55 (X-RAY DIFFRACTION, 2.4 Å, deposited 1999-01-12) observes residue 28 of Q06187: PH DOMAIN FROM BRUTON'S TYROSINE KINAS
+[ 20] literature      gap                 G2 The retrieved literature does not report whether R28H reduces PH-TH domain folding, stability or protein expression, and the 2013 simulation explic
+[ 21] knowledge_graph evidence            E16 experimental PDB entry 1BWN (X-RAY DIFFRACTION, 2.1 Å, deposited 1998-09-25) observes residue 28 of Q06187: PH DOMAIN AND BTK MOTIF FROM BRUTON'S 
+[ 22] literature      gap                 G3 The only experimental report of R28H activation defects retrieved is a single 2024 JBC study (cited by 2), and no independent replication, quantita
+[ 23] knowledge_graph evidence            E17 computational_prediction AlphaFold DB model AF-Q06187-F1 covers the full sequence of Q06187 (mean pLDDT 84.44).
+[ 24] knowledge_graph evidence            E18 experimental IntAct curates a physical interaction of Q06187 with GTF2I (5 experiments; MI score 0.72; anti bait coimmunoprecipitation, pull down)
+[ 25] literature      handoff             literature -> orchestrator: Literature for BTK p.Arg28His (PH-TH domain, R28H) is thin: one 2024 JBC primary study reports R28H impairs BTK activation
+[ 26] knowledge_graph gap                 G4 EVE score for p.Arg28His is not covered by the effect-value tool (state: not_covered).
+[ 27] knowledge_graph gap                 G5 Functional assays covering residue 28 of Q06187: count is 0.
+[ 28] knowledge_graph gap                 G6 The IntAct record for Q06187 with GTF2I does not map the interaction surface to residues.
+[ 29] knowledge_graph handoff             knowledge_graph -> orchestrator: COLLECT for BTK-p.Arg28His (Q06187 R28H) recorded 14 evidence items (E1-E4, E7, E8, E10, E12-E18) and 3 gaps (G4-G6).
+[ 30] orchestrator    handoff             orchestrator -> insight: Evidence collection is complete: E1-E18 and gaps G1-G6 are recorded. Form competing agent-generated hypotheses for how p.Arg2
+[ 31] insight         hypothesis          H1 ligand_binding R28 in the BTK PH domain contacts the inositol phosphate head group (Ins(1,3,4,5)P4 / IP6). Replacing the arginine with histidine re
+[ 32] insight         hypothesis          H2 protein_interaction R28H disrupts PH-TH domain dimerisation. The arginine at the dimer interface is lost, so the autoinhibitory PH-TH assembly need
+[ 33] insight         hypothesis          H3 stability_folding R28H destabilises the PH-domain fold. Loss of the arginine's buried salt bridge or hydrogen-bond network lowers folding free ener
+[ 34] insight         handoff             insight -> orchestrator: Three agent-generated hypotheses are recorded for BTK p.Arg28His. H1 (ligand_binding, rank 1) is that the arginine's contact 
+[ 35] orchestrator    handoff             orchestrator -> planner: Hypotheses H1 (ligand binding, rank 1), H2 (protein interaction, rank 2), and H3 (stability/folding, rank 3) are recorded. Ch
+[ 36] planner         test_candidate      T1 ligand_contact learning=0.6 feasibility=0.9 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 37] planner         test_candidate      T2 stability_effect learning=0.5 feasibility=0.7 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 38] planner         test_candidate      T3 structural_context learning=0.35 feasibility=0.6 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 39] planner         plan                chose T1: Scores: T1 ligand_contact learning 0.6, feasibility 0.9, so 0.54 learning-times-feasibility at 0 compute seconds and 2 tool calls. T2 stabil
+[ 40] planner         handoff             planner -> orchestrator: Planner chose T1 (ligand_contact) to discriminate H1 (ligand binding, current favourite) from H2 and H3. Refuting outcome for
+[ 41] safety          note                safety_review: Checked 39 statements (seq 1-39) with review_claims. No clinical or treatment wording, no evidence items without a source (18 evidence 
+[ 42] safety          handoff             safety -> orchestrator: T1 (ligand_contact) is cleared by safety, with no approval needed. Claims were checked (39 statements) and nothing was flagged
+[ 43] orchestrator    handoff             orchestrator -> runner: Safety cleared test T1 (ligand_contact) with no human approval needed. Execute exactly T1 as planned and report what was measu
+[ 44] runner          experiment_started  T1 run_ligand_contact_test
+[ 45] runner          experiment_result   T1 Residue 28 is within 4.5 Å of an organic ligand in 32 of 39 ligand-bound structures (4IP, 4PT, A1B6F, A1B6G, A1B6H, A1B6I); closest 2.58 Å to 4PT (
+[ 46] runner          handoff             runner -> orchestrator: T1 (ligand_contact) executed and recorded. Residue 28 contacts organic ligands in 32 of 39 ligand-bound structures, with close
+[ 47] orchestrator    handoff             orchestrator -> analysis: Runner finished test T1 (ligand_contact) and its result is recorded. Interpret what T1 means for H1, H2 and H3, say which hy
+[ 48] orchestrator    handoff             orchestrator -> knowledge_graph: Test T1 (ligand_contact) has been executed and its result is recorded. Update the evidence graph with the T1 test ID 
+[ 49] knowledge_graph evidence            E19 experimental Residue 28 is within 4.5 Å of an organic ligand in 32 of 39 ligand-bound structures; the closest contact is 2.58 Å to ligand 4PT (cha
+[ 50] knowledge_graph evidence            E20 experimental Residue 28 is within 2.58 Å of ligand A1B6K (chain C) in PDB 7I9B at 2.769 Å resolution, among the closest contacts reported for resi
+[ 51] knowledge_graph evidence            E21 experimental Residue 28 is within 2.75 Å of ligand 4IP (INOSITOL-(1,3,4,5)-TETRAKISPHOSPHATE, chain B) in PDB 1BWN at 2.1 Å resolution; 4IP contac
+[ 52] knowledge_graph handoff             knowledge_graph -> orchestrator: T1 (ligand_contact) recorded as E19-E21 from RCSB PDB 2Z0P, 7I9B and 1BWN, linked to H1, H2 and H3. Residue 28 lies w
+[ 53] analysis        interpretation      H1 supported; H2 unchanged; H3 unchanged
+[ 54] analysis        decision            ligand_binding -> ligand_binding (changed: False)
+[ 55] analysis        next_experiment     computational: Computational ΔΔG of binding for R28H versus wild type with Ins(1,3,4,5)P4 (or the 4IP/4PT analogue) on PDB 1B55 and 1BWN, using FoldX 
+[ 56] analysis        handoff             analysis -> orchestrator: T1 (ligand_contact) interpreted. H1 is supported: R28 contacts the inositol phosphate ligands 4IP (2.75 Å, 1BWN) and 4PT (2.
+[ 57] orchestrator    note                final_report: ## Question What molecular mechanism best explains the loss of function of BTK p.Arg28His (Q06187), and which single computational test 
+run bench01-BTK-p.Arg28His-lab succeeded in 179.0s: 87 tool calls, 21 evidence items from 10 databases, 3 tests considered, favoured ligand_binding -> ligand_binding (changed: False)

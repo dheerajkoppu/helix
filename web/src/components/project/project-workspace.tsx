@@ -47,6 +47,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { isApiError } from "@/lib/api/client";
 import { formatTimestamp } from "@/lib/format";
+import {
+  PROJECT_WORDS,
+  plainAccess,
+  plainDate,
+  plainSavedCount,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { routes } from "@/lib/ids";
 import {
@@ -76,13 +82,29 @@ const VISIBILITY: Record<ProjectVisibility, { label: string; detail: string }> =
     },
   };
 
-const EXPORTS: { format: ExportFormat; label: string; detail: string }[] = [
-  { format: "md", label: "Research report", detail: "Markdown" },
-  { format: "json", label: "Project document", detail: "project.json" },
+const EXPORTS: {
+  format: ExportFormat;
+  label: string;
+  detail: string;
+  plain: string;
+}[] = [
+  {
+    format: "md",
+    label: "Research report",
+    detail: "Markdown",
+    plain: PROJECT_WORDS.report,
+  },
+  {
+    format: "json",
+    label: "Project document",
+    detail: "project.json",
+    plain: PROJECT_WORDS.dataFile,
+  },
   {
     format: "zip",
     label: "Full export",
     detail: "zip: manifest, items, citations, run manifests",
+    plain: PROJECT_WORDS.everything,
   },
 ];
 
@@ -113,6 +135,7 @@ export function ExportMenu({
   name: string;
 }) {
   const [busy, setBusy] = useState(false);
+  const advanced = useAdvancedMode();
   async function run(format: ExportFormat) {
     setBusy(true);
     try {
@@ -135,18 +158,25 @@ export function ExportMenu({
         render={<Button variant="outline" disabled={busy} />}
       >
         <DownloadIcon data-icon="inline-start" />
-        {busy ? "Exporting" : "Export"}
+        {advanced ? (busy ? "Exporting" : "Export") : PROJECT_WORDS.download}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-72">
+      <DropdownMenuContent
+        align="end"
+        className={advanced ? "w-72" : "w-44"}
+      >
         {EXPORTS.map((entry) => (
           <DropdownMenuItem
             key={entry.format}
             onClick={() => void run(entry.format)}
           >
-            <span className="flex-1">{entry.label}</span>
-            <span className="font-mono text-2xs text-muted-foreground">
-              {entry.detail}
+            <span className="flex-1">
+              {advanced ? entry.label : entry.plain}
             </span>
+            {advanced ? (
+              <span className="font-mono text-2xs text-muted-foreground">
+                {entry.detail}
+              </span>
+            ) : null}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
@@ -231,17 +261,21 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
       setActive: (itemId) =>
         guard(async () => {
           await projectsApi.update(projectId, { active_item_id: itemId });
-          toast("Attach point moved", {
-            description: "The next saved item follows this node.",
-          });
-        }, "Attach point not moved"),
+          if (advanced)
+            toast("Attach point moved", {
+              description: "The next saved item follows this node.",
+            });
+          else toast(PROJECT_WORDS.continuing);
+        }, advanced ? "Attach point not moved" : PROJECT_WORDS.notSaved),
       removeItem: (item) =>
         guard(async () => {
           await projectsApi.removeItem(projectId, item.id);
-          toast(`Removed ${item.label}`, {
-            description: "Its steps now follow the item before it.",
-          });
-        }, "Not removed"),
+          if (advanced)
+            toast(`Removed ${item.label}`, {
+              description: "Its steps now follow the item before it.",
+            });
+          else toast(PROJECT_WORDS.removed);
+        }, advanced ? "Not removed" : PROJECT_WORDS.notSaved),
       saveNote: (item, note) =>
         guard(
           () => projectsApi.updateItem(projectId, item.id, { note }),
@@ -269,10 +303,12 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
             parent_item_id: parentItemId,
           });
           setSelectedItemId(created.id);
-          toast.success("Hypothesis recorded", {
-            description: `Rests on ${draft.supporting_item_ids.length} saved ${draft.supporting_item_ids.length === 1 ? "item" : "items"}.`,
-          });
-        }, "Hypothesis not recorded"),
+          if (advanced)
+            toast.success("Hypothesis recorded", {
+              description: `Rests on ${draft.supporting_item_ids.length} saved ${draft.supporting_item_ids.length === 1 ? "item" : "items"}.`,
+            });
+          else toast.success(PROJECT_WORDS.ideaSaved);
+        }, advanced ? "Hypothesis not recorded" : PROJECT_WORDS.notSaved),
       updateHypothesis: (item, draft) =>
         guard(
           () =>
@@ -280,7 +316,7 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
           "Hypothesis not saved",
         ),
     };
-  }, [project?.is_owner, projectId, refresh]);
+  }, [project?.is_owner, projectId, refresh, advanced]);
 
   async function fork() {
     setForking(true);
@@ -361,25 +397,16 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
           !advanced ? (
             <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
               <span className="text-foreground">
-                {VISIBILITY[project.visibility].label}
+                {plainSavedCount(project.item_count)}
               </span>
               <span aria-hidden>·</span>
               <span>
-                {project.item_count}{" "}
-                {project.item_count === 1 ? "step" : "steps"}
-              </span>
-              <span aria-hidden>·</span>
-              <span>
-                {head
-                  ? project.unpublished_changes
-                    ? "changed since publishing"
-                    : "published"
-                  : "not published"}
+                {PROJECT_WORDS.whoSees}: {plainAccess(project.visibility)}
               </span>
               {project.is_owner ? null : (
                 <>
                   <span aria-hidden>·</span>
-                  <span>read only</span>
+                  <span>{PROJECT_WORDS.readOnly}</span>
                 </>
               )}
             </p>
@@ -423,7 +450,9 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
         actions={
           <div className="flex max-w-[calc(100vw-2rem)] flex-wrap items-center gap-2">
             {project.is_owner ? (
-              <Button onClick={() => setPublishOpen(true)}>Publish</Button>
+              <Button onClick={() => setPublishOpen(true)}>
+                {advanced ? "Publish" : PROJECT_WORDS.share}
+              </Button>
             ) : null}
             {head ? (
               <Button
@@ -431,7 +460,7 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
                 onClick={() => void copyLink(head.share_path, "Share link")}
               >
                 <LinkIcon data-icon="inline-start" />
-                Share link
+                {advanced ? "Share link" : PROJECT_WORDS.copyLink}
               </Button>
             ) : null}
             {advanced || !project.is_owner ? (
@@ -441,7 +470,11 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
                 disabled={forking}
               >
                 <GitForkIcon data-icon="inline-start" />
-                {forking ? "Forking" : "Fork Research"}
+                {advanced
+                  ? forking
+                    ? "Forking"
+                    : "Fork Research"
+                  : PROJECT_WORDS.makeCopy}
               </Button>
             ) : null}
             <ExportMenu
@@ -452,8 +485,8 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
               <Button
                 variant="ghost"
                 size="icon"
-                aria-label="Project settings"
-                title="Project settings"
+                aria-label={PROJECT_WORDS.settings}
+                title={PROJECT_WORDS.settings}
                 onClick={() => setSettingsOpen(true)}
               >
                 <SettingsIcon />
@@ -471,8 +504,9 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
           actions={actions}
         />
 
+        {advanced || project.snapshots.length ? (
         <PageSection
-          title="Snapshots"
+          title={advanced ? "Snapshots" : PROJECT_WORDS.sharedCopies}
           count={project.snapshots.length}
         >
           {project.snapshots.length ? (
@@ -485,19 +519,29 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
                   <span className="tabular w-8 font-mono text-muted-foreground">
                     #{snapshot.sequence_number}
                   </span>
-                  <TextLink href={snapshot.share_path} className="font-mono">
-                    {snapshot.id}
+                  <TextLink
+                    href={snapshot.share_path}
+                    className={advanced ? "font-mono" : undefined}
+                  >
+                    {advanced ? snapshot.id : PROJECT_WORDS.open}
                   </TextLink>
                   <span className="min-w-0 flex-1 truncate text-muted-foreground">
-                    {snapshot.message ?? "No message"}
+                    {snapshot.message ?? (advanced ? "No message" : "")}
                   </span>
-                  {snapshot.id === project.head_snapshot_id ? (
+                  {advanced && snapshot.id === project.head_snapshot_id ? (
                     <span className="text-2xs tracking-[0.04em] text-foreground uppercase">
                       head
                     </span>
                   ) : null}
-                  <span className="tabular font-mono text-2xs text-subtle-foreground">
-                    {formatTimestamp(snapshot.created_at)}
+                  <span
+                    className={cn(
+                      "tabular text-2xs text-subtle-foreground",
+                      advanced && "font-mono",
+                    )}
+                  >
+                    {advanced
+                      ? formatTimestamp(snapshot.created_at)
+                      : plainDate(snapshot.created_at)}
                   </span>
                   <Button
                     variant="ghost"
@@ -506,7 +550,7 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
                       void copyLink(snapshot.share_path, "Share link")
                     }
                   >
-                    Copy link
+                    {PROJECT_WORDS.copyLink}
                   </Button>
                 </li>
               ))}
@@ -517,6 +561,7 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
             </p>
           )}
         </PageSection>
+        ) : null}
       </PageBody>
 
       <PublishDialog
@@ -556,6 +601,7 @@ function PublishDialog({
 }) {
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
+  const advanced = useAdvancedMode();
   const unchanged =
     Boolean(project.head_snapshot_id) && !project.unpublished_changes;
 
@@ -570,20 +616,24 @@ function PublishDialog({
       onOpenChange(false);
       setMessage("");
       toast.success(
-        unchanged
-          ? "Already published"
-          : `Snapshot #${snapshot.sequence_number} published`,
+        !advanced
+          ? PROJECT_WORDS.linkReady
+          : unchanged
+            ? "Already published"
+            : `Snapshot #${snapshot.sequence_number} published`,
         {
           description: absoluteUrl(snapshot.share_path),
           action: {
-            label: "Copy link",
+            label: PROJECT_WORDS.copyLink,
             onClick: () => void copyLink(snapshot.share_path, "Share link"),
           },
         },
       );
     } catch (error) {
-      toast.error("Not published", {
-        description: describe(error, "The snapshot could not be created."),
+      toast.error(advanced ? "Not published" : PROJECT_WORDS.notSaved, {
+        description: advanced
+          ? describe(error, "The snapshot could not be created.")
+          : undefined,
       });
     } finally {
       setSaving(false);
@@ -594,14 +644,22 @@ function PublishDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="gap-3 rounded-lg sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Publish a snapshot</DialogTitle>
+          <DialogTitle>
+            {advanced ? "Publish a snapshot" : PROJECT_WORDS.shareTitle}
+          </DialogTitle>
           <DialogDescription>
-            Freezes the trail, items, notes and hypotheses as they are now.
-            Anyone with the link can read and fork the snapshot; later edits to
-            the project do not change it.
+            {advanced
+              ? "Freezes the trail, items, notes and hypotheses as they are now. Anyone with the link can read and fork the snapshot; later edits to the project do not change it."
+              : PROJECT_WORDS.shareLine}
           </DialogDescription>
         </DialogHeader>
-        <dl className="grid grid-cols-[7rem_minmax(0,1fr)] gap-y-1 border-y border-border-subtle py-2 text-xs">
+        <dl
+          hidden={!advanced}
+          className={cn(
+            "grid-cols-[7rem_minmax(0,1fr)] gap-y-1 border-y border-border-subtle py-2 text-xs",
+            advanced && "grid",
+          )}
+        >
           <dt className="text-muted-foreground">Contents</dt>
           <dd className="tabular font-mono">
             {project.item_count} items, {project.item_counts.hypothesis ?? 0}{" "}
@@ -615,19 +673,23 @@ function PublishDialog({
           </dd>
         </dl>
         {unchanged ? (
-          <p className="text-xs text-muted-foreground">
-            Nothing changed since the last snapshot. Publishing returns the same
-            link.
-          </p>
+          advanced ? (
+            <p className="text-xs text-muted-foreground">
+              Nothing changed since the last snapshot. Publishing returns the
+              same link.
+            </p>
+          ) : null
         ) : (
           <label className="flex flex-col gap-1">
             <span className="text-2xs font-medium tracking-[0.04em] text-muted-foreground uppercase">
-              Message (optional)
+              {advanced ? "Message (optional)" : PROJECT_WORDS.note}
             </span>
             <Input
               value={message}
               maxLength={1000}
-              placeholder="What this snapshot records"
+              placeholder={
+                advanced ? "What this snapshot records" : PROJECT_WORDS.shareNote
+              }
               onChange={(event) => setMessage(event.target.value)}
             />
           </label>
@@ -638,14 +700,18 @@ function PublishDialog({
             onClick={() => onOpenChange(false)}
             disabled={saving}
           >
-            Cancel
+            {PROJECT_WORDS.cancel}
           </Button>
           <Button onClick={() => void publish()} disabled={saving}>
-            {saving
-              ? "Publishing"
-              : unchanged
-                ? "Get share link"
-                : "Publish snapshot"}
+            {!advanced
+              ? saving
+                ? PROJECT_WORDS.saving
+                : PROJECT_WORDS.getLink
+              : saving
+                ? "Publishing"
+                : unchanged
+                  ? "Get share link"
+                  : "Publish snapshot"}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -672,6 +738,7 @@ function SettingsDialog({
     project.visibility,
   );
   const [saving, setSaving] = useState(false);
+  const advanced = useAdvancedMode();
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   async function save() {
@@ -714,14 +781,14 @@ function SettingsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="gap-3 rounded-lg sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Project settings</DialogTitle>
-          <DialogDescription>
+          <DialogTitle>{PROJECT_WORDS.settings}</DialogTitle>
+          <DialogDescription className={advanced ? undefined : "sr-only"}>
             Title, description and who can open the working project.
           </DialogDescription>
         </DialogHeader>
         <label className="flex flex-col gap-1">
           <span className="text-2xs font-medium tracking-[0.04em] text-muted-foreground uppercase">
-            Title
+            {advanced ? "Title" : PROJECT_WORDS.name}
           </span>
           <Input
             value={title}
@@ -731,18 +798,22 @@ function SettingsDialog({
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-2xs font-medium tracking-[0.04em] text-muted-foreground uppercase">
-            Description
+            {advanced ? "Description" : PROJECT_WORDS.about}
           </span>
           <Textarea
             value={description}
             maxLength={5000}
-            placeholder="The question this investigation asks"
+            placeholder={
+              advanced
+                ? "The question this investigation asks"
+                : PROJECT_WORDS.aboutHint
+            }
             onChange={(event) => setDescription(event.target.value)}
           />
         </label>
         <fieldset className="flex flex-col">
           <legend className="mb-1 text-2xs font-medium tracking-[0.04em] text-muted-foreground uppercase">
-            Visibility
+            {advanced ? "Visibility" : PROJECT_WORDS.whoSees}
           </legend>
           <div
             role="radiogroup"
@@ -767,12 +838,20 @@ function SettingsDialog({
                     className="absolute inset-y-0 left-0 w-0.5 bg-foreground"
                   />
                 ) : null}
-                <span className="w-16 shrink-0 font-medium text-foreground">
-                  {VISIBILITY[value].label}
-                </span>
-                <span className="text-muted-foreground">
-                  {VISIBILITY[value].detail}
-                </span>
+                {advanced ? (
+                  <>
+                    <span className="w-16 shrink-0 font-medium text-foreground">
+                      {VISIBILITY[value].label}
+                    </span>
+                    <span className="text-muted-foreground">
+                      {VISIBILITY[value].detail}
+                    </span>
+                  </>
+                ) : (
+                  <span className="font-medium text-foreground">
+                    {plainAccess(value)}
+                  </span>
+                )}
               </button>
             ))}
           </div>

@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-ADA-p.Arg211His-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of ADA-p.Arg211His (ADA, UniProt P00813) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "ADA",
+    "variant_id": "ADA-p.Arg211His",
+    "accession": "P00813",
+    "position": 211,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "protein_change": "p.Arg211His"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:07:45Z",
+  "finished_at": "2026-10-03T22:11:52Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "76acdf91f040410d859de8021cca171b",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 10,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 246.6,
+    "tool_calls": 104,
+    "distinct_sources": 11,
+    "evidence_items": 20,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 1,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 16,
+      "literature": 14,
+      "knowledge_graph": 31,
+      "insight": 5,
+      "planner": 15,
+      "safety": 13,
+      "runner": 4,
+      "analysis": 6
+    },
+    "policy_denials": 0,
+    "reopenings": 1
+  },
+  "outcome": {
+    "favoured_before": "ligand_binding",
+    "favoured_after": "stability_folding",
+    "decision_changed": true,
+    "next_experiment": "Run T2 (run_stability_test): FoldX folding free-energy change (ΔΔG) for R211H on the AlphaFold model AF-P00813-F1 (mean pLDDT 96.56), with per-residue pLDDT at 211 and the same predictor applied to other substitutions at 211 (for example R211C, the ClinVar Likely pathogenic variant E18, and a neutral control). Outcome that supports H2: ΔΔG destabilising (roughly ≥1 kcal/mol) for R211H, with pLDDT at 211 high. Outcome that refutes H2 (matching its would_refute clause): |ΔΔG| under about 1 kcal/mol across predictors, residue 211 solvent exposed with no intraprotein contacts, and the variant reported folded at wild-type levels. Also add a second predictor (for example Rosetta ddG or ThermoMPNN) so one tool does not decide the verdict.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H2",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

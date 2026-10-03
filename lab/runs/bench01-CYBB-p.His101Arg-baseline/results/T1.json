@@ -1,0 +1,248 @@
+{
+  "test_id": "T1",
+  "test_kind": "ligand_contact",
+  "values": {
+    "headline": "Residue 101 is within 4.5 Å of an organic ligand in 5 of 5 ligand-bound structures (HEM); closest 2.0 Å to HEM (PROTOPORPHYRIN IX CONTAINING FE) in PDB 8GZ3.",
+    "verdict": "contact_with_organic_ligand",
+    "contact_threshold_angstrom": 4.5,
+    "experimental_structures_total": 6,
+    "structures_observing_residue": 5,
+    "ligand_bound_structures_examined": 5,
+    "structures_with_contact": [
+      "7U8G",
+      "8GZ3",
+      "8KEI",
+      "8WEJ",
+      "8X2L"
+    ],
+    "closest_contacts": [
+      {
+        "structure": "8GZ3",
+        "resolution": 3.3,
+        "ligand": "HEM",
+        "ligand_name": "PROTOPORPHYRIN IX CONTAINING FE",
+        "ligand_kind": "organic",
+        "chain": "B",
+        "distance_angstrom": 2.0,
+        "residue_in_structure": "HIS",
+        "residue_mutated_in_structure": null
+      },
+      {
+        "structure": "7U8G",
+        "resolution": 3.2,
+        "ligand": "HEM",
+        "ligand_name": "PROTOPORPHYRIN IX CONTAINING FE",
+        "ligand_kind": "organic",
+        "chain": "A",
+        "distance_angstrom": 2.04,
+        "residue_in_structure": "HIS",
+        "residue_mutated_in_structure": null
+      },
+      {
+        "structure": "8WEJ",
+        "resolution": 2.79,
+        "ligand": "HEM",
+        "ligand_name": "PROTOPORPHYRIN IX CONTAINING FE",
+        "ligand_kind": "organic",
+        "chain": "B",
+        "distance_angstrom": 2.1,
+        "residue_in_structure": "HIS",
+        "residue_mutated_in_structure": null
+      },
+      {
+        "structure": "8X2L",
+        "resolution": 2.99,
+        "ligand": "HEM",
+        "ligand_name": "PROTOPORPHYRIN IX CONTAINING FE",
+        "ligand_kind": "organic",
+        "chain": "B",
+        "distance_angstrom": 2.1,
+        "residue_in_structure": "HIS",
+        "residue_mutated_in_structure": null
+      },
+      {
+        "structure": "8KEI",
+        "resolution": 3.56,
+        "ligand": "HEM",
+        "ligand_name": "PROTOPORPHYRIN IX CONTAINING FE",
+        "ligand_kind": "organic",
+        "chain": "B",
+        "distance_angstrom": 2.12,
+        "residue_in_structure": "HIS",
+        "residue_mutated_in_structure": null
+      }
+    ],
+    "ligands": [
+      {
+        "ligand": "HEM",
+        "name": "PROTOPORPHYRIN IX CONTAINING FE",
+        "kind": "organic",
+        "structures": [
+          "7U8G",
+          "8GZ3",
+          "8KEI",
+          "8WEJ",
+          "8X2L"
+        ],
+        "instances": 10,
+        "instances_contacting_residue": 5,
+        "min_distance_angstrom": 2.0,
+        "median_residues_neighbouring_ligand": 22.5
+      },
+      {
+        "ligand": "FAD",
+        "name": "FLAVIN-ADENINE DINUCLEOTIDE",
+        "kind": "organic",
+        "structures": [
+          "8GZ3",
+          "8X2L"
+        ],
+        "instances": 2,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 16.5
+      },
+      {
+        "ligand": "FDA",
+        "name": "DIHYDROFLAVINE-ADENINE DINUCLEOTIDE",
+        "kind": "organic",
+        "structures": [
+          "8WEJ"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 20
+      },
+      {
+        "ligand": "GTP",
+        "name": "GUANOSINE-5'-TRIPHOSPHATE",
+        "kind": "organic",
+        "structures": [
+          "8WEJ"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 0
+      },
+      {
+        "ligand": "LBN",
+        "name": "1-palmitoyl-2-oleoyl-sn-glycero-3-phosphocholine",
+        "kind": "organic",
+        "structures": [
+          "8GZ3",
+          "8KEI"
+        ],
+        "instances": 2,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 12.5
+      },
+      {
+        "ligand": "MG",
+        "name": "MAGNESIUM ION",
+        "kind": "ion",
+        "structures": [
+          "8WEJ",
+          "8X2L"
+        ],
+        "instances": 3,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 3
+      },
+      {
+        "ligand": "NAG",
+        "name": "2-acetamido-2-deoxy-beta-D-glucopyranose",
+        "kind": "organic",
+        "structures": [
+          "7U8G",
+          "8GZ3",
+          "8KEI",
+          "8WEJ",
+          "8X2L"
+        ],
+        "instances": 10,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 2.0
+      },
+      {
+        "ligand": "NDP",
+        "name": "NADPH DIHYDRO-NICOTINAMIDE-ADENINE-DINUCLEOTIDE PHOSPHATE",
+        "kind": "organic",
+        "structures": [
+          "8WEJ"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 17
+      },
+      {
+        "ligand": "POV",
+        "name": "(2S)-3-(hexadecanoyloxy)-2-[(9Z)-octadec-9-enoyloxy]propyl 2-(trimeth…",
+        "kind": "organic",
+        "structures": [
+          "7U8G",
+          "8KEI"
+        ],
+        "instances": 4,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 12.5
+      }
+    ],
+    "negative_control_ligands_never_contacting_residue": [
+      "FAD",
+      "FDA",
+      "GTP",
+      "LBN",
+      "MG",
+      "NAG",
+      "NDP",
+      "POV"
+    ],
+    "structures_with_residue_mutated": [],
+    "structures_unavailable": []
+  },
+  "sources": [
+    {
+      "database": "RCSB PDB",
+      "record_id": "8WEJ",
+      "url": "https://www.rcsb.org/structure/8WEJ"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "8X2L",
+      "url": "https://www.rcsb.org/structure/8X2L"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "7U8G",
+      "url": "https://www.rcsb.org/structure/7U8G"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "8GZ3",
+      "url": "https://www.rcsb.org/structure/8GZ3"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "8KEI",
+      "url": "https://www.rcsb.org/structure/8KEI"
+    }
+  ],
+  "controls": [
+    "Negative control: ligands in the same structures that never list the residue as a neighbour.",
+    "Selectivity control: number of distinct residues that neighbour the contacting ligand, so a contact is not an artefact of a large neighbour list.",
+    "Site-state control: structures in which the residue itself is mutated are reported separately."
+  ],
+  "limitations": [
+    "A crystal contact with a soluble analogue is not a measurement of binding by the variant protein.",
+    "Absence of a ligand-bound structure is not evidence of absence of binding."
+  ],
+  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments ligand_contact --accession P04839 --position 101 --alternate-residue R --reference-residue H --gene CYBB --variant-id CYBB-p.His101Arg",
+  "elapsed_seconds": 0.0
+}

@@ -23,6 +23,11 @@ import {
   type ViewportResidueSet,
 } from "@/components/viewer";
 import { parseVariantId, routes } from "@/lib/ids";
+import {
+  RESULT_WORDS,
+  plainConfidence,
+  plainTestName,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import type { StructureOrigin } from "@/lib/structure-origin";
@@ -50,24 +55,70 @@ interface Tangible {
   runtime: string | null;
 }
 
+/** A confidence score on 0 to 100 with its class word under it. */
+const confidenceMetric = (
+  label: string,
+  value: number | null,
+  missingReason: string,
+): ModelResultMetric => ({
+  label,
+  value: value === null ? null : Math.round(value),
+  unit: RESULT_WORDS.outOf100,
+  caption: value === null ? null : plainConfidence(value),
+  missingReason,
+});
+
 const structureIdOf = (value: unknown): string | null => {
   const text = readText(value);
   return text && STRUCTURE_ID.test(text) ? text : null;
 };
 
-function ligandContact(values: LooseRecord): Partial<Tangible> {
+function ligandContact(
+  values: LooseRecord,
+  _subject: LabRun["subject"],
+  plain: boolean,
+): Partial<Tangible> {
   const closest = readList(values.closest_contacts).find(isRecord);
   const structure = closest ? readText(closest.structure) : null;
   const withContact = readList(values.structures_with_contact).length;
   const examined = readNumber(values.ligand_bound_structures_examined);
   const compId = closest ? readText(closest.ligand) : null;
   const chainId = closest ? readText(closest.chain) : null;
-  return {
-    model: "Ligand contact test",
-    origin: "experimental",
+  const distance = closest ? readNumber(closest.distance_angstrom) : null;
+  const cutoff = readNumber(values.contact_threshold_angstrom);
+  const shown = {
+    origin: "experimental" as const,
     structureId: structure ? `pdb:${structure.toUpperCase()}` : null,
     chainId,
     ligand: compId ? { compId, chainId } : null,
+  };
+  if (plain)
+    return {
+      ...shown,
+      metrics: [
+        {
+          label: RESULT_WORDS.touchesIn,
+          value: examined !== null ? `${withContact} of ${examined}` : null,
+          unit: RESULT_WORDS.structures,
+          missingReason: RESULT_WORDS.notChecked,
+        },
+        {
+          label: RESULT_WORDS.closestGap,
+          value: distance,
+          unit: "Å",
+          caption:
+            distance !== null && cutoff !== null
+              ? distance <= cutoff
+                ? RESULT_WORDS.touching
+                : RESULT_WORDS.notTouching
+              : null,
+          missingReason: RESULT_WORDS.notTouching,
+        },
+      ],
+    };
+  return {
+    model: "Ligand contact test",
+    ...shown,
     metrics: [
       {
         label: "In contact",
@@ -77,13 +128,13 @@ function ligandContact(values: LooseRecord): Partial<Tangible> {
       },
       {
         label: compId ? `Closest, ${compId}` : "Closest",
-        value: closest ? readNumber(closest.distance_angstrom) : null,
+        value: distance,
         unit: "Å",
         missingReason: "No contact",
       },
       {
         label: "Cutoff",
-        value: readNumber(values.contact_threshold_angstrom),
+        value: cutoff,
         unit: "Å",
         missingReason: "Not reported",
       },
@@ -91,7 +142,39 @@ function ligandContact(values: LooseRecord): Partial<Tangible> {
   };
 }
 
-function stabilityEffect(values: LooseRecord): Partial<Tangible> {
+function stabilityEffect(
+  values: LooseRecord,
+  _subject: LabRun["subject"],
+  plain: boolean,
+): Partial<Tangible> {
+  if (plain) {
+    const change = readNumber(values.foldx_ddg_kcal_mol);
+    const threshold = readNumber(values.destabilising_threshold_kcal_mol);
+    return {
+      origin: "predicted_external",
+      structureId: structureIdOf(values.model),
+      metrics: [
+        {
+          label: RESULT_WORDS.stabilityChange,
+          value: change,
+          unit: "kcal/mol",
+          explainer: "ddg",
+          caption:
+            change !== null && threshold !== null
+              ? change >= threshold
+                ? RESULT_WORDS.lessStable
+                : RESULT_WORDS.sameStability
+              : null,
+          missingReason: RESULT_WORDS.notChecked,
+        },
+        confidenceMetric(
+          RESULT_WORDS.spotConfidence,
+          readNumber(values.residue_plddt),
+          RESULT_WORDS.notChecked,
+        ),
+      ],
+    };
+  }
   return {
     model: "FoldX",
     origin: "predicted_external",
@@ -120,7 +203,11 @@ function stabilityEffect(values: LooseRecord): Partial<Tangible> {
   };
 }
 
-function structuralContext(values: LooseRecord): Partial<Tangible> {
+function structuralContext(
+  values: LooseRecord,
+  _subject: LabRun["subject"],
+  plain: boolean,
+): Partial<Tangible> {
   const p2rank = readList(values.p2rank_pockets_containing_residue).filter(
     isRecord,
   );
@@ -132,13 +219,56 @@ function structuralContext(values: LooseRecord): Partial<Tangible> {
   const positions = readList(pocket?.residues ?? pocket?.positions).filter(
     (entry): entry is number => typeof entry === "number",
   );
-  return {
-    model: "P2Rank and ProtVar",
-    origin: "predicted_external",
+  const shown = {
+    origin: "predicted_external" as const,
     structureId: structureIdOf(values.p2rank_model),
     residueSet: positions.length
       ? { label: "Predicted pocket", positions }
       : null,
+  };
+  if (plain) {
+    const lists = [p2rank, protvar];
+    const toolsRun = [
+      values.p2rank_pockets_containing_residue,
+      values.protvar_pockets_containing_residue,
+    ].filter(Array.isArray).length;
+    const onSurface = values.in_predicted_interface;
+    return {
+      ...shown,
+      metrics: [
+        {
+          label: RESULT_WORDS.inPocket,
+          value: toolsRun
+            ? `${lists.filter((list) => list.length > 0).length} of ${toolsRun}`
+            : null,
+          unit: RESULT_WORDS.tools,
+          missingReason: RESULT_WORDS.notChecked,
+        },
+        {
+          label: RESULT_WORDS.onSurface,
+          value:
+            typeof onSurface === "boolean"
+              ? onSurface
+                ? RESULT_WORDS.yes
+                : RESULT_WORDS.no
+              : null,
+          missingReason: RESULT_WORDS.notChecked,
+        },
+        ...(pocket
+          ? [
+              confidenceMetric(
+                RESULT_WORDS.pocketConfidence,
+                readNumber(pocket.mean_plddt),
+                RESULT_WORDS.notChecked,
+              ),
+            ]
+          : []),
+      ],
+    };
+  }
+  return {
+    model: "P2Rank and ProtVar",
+    ...shown,
     metrics: [
       {
         label: "In P2Rank pockets",
@@ -161,6 +291,7 @@ function structuralContext(values: LooseRecord): Partial<Tangible> {
 function structureComparison(
   values: LooseRecord,
   subject: LabRun["subject"],
+  plain: boolean,
 ): Partial<Tangible> {
   const provider = isRecord(values.provider) ? values.provider : {};
   const summary = isRecord(values.summary) ? values.summary : {};
@@ -170,18 +301,44 @@ function structureComparison(
   const stored =
     readText(values.origin) === "cached_example" ||
     provider.performs_inference === false;
-  return {
-    model:
-      readText(provider.model_name) ?? readText(provider.id) ?? "Comparison",
-    version: readText(provider.model_version),
-    origin: "predicted_orphafold",
+  const shown = {
+    origin: "predicted_orphafold" as const,
     compareJobId: readText(values.job_id),
-    runtime: stored ? "cached" : null,
     href:
       parsed?.kind === "substitution"
         ? routes.compare(parsed.gene, parsed.label)
         : null,
     hrefLabel: "Open comparison",
+  };
+  if (plain)
+    return {
+      ...shown,
+      metrics: [
+        {
+          label: RESULT_WORDS.shiftNear,
+          value: readNumber(summary.local_rmsd_ca),
+          unit: "Å",
+          missingReason: RESULT_WORDS.notChecked,
+        },
+        {
+          label: RESULT_WORDS.shiftOverall,
+          value: readNumber(summary.rmsd_ca_confident),
+          unit: "Å",
+          missingReason: RESULT_WORDS.notChecked,
+        },
+        confidenceMetric(
+          RESULT_WORDS.spotConfidence,
+          siteVariant,
+          RESULT_WORDS.notChecked,
+        ),
+      ],
+    };
+  return {
+    model:
+      readText(provider.model_name) ?? readText(provider.id) ?? "Comparison",
+    version: readText(provider.model_version),
+    ...shown,
+    runtime: stored ? "cached" : null,
     metrics: [
       {
         label: "Local Cα RMSD",
@@ -210,7 +367,11 @@ function structureComparison(
 
 const READERS: Record<
   string,
-  (values: LooseRecord, subject: LabRun["subject"]) => Partial<Tangible>
+  (
+    values: LooseRecord,
+    subject: LabRun["subject"],
+    plain: boolean,
+  ) => Partial<Tangible>
 > = {
   ligand_contact: ligandContact,
   stability_effect: stabilityEffect,
@@ -218,14 +379,19 @@ const READERS: Record<
   structure_comparison: structureComparison,
 };
 
-function tangibleOf(result: ResultEntry, subject: LabRun["subject"]): Tangible {
+function tangibleOf(
+  result: ResultEntry,
+  subject: LabRun["subject"],
+  plain = false,
+): Tangible {
   const read = result.test_kind ? READERS[result.test_kind] : undefined;
-  const found = read ? read(result.values, subject) : {};
+  const found = read ? read(result.values, subject, plain) : {};
   const structureId = found.structureId ?? null;
   return {
-    model:
-      found.model ??
-      (result.test_kind ? humanise(result.test_kind) : "Computational test"),
+    model: plain
+      ? plainTestName(result.test_kind)
+      : (found.model ??
+        (result.test_kind ? humanise(result.test_kind) : "Computational test")),
     version: found.version ?? null,
     origin: found.origin ?? null,
     metrics: found.metrics ?? [],
@@ -304,8 +470,8 @@ export function ResultFigure({
 }) {
   const advanced = useAdvancedMode();
   const tangible = useMemo(
-    () => tangibleOf(result, subject),
-    [result, subject],
+    () => tangibleOf(result, subject, !advanced),
+    [result, subject, advanced],
   );
   const variantId = subject.variant_id;
   const substitution = useMemo(() => {
@@ -392,9 +558,10 @@ export function ResultFigure({
         </div>
       ) : null}
       <ModelResultStrip
+        label={advanced ? undefined : RESULT_WORDS.test}
         model={tangible.model}
         version={tangible.version}
-        origin={tangible.origin}
+        origin={advanced ? tangible.origin : null}
         metrics={tangible.metrics}
         runtime={tangible.runtime ?? result.elapsed_seconds}
         href={tangible.href}

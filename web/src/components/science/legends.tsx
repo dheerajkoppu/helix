@@ -1,6 +1,15 @@
+"use client";
+
 import { cn } from "cn";
 
 import { Swatch } from "@/components/science/swatch";
+import {
+  CONFIDENCE_LABEL,
+  VIEWER_WORDS,
+  plainClinicalClass,
+  plainColouring,
+  plainImpact,
+} from "@/lib/plain-language";
 import {
   ALPHAMISSENSE_BENIGN_BELOW,
   ALPHAMISSENSE_CLASSES,
@@ -13,6 +22,7 @@ import {
   type ClinicalSignificance,
 } from "@/lib/science/clinical-significance";
 import { PLDDT_BANDS } from "@/lib/science/plddt";
+import { useAdvancedMode } from "@/lib/state/preferences";
 
 interface LegendProps {
   /** horizontal for toolbars and plot footers, vertical for inspectors */
@@ -69,10 +79,11 @@ export function PlddtLegend({
   wrap = true,
   className,
 }: LegendProps) {
+  const advanced = useAdvancedMode();
   return (
     <LegendFrame
-      title="Model confidence"
-      note="pLDDT"
+      title={advanced ? "Model confidence" : CONFIDENCE_LABEL}
+      note={advanced ? "pLDDT" : undefined}
       orientation={orientation}
       className={cn(!wrap && NOWRAP, className)}
     >
@@ -88,11 +99,11 @@ export function PlddtLegend({
           <li key={band.id} className="flex items-center gap-1.5">
             <Swatch
               swatchClass={band.swatchClass}
-              code={band.code}
+              code={advanced ? band.code : undefined}
               onFill={band.onFill}
             />
             <span className="text-foreground">{band.label}</span>
-            {showRanges ? (
+            {showRanges && advanced ? (
               <span className="tabular font-mono text-subtle-foreground">
                 {band.range}
               </span>
@@ -111,9 +122,10 @@ export function AlphaMissenseLegend({
   wrap = true,
   className,
 }: LegendProps) {
+  const advanced = useAdvancedMode();
   return (
     <LegendFrame
-      title="AlphaMissense"
+      title={advanced ? "AlphaMissense" : plainColouring("alphamissense")}
       note="(predicted)"
       orientation={orientation}
       className={cn(!wrap && NOWRAP, className)}
@@ -129,8 +141,10 @@ export function AlphaMissenseLegend({
         {ALPHAMISSENSE_CLASSES.map((entry) => (
           <li key={entry.id} className="flex items-center gap-1.5">
             <Swatch swatchClass={entry.swatchClass} />
-            <span className="text-foreground">{entry.label}</span>
-            {showRanges ? (
+            <span className="text-foreground">
+              {advanced ? entry.label : plainImpact(entry.label)}
+            </span>
+            {showRanges && advanced ? (
               <span className="tabular font-mono text-subtle-foreground">
                 {entry.range}
               </span>
@@ -140,7 +154,7 @@ export function AlphaMissenseLegend({
       </ul>
       <div
         className={cn(
-          "flex flex-col gap-0.5",
+          advanced ? "flex flex-col gap-0.5" : "hidden",
           orientation === "horizontal" ? "w-40" : "w-full max-w-56",
         )}
       >
@@ -199,7 +213,29 @@ export function ClinicalSignificanceChip({
   long = false,
   className,
 }: ClinicalSignificanceChipProps) {
+  const advanced = useAdvancedMode();
   const meta = CLINICAL_SIGNIFICANCE[significance];
+  if (!advanced) {
+    return (
+      <span
+        data-slot="clinical-significance"
+        title={
+          reviewStars !== null && reviewStars !== undefined
+            ? `${meta.label} · ClinVar review ${reviewStars} of 4 stars`
+            : meta.label
+        }
+        className={cn(
+          "inline-flex items-center gap-1.5 align-middle text-2xs whitespace-nowrap",
+          className,
+        )}
+      >
+        <Swatch swatchClass={meta.swatchClass} hatched={!meta.certain} />
+        <span className="text-foreground">
+          {plainClinicalClass(meta.label)}
+        </span>
+      </span>
+    );
+  }
   return (
     <span
       data-slot="clinical-significance"
@@ -236,10 +272,11 @@ export function ClinicalSignificanceLegend({
   wrap = true,
   className,
 }: LegendProps) {
+  const advanced = useAdvancedMode();
   return (
     <LegendFrame
-      title="Clinical significance"
-      note="database classification"
+      title={advanced ? "Clinical significance" : "Medical database class"}
+      note={advanced ? "database classification" : undefined}
       orientation={orientation}
       className={cn(!wrap && NOWRAP, className)}
     >
@@ -254,7 +291,7 @@ export function ClinicalSignificanceLegend({
         {CLINICAL_SIGNIFICANCE_ORDER.map((id) => (
           <li key={id} className="flex items-center gap-1.5">
             <ClinicalSignificanceChip significance={id} />
-            <span>{CLINICAL_SIGNIFICANCE[id].label}</span>
+            {advanced ? <span>{CLINICAL_SIGNIFICANCE[id].label}</span> : null}
           </li>
         ))}
       </ul>
@@ -268,6 +305,7 @@ export function ReferenceVariantLegend({
   wrap = true,
   className,
 }: LegendProps) {
+  const advanced = useAdvancedMode();
   return (
     <LegendFrame
       title="Structure"
@@ -283,12 +321,20 @@ export function ReferenceVariantLegend({
         )}
       >
         <li className="flex items-center gap-1.5">
-          <Swatch swatchClass="bg-reference" code="R" />
-          <span className="text-foreground">Reference</span>
+          <Swatch swatchClass="bg-reference" code={advanced ? "R" : undefined} />
+          <span className="text-foreground">
+            {advanced ? "Reference" : VIEWER_WORDS.normal}
+          </span>
         </li>
         <li className="flex items-center gap-1.5">
-          <Swatch swatchClass="bg-variant" code="V" onFill="white" />
-          <span className="text-foreground">Variant</span>
+          <Swatch
+            swatchClass="bg-variant"
+            code={advanced ? "V" : undefined}
+            onFill="white"
+          />
+          <span className="text-foreground">
+            {advanced ? "Variant" : VIEWER_WORDS.mutationSite}
+          </span>
         </li>
       </ul>
     </LegendFrame>

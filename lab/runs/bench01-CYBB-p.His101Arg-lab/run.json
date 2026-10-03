@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-CYBB-p.His101Arg-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of CYBB-p.His101Arg (CYBB, UniProt P04839) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "CYBB",
+    "variant_id": "CYBB-p.His101Arg",
+    "accession": "P04839",
+    "position": 101,
+    "reference_residue": "H",
+    "alternate_residue": "R",
+    "protein_change": "p.His101Arg"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:17:40Z",
+  "finished_at": "2026-10-03T22:20:49Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "8895681f684e463f9f06d7c958135236",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 8,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 189.5,
+    "tool_calls": 91,
+    "distinct_sources": 7,
+    "evidence_items": 22,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 15,
+      "literature": 15,
+      "knowledge_graph": 33,
+      "insight": 5,
+      "planner": 9,
+      "safety": 4,
+      "runner": 4,
+      "analysis": 6
+    },
+    "policy_denials": 0,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "ligand_binding",
+    "favoured_after": "ligand_binding",
+    "decision_changed": false,
+    "next_experiment": "T2 ligand_contact (computational): measure the shortest distance from His101 (any side-chain atom, especially NE2) to the heme b iron in the three cryo-EM structures 8WEJ, 8X2L and 7U8G, plus the two other structures that observe residue 101. Prediction (agent-generated, not a result): NE2 sits about 2.0–2.5 Å from the heme iron, which would support H1. Outcome that overturns H1: the distance is well above about 4 Å, or His101 is not a neighbour of the heme in any structure. Outcome that weakens H1 but leaves it standing: the distance is near 2.5 Å but the contact is only via the backbone.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

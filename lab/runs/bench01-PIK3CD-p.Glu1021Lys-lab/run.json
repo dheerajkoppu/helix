@@ -1,0 +1,76 @@
+{
+  "run_id": "bench01-PIK3CD-p.Glu1021Lys-lab",
+  "objective": "Find the molecular mechanism that best explains the loss of function of PIK3CD-p.Glu1021Lys (PIK3CD, UniProt O00329) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "PIK3CD",
+    "variant_id": "PIK3CD-p.Glu1021Lys",
+    "accession": "O00329",
+    "position": 1021,
+    "reference_residue": "E",
+    "alternate_residue": "K",
+    "protein_change": "p.Glu1021Lys"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:29:22Z",
+  "finished_at": "2026-10-03T22:32:28Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "0caff86d8d634caeb65ac4bed556e441",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 8,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+  "metrics": {
+    "wall_seconds": 186.6,
+    "tool_calls": 93,
+    "distinct_sources": 13,
+    "evidence_items": 23,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 13,
+      "literature": 15,
+      "knowledge_graph": 37,
+      "insight": 5,
+      "planner": 9,
+      "safety": 4,
+      "runner": 4,
+      "analysis": 6
+    },
+    "policy_denials": 0,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "ligand_binding",
+    "favoured_after": "ligand_binding",
+    "decision_changed": false,
+    "next_experiment": "Laboratory membrane-recruitment assay of PIK3CD wild type vs E1021K (p110delta with p85 or with p85-free catalytic subunit, as the lab's standard prep allows), measuring fraction of protein bound to PIP2/PS-containing liposomes or supported bilayers at several salt concentrations, plus a kinase assay on the same membranes. H1 is confirmed if E1021K gives higher membrane association and activity that is salt-sensitive (electrostatic); it is overturned if E1021K binds membranes no more than wild type and the gain of activity is unchanged. Include a control substitution outside the pocket to show the effect is specific to residue 1021.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

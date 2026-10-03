@@ -1,7 +1,11 @@
+"use client";
+
 import { cn } from "cn";
 
 import { EvidenceBadge } from "@/components/evidence/evidence-badge";
 import { StructureOriginTag } from "@/components/evidence/structure-origin-tag";
+import { plainSavedKind } from "@/lib/plain-language";
+import { useAdvancedMode } from "@/lib/state/preferences";
 import type { ItemKind, ProjectItem, TrailNode } from "@/lib/state/projects";
 import type { StructureOrigin } from "@/lib/structure-origin";
 
@@ -84,6 +88,15 @@ export function KindCode({
   kind: ItemKind;
   className?: string;
 }) {
+  const advanced = useAdvancedMode();
+  if (!advanced)
+    return (
+      <span
+        className={cn("shrink-0 text-2xs text-muted-foreground", className)}
+      >
+        {plainSavedKind(kind)}
+      </span>
+    );
   return (
     <span
       title={KIND_META[kind].label}

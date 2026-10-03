@@ -1,0 +1,62 @@
+{
+  "run_id": "bench01-ADA-p.Arg211His-baseline",
+  "objective": "Find the molecular mechanism that best explains the loss of function of ADA-p.Arg211His (ADA, UniProt P00813) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "ADA",
+    "variant_id": "ADA-p.Arg211His",
+    "accession": "P00813",
+    "position": 211,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "protein_change": "p.Arg211His"
+  },
+  "mode": "single_agent_baseline",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:07:50Z",
+  "finished_at": "2026-10-03T22:09:23Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "499372a2b9e648b3b52f3b1b78308321",
+    "models": {
+      "generalist": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_baseline",
+    "sub_agent_sessions": 0,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+  "metrics": {
+    "wall_seconds": 93.2,
+    "tool_calls": 42,
+    "distinct_sources": 7,
+    "evidence_items": 13,
+    "hypotheses": 3,
+    "tests_considered": 3,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 42
+    },
+    "policy_denials": 0,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "stability_folding",
+    "favoured_after": "stability_folding",
+    "decision_changed": false,
+    "next_experiment": "Run T2 (ligand_contact) to check whether Arg211 neighbours NI, 3D1 or ZN in 3IAR and 7RTG. A contact would leave H2 open alongside H1; no contact would leave H1 as the sole supported mechanism. Then, with human approval, run the reference versus variant structure comparison (120 compute seconds) to test whether the destabilised fold shows a local rearrangement.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

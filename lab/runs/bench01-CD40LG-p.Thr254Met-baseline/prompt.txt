@@ -1,0 +1,4 @@
+Objective: Find the molecular mechanism that best explains the loss of function of CD40LG-p.Thr254Met (CD40LG, UniProt P29965) and test it with one targeted computational test.
+Subject line: variant_id=CD40LG-p.Thr254Met gene=CD40LG accession=P29965 position=254 reference=T alternate=M
+Budget for the whole run: 160 lab tool calls and 300 compute seconds.
+Run the discovery loop to the final report.

@@ -1,0 +1,63 @@
+run bench01-STAT1-p.Arg274Trp-lab (specialist_lab) started; record: /Users/dheeraj/Downloads/alphafold/lab/runs/bench01-STAT1-p.Arg274Trp-lab/record.jsonl
+[  1] human           objective           Find the molecular mechanism that best explains the loss of function of STAT1-p.Arg274Trp (STAT1, UniProt P42224) and test it with one targeted comput
+[  2] orchestrator    handoff             orchestrator -> literature: Subject: variant_id=STAT1-p.Arg274Trp gene=STAT1 accession=P42224 position=274 reference=R alternate=W. COLLECT published 
+[  3] orchestrator    handoff             orchestrator -> knowledge_graph: Subject: variant_id=STAT1-p.Arg274Trp gene=STAT1 accession=P42224 position=274 reference=R alternate=W. COLLECT datab
+[  4] knowledge_graph evidence            E1 clinical_database ClinVar classifies NM_007315.4(STAT1):c.820C>T (p.Arg274Trp) as Pathogenic (criteria provided, multiple submitters, no conflicts;
+[  5] knowledge_graph evidence            E2 experimental UniProtKB natural variant VAR_065943 at residue 274 (R to W): Variant assessed as Somatic; MODERATE impact.; IMD31C; gain of function;
+[  6] knowledge_graph evidence            E3 experimental UniProtKB annotates residues 136-317 of P42224 as Coiled coil; evidence: experimental evidence used in manual assertion; PubMed 963022
+[  7] knowledge_graph evidence            E4 experimental UniProtKB annotates residues 257-286 of P42224 as Helix; evidence: combinatorial computational and experimental evidence used in autom
+[  8] knowledge_graph evidence            E5 computational_prediction InterPro annotates residues 144-308 of P42224 as domain: STAT transcription factor, all-alpha domain; evidence: match to s
+[  9] knowledge_graph evidence            E6 computational_prediction AlphaMissense gives p.Arg274Trp of P42224 a AlphaMissense pathogenicity of 0.5268, classed as ambiguous (AlphaMissense cla
+[ 10] literature      evidence            E7 literature Petersen et al. characterized STAT1 R274W as a CMC-associated gain-of-function mutation with elevated tyrosine phosphorylation, prolonge
+[ 11] knowledge_graph evidence            E8 computational_prediction EVE gives p.Arg274Trp of P42224 a EVE of 0.604, classed as uncertain (EVE class) (scale: 0 to 1; higher = more pathogenic)
+[ 12] literature      evidence            E9 literature Giovannozzi et al. reported by live-cell imaging that STAT1 R274W, among four GOF mutants, showed increased phosphorylation relative to 
+[ 13] knowledge_graph evidence            E10 computational_prediction popEVE gives p.Arg274Trp of P42224 a popEVE of -5.014 (scale: proteome-wide scale; more negative = more deleterious).
+[ 14] knowledge_graph evidence            E11 computational_prediction ScoreCons gives p.Arg274Trp of P42224 a Conservation (ScoreCons, UniRef90) of 0.735 (scale: 0 to 1; higher = more conserv
+[ 15] literature      evidence            E12 literature Ruiz-Lopez/Eastern and Central European cohort study (Journal of Medical Genetics 2013) states that twelve of the 13 causal STAT1 mutat
+[ 16] knowledge_graph evidence            E13 experimental PDB entry 7NUF (X-RAY DIFFRACTION, 2.00040159011 Å, deposited 2021-03-12) observes residue 274 of P42224: Vaccinia virus protein 018 
+[ 17] literature      evidence            E14 literature Liu et al. (2011) identified heterozygous germline STAT1 mutations in 47 patients from 20 kindreds with autosomal dominant CMCD and sta
+[ 18] knowledge_graph evidence            E15 experimental PDB entry 1BF5 (X-RAY DIFFRACTION, 2.9 Å, deposited 1998-05-27) observes residue 274 of P42224: TYROSINE PHOSPHORYLATED STAT-1/DNA CO
+[ 19] literature      evidence            E16 literature Heterozygous GOF STAT1 mutations were reported to cause autosomal-dominant CMCD as a result of impaired dephosphorylation of STAT1, a m
+[ 20] knowledge_graph evidence            E17 experimental PDB entry 1YVL (X-RAY DIFFRACTION, 3.0 Å, deposited 2005-02-16) observes residue 274 of P42224: Structure of Unphosphorylated STAT1; 
+[ 21] knowledge_graph evidence            E18 clinical_database ClinVar lists NM_007315.4(STAT1):c.821G>A (p.Arg274Gln) at the same residue as Pathogenic (criteria provided, multiple submitter
+[ 22] knowledge_graph evidence            E19 curated_database UniProtKB function of STAT1_HUMAN: Signal transducer and transcription activator that mediates cellular responses to interferons 
+[ 23] knowledge_graph evidence            E20 computational_prediction AlphaFold DB model AF-P42224-F1 covers the full sequence of P42224 (mean pLDDT 87.25).
+[ 24] knowledge_graph gap                 G1 No functional assay covers residue 274 of P42224 (functional_assays_covering_residue = 0).
+[ 25] knowledge_graph gap                 G2 None of the 8 experimental structures observing residue 274 carries the R274W substitution (of_those_with_the_residue_mutated = 0).
+[ 26] literature      gap                 G3 No retrieved source reports a loss-of-function mechanism for STAT1 p.Arg274Trp; every retrieved paper that studies R274W classifies it as gain-of-f
+[ 27] knowledge_graph gap                 G4 The IntAct interaction records for P42224 (STAT2, FOS, STAT3) do not map the interaction surface to residues, so it is not shown whether residue 27
+[ 28] literature      gap                 G5 The retrieved studies do not establish why R274W increases nuclear accumulation: the in vitro dephosphorylation and JAK2 phosphorylation rates were
+[ 29] literature      gap                 G6 No retrieved source provides a structure or structure-based model showing how the Arg274 side chain contacts the antiparallel dimer interface or DN
+[ 30] literature      handoff             literature -> orchestrator: Retrieved literature classifies STAT1 R274W as gain-of-function (elevated phosphorylation, prolonged nuclear accumulation)
+[ 31] knowledge_graph handoff             knowledge_graph -> orchestrator: COLLECT for STAT1-p.Arg274Trp (P42224 residue 274) is recorded: 15 evidence items from ClinVar, UniProtKB, InterPro, 
+[ 32] orchestrator    handoff             orchestrator -> insight: Subject: variant_id=STAT1-p.Arg274Trp gene=STAT1 accession=P42224 position=274 reference=R alternate=W. Form competing agent-
+[ 33] insight         hypothesis          H1 protein_interaction R274W, in the coiled-coil helix, changes the surface that a partner or phosphatase uses to engage STAT1 near the Y701 phospho-s
+[ 34] insight         hypothesis          H2 domain_interface R274W, in the coiled-coil helix, breaks a contact between the coiled-coil and the DNA-binding or N-terminal domain of the same cha
+[ 35] insight         hypothesis          H3 stability_folding R274W destabilises the coiled-coil helix (residues 257-286), so the protein folds poorly or is degraded, which lowers functional 
+[ 36] insight         handoff             insight -> orchestrator: Three agent-generated hypotheses are recorded. The record supports gain of function for R274W, not the loss of function named
+[ 37] orchestrator    handoff             orchestrator -> planner: Subject: variant_id=STAT1-p.Arg274Trp gene=STAT1 accession=P42224 position=274 reference=R alternate=W. Choose ONE targeted c
+[ 38] planner         test_candidate      T1 stability_effect learning=0.6 feasibility=0.9 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 39] planner         test_candidate      T2 structural_context learning=0.35 feasibility=0.9 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 40] planner         test_candidate      T3 structure_comparison learning=0.6 feasibility=0.1 cost={'compute_seconds': 120, 'tool_calls': 3}
+[ 41] planner         test_candidate      T4 ligand_contact learning=0.1 feasibility=0.8 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 42] planner         plan                chose T1: T1 (stability_effect) scores expected learning 0.6 and feasibility 0.9, at 0 compute seconds and no approval. T2 (structural_context) scores
+[ 43] planner         handoff             planner -> orchestrator: Planner chose T1 (stability_effect, FoldX ΔΔG for R274W on the AlphaFold model) to test H3, the currently last-ranked hypothe
+[ 44] orchestrator    handoff             orchestrator -> safety: Subject: variant_id=STAT1-p.Arg274Trp gene=STAT1 accession=P42224 position=274 reference=R alternate=W. Review planned test T1
+[ 45] safety          note                safety_review: Read plan seq 42, tests T1 to T4, and hypotheses H1 to H3. review_claims checked 43 statements: no clinical or treatment wording, no ev
+[ 46] safety          handoff             safety -> orchestrator: Safety review of T1 (stability_effect, FoldX ΔΔG via EBI ProtVar) is cleared. No clinical or treatment wording, uncited eviden
+[ 47] orchestrator    handoff             orchestrator -> runner: Subject: variant_id=STAT1-p.Arg274Trp gene=STAT1 accession=P42224 position=274 reference=R alternate=W. Execute exactly test T
+[ 48] runner          experiment_started  T1 run_stability_test
+[ 49] runner          experiment_result   T1 FoldX predicts ΔΔG -0.60 kcal/mol for R274W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 94.62).
+[ 50] runner          handoff             runner -> orchestrator: T1 (FoldX stability_effect via EBI ProtVar) completed. R274W ΔΔG = -0.60 kcal/mol, not destabilising by the 2.0 kcal/mol thres
+[ 51] orchestrator    handoff             orchestrator -> analysis: Subject: variant_id=STAT1-p.Arg274Trp gene=STAT1 accession=P42224 position=274 reference=R alternate=W. Interpret the comple
+[ 52] orchestrator    handoff             orchestrator -> knowledge_graph: Subject: variant_id=STAT1-p.Arg274Trp gene=STAT1 accession=P42224 position=274 reference=R alternate=W. UPDATE the ev
+[ 53] knowledge_graph evidence            E21 computational_prediction FoldX predicts ΔΔG -0.60 kcal/mol for R274W on the AlphaFold model AF-P42224-F1, below the 2.0 kcal/mol destabilising thr
+[ 54] knowledge_graph evidence            E22 computational_prediction FoldX predicts ΔΔG +1.42 kcal/mol for R274G at the same residue, within the same predictor, as reported in the T1 stabili
+[ 55] knowledge_graph evidence            E23 computational_prediction FoldX predicts ΔΔG +0.32 kcal/mol for R274Q at the same residue, within the same predictor, as reported in the T1 stabili
+[ 56] analysis        interpretation      H1 unchanged; H2 unchanged; H3 weakened
+[ 57] analysis        decision            protein_interaction -> protein_interaction (changed: False)
+[ 58] knowledge_graph handoff             knowledge_graph -> orchestrator: T1 (FoldX stability_effect, AF-P42224-F1) is recorded as E21-E23: R274W ΔΔG -0.60 kcal/mol, below the 2.0 kcal/mol th
+[ 59] analysis        next_experiment     computational: Run T2 (structural_context): check whether residue 274 of P42224 (AF-P42224-F1) lies in a P2Rank or ProtVar predicted pocket and in a P
+[ 60] analysis        handoff             analysis -> orchestrator: T1 interpreted: FoldX ddG for R274W is -0.60 kcal/mol (below the 2.0 threshold) at residue pLDDT 94.62, so H3 (destabilisati
+[ 61] orchestrator    note                final_report: ## Question What molecular mechanism best explains the loss of function of STAT1 p.Arg274Trp (P42224)? The record contradicts the premis
+run bench01-STAT1-p.Arg274Trp-lab succeeded in 198.5s: 94 tool calls, 23 evidence items from 9 databases, 4 tests considered, favoured protein_interaction -> protein_interaction (changed: False)

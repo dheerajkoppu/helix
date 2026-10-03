@@ -1,0 +1,62 @@
+{
+  "run_id": "bench01-CD40LG-p.Thr254Met-baseline",
+  "objective": "Find the molecular mechanism that best explains the loss of function of CD40LG-p.Thr254Met (CD40LG, UniProt P29965) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "CD40LG",
+    "variant_id": "CD40LG-p.Thr254Met",
+    "accession": "P29965",
+    "position": 254,
+    "reference_residue": "T",
+    "alternate_residue": "M",
+    "protein_change": "p.Thr254Met"
+  },
+  "mode": "single_agent_baseline",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T22:27:27Z",
+  "finished_at": "2026-10-03T22:28:50Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "3787c4bdf5e54e1da3838101688fff8d",
+    "models": {
+      "generalist": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_baseline",
+    "sub_agent_sessions": 0,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+  "metrics": {
+    "wall_seconds": 82.7,
+    "tool_calls": 39,
+    "distinct_sources": 7,
+    "evidence_items": 10,
+    "hypotheses": 3,
+    "tests_considered": 3,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 39
+    },
+    "policy_denials": 1,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "stability_folding",
+    "favoured_after": "stability_folding",
+    "decision_changed": false,
+    "next_experiment": "Run the structural context test (T2) to check whether residue 254 lies in a predicted CD40-binding or trimer interface, since ProtVar interface state was not covered. Then, with approval, run the reference versus T254M structure comparison (T3) on ESM Atlas for a local rearrangement. A neutral interface result and no local rearrangement would weaken H1 in favour of a distal folding effect; a positive interface hit would keep H2 alive as a parallel mechanism.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

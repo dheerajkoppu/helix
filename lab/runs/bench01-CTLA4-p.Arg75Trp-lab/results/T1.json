@@ -1,0 +1,37 @@
+{
+  "test_id": "T1",
+  "test_kind": "stability_effect",
+  "values": {
+    "headline": "FoldX predicts ΔΔG -0.11 kcal/mol for R75W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 95.38).",
+    "verdict": "not_predicted_destabilising",
+    "substitution": "R75W",
+    "foldx_ddg_kcal_mol": -0.111891,
+    "destabilising_threshold_kcal_mol": 2.0,
+    "threshold_defined_by": "ProtVar display bins",
+    "model": "afdb:AF-P16410-F1",
+    "residue_plddt": 95.38,
+    "plddt_supports_interpretation": true,
+    "missense3d": {
+      "state": "ok",
+      "value": "Neutral"
+    },
+    "other_substitutions_at_residue": []
+  },
+  "sources": [
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P16410:75:W",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P16410:75:W"
+    }
+  ],
+  "controls": [
+    "Within-site comparison: the same predictor for the other substitutions reported at this residue.",
+    "Applicability control: the model confidence (pLDDT) at the residue, because FoldX on a low-confidence region is not interpretable."
+  ],
+  "limitations": [
+    "FoldX on a predicted model is a computational prediction with errors near 1 kcal/mol.",
+    "A neutral stability prediction does not show the variant is tolerated."
+  ],
+  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments stability_effect --accession P16410 --position 75 --alternate-residue W --reference-residue R --gene CTLA4 --variant-id CTLA4-p.Arg75Trp",
+  "elapsed_seconds": 0.0
+}

@@ -1,0 +1,1017 @@
+{
+  "generated_at": "2026-10-03T22:37:43Z",
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested? Measured here: what a supervised team of specialist agents changes, against one generalist agent with the same tools, model, policies and budget.",
+  "conditions": {
+    "started_at": "2026-10-03T22:34:23Z",
+    "arms": "specialist_lab and single_agent_baseline through lab/run_lab.py",
+    "budget": {
+      "max_tool_calls": 160,
+      "max_compute_seconds": 300
+    },
+    "parallel_runs": 3,
+    "order": "Catalogue order; the lab starts first on odd-numbered variants, the control on even-numbered ones; one worker pool for both arms.",
+    "approvals": "Pre-approved with --approve under protocol.md section 5; every decision is written to the record with the operator below.",
+    "operator": "benchmark pre-approval rule (lab/experiments/protocol.md section 5), batch started by an automated build agent in dheeraj's session",
+    "run_timeout_seconds": 1500,
+    "retries_after_failure": 1,
+    "api_url": "http://localhost:8000",
+    "repeats_per_cell": 1,
+    "resumed_at": [],
+    "secondary": true,
+    "batch": "bench01-repeat2",
+    "models": [
+      "claude-sonnet-5"
+    ],
+    "spec_hashes": {
+      "specialist_lab": [
+        "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992"
+      ],
+      "single_agent_baseline": [
+        "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18"
+      ]
+    },
+    "reference_labels": {
+      "file": "lab/experiments/reference/labels.json",
+      "derived_at": "2026-10-03T22:02:04Z",
+      "sha256": "b5e06136467d250697f79ce1c50f3a3ccc39beccf1c5fec2d779b5fc77765656",
+      "rule_sha256": "04d68308cf2f0c9ab7c2e2595515d98eb8ef8967eae4413016655f6d638e2fce"
+    },
+    "variant_selection": "First-listed flagship variant of every gene in data/seed/catalog.json.",
+    "runs_succeeded": 2,
+    "runs_planned": 26,
+    "complete": false
+  },
+  "n_variants": 13,
+  "arms": [
+    {
+      "id": "specialist_lab",
+      "label": "Specialist lab: Omnigent supervisor and seven specialist agents",
+      "runs": 1,
+      "median_wall_seconds": 192.5,
+      "mean_tool_calls": 89.0,
+      "mean_distinct_sources": 10.0,
+      "mean_evidence_items": 21.0,
+      "agreement": {
+        "n_with_reference": 1,
+        "n_agree": 0
+      },
+      "decision_changed": 0,
+      "runs_planned": 13,
+      "runs_not_succeeded": 0,
+      "runs_in_progress": 0,
+      "runs_not_started": 12,
+      "failed_attempts": 0,
+      "complete_records": 1,
+      "min_wall_seconds": 192.5,
+      "max_wall_seconds": 192.5,
+      "mean_wall_seconds": 192.5,
+      "median_seconds_to_first_hypothesis": 71.0,
+      "median_seconds_to_first_plan": 106.0,
+      "median_seconds_to_first_result": 131.0,
+      "median_seconds_to_first_decision": 165.0,
+      "median_seconds_to_final_report": 188.0,
+      "median_tool_calls": 89,
+      "median_distinct_sources": 10,
+      "median_evidence_items": 21,
+      "mean_starting_evidence_items": 18.0,
+      "mean_starting_distinct_sources": 10.0,
+      "mean_hypotheses": 3.0,
+      "mean_tests_considered": 4.0,
+      "mean_tests_executed": 1.0,
+      "runs_with_reopening": 0,
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "safety_reviews_blocked": 0,
+      "plans_without_result": 0,
+      "mean_tool_calls_by_purpose": {
+        "retrieval": 14.0,
+        "evidence_record": 26.0,
+        "reasoning_record": 12.0,
+        "safety": 2.0,
+        "test": 4.0,
+        "coordination": 31.0,
+        "omnigent_dispatch": 17.0,
+        "other": 0.0
+      },
+      "median_wall_seconds_per_lab_tool_call": 2.2,
+      "mean_output_tokens": 38237.0,
+      "mean_omnigent_reported_cost_usd": 0.94,
+      "first_chosen_test": {
+        "ligand_contact": 1
+      },
+      "favoured_after_classes": {
+        "protein_interaction": 1
+      },
+      "agreement_before_test": {
+        "n_with_reference": 1,
+        "n_agree": 0
+      },
+      "agreement_residue_specific_reference": {
+        "n_with_reference": 1,
+        "n_agree": 0
+      }
+    },
+    {
+      "id": "single_agent_baseline",
+      "label": "Control: one generalist agent with every tool",
+      "runs": 1,
+      "median_wall_seconds": 85.7,
+      "mean_tool_calls": 41.0,
+      "mean_distinct_sources": 8.0,
+      "mean_evidence_items": 14.0,
+      "agreement": {
+        "n_with_reference": 1,
+        "n_agree": 1
+      },
+      "decision_changed": 0,
+      "runs_planned": 13,
+      "runs_not_succeeded": 0,
+      "runs_in_progress": 0,
+      "runs_not_started": 12,
+      "failed_attempts": 0,
+      "complete_records": 1,
+      "min_wall_seconds": 85.7,
+      "max_wall_seconds": 85.7,
+      "mean_wall_seconds": 85.7,
+      "median_seconds_to_first_hypothesis": 37.0,
+      "median_seconds_to_first_plan": 50.0,
+      "median_seconds_to_first_result": 59.0,
+      "median_seconds_to_first_decision": 63.0,
+      "median_seconds_to_final_report": 78.0,
+      "median_tool_calls": 41,
+      "median_distinct_sources": 8,
+      "median_evidence_items": 14,
+      "mean_starting_evidence_items": 14.0,
+      "mean_starting_distinct_sources": 8.0,
+      "mean_hypotheses": 3.0,
+      "mean_tests_considered": 4.0,
+      "mean_tests_executed": 1.0,
+      "runs_with_reopening": 0,
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 1,
+      "safety_reviews_blocked": 0,
+      "plans_without_result": 0,
+      "mean_tool_calls_by_purpose": {
+        "retrieval": 9.0,
+        "evidence_record": 16.0,
+        "reasoning_record": 13.0,
+        "safety": 2.0,
+        "test": 2.0,
+        "coordination": 0.0,
+        "omnigent_dispatch": 0.0,
+        "other": 0.0
+      },
+      "median_wall_seconds_per_lab_tool_call": 2.1,
+      "mean_output_tokens": 14101.0,
+      "mean_omnigent_reported_cost_usd": 0.36,
+      "first_chosen_test": {
+        "ligand_contact": 1
+      },
+      "favoured_after_classes": {
+        "ligand_binding": 1
+      },
+      "agreement_before_test": {
+        "n_with_reference": 1,
+        "n_agree": 1
+      },
+      "agreement_residue_specific_reference": {
+        "n_with_reference": 1,
+        "n_agree": 1
+      }
+    }
+  ],
+  "comparison": {
+    "metric": "Median wall seconds from launch to a complete cited record (launcher clock)",
+    "baseline": 85.7,
+    "lab": 192.5,
+    "ratio": 0.45,
+    "note": "ratio = baseline ÷ lab on the median of all succeeded runs of each arm; above 1 the lab reaches a complete cited record faster than the single agent, below 1 slower.",
+    "paired": [
+      {
+        "metric": "wall_seconds",
+        "n_pairs": 1,
+        "lab_higher": 1,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 106.8,
+        "median_ratio_lab_over_baseline": 2.25,
+        "sign_test_two_sided_p": 1.0
+      },
+      {
+        "metric": "tool_calls",
+        "n_pairs": 1,
+        "lab_higher": 1,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 48,
+        "median_ratio_lab_over_baseline": 2.17,
+        "sign_test_two_sided_p": 1.0
+      },
+      {
+        "metric": "distinct_sources",
+        "n_pairs": 1,
+        "lab_higher": 1,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 2,
+        "median_ratio_lab_over_baseline": 1.25,
+        "sign_test_two_sided_p": 1.0
+      },
+      {
+        "metric": "evidence_items",
+        "n_pairs": 1,
+        "lab_higher": 1,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 7,
+        "median_ratio_lab_over_baseline": 1.5,
+        "sign_test_two_sided_p": 1.0
+      },
+      {
+        "metric": "starting_evidence_items",
+        "n_pairs": 1,
+        "lab_higher": 1,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 4,
+        "median_ratio_lab_over_baseline": 1.29,
+        "sign_test_two_sided_p": 1.0
+      },
+      {
+        "metric": "starting_distinct_sources",
+        "n_pairs": 1,
+        "lab_higher": 1,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 2,
+        "median_ratio_lab_over_baseline": 1.25,
+        "sign_test_two_sided_p": 1.0
+      },
+      {
+        "metric": "hypotheses",
+        "n_pairs": 1,
+        "lab_higher": 0,
+        "baseline_higher": 0,
+        "ties": 1,
+        "median_difference_lab_minus_baseline": 0,
+        "median_ratio_lab_over_baseline": 1.0,
+        "sign_test_two_sided_p": null
+      },
+      {
+        "metric": "tests_considered",
+        "n_pairs": 1,
+        "lab_higher": 0,
+        "baseline_higher": 0,
+        "ties": 1,
+        "median_difference_lab_minus_baseline": 0,
+        "median_ratio_lab_over_baseline": 1.0,
+        "sign_test_two_sided_p": null
+      },
+      {
+        "metric": "output_tokens",
+        "n_pairs": 1,
+        "lab_higher": 1,
+        "baseline_higher": 0,
+        "ties": 0,
+        "median_difference_lab_minus_baseline": 24136,
+        "median_ratio_lab_over_baseline": 2.71,
+        "sign_test_two_sided_p": 1.0
+      }
+    ]
+  },
+  "per_variant": [
+    {
+      "variant_id": "ADA-p.Arg211His",
+      "arm": "specialist_lab",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "ADA-p.Arg211His",
+      "arm": "single_agent_baseline",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "IL2RG-p.Arg226Cys",
+      "arm": "specialist_lab",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "IL2RG-p.Arg226Cys",
+      "arm": "single_agent_baseline",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "BTK-p.Arg28His",
+      "arm": "specialist_lab",
+      "run_id": "bench01-repeat2-BTK-p.Arg28His-lab",
+      "wall_seconds": 192.5,
+      "distinct_sources": 10,
+      "favoured_after": "protein_interaction",
+      "reference_mechanism": "ligand_binding",
+      "agrees": false,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "residue_specific",
+      "started_at": "2026-10-03T22:34:30Z",
+      "spec_hash": "46ed3f8b211b4268a867c1c6e8b3ab4d5472533f5bb07eecdf279be7f1888992",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "protein_interaction",
+      "agrees_before": false,
+      "tool_calls": 89,
+      "evidence_items": 21,
+      "hypotheses": 3,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 8,
+      "complete_record": true,
+      "record_events": 58,
+      "missing_from_record": [],
+      "starting_evidence_items": 18,
+      "starting_distinct_sources": 10,
+      "gaps": 5,
+      "hypothesis_classes": [
+        "protein_interaction",
+        "ligand_binding",
+        "stability_folding"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.6,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.45,
+          "feasibility": 0.85,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.2,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.25,
+          "feasibility": 0.6,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "ligand_contact"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "verdict": "contact_with_organic_ligand",
+          "headline": "Residue 28 is within 4.5 Å of an organic ligand in 32 of 39 ligand-bound structures (4IP, 4PT, A1B6F, A1B6G, A1B6H, A1B6I); closest 2.58 Å to 4PT ((2R)-3-{[(S)-{[(2S,3R,5S,6S)-2,6-DIHYDROXY-3,4,5-TRIS(PHOSPHONOOXY)CY…) in PDB 2Z0P."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "protein_interaction",
+          "favoured_after": "protein_interaction",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 0,
+      "report_words": 454,
+      "report_cited_ids": 20,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 30.0,
+      "seconds_to_first_hypothesis": 71.0,
+      "seconds_to_first_plan": 106.0,
+      "seconds_to_first_result": 131.0,
+      "seconds_to_first_decision": 165.0,
+      "seconds_to_final_report": 188.0,
+      "tool_calls_by_purpose": {
+        "omnigent_dispatch": 17,
+        "coordination": 31,
+        "retrieval": 14,
+        "evidence_record": 26,
+        "reasoning_record": 12,
+        "safety": 2,
+        "test": 4
+      },
+      "usage": {
+        "input_tokens": 144,
+        "output_tokens": 38237,
+        "cache_read_input_tokens": 914312,
+        "cache_creation_input_tokens": 148373,
+        "omnigent_reported_cost_usd": 0.9365
+      },
+      "output_tokens": 38237,
+      "omnigent_reported_cost_usd": 0.9365
+    },
+    {
+      "variant_id": "BTK-p.Arg28His",
+      "arm": "single_agent_baseline",
+      "run_id": "bench01-repeat2-BTK-p.Arg28His-baseline",
+      "wall_seconds": 85.7,
+      "distinct_sources": 8,
+      "favoured_after": "ligand_binding",
+      "reference_mechanism": "ligand_binding",
+      "agrees": true,
+      "decision_changed": false,
+      "status": "succeeded",
+      "attempts": 1,
+      "failed_attempts": [],
+      "reference_tier": "residue_specific",
+      "started_at": "2026-10-03T22:34:33Z",
+      "spec_hash": "d076ea5605374300079431e6b9c61e37a302d79edfa278fd854d073dac3acf18",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "favoured_before": "ligand_binding",
+      "agrees_before": true,
+      "tool_calls": 41,
+      "evidence_items": 14,
+      "hypotheses": 3,
+      "tests_considered": 4,
+      "tests_executed": 1,
+      "approvals": 0,
+      "compute_seconds": 0.0,
+      "sub_agent_sessions": 0,
+      "complete_record": true,
+      "record_events": 33,
+      "missing_from_record": [],
+      "starting_evidence_items": 14,
+      "starting_distinct_sources": 8,
+      "gaps": 2,
+      "hypothesis_classes": [
+        "ligand_binding",
+        "stability_folding",
+        "protein_interaction"
+      ],
+      "candidate_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "expected_learning": 0.8,
+          "feasibility": 0.95,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "stability_effect",
+          "expected_learning": 0.5,
+          "feasibility": 0.9,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structural_context",
+          "expected_learning": 0.5,
+          "feasibility": 0.85,
+          "compute_seconds": 0
+        },
+        {
+          "test_kind": "structure_comparison",
+          "expected_learning": 0.3,
+          "feasibility": 0.6,
+          "compute_seconds": 120
+        }
+      ],
+      "chosen_tests": [
+        "ligand_contact"
+      ],
+      "executed_tests": [
+        {
+          "test_kind": "ligand_contact",
+          "verdict": "contact_with_organic_ligand",
+          "headline": "Residue 28 is within 4.5 Å of an organic ligand in 32 of 39 ligand-bound structures (4IP, 4PT, A1B6F, A1B6G, A1B6H, A1B6I); closest 2.58 Å to 4PT ((2R)-3-{[(S)-{[(2S,3R,5S,6S)-2,6-DIHYDROXY-3,4,5-TRIS(PHOSPHONOOXY)CY…) in PDB 2Z0P."
+        }
+      ],
+      "decisions": [
+        {
+          "favoured_before": "ligand_binding",
+          "favoured_after": "ligand_binding",
+          "changed": false
+        }
+      ],
+      "reopenings": 0,
+      "reopened": [],
+      "safety_reviews_blocked": 0,
+      "approval_requests": [],
+      "approvals_approved": 0,
+      "approvals_rejected": 0,
+      "policy_denials": 1,
+      "report_words": 413,
+      "report_cited_ids": 16,
+      "mentions_gain_of_function": false,
+      "seconds_to_first_evidence": 14.0,
+      "seconds_to_first_hypothesis": 37.0,
+      "seconds_to_first_plan": 50.0,
+      "seconds_to_first_result": 59.0,
+      "seconds_to_first_decision": 63.0,
+      "seconds_to_final_report": 78.0,
+      "tool_calls_by_purpose": {
+        "retrieval": 9,
+        "evidence_record": 16,
+        "reasoning_record": 13,
+        "safety": 2,
+        "test": 2
+      },
+      "usage": {
+        "input_tokens": 32,
+        "output_tokens": 14101,
+        "cache_read_input_tokens": 509211,
+        "cache_creation_input_tokens": 45157,
+        "omnigent_reported_cost_usd": 0.3558
+      },
+      "output_tokens": 14101,
+      "omnigent_reported_cost_usd": 0.3558
+    },
+    {
+      "variant_id": "WAS-p.Thr45Met",
+      "arm": "specialist_lab",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "WAS-p.Thr45Met",
+      "arm": "single_agent_baseline",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "RAG1-p.Arg404Gln",
+      "arm": "specialist_lab",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": "nucleic_acid_binding",
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": "region_level"
+    },
+    {
+      "variant_id": "RAG1-p.Arg404Gln",
+      "arm": "single_agent_baseline",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": "nucleic_acid_binding",
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": "region_level"
+    },
+    {
+      "variant_id": "JAK3-p.Arg103His",
+      "arm": "specialist_lab",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": "protein_interaction",
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": "region_level"
+    },
+    {
+      "variant_id": "JAK3-p.Arg103His",
+      "arm": "single_agent_baseline",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": "protein_interaction",
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": "region_level"
+    },
+    {
+      "variant_id": "CYBB-p.His101Arg",
+      "arm": "specialist_lab",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": "ligand_binding",
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": "residue_specific"
+    },
+    {
+      "variant_id": "CYBB-p.His101Arg",
+      "arm": "single_agent_baseline",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": "ligand_binding",
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": "residue_specific"
+    },
+    {
+      "variant_id": "STAT3-p.Arg382Trp",
+      "arm": "specialist_lab",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": "nucleic_acid_binding",
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": "residue_specific"
+    },
+    {
+      "variant_id": "STAT3-p.Arg382Trp",
+      "arm": "single_agent_baseline",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": "nucleic_acid_binding",
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": "residue_specific"
+    },
+    {
+      "variant_id": "STAT1-p.Arg274Trp",
+      "arm": "specialist_lab",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "STAT1-p.Arg274Trp",
+      "arm": "single_agent_baseline",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "FOXP3-p.Ala384Thr",
+      "arm": "specialist_lab",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": "nucleic_acid_binding",
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": "region_level"
+    },
+    {
+      "variant_id": "FOXP3-p.Ala384Thr",
+      "arm": "single_agent_baseline",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": "nucleic_acid_binding",
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": "region_level"
+    },
+    {
+      "variant_id": "CD40LG-p.Thr254Met",
+      "arm": "specialist_lab",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "CD40LG-p.Thr254Met",
+      "arm": "single_agent_baseline",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "PIK3CD-p.Glu1021Lys",
+      "arm": "specialist_lab",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "PIK3CD-p.Glu1021Lys",
+      "arm": "single_agent_baseline",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "CTLA4-p.Arg75Trp",
+      "arm": "specialist_lab",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    },
+    {
+      "variant_id": "CTLA4-p.Arg75Trp",
+      "arm": "single_agent_baseline",
+      "run_id": null,
+      "wall_seconds": null,
+      "distinct_sources": null,
+      "favoured_after": null,
+      "reference_mechanism": null,
+      "agrees": null,
+      "decision_changed": null,
+      "status": "not_run",
+      "attempts": 0,
+      "failed_attempts": [],
+      "reference_tier": null
+    }
+  ],
+  "controls": [
+    "Same tools: the control agent holds every tool of the lab, generated from the same registry.",
+    "Same model in every agent of both arms; the model names are read from each run.json.",
+    "Same policies in both arms: role boundary, approval gate, claims guard, run budget.",
+    "Same budget per run: tool calls and compute seconds, enforced by policy.",
+    "Same objective text and subject line for a variant in both arms, built by lab/run_lab.py.",
+    "Same approval rule in both arms: pre-approved by the documented rule of protocol.md section 5.",
+    "Variant set fixed before any run: the first-listed flagship variant of every gene in data/seed/catalog.json.",
+    "Reference labels derived from UniProtKB by a fixed script before any benchmark run, never shown to an agent.",
+    "API caches filled for every variant by a scripted preflight before the first run, so neither arm pays for a cold upstream database.",
+    "Arms interleaved in one worker pool with the starting arm alternating by variant, so both arms see the same concurrency.",
+    "Citations can only name a database record a tool returned in that run (source ledger), in both arms.",
+    "spec_hash of the agent bundle, policies and tool package recorded per run; a change during the batch is reported.",
+    "Failed attempts are kept in lab/runs/ and counted; a failed run is retried at most once."
+  ],
+  "caveats": [
+    "Small sample: 13 variants, one run per variant and arm, no repeats; run-to-run variation of a language-model agent is not estimated.",
+    "Both arms use the same model, so the comparison says nothing about a different model in either role.",
+    "The reference covers 6 of 13 variants (3 from a residue-specific UniProtKB annotation, 3 only from membership of an annotated region). The label is never shown to an agent, but the UniProtKB annotation behind it is returned by tools both arms hold, so agreement is consistency with curated annotation, not blind rediscovery.",
+    "Pathogenicity predictors in the starting evidence (AlphaMissense, EVE, popEVE) share training signal with clinical labels; they say a variant is damaging, not by which mechanism.",
+    "Wall time includes the start of a per-run Omnigent server and the export of session transcripts, in both arms.",
+    "No human was timed. The benchmark does not measure a speed-up over manual work.",
+    "The lab can run a second test after a reopening; the control prompt has no reopening step. Counts of decisions that changed are therefore not like for like."
+  ],
+  "next_experiment": "Stated in lab/experiments/RESULTS.md once the batch is analysed.",
+  "reference": [
+    {
+      "variant_id": "ADA-p.Arg211His",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "IL2RG-p.Arg226Cys",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "BTK-p.Arg28His",
+      "reference_mechanism": "ligand_binding",
+      "reference_tier": "residue_specific",
+      "derivation": "R2 binding-site feature at the residue (ligand: 1D-myo-inositol 1,3,4,5-tetrakisphosphate) [UniProtKB Q06187 Binding site 28]",
+      "structural_corroboration": "corroborated",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "WAS-p.Thr45Met",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "RAG1-p.Arg404Gln",
+      "reference_mechanism": "nucleic_acid_binding",
+      "reference_tier": "region_level",
+      "derivation": "R5 inside a DNA-binding region [UniProtKB P15918 DNA binding 392-459]",
+      "structural_corroboration": "not observed",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "JAK3-p.Arg103His",
+      "reference_mechanism": "protein_interaction",
+      "reference_tier": "region_level",
+      "derivation": "R6 inside an interaction region [UniProtKB P52333 Region 1-223]",
+      "structural_corroboration": "not observed",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "CYBB-p.His101Arg",
+      "reference_mechanism": "ligand_binding",
+      "reference_tier": "residue_specific",
+      "derivation": "R2 binding-site feature at the residue (ligand: heme b) [UniProtKB P04839 Binding site 101]",
+      "structural_corroboration": "corroborated",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "STAT3-p.Arg382Trp",
+      "reference_mechanism": "nucleic_acid_binding",
+      "reference_tier": "residue_specific",
+      "derivation": "R4 description of this substitution: 'reduced DNA-binding ability' [UniProtKB P40763 Natural variant 382 VAR_037367]",
+      "structural_corroboration": "corroborated",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "STAT1-p.Arg274Trp",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB describes this substitution as a gain of function ('in IMD31C; gain of function; increases phosphorylation in response to IFNG, IFNA and IL27 due to a loss of dephosphorylation; dbSNP:rs387906758'), which the lab's loss-of-function classes do not cover.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": "gain_of_function"
+    },
+    {
+      "variant_id": "FOXP3-p.Ala384Thr",
+      "reference_mechanism": "nucleic_acid_binding",
+      "reference_tier": "region_level",
+      "derivation": "R5 inside a DNA-binding region [UniProtKB Q9BZS1 DNA binding 337-423]",
+      "structural_corroboration": "corroborated",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "CD40LG-p.Thr254Met",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": null
+    },
+    {
+      "variant_id": "PIK3CD-p.Glu1021Lys",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB describes this substitution as a gain of function ('in IMD14A; results in gain of function causing enhanced membrane association and kinase activity; dbSNP:rs397518423'), which the lab's loss-of-function classes do not cover.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": "gain_of_function"
+    },
+    {
+      "variant_id": "CTLA4-p.Arg75Trp",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "structural_corroboration": "not applicable",
+      "premise_mismatch": null
+    }
+  ],
+  "preflight": {
+    "generated_at": "2026-10-03T22:04:11Z",
+    "what": "Per variant: 11 retrieval tool calls and 3 retrieval-only tests in a fixed order, no agent, twice. The first pass also fills the API caches before the benchmark.",
+    "median_first_pass_seconds": 1.74,
+    "median_second_pass_seconds": 0.56
+  }
+}

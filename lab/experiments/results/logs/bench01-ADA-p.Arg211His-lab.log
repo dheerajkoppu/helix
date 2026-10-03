@@ -1,0 +1,70 @@
+run bench01-ADA-p.Arg211His-lab (specialist_lab) started; record: /Users/dheeraj/Downloads/alphafold/lab/runs/bench01-ADA-p.Arg211His-lab/record.jsonl
+[  1] human           objective           Find the molecular mechanism that best explains the loss of function of ADA-p.Arg211His (ADA, UniProt P00813) and test it with one targeted computatio
+[  2] orchestrator    handoff             orchestrator -> literature: COLLECT evidence for ADA-p.Arg211His (P00813, position 211, R to H). Record 4 to 7 literature evidence items (Europe PMC o
+[  3] orchestrator    handoff             orchestrator -> knowledge_graph: COLLECT for ADA-p.Arg211His (P00813, position 211, R to H). Record 10 to 16 evidence items with database record IDs (
+[  4] knowledge_graph evidence            E1 clinical_database ClinVar classifies NM_000022.4(ADA):c.632G>A (p.Arg211His) as Pathogenic (reviewed by expert panel; 3 of 4 stars; 14 submissions;
+[  5] knowledge_graph evidence            E2 experimental UniProtKB natural variant VAR_002232 at residue 211 (R to H): ADASCID; Variant assessed as Somatic; MODERATE impact.; Severe combined 
+[  6] knowledge_graph evidence            E3 computational_prediction Ensembl VEP predicts missense_variant for NM_000022.4:c.632G>A (NP_000013.2:p.Arg211His; exon 7/12; MANE Select ENST000003
+[  7] knowledge_graph evidence            E4 curated_database gnomAD v4.1: allele 20-44623053-C-T observed 58 times in 1461764 alleles (frequency 3.97e-05; 0 hemizygotes, 0 homozygotes).
+[  8] knowledge_graph evidence            E5 experimental UniProtKB annotates residues 210-219 of P00813 as Beta strand; evidence: combinatorial computational and experimental evidence used in
+[  9] knowledge_graph evidence            E6 computational_prediction InterPro annotates residues 10-349 of P00813 as domain: Adenosine deaminase domain; evidence: match to sequence model evid
+[ 10] knowledge_graph evidence            E7 computational_prediction AlphaMissense gives p.Arg211His of P00813 a AlphaMissense pathogenicity of 0.5475, classed as ambiguous (AlphaMissense cla
+[ 11] knowledge_graph evidence            E8 computational_prediction ScoreCons gives p.Arg211His of P00813 a Conservation (ScoreCons, UniRef90) of 0.607 (scale: 0 to 1; higher = more conserve
+[ 12] literature      evidence            E9 literature In the ADA-deleted E. coli strain SO3834, expressed ADA activity of 29 amino acid sequence-altering alleles ranged over five orders of m
+[ 13] knowledge_graph evidence            E10 computational_prediction popEVE gives p.Arg211His of P00813 a popEVE of -3.678 (scale: proteome-wide scale; more negative = more deleterious).
+[ 14] literature      evidence            E11 literature Expressing 46 ADA missense variants in E. coli S03834 showed they expressed about 0.001% to about 70% of wild-type ADA activity, with 4
+[ 15] knowledge_graph evidence            E12 computational_prediction EVE gives p.Arg211His of P00813 a EVE of 0.837, classed as pathogenic (EVE class) (scale: 0 to 1; higher = more pathogeni
+[ 16] literature      evidence            E13 literature ADA deficiency leads to an accumulation of toxic purine degradation by-products, most potently affecting lymphocytes (general mechanism
+[ 17] knowledge_graph evidence            E14 experimental PDB entry 3IAR (X-RAY DIFFRACTION, 1.52 Å, deposited 2009-07-14) observes residue 211 of P00813: The crystal structure of human adeno
+[ 18] literature      evidence            E15 literature Per the title, two newly identified deleterious ADA mutations (Y97C and L106V) interact to abolish enzyme activity (other residues; con
+[ 19] knowledge_graph evidence            E16 experimental PDB entry 7RTG (X-RAY DIFFRACTION, 2.591 Å, deposited 2021-08-13) observes residue 211 of P00813: Crystal Structure of the Human Aden
+[ 20] literature      gap                 G1 None of the retrieved abstracts reports measured enzyme activity, structure, stability, or dimerization for the R211H substitution specifically, so
+[ 21] knowledge_graph evidence            E17 computational_prediction AlphaFold DB model AF-P00813-F1 covers the full sequence of P00813 (mean pLDDT 96.56).
+[ 22] literature      gap                 G2 The retrieved sources do not state where residue 211 sits relative to the ADA active site or domain interfaces, nor whether it contacts substrate o
+[ 23] knowledge_graph evidence            E18 clinical_database ClinVar lists NM_000022.4(ADA):c.631C>T (p.Arg211Cys) at the same residue as Likely pathogenic (reviewed by expert panel).
+[ 24] literature      gap                 G3 Full texts of the 2025 46-variant study and the 1998 29-allele study were not retrieved, so any per-variant table that may list R211H was not check
+[ 25] knowledge_graph gap                 G4 None of the 2 experimental structures observing residue 211 carries a mutation at that residue (residue_mutated_in_structure is null for 3IAR and 7
+[ 26] knowledge_graph gap                 G5 functional_assays_covering_residue is 0 for P00813 position 211 in the effect-value tool output.
+[ 27] literature      handoff             literature -> orchestrator: Literature collection for ADA p.Arg211His is done, but no retrieved paper reports R211H itself. Four evidence items cover 
+[ 28] knowledge_graph handoff             knowledge_graph -> orchestrator: COLLECT for ADA-p.Arg211His (P00813) recorded 14 evidence items (E1-E8, E10, E12, E14, E16-E18) and 2 gaps (G4, G5). 
+[ 29] orchestrator    handoff             orchestrator -> insight: Evidence and gaps for ADA-p.Arg211His are recorded (literature E9, E11, E13, E15 and knowledge_graph E1-E8, E10, E12, E14, E1
+[ 30] insight         hypothesis          H1 ligand_binding Agent-generated hypothesis: R211 contacts a bound ligand, metal (zinc) or inhibitor in the ADA active-site region, and the Arg-to-Hi
+[ 31] insight         hypothesis          H2 stability_folding Agent-generated hypothesis: R211 sits in a beta strand (residues 210-219) where its side chain packs or hydrogen-bonds within the
+[ 32] insight         hypothesis          H3 protein_interaction Agent-generated hypothesis: R211 makes an inter-chain contact at a protein-protein interface in the biological assembly, and th
+[ 33] insight         handoff             insight -> orchestrator: Three agent-generated hypotheses are recorded for ADA-p.Arg211His: H1 ligand_binding (rank 1), H2 stability_folding (rank 2),
+[ 34] orchestrator    handoff             orchestrator -> planner: Hypotheses H1 (ligand_binding, rank 1), H2 (stability_folding, rank 2) and H3 (protein_interaction, rank 3) are recorded as a
+[ 35] planner         test_candidate      T1 ligand_contact learning=0.6 feasibility=0.95 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 36] planner         test_candidate      T2 stability_effect learning=0.4 feasibility=0.9 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 37] planner         test_candidate      T3 structural_context learning=0.3 feasibility=0.85 cost={'compute_seconds': 0, 'tool_calls': 2}
+[ 38] planner         plan                chose T1: Scores: T1 ligand_contact learning 0.6, feasibility 0.95, cost 0 s and 2 calls. T2 stability_effect learning 0.4, feasibility 0.9, cost 0 s 
+[ 39] planner         handoff             planner -> orchestrator: Planner chose T1 (ligand_contact) to test H1, the current favourite, against H2 and H3. T1 costs 0 compute seconds and 2 tool
+[ 40] orchestrator    handoff             orchestrator -> safety: Plan chooses test T1 (ligand_contact) for ADA-p.Arg211His, testing H1 (ligand_binding) first. Rejected T2 (stability_effect) a
+[ 41] safety          note                safety_review: Checked the plan (seq 38) and all 39 recorded statements with review_claims. No clinical or treatment wording. No evidence without a so
+[ 42] safety          handoff             safety -> orchestrator: T1 (ligand_contact) is cleared by safety review (seq 41) with no approval needed. Claims check found no clinical wording, unso
+[ 43] orchestrator    handoff             orchestrator -> runner: Execute exactly test T1 (ligand_contact) for ADA-p.Arg211His. Safety cleared T1 and no approval is needed. Record experiment_s
+[ 44] runner          experiment_started  T1 run_ligand_contact_test
+[ 45] runner          experiment_result   T1 Residue 211 is not within 4.5 Å of any non-solvent ligand in the 2 ligand-bound structures examined.
+[ 46] runner          handoff             runner -> orchestrator: T1 (ligand_contact, run_ligand_contact_test) is executed and recorded in results/T1.json; no compute job was started (job_id n
+[ 47] orchestrator    handoff             orchestrator -> analysis: Test T1 (ligand_contact) result is recorded for ADA-p.Arg211His. Write an interpretation with a verdict per hypothesis (H1, 
+[ 48] orchestrator    handoff             orchestrator -> knowledge_graph: UPDATE for test T1 (ligand_contact) on ADA-p.Arg211His. Add the result evidence, link it to T1 and to H1, H2, H3, and
+[ 49] knowledge_graph evidence            E19 experimental Residue 211 is not within 4.5 Å of any non-solvent ligand in the 2 ligand-bound structures examined (3IAR: 3D1 and NI; 7RTG: ZN); ins
+[ 50] knowledge_graph evidence            E20 experimental In 7RTG, residue 211 was observed and the ZINC ION (ZN, 2 instances) had 0 instances contacting residue 211, with no minimum distance
+[ 51] analysis        interpretation      H1 weakened; H2 unchanged; H3 unchanged
+[ 52] knowledge_graph handoff             knowledge_graph -> orchestrator: T1 (ligand_contact) recorded as E19 (3IAR) and E20 (7RTG): residue 211 is not within 4.5 Å of any non-solvent ligand 
+[ 53] analysis        decision            ligand_binding -> stability_folding (changed: True)
+[ 54] analysis        next_experiment     computational: Run T2 (run_stability_test): FoldX folding free-energy change (ΔΔG) for R211H on the AlphaFold model AF-P00813-F1 (mean pLDDT 96.56), w
+[ 55] analysis        handoff             analysis -> orchestrator: T1 (ligand_contact) returned no_ligand_contact: residue 211 is not within 4.5 Å of any non-solvent ligand in 3IAR (3D1, NI) 
+[ 56] orchestrator    note                reopened_assumption: Test T1 (ligand_contact) returned no_ligand_contact: residue 211 had 0 contacts within 4.5 Å of 3D1, NI or ZN. H1 (ligand_binding
+[ 57] orchestrator    handoff             orchestrator -> planner: Reopened planning for ADA-p.Arg211His (round 2). H1 (ligand_binding), favoured before T1, was weakened by T1 (no_ligand_conta
+[ 58] planner         test_candidate      T4 structure_comparison learning=0.35 feasibility=0.1 cost={'compute_seconds': 120, 'tool_calls': 3}
+[ 59] planner         plan                chose T2: T1 returned no_ligand_contact, which weakens H1 (ligand_binding). H2 (stability_folding) is now the favourite, but it has no stability value
+[ 60] planner         handoff             planner -> orchestrator: Planner chose T2 (stability_effect, FoldX on the AlphaFold model) as the next test. It bears on H2 (stability_folding), the c
+[ 61] orchestrator    handoff             orchestrator -> safety: Reopened plan (round 2) chooses test T2 (stability_effect) for ADA-p.Arg211His, bearing on H2 (stability_folding). Rejected T1
+[ 62] safety          note                safety_review: Checked the reopened plan (seq 59) and all 59 recorded statements with review_claims. No clinical or treatment wording. No evidence wit
+[ 63] safety          handoff             safety -> orchestrator: T2 (stability_effect) cleared at seq 62 with no approval needed; the claims check found no clinical wording, unsourced evidenc
+[ 64] safety          approval_request    A1 Run run_stability_test (Predicted stability change of the substitution) for ADA-p.Arg211His
+[ 65] human           approval_decision   A1 approved by benchmark pre-approval rule (lab/experiments/protocol.md section 5), batch started by an automated build agent in dheeraj's session (ru
+[ 66] safety          note                safety_review: Supersedes review seq 62 (cleared). Definitive answer: T2 is NOT retrieval only. Its described method is a FoldX ΔΔG calculation on AF-
+[ 67] safety          handoff             safety -> orchestrator: Answer: T2 is not retrieval only. The described FoldX ΔΔG run is a local compute job, and the proposed second predictor may se
+[ 68] orchestrator    note                final_report: ## Question Which molecular mechanism best explains the loss of function of ADA p.Arg211His (UniProt P00813), and does one targeted comp
+run bench01-ADA-p.Arg211His-lab succeeded in 246.6s: 104 tool calls, 20 evidence items from 11 databases, 4 tests considered, favoured ligand_binding -> stability_folding (changed: True)

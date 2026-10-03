@@ -6,6 +6,7 @@ import { cn } from "cn";
 import { CompoundDepiction } from "@/components/compound/depiction";
 import {
   databaseName,
+  measuredAmount,
   measuredBasis,
   measuredValue,
   phaseLabel,
@@ -16,6 +17,14 @@ import { SourceChip } from "@/components/evidence/source-chip";
 import { StructureOriginTag } from "@/components/evidence/structure-origin-tag";
 import { LearnTerm } from "@/components/science/learn-term";
 import { EmptyState } from "@/components/states/empty-state";
+import {
+  OPTIONS_WORDS,
+  plainConcentration,
+  plainDrugKind,
+  plainDrugStage,
+  plainLabTests,
+  plainSeenIn3d,
+} from "@/lib/plain-language";
 import { formatMetricValue } from "@/lib/science/metrics";
 
 import {
@@ -110,22 +119,23 @@ const COLUMNS: Column[] = [
 ];
 
 const SIMPLE_COLUMNS: Column[] = [
-  { id: "compound", header: "Compound", width: 230 },
-  { id: "stage", header: "Stage", width: 120 },
+  { id: "compound", header: OPTIONS_WORDS.name, width: 230 },
+  { id: "kind", header: OPTIONS_WORDS.kind, width: 150 },
+  { id: "stage", header: OPTIONS_WORDS.stage, width: 140 },
   {
     id: "measured",
-    header: "Measured affinity",
+    header: OPTIONS_WORDS.strength,
     width: 170,
     sort: "measured",
   },
-  { id: "structures", header: "Structures", width: 100 },
+  { id: "structures", header: OPTIONS_WORDS.seenIn3d, width: 150 },
   {
     id: "predicted",
-    header: "Predicted affinity",
-    width: 190,
+    header: OPTIONS_WORDS.predicted,
+    width: 170,
     sort: "predicted",
   },
-  { id: "evidence", header: "Evidence", width: 110 },
+  { id: "evidence", header: OPTIONS_WORDS.source, width: 150 },
 ];
 
 const widthOf = (columns: Column[]) =>
@@ -165,7 +175,9 @@ export function ComparisonTable({
   if (rows.length === 0)
     return (
       <EmptyState
-        title="No compound recorded for this protein"
+        title={
+          simple ? OPTIONS_WORDS.empty : "No compound recorded for this protein"
+        }
         description={
           simple
             ? undefined
@@ -304,7 +316,7 @@ function SimpleRow({
   const result = pose?.result ?? null;
   const affinity = result?.affinity ?? null;
   const status =
-    phaseLabel(compound?.max_phase, compound?.first_approval) ??
+    plainDrugStage(compound?.max_phase, compound?.first_approval) ??
     treatment?.clinical_stage_label ??
     null;
   const stop = (event: React.SyntheticEvent) => event.stopPropagation();
@@ -312,10 +324,12 @@ function SimpleRow({
     ...(compound?.evidence ?? []).map((record) => toEvidenceItem(record)),
     ...(!compound && treatment ? [toEvidenceItem(treatment.evidence)] : []),
   ].filter((item) => item !== null);
-  const classes = new Set<string>();
+  // the badge prints the database, so one badge per database
+  const databases = new Set<string>();
   const distinct = badges.filter((item) => {
-    if (classes.has(item.evidenceClass)) return false;
-    classes.add(item.evidenceClass);
+    const key = item.source?.database ?? item.evidenceClass;
+    if (databases.has(key)) return false;
+    databases.add(key);
     return true;
   });
 
@@ -336,56 +350,67 @@ function SimpleRow({
             depictionUrl={compound?.depiction_url}
             name={row.name}
             absentLabel={
-              row.smallMolecule === false ? row.modality : "No 2D structure"
+              row.smallMolecule === false
+                ? plainDrugKind(row.modality)
+                : OPTIONS_WORDS.noDrawing
             }
             className="h-12 w-16 shrink-0"
           />
-          <div className="flex min-w-0 flex-col">
-            <button
-              type="button"
-              onClick={(event) => {
-                stop(event);
-                onSelect(row);
-              }}
-              className="cursor-pointer truncate rounded-xs text-left text-sm font-medium text-foreground hover:underline"
-              title={row.name}
-            >
-              {row.name}
-            </button>
-            <span className="truncate text-xs text-muted-foreground">
-              {row.modality}
-              {row.tier === "C_predicted" ? " · prediction only" : ""}
-            </span>
-          </div>
+          <button
+            type="button"
+            onClick={(event) => {
+              stop(event);
+              onSelect(row);
+            }}
+            className="min-w-0 cursor-pointer truncate rounded-xs text-left text-sm font-medium text-foreground hover:underline"
+            title={row.name}
+          >
+            {row.name}
+          </button>
         </div>
       </td>
       <td className={SIMPLE_CELL}>
-        {status ?? <Quiet>No record</Quiet>}
+        {plainDrugKind(row.modality)}
+        {row.tier === "C_predicted" ? (
+          <span className="block text-2xs text-muted-foreground">
+            {OPTIONS_WORDS.predictionOnly}
+          </span>
+        ) : null}
+      </td>
+      <td className={SIMPLE_CELL}>
+        {status ?? <Quiet>{OPTIONS_WORDS.noStage}</Quiet>}
       </td>
       <td className={SIMPLE_CELL}>
         {measured ? (
           <>
-            <span className="tabular font-mono text-sm text-foreground">
-              {measuredValue(measured)}
+            <span
+              className="tabular font-mono text-sm text-foreground"
+              title={`${measuredValue(measured)} (${plainConcentration(measured.representative.units)})`}
+            >
+              {measuredAmount(measured)}
             </span>
             <span className="block text-2xs text-muted-foreground">
-              {measured.assay_count}{" "}
-              {measured.assay_count === 1 ? "assay" : "assays"}
+              {plainLabTests(measured.assay_count)}
             </span>
           </>
         ) : (
-          <Quiet>{chemblDown ? "ChEMBL unavailable" : "None found"}</Quiet>
+          <Quiet>
+            {chemblDown ? OPTIONS_WORDS.sourceDown : OPTIONS_WORDS.none}
+          </Quiet>
         )}
       </td>
       <td className={SIMPLE_CELL}>
         {coCrystal ? (
-          <span className="tabular font-mono text-foreground">
-            {coCrystal.pdb_entry_count === 1
-              ? coCrystal.pdb_ids[0]?.toUpperCase()
-              : `${coCrystal.pdb_entry_count} PDB`}
+          <span
+            className="text-foreground"
+            title={coCrystal.pdb_ids
+              .map((id) => id.toUpperCase())
+              .join(", ")}
+          >
+            {plainSeenIn3d(coCrystal.pdb_entry_count)}
           </span>
         ) : (
-          <Quiet>None</Quiet>
+          <Quiet>{OPTIONS_WORDS.no}</Quiet>
         )}
       </td>
       {predicted ? (
@@ -402,12 +427,15 @@ function SimpleRow({
               <span className="tabular font-mono text-sm text-foreground">
                 {formatMetricValue("affinity", affinity.affinity_pred_value)}
               </span>
-              <span className="text-2xs text-muted-foreground">
-                log10(IC50 / µM), predicted
+              <span
+                className="text-2xs text-muted-foreground"
+                title="log10(IC50 / µM), predicted"
+              >
+                {OPTIONS_WORDS.predictedNote}
               </span>
             </button>
           ) : result ? (
-            <Quiet>No affinity</Quiet>
+            <Quiet>{OPTIONS_WORDS.noValue}</Quiet>
           ) : (
             notRun(row)
           )}
@@ -426,7 +454,7 @@ function SimpleRow({
             <StructureOriginTag origin="predicted_orphafold" size="compact" />
           ) : null}
           {distinct.length === 0 && !pose?.result ? (
-            <Quiet>None found</Quiet>
+            <Quiet>{OPTIONS_WORDS.none}</Quiet>
           ) : null}
         </div>
       </td>

@@ -1,0 +1,4 @@
+Objective: Find the molecular mechanism that best explains the loss of function of WAS-p.Thr45Met (WAS, UniProt P42768) and test it with one targeted computational test.
+Subject line: variant_id=WAS-p.Thr45Met gene=WAS accession=P42768 position=45 reference=T alternate=M
+Budget for the whole run: 160 lab tool calls and 300 compute seconds.
+Run the discovery loop to the final report.

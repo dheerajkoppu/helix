@@ -14,6 +14,7 @@ import { useAgentLabel } from "@/components/lab/run-context";
 import type { LabEvent } from "@/components/lab/types";
 import { Button } from "@/components/ui/button";
 import { formatTimestamp } from "@/lib/format";
+import { useAdvancedMode } from "@/lib/state/preferences";
 
 export const REPLAY_SPEEDS = [
   { id: 1, label: "1×", intervalMs: 900 },
@@ -53,6 +54,7 @@ export function ReplayBar({
   onExit,
 }: ReplayBarProps) {
   const agentLabel = useAgentLabel();
+  const advanced = useAdvancedMode();
   const last = events.length - 1;
   const current = events[index];
   const atEnd = index >= last;
@@ -145,7 +147,8 @@ export function ReplayBar({
             className="hidden h-1 w-28 cursor-pointer accent-foreground sm:block xl:w-40"
           />
           <span className="tabular font-mono text-2xs whitespace-nowrap text-muted-foreground">
-            line {index + 1} of {events.length}
+            {advanced ? "line " : null}
+            {index + 1} of {events.length}
           </span>
 
           <div

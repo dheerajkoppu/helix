@@ -1,0 +1,82 @@
+{
+  "test_id": "T1",
+  "test_kind": "ligand_contact",
+  "values": {
+    "headline": "Residue 211 is not within 4.5 Å of any non-solvent ligand in the 2 ligand-bound structures examined.",
+    "verdict": "no_ligand_contact",
+    "contact_threshold_angstrom": 4.5,
+    "experimental_structures_total": 2,
+    "structures_observing_residue": 2,
+    "ligand_bound_structures_examined": 2,
+    "structures_with_contact": [],
+    "closest_contacts": [],
+    "ligands": [
+      {
+        "ligand": "3D1",
+        "name": "(2R,3S,5R)-5-(6-amino-9H-purin-9-yl)-tetrahydro-2-(hydroxymethyl)fura…",
+        "kind": "organic",
+        "structures": [
+          "3IAR"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 13
+      },
+      {
+        "ligand": "NI",
+        "name": "NICKEL (II) ION",
+        "kind": "ion",
+        "structures": [
+          "3IAR"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 4
+      },
+      {
+        "ligand": "ZN",
+        "name": "ZINC ION",
+        "kind": "ion",
+        "structures": [
+          "7RTG"
+        ],
+        "instances": 2,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 4.0
+      }
+    ],
+    "negative_control_ligands_never_contacting_residue": [
+      "3D1",
+      "NI",
+      "ZN"
+    ],
+    "structures_with_residue_mutated": [],
+    "structures_unavailable": []
+  },
+  "sources": [
+    {
+      "database": "RCSB PDB",
+      "record_id": "3IAR",
+      "url": "https://www.rcsb.org/structure/3IAR"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "7RTG",
+      "url": "https://www.rcsb.org/structure/7RTG"
+    }
+  ],
+  "controls": [
+    "Negative control: ligands in the same structures that never list the residue as a neighbour.",
+    "Selectivity control: number of distinct residues that neighbour the contacting ligand, so a contact is not an artefact of a large neighbour list.",
+    "Site-state control: structures in which the residue itself is mutated are reported separately."
+  ],
+  "limitations": [
+    "A crystal contact with a soluble analogue is not a measurement of binding by the variant protein.",
+    "Absence of a ligand-bound structure is not evidence of absence of binding."
+  ],
+  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments ligand_contact --accession P00813 --position 211 --alternate-residue H --reference-residue R --gene ADA --variant-id ADA-p.Arg211His",
+  "elapsed_seconds": 0.0
+}

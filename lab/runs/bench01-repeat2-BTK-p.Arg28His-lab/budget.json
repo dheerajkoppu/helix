@@ -1,0 +1,16 @@
+{
+  "max_tool_calls": 160,
+  "max_compute_seconds": 300.0,
+  "tool_calls_used": 89,
+  "compute_seconds_used": 0.0,
+  "tool_calls_by_agent": {
+    "orchestrator": 13,
+    "literature": 14,
+    "knowledge_graph": 33,
+    "insight": 5,
+    "planner": 10,
+    "safety": 4,
+    "runner": 4,
+    "analysis": 6
+  }
+}

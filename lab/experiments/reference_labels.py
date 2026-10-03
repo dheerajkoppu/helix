@@ -5,8 +5,9 @@
 Reads the variant set (the first-listed flagship variant of every gene in data/seed/catalog.json), fetches
 each UniProtKB entry from rest.uniprot.org and the PDBe-KB residue annotations from www.ebi.ac.uk (the raw
 responses are kept under lab/experiments/reference/snapshots/ and reused unless --refresh is given), applies
-the fixed rules below, and writes lab/experiments/reference/labels.json. Nothing here calls the OrphaFold API, a
-lab tool or an agent, and no run record is read. The labels are never passed to an agent.
+the fixed rules below, and writes lab/experiments/reference/labels.json. When that file exists the script
+only checks that the derivation still gives the same labels; --overwrite replaces it. Nothing here calls the
+OrphaFold API, a lab tool or an agent, and no run record is read. The labels are never passed to an agent.
 """
 
 import argparse
@@ -69,9 +70,28 @@ DESCRIPTION_RULES: list[tuple[str, re.Pattern[str]]] = [
         ),
     ),
 ]
-NON_PARTNER_NAMES = re.compile(r"heavy chain|light chain|^IG-|nanobody|antibody|^fab\b|^other$", re.IGNORECASE)
+NON_PARTNER_NAMES = re.compile(
+    r"heavy chain|light chain|^IG-|nanobody|antibody|^fab\b|^other$", re.IGNORECASE
+)
 ADDITIVE_LIGANDS = frozenset(
-    {"GOL", "EDO", "SO4", "PO4", "ACT", "CL", "NA", "K", "PEG", "PGE", "DMS", "FMT", "MPD", "NAG", "BMA", "MAN"}
+    {
+        "GOL",
+        "EDO",
+        "SO4",
+        "PO4",
+        "ACT",
+        "CL",
+        "NA",
+        "K",
+        "PEG",
+        "PGE",
+        "DMS",
+        "FMT",
+        "MPD",
+        "NAG",
+        "BMA",
+        "MAN",
+    }
 )
 
 
@@ -188,7 +208,11 @@ def uniprot_candidates(entry: dict[str, Any], subject: dict[str, Any]) -> dict[s
         rule: str | None = None
         tier: str | None = None
         if kind == "Active site" and length <= RESIDUE_SPECIFIC_SPAN:
-            mechanism, rule, tier = "catalytic_site", "R1 active-site feature at the residue", "residue_specific"
+            mechanism, rule, tier = (
+                "catalytic_site",
+                "R1 active-site feature at the residue",
+                "residue_specific",
+            )
         elif kind == "Binding site" and length <= RESIDUE_SPECIFIC_SPAN:
             ligand = (feature.get("ligand") or {}).get("name") or ""
             nucleic = bool(re.search(r"\b(DNA|RNA)\b", ligand))
@@ -196,7 +220,11 @@ def uniprot_candidates(entry: dict[str, Any], subject: dict[str, Any]) -> dict[s
             rule, tier = f"R2 binding-site feature at the residue (ligand: {ligand})", "residue_specific"
         elif kind == "Site" and length <= RESIDUE_SPECIFIC_SPAN:
             if re.search(r"interaction with", description, re.IGNORECASE):
-                mechanism, rule, tier = "protein_interaction", "R3 site feature: interaction", "residue_specific"
+                mechanism, rule, tier = (
+                    "protein_interaction",
+                    "R3 site feature: interaction",
+                    "residue_specific",
+                )
         elif kind in ("Natural variant", "Mutagenesis") and length == 1:
             alternatives = (feature.get("alternativeSequence") or {}).get("alternativeSequences") or []
             if subject["alternate_residue"] not in alternatives:
@@ -227,7 +255,12 @@ def uniprot_candidates(entry: dict[str, Any], subject: dict[str, Any]) -> dict[s
 
 def pdbe_kb_membership(accession: str, position: int, refresh: bool) -> dict[str, Any]:
     """Experimental-structure membership of the residue: macromolecular interfaces and ligand sites."""
-    membership: dict[str, Any] = {"nucleic_acid": [], "protein_partner": [], "same_protein": [], "ligands": []}
+    membership: dict[str, Any] = {
+        "nucleic_acid": [],
+        "protein_partner": [],
+        "same_protein": [],
+        "ligands": [],
+    }
     interfaces = fetch_json(
         PDBE_KB_URL.format(kind="interface_residues", accession=accession),
         SNAPSHOTS / f"pdbekb_interface_residues_{accession}.json",
@@ -350,10 +383,35 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=OUTPUT)
     parser.add_argument(
-        "--refresh", action="store_true", help="Fetch UniProtKB and PDBe-KB again instead of reading the snapshots"
+        "--refresh",
+        action="store_true",
+        help="Fetch UniProtKB and PDBe-KB again instead of reading the snapshots",
+    )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Replace an existing labels file; without it an existing file is only checked",
     )
     arguments = parser.parse_args()
     labels = [label(subject, arguments.refresh) for subject in variant_set()]
+    for row in labels:
+        print(
+            f"{row['variant_id']:<22} {str(row['reference_mechanism']):<22} {str(row['reference_tier']):<17} "
+            f"{row['structural_corroboration']:<14} {row['derivation'][:120]}"
+        )
+    if arguments.output.exists() and not arguments.overwrite:
+        # The labels of a benchmark are fixed before its first run; a later call only checks them
+        stored = json.loads(arguments.output.read_text(encoding="utf-8"))
+        changed = [
+            row["variant_id"] for row, kept in zip(labels, stored["labels"], strict=True) if row != kept
+        ]
+        if changed:
+            raise SystemExit(
+                f"The derivation now differs from {arguments.output} (derived {stored['derived_at']}) for: "
+                f"{', '.join(changed)}. Pass --overwrite to replace the file."
+            )
+        print(f"matches {arguments.output} (derived {stored['derived_at']}); file left unchanged")
+        return
     body = {
         "derived_at": now(),
         "rule_source": "lab/experiments/reference_labels.py",
@@ -367,11 +425,6 @@ def main() -> None:
     }
     arguments.output.parent.mkdir(parents=True, exist_ok=True)
     arguments.output.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    for row in labels:
-        print(
-            f"{row['variant_id']:<22} {str(row['reference_mechanism']):<22} {str(row['reference_tier']):<17} "
-            f"{row['structural_corroboration']:<14} {row['derivation'][:120]}"
-        )
     print(f"wrote {arguments.output}")
 
 

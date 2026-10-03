@@ -1,0 +1,4 @@
+Objective: Find the molecular mechanism that best explains the loss of function of IL2RG-p.Arg226Cys (IL2RG, UniProt P31785) and test it with one targeted computational test.
+Subject line: variant_id=IL2RG-p.Arg226Cys gene=IL2RG accession=P31785 position=226 reference=R alternate=C
+Budget for the whole run: 160 lab tool calls and 300 compute seconds.
+Run the discovery loop to the final report.

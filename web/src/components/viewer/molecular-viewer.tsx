@@ -14,7 +14,15 @@ import { StructureOriginTag } from "@/components/evidence/structure-origin-tag";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { usePrefersReducedMotion } from "@/hooks/use-media-query";
+import {
+  VIEWER_WORDS,
+  plainConfidence,
+  plainOrigin,
+  plainRole,
+  plainStructureLine,
+} from "@/lib/plain-language";
 import { normalizePlddt, plddtBand } from "@/lib/science/plddt";
+import { useAdvancedMode } from "@/lib/state/preferences";
 import { STRUCTURE_ORIGIN_META } from "@/lib/structure-origin";
 // camera-sync has no Mol* import, so this static import keeps Mol* out of the component chunk
 import { camerasInSync } from "@/viewer/camera-sync";
@@ -77,10 +85,26 @@ function DefaultHoverReadout({
   pick: ResiduePick;
   entry: SceneEntry | undefined;
 }) {
+  const advanced = useAdvancedMode();
   const predicted = entry && entry.descriptor.origin !== "experimental";
   const plddt = predicted
     ? normalizePlddt(pick.bFactor, entry.descriptor.plddtScale ?? "0-100")
     : null;
+  if (!advanced) {
+    return (
+      <>
+        <span className="font-medium text-foreground">
+          {residueName(pick.compId)}
+          {predicted ? pick.labelSeqId : pick.authSeqId}
+        </span>
+        {plddt !== null ? (
+          <span className="font-sans" title={plddt.toFixed(1)}>
+            {plainConfidence(plddt)}
+          </span>
+        ) : null}
+      </>
+    );
+  }
   return (
     <>
       <span className="font-medium text-foreground">
@@ -118,6 +142,7 @@ export function MolecularViewer(props: MolecularViewerProps) {
     children,
   } = props;
   const { resolvedTheme } = useTheme();
+  const advanced = useAdvancedMode();
   const systemReducedMotion = usePrefersReducedMotion();
   const activeTheme = useMemo(
     () => theme ?? viewerThemeFor(resolvedTheme),
@@ -345,8 +370,11 @@ export function MolecularViewer(props: MolecularViewerProps) {
     (entry) => entry.descriptor.id === hover?.structureId,
   );
   const loading = pending.length > 0 || (!started && !failure);
-  const loadingStep =
-    pending.length > 0
+  const loadingStep = !advanced
+    ? pending.length > 0
+      ? VIEWER_WORDS.loading
+      : VIEWER_WORDS.starting
+    : pending.length > 0
       ? `Loading ${pending.map(shortStructureId).join(", ")}`
       : "Starting the 3D viewer";
 
@@ -392,9 +420,17 @@ export function MolecularViewer(props: MolecularViewerProps) {
                     entry.descriptor.label ??
                     shortStructureId(entry.descriptor.id)
                   }
-                  caption
+                  caption={advanced}
+                  plainLabel={
+                    entry.descriptor.label
+                      ? `${plainRole(entry.descriptor.label)} · ${plainOrigin(entry.descriptor.origin)}`
+                      : plainStructureLine(
+                          entry.descriptor.origin,
+                          entry.descriptor.detail,
+                        )
+                  }
                 />
-                {entry.descriptor.detail ? (
+                {advanced && entry.descriptor.detail ? (
                   <span className="text-2xs text-muted-foreground">
                     {entry.descriptor.detail}
                   </span>
@@ -471,7 +507,7 @@ export function MolecularViewer(props: MolecularViewerProps) {
 
       {!loading && !failure && shown.length === 0 ? (
         <p className="pointer-events-none absolute inset-0 flex items-center justify-center text-xs text-muted-foreground">
-          No structure loaded
+          {advanced ? "No structure loaded" : VIEWER_WORDS.empty}
         </p>
       ) : null}
 

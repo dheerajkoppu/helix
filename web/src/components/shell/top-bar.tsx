@@ -23,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useHydrated } from "@/hooks/use-hydrated";
+import { MENU_WORDS } from "@/lib/plain-language";
 import { PRIMARY_NAV, SECONDARY_NAV, site, type NavItem } from "@/lib/site";
 import { useAssistant } from "@/lib/state/assistant";
 import { usePreferences } from "@/lib/state/preferences";
@@ -126,14 +127,14 @@ function OverflowMenu({ pathname }: { pathname: string }) {
           className={ITEM_CLASS}
           onClick={() => setAssistantOpen(true)}
         >
-          Ask Orpha
+          {advanced ? "Ask Orpha" : MENU_WORDS.ask}
           <KeyHint keys="mod+j" className="ml-auto max-md:hidden" />
         </DropdownMenuItem>
         <DropdownMenuItem
           className={cn(ITEM_CLASS, "max-md:hidden")}
           onClick={() => setShortcutsOpen(true)}
         >
-          Shortcuts
+          {advanced ? "Shortcuts" : MENU_WORDS.shortcuts}
           <KeyHint keys="?" className="ml-auto" />
         </DropdownMenuItem>
 
@@ -143,19 +144,19 @@ function OverflowMenu({ pathname }: { pathname: string }) {
           checked={advanced}
           onCheckedChange={setAdvanced}
         >
-          Advanced
+          {MENU_WORDS.advanced}
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           className={ITEM_CLASS}
           checked={learnMode}
           onCheckedChange={setLearnMode}
         >
-          Learn mode
+          {advanced ? "Learn mode" : MENU_WORDS.learn}
         </DropdownMenuCheckboxItem>
 
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Theme</DropdownMenuLabel>
+          <DropdownMenuLabel>{MENU_WORDS.theme}</DropdownMenuLabel>
           <DropdownMenuRadioGroup
             value={hydrated ? theme : "system"}
             onValueChange={(value) => setTheme(String(value))}
@@ -183,10 +184,12 @@ function OverflowMenu({ pathname }: { pathname: string }) {
             )
           }
         >
-          Source
-          <span className="ml-auto font-mono text-2xs text-subtle-foreground">
-            {site.license}
-          </span>
+          {advanced ? "Source" : MENU_WORDS.source}
+          {advanced ? (
+            <span className="ml-auto font-mono text-2xs text-subtle-foreground">
+              {site.license}
+            </span>
+          ) : null}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

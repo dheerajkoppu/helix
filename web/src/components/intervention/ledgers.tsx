@@ -5,6 +5,7 @@ import { cn } from "cn";
 
 import {
   compoundName,
+  measuredAmount,
   measuredValue,
   toEvidenceItem,
   type ApiEvidence,
@@ -17,6 +18,17 @@ import { EmptyState } from "@/components/states/empty-state";
 import { QueryErrorState, RowsSkeleton } from "@/components/states/query-state";
 import { SourceUnavailable } from "@/components/states/source-unavailable";
 import type { SourceStatus } from "@/lib/api/types";
+import {
+  OPTIONS_WORDS,
+  plainBindingSpot,
+  plainChance,
+  plainDrugCount,
+  plainDrugKind,
+  plainLabTests,
+  plainLength,
+  plainOptionGroup,
+  plainSeenIn3d,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import type { InteractionsResponse } from "@/lib/workspace-data";
 
@@ -90,7 +102,13 @@ function LedgerSection<Item>({
       onRetry={onRetry}
     />
   ) : items.length === 0 ? (
-    empty
+    advanced || !empty ? (
+      empty
+    ) : (
+      <p className="px-3 py-2 text-xs text-subtle-foreground">
+        {OPTIONS_WORDS.none}
+      </p>
+    )
   ) : (
     <>
       <ul>{shown.map((item) => children(item))}</ul>
@@ -109,7 +127,7 @@ function LedgerSection<Item>({
   if (!advanced)
     return (
       <Fold
-        title={short}
+        title={plainOptionGroup(short)}
         count={loading || unavailable ? null : items.length}
         trailing={
           unavailable ? (
@@ -289,7 +307,7 @@ export function InterventionLedger({
             onSelect={() => onSelect({ kind: "compound", id: row.id })}
             evidence={row.treatment?.evidence}
             label={row.name}
-            note={row.modality}
+            note={advanced ? row.modality : plainDrugKind(row.modality)}
             value={row.treatment?.clinical_stage_label ?? "Stage unknown"}
             title={row.name}
           />
@@ -316,9 +334,11 @@ export function InterventionLedger({
               evidence={treatment.evidence}
               label={treatment.name}
               note={
-                treatment.modality === "Unknown"
-                  ? "Unknown modality"
-                  : (treatment.modality ?? undefined)
+                !advanced
+                  ? plainDrugKind(treatment.modality)
+                  : treatment.modality === "Unknown"
+                    ? "Unknown modality"
+                    : (treatment.modality ?? undefined)
               }
               value={treatment.clinical_stage_label ?? "Stage unknown"}
               title={treatment.name ?? undefined}
@@ -356,12 +376,20 @@ export function InterventionLedger({
             onSelect={() => onSelect({ kind: "compound", id: row.id })}
             evidence={findEvidence(row, "bioactivity")}
             label={row.name}
-            note={`${row.compound!.measured_affinity!.assay_count} ${
-              row.compound!.measured_affinity!.assay_count === 1
-                ? "assay"
-                : "assays"
-            }`}
-            value={measuredValue(row.compound!.measured_affinity!)}
+            note={
+              advanced
+                ? `${row.compound!.measured_affinity!.assay_count} ${
+                    row.compound!.measured_affinity!.assay_count === 1
+                      ? "assay"
+                      : "assays"
+                  }`
+                : plainLabTests(row.compound!.measured_affinity!.assay_count)
+            }
+            value={
+              advanced
+                ? measuredValue(row.compound!.measured_affinity!)
+                : measuredAmount(row.compound!.measured_affinity!)
+            }
             title={row.name}
           />
         )}
@@ -403,16 +431,18 @@ export function InterventionLedger({
                 )
               }
               note={
-                row.compound?.name ? (
+                !advanced ? undefined : row.compound?.name ? (
                   <span className="font-mono">{coCrystal.ccd_id}</span>
                 ) : (
                   (coCrystal.name ?? undefined)
                 )
               }
               value={
-                coCrystal.pdb_entry_count === 1
-                  ? coCrystal.pdb_ids[0]?.toUpperCase()
-                  : `${coCrystal.pdb_entry_count} entries`
+                !advanced
+                  ? plainSeenIn3d(coCrystal.pdb_entry_count)
+                  : coCrystal.pdb_entry_count === 1
+                    ? coCrystal.pdb_ids[0]?.toUpperCase()
+                    : `${coCrystal.pdb_entry_count} entries`
               }
               title={coCrystal.name ?? compoundName(row.compound!)}
             />
@@ -455,16 +485,24 @@ export function InterventionLedger({
             selected={isSelected(selected, "pocket", pocket.id)}
             onSelect={() => onSelect({ kind: "pocket", id: pocket.id })}
             evidence={pocket.evidence}
-            label={`Pocket ${pocket.rank}`}
+            label={
+              advanced ? `Pocket ${pocket.rank}` : plainBindingSpot(pocket.rank)
+            }
             note={
               position !== null && pocket.positions.includes(position)
-                ? `contains residue ${position}`
-                : `${pocket.positions.length} residues`
+                ? advanced
+                  ? `contains residue ${position}`
+                  : `contains position ${position}`
+                : advanced
+                  ? `${pocket.positions.length} residues`
+                  : plainLength(pocket.positions.length)
             }
             value={
-              pocket.probability !== null
-                ? `p ${pocket.probability.toFixed(2)}`
-                : "p unknown"
+              !advanced
+                ? plainChance(pocket.probability) || undefined
+                : pocket.probability !== null
+                  ? `p ${pocket.probability.toFixed(2)}`
+                  : "p unknown"
             }
           />
         )}
@@ -500,7 +538,9 @@ export function InterventionLedger({
               partner.evidence_count === 1 ? "record" : "records"
             }`}
             value={
-              partner.mi_score !== null && partner.mi_score !== undefined
+              advanced &&
+              partner.mi_score !== null &&
+              partner.mi_score !== undefined
                 ? `MI ${partner.mi_score.toFixed(2)}`
                 : undefined
             }
@@ -528,9 +568,11 @@ export function InterventionLedger({
               }
               evidence={partner.evidence}
               label={partner.partner_symbol ?? partner.string_id}
-              note={partner.also_in_intact ? "also in IntAct" : undefined}
+              note={
+                advanced && partner.also_in_intact ? "also in IntAct" : undefined
+              }
               value={
-                partner.score !== null && partner.score !== undefined
+                advanced && partner.score !== null && partner.score !== undefined
                   ? `score ${partner.score.toFixed(3)}`
                   : undefined
               }
@@ -564,10 +606,18 @@ export function InterventionLedger({
             onSelect={() => onSelect({ kind: "class", id: entry.id })}
             evidence={entry.drugs[0]?.evidence}
             label={entry.mechanism}
-            note={entry.modalities.join(", ")}
-            value={`${entry.drugs.length} ${
-              entry.drugs.length === 1 ? "record" : "records"
-            }`}
+            note={
+              advanced
+                ? entry.modalities.join(", ")
+                : entry.modalities.map(plainDrugKind).join(", ")
+            }
+            value={
+              advanced
+                ? `${entry.drugs.length} ${
+                    entry.drugs.length === 1 ? "record" : "records"
+                  }`
+                : plainDrugCount(entry.drugs.length)
+            }
             title={entry.mechanism}
           />
         )}

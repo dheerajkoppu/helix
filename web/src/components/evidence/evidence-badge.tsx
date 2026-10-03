@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "cn";
 
 import { EvidenceGlyph } from "@/components/evidence/glyphs";
@@ -6,6 +8,8 @@ import {
   type EvidenceBorder,
   type EvidenceClass,
 } from "@/lib/evidence";
+import { plainEvidenceKind, plainEvidenceSource } from "@/lib/plain-language";
+import { useAdvancedMode } from "@/lib/state/preferences";
 
 export const BORDER_STYLE: Record<EvidenceBorder, string> = {
   solid: "border-solid",
@@ -25,6 +29,8 @@ export interface EvidenceBadgeProps extends Omit<
   size?: "compact" | "standard";
   /** short source reference printed after the code, e.g. "PubMed:21727188", "AFDB v6" */
   detail?: React.ReactNode;
+  /** database the statement comes from; simple mode prints it in place of the class code */
+  source?: string | null;
 }
 
 /**
@@ -36,10 +42,43 @@ export function EvidenceBadge({
   evidenceClass,
   size = "standard",
   detail,
+  source,
   className,
   ...props
 }: EvidenceBadgeProps) {
+  const advanced = useAdvancedMode();
   const meta = EVIDENCE_META[evidenceClass];
+  if (!advanced) {
+    return (
+      <span
+        data-slot="evidence-badge"
+        data-evidence={evidenceClass}
+        title={
+          typeof detail === "string"
+            ? `${plainEvidenceKind(evidenceClass)} · ${detail}`
+            : plainEvidenceKind(evidenceClass)
+        }
+        className={cn(
+          "inline-flex shrink-0 items-center gap-1 align-middle text-2xs whitespace-nowrap",
+          size === "standard" && [
+            "h-[18px] rounded-xs border px-1",
+            BORDER_STYLE[meta.border],
+            meta.borderClass,
+          ],
+          className,
+        )}
+        {...props}
+      >
+        <EvidenceGlyph
+          evidenceClass={evidenceClass}
+          className={meta.textClass}
+        />
+        <span className="leading-none text-foreground">
+          {plainEvidenceSource(evidenceClass, source)}
+        </span>
+      </span>
+    );
+  }
   return (
     <span
       data-slot="evidence-badge"

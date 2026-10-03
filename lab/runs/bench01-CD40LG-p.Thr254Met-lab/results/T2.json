@@ -1,0 +1,99 @@
+{
+  "test_id": "T2",
+  "test_kind": "structural_context",
+  "values": {
+    "headline": "Residue 254: lines none of the 1 P2Rank pockets; lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar).",
+    "verdict": "in_predicted_pocket",
+    "in_predicted_interface": false,
+    "p2rank_status": "ready",
+    "p2rank_model": "afdb:AF-P29965-F1",
+    "p2rank_pockets_total": 1,
+    "p2rank_pockets_containing_residue": [],
+    "protvar_pockets_containing_residue": [
+      {
+        "pocket": 2,
+        "score": 913.5,
+        "buriedness": 0.83,
+        "mean_plddt": 94.2,
+        "residues": [
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          241,
+          242,
+          243,
+          244,
+          245,
+          246,
+          247,
+          248,
+          249,
+          254
+        ]
+      },
+      {
+        "pocket": 7,
+        "score": 595.8,
+        "buriedness": 0.81,
+        "mean_plddt": 96.4,
+        "residues": [
+          125,
+          127,
+          128,
+          129,
+          130,
+          143,
+          144,
+          145,
+          249,
+          250,
+          251,
+          252,
+          253,
+          254,
+          255
+        ]
+      }
+    ],
+    "protvar_interface": {
+      "state": "not_covered",
+      "message": "No predicted interface contains this residue."
+    }
+  },
+  "sources": [
+    {
+      "database": "PrankWeb",
+      "record_id": "AF-P29965-F1",
+      "url": "https://prankweb.cz"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P29965:pocket:2",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P29965:254"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "P29965:pocket:7",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=P29965:254"
+    }
+  ],
+  "controls": [
+    "Rank control: the rank and probability of the pocket among all predicted pockets of the model.",
+    "Confidence control: mean pLDDT of the pocket residues."
+  ],
+  "limitations": [
+    "Predicted pockets and interfaces are computational predictions, not measured binding sites."
+  ],
+  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments structural_context --accession P29965 --position 254 --alternate-residue M --reference-residue T --gene CD40LG --variant-id CD40LG-p.Thr254Met",
+  "elapsed_seconds": 0.5
+}

@@ -20,6 +20,7 @@ import {
   variantLabel,
 } from "@/components/lab/format";
 import { STEP_LABEL } from "@/components/lab/loop";
+import { PlainStepPanel } from "@/components/lab/plain-steps";
 import {
   overallOutcome,
   type ApprovalEntry,
@@ -33,6 +34,7 @@ import { isActiveStatus } from "@/components/lab/types";
 import { Button } from "@/components/ui/button";
 import { isApiError } from "@/lib/api/client";
 import { routes } from "@/lib/ids";
+import { useAdvancedMode } from "@/lib/state/preferences";
 
 const SHORT_LIST = 6;
 
@@ -700,8 +702,20 @@ interface Counts {
   results: number;
 }
 
-/** The output of one loop step, reduced to what a first reading needs. */
-export function StepPanel({
+/** The output of one loop step: everyday words by default, the record's own terms in Advanced. */
+export function StepPanel(props: {
+  stage: LoopStageId;
+  onDetails: (stage: LoopStageId) => void;
+}) {
+  const advanced = useAdvancedMode();
+  return advanced ? (
+    <RecordStepPanel {...props} />
+  ) : (
+    <PlainStepPanel {...props} />
+  );
+}
+
+function RecordStepPanel({
   stage,
   onDetails,
 }: {

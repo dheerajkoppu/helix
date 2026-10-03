@@ -43,7 +43,7 @@ import {
 } from "@/components/search/result-row";
 import type { SearchResult } from "@/components/search/types";
 import { useEntitySearch } from "@/components/search/use-entity-search";
-import { SEARCH_PLACEHOLDER } from "@/components/shell/search-trigger";
+import { useSearchPlaceholder } from "@/components/shell/search-trigger";
 import {
   CommandDialog,
   Command,
@@ -61,6 +61,14 @@ import {
   routes,
 } from "@/lib/ids";
 import { askOrpha, useAssistant } from "@/lib/state/assistant";
+import { PlainResultRow } from "@/components/shell/plain-result-row";
+import {
+  PALETTE_WORDS,
+  SEARCH_WORDS,
+  plainCommand,
+  plainCommandGroup,
+  plainStage,
+} from "@/lib/plain-language";
 import { usePreferences } from "@/lib/state/preferences";
 import type { ProjectItemDraft } from "@/lib/state/projects";
 import { useWorkspaceSelection } from "@/lib/state/selection";
@@ -181,6 +189,7 @@ export function CommandPalette() {
   const selectResidue = useWorkspaceSelection((state) => state.selectResidue);
   const learnMode = usePreferences((state) => state.learnMode);
   const advanced = usePreferences((state) => state.advanced);
+  const placeholder = useSearchPlaceholder();
   const toggleLearnMode = usePreferences((state) => state.toggleLearnMode);
   const toggleAdvanced = usePreferences((state) => state.toggleAdvanced);
   const setAssistantOpen = useAssistant((state) => state.setOpen);
@@ -440,7 +449,7 @@ export function CommandPalette() {
     const target = resolveStage(stage.id, chain);
     return {
       id: `stage-${stage.id}`,
-      label: `${stage.number} ${stage.label}`,
+      label: `${stage.number} ${advanced ? stage.label : plainStage(stage.id)}`,
       detail: target.subject?.label ?? target.missing ?? undefined,
       keywords: "stage jump go",
       shortcut: `g ${stage.key}`,
@@ -592,7 +601,12 @@ export function CommandPalette() {
       : [
           { heading: "Actions", commands: actions },
           { heading: "Stages", commands: stageCommands },
-          { heading: "Go to", commands: navigation },
+          {
+            heading: "Go to",
+            commands: advanced
+              ? navigation
+              : navigation.filter((command) => command.id !== "kit"),
+          },
           { heading: "Preferences", commands: preferences },
         ]
           .map((group) => ({
@@ -654,8 +668,14 @@ export function CommandPalette() {
       ) : (
         <span className="w-3.5 shrink-0" />
       )}
-      <span className="shrink-0">{command.label}</span>
-      {command.detail ? (
+      <span className="shrink-0">
+        {advanced
+          ? command.label
+          : command.id === "ask-orpha" && command.label.includes("“")
+            ? `${plainCommand(command.id)} ${command.label.slice(command.label.indexOf("“"))}`
+            : (plainCommand(command.id) ?? command.label)}
+      </span>
+      {command.detail && (advanced || command.kind === "setting") ? (
         <span className="min-w-0 truncate text-muted-foreground">
           {command.detail}
         </span>
@@ -663,11 +683,11 @@ export function CommandPalette() {
       <CommandShortcut className="shrink-0 pl-2 tracking-normal">
         {command.shortcut ? (
           <KeyHint keys={command.shortcut} />
-        ) : (
+        ) : advanced ? (
           <span className="text-2xs text-subtle-foreground">
             {command.kind}
           </span>
-        )}
+        ) : null}
       </CommandShortcut>
     </CommandItem>
   );
@@ -678,7 +698,11 @@ export function CommandPalette() {
       value={resultValue(result)}
       onSelect={() => openSearchResult(result, navigate)}
     >
-      <SearchResultRow result={result} />
+      {advanced ? (
+        <SearchResultRow result={result} />
+      ) : (
+        <PlainResultRow result={result} />
+      )}
     </CommandItem>
   );
 
@@ -686,7 +710,7 @@ export function CommandPalette() {
     <CommandDialog
       open={open}
       onOpenChange={(next) => (next ? setOpen(true) : close())}
-      title="Search and commands"
+      title={advanced ? "Search and commands" : PALETTE_WORDS.title}
       description="Search a disease, gene, protein or variant, or run a command."
       className="top-[14%] max-w-[calc(100%-2rem)] gap-0 duration-0 data-closed:animate-none data-open:animate-none sm:max-w-2xl"
     >
@@ -710,17 +734,23 @@ export function CommandPalette() {
         <CommandInput
           value={query}
           onValueChange={setQuery}
-          placeholder={SEARCH_PLACEHOLDER}
+          placeholder={placeholder}
         />
         <CommandList className="mt-1 max-h-[min(30rem,62dvh)] border-t border-border-subtle">
           {residueCommands.length > 0 ? (
-            <CommandGroup heading={`Residue on ${accession}`}>
+            <CommandGroup
+              heading={
+                advanced ? `Residue on ${accession}` : PALETTE_WORDS.jumpTo
+              }
+            >
               {residueCommands.map(renderCommand)}
             </CommandGroup>
           ) : null}
 
           {parsed.length > 0 ? (
-            <CommandGroup heading="Parsed input">
+            <CommandGroup
+              heading={advanced ? "Parsed input" : SEARCH_WORDS.goTo}
+            >
               {parsed.map((entry) => (
                 <CommandItem
                   key={entry.id}
@@ -732,7 +762,7 @@ export function CommandPalette() {
                     {entry.label}
                   </span>
                   <span className="min-w-0 truncate text-muted-foreground">
-                    {entry.detail}
+                    {advanced ? entry.detail : null}
                   </span>
                   <CommandShortcut className="shrink-0 pl-2 tracking-normal">
                     <KeyHint keys="enter" />
@@ -746,9 +776,11 @@ export function CommandPalette() {
             <CommandGroup
               key={group.type}
               heading={
-                group.total > group.results.length
-                  ? `${group.label} · ${group.results.length} of ${group.total}`
-                  : group.label
+                !advanced
+                  ? plainCommandGroup(group.label)
+                  : group.total > group.results.length
+                    ? `${group.label} · ${group.results.length} of ${group.total}`
+                    : group.label
               }
             >
               {group.results.map(renderResult)}
@@ -756,10 +788,19 @@ export function CommandPalette() {
           ))}
 
           {entityText && search.pending && entityRows.length === 0 ? (
-            <PendingRow>Searching the catalog</PendingRow>
+            <PendingRow>
+              {advanced ? "Searching the catalog" : SEARCH_WORDS.searching}
+            </PendingRow>
           ) : null}
 
-          {noEntities ? (
+          {noEntities && !advanced ? (
+            <div className="px-3.5 py-3 text-sm text-muted-foreground">
+              <p className="text-foreground">{SEARCH_WORDS.nothing}</p>
+              <p className="mt-1">{SEARCH_WORDS.tryThis}</p>
+            </div>
+          ) : null}
+
+          {noEntities && advanced ? (
             <div className="px-3.5 py-3 text-xs text-muted-foreground">
               <p className="text-foreground">
                 No source found for &ldquo;{entityText}&rdquo;.
@@ -783,12 +824,14 @@ export function CommandPalette() {
             <CommandGroup heading="Search">
               <CommandItem value="retry:search" onSelect={() => search.retry()}>
                 <span className="text-foreground">
-                  {isApiError(searchFailed) && searchFailed.isUnreachable
-                    ? "The OrphaFold API did not answer. Names and aliases cannot be resolved."
-                    : `Search failed: ${searchFailed.message}`}
+                  {!advanced
+                    ? SEARCH_WORDS.offline
+                    : isApiError(searchFailed) && searchFailed.isUnreachable
+                      ? "The OrphaFold API did not answer. Names and aliases cannot be resolved."
+                      : `Search failed: ${searchFailed.message}`}
                 </span>
                 <CommandShortcut className="shrink-0 pl-2 tracking-normal">
-                  Retry
+                  {advanced ? "Retry" : SEARCH_WORDS.retry}
                 </CommandShortcut>
               </CommandItem>
             </CommandGroup>
@@ -798,12 +841,19 @@ export function CommandPalette() {
             section.results.length > 0 ||
             section.unanswered.length > 0 ||
             (section.state.pending && liveText.length >= 3) ? (
-              <CommandGroup key={section.key} heading={section.heading}>
+              <CommandGroup
+                key={section.key}
+                heading={
+                  advanced ? section.heading : plainCommandGroup(section.heading)
+                }
+              >
                 {section.results.flatMap((group) =>
                   group.results.map(renderResult),
                 )}
                 {section.state.pending && section.results.length === 0 ? (
-                  <PendingRow>{section.step}</PendingRow>
+                  <PendingRow>
+                    {advanced ? section.step : SEARCH_WORDS.searching}
+                  </PendingRow>
                 ) : null}
                 {section.unanswered.map((source) => (
                   <CommandItem
@@ -812,11 +862,13 @@ export function CommandPalette() {
                     onSelect={() => section.state.retry()}
                   >
                     <span className="text-muted-foreground">
-                      {source.message ??
-                        `${source.name ?? source.source} did not answer.`}
+                      {advanced
+                        ? (source.message ??
+                          `${source.name ?? source.source} did not answer.`)
+                        : SEARCH_WORDS.offline}
                     </span>
                     <CommandShortcut className="shrink-0 pl-2 tracking-normal">
-                      Retry
+                      {advanced ? "Retry" : SEARCH_WORDS.retry}
                     </CommandShortcut>
                   </CommandItem>
                 ))}
@@ -825,7 +877,12 @@ export function CommandPalette() {
           )}
 
           {commandGroups.map((group) => (
-            <CommandGroup key={group.heading} heading={group.heading}>
+            <CommandGroup
+              key={group.heading}
+              heading={
+                advanced ? group.heading : plainCommandGroup(group.heading)
+              }
+            >
               {group.commands.map(renderCommand)}
             </CommandGroup>
           ))}
@@ -833,13 +890,15 @@ export function CommandPalette() {
           {noRows ? (
             <div className="px-3.5 py-4 text-xs text-muted-foreground">
               <p className="text-foreground">
-                {mode !== "residue"
-                  ? `No command matches “${text}”.`
+                {!advanced
+                  ? PALETTE_WORDS.noCommand
+                  : mode !== "residue"
+                    ? `No command matches “${text}”.`
                   : accession
                     ? `“${text}” is not a residue or a substitution.`
                     : "No protein in context. Open a gene or protein first."}
               </p>
-              {mode === "residue" ? (
+              {mode === "residue" && advanced ? (
                 <p className="mt-1">
                   Type a position (165), a residue (R226, Arg226) or a
                   substitution (D165G, p.Asp165Gly).
@@ -850,20 +909,24 @@ export function CommandPalette() {
         </CommandList>
         <div className="flex h-7 items-center gap-4 border-t border-border-subtle bg-sunken px-3">
           <KeyHint keys="enter" label="Open" />
-          <KeyHint
-            keys="mod+enter"
-            label="Open at source"
-            className="hidden sm:inline-flex"
-          />
+          {advanced ? (
+            <KeyHint
+              keys="mod+enter"
+              label="Open at source"
+              className="hidden sm:inline-flex"
+            />
+          ) : null}
           <span className="inline-flex items-center">
             <KeyHint keys="up" />
             <KeyHint keys="down" label="Move" />
           </span>
-          <span className="hidden items-center gap-3 font-mono text-2xs text-subtle-foreground md:inline-flex">
-            <span>&gt; commands</span>
-            <span>@ entities</span>
-            <span># residue</span>
-          </span>
+          {advanced ? (
+            <span className="hidden items-center gap-3 font-mono text-2xs text-subtle-foreground md:inline-flex">
+              <span>&gt; commands</span>
+              <span>@ entities</span>
+              <span># residue</span>
+            </span>
+          ) : null}
           <KeyHint keys="esc" label="Close" className="ml-auto" />
         </div>
       </Command>

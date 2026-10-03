@@ -20,6 +20,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  CHOOSE_STEP_LABEL,
+  STEPS_LABEL,
+  plainStage,
+  plainStageNeeds,
+} from "@/lib/plain-language";
 import { withSelection } from "@/lib/state/selection-url";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import {
@@ -94,7 +100,7 @@ export function StageRail({
                   isActive && "font-medium",
                 )}
               >
-                {stage.label}
+                {simple ? plainStage(stage.id) : stage.label}
               </span>
               {target.subject && !simple ? (
                 <span
@@ -145,7 +151,7 @@ export function StageRail({
                     {body}
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
-                    {target.missing}
+                    {simple ? plainStageNeeds(stage.id) : target.missing}
                   </TooltipContent>
                 </Tooltip>
               )}
@@ -157,10 +163,22 @@ export function StageRail({
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetTrigger className="flex h-10 w-full items-center gap-2 px-3 text-left text-sm lg:hidden">
           <span className="tabular font-mono text-xs text-muted-foreground">
-            {activeEntry ? `${activeEntry.stage.number}/6` : "0/6"}
+            {activeEntry
+              ? simple
+                ? `${activeEntry.stage.number} of 6`
+                : `${activeEntry.stage.number}/6`
+              : simple
+                ? ""
+                : "0/6"}
           </span>
           <span className="font-medium">
-            {activeEntry?.stage.label ?? "Choose a stage"}
+            {activeEntry
+              ? simple
+                ? plainStage(activeEntry.stage.id)
+                : activeEntry.stage.label
+              : simple
+                ? CHOOSE_STEP_LABEL
+                : "Choose a stage"}
           </span>
           {activeEntry?.target.subject && !simple ? (
             <span
@@ -181,7 +199,9 @@ export function StageRail({
           className="gap-0 rounded-t-2xl p-0"
         >
           <SheetHeader className="border-b border-border-subtle px-4 py-3">
-            <SheetTitle>Research stages</SheetTitle>
+            <SheetTitle>
+              {simple ? STEPS_LABEL : "Research stages"}
+            </SheetTitle>
             <SheetDescription className="sr-only">
               Move between stages. The current disease, gene, variant and
               protein stay in context.
@@ -199,10 +219,11 @@ export function StageRail({
                   </span>
                   <span className="flex min-w-0 flex-col">
                     <span className={cn(isActive && "font-medium")}>
-                      {stage.label}
+                      {simple ? plainStage(stage.id) : stage.label}
                     </span>
                     <span className="truncate text-xs text-muted-foreground">
-                      {target.subject?.label ?? target.missing}
+                      {target.subject?.label ??
+                        (simple ? plainStageNeeds(stage.id) : target.missing)}
                     </span>
                   </span>
                 </>

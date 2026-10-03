@@ -25,6 +25,11 @@ import { tokenColor, useViewerPalette } from "@/components/viewer/palette";
 import { PLDDT_NO_SCORE } from "@/lib/science/plddt";
 import { routes, toThreeLetter } from "@/lib/ids";
 import {
+  COMPARE_WORDS,
+  PREDICTION_CAVEAT,
+  plainLength,
+} from "@/lib/plain-language";
+import {
   useWorkspaceSelection,
   type ColorMode,
   type CompareMode,
@@ -184,7 +189,12 @@ export const CompareInstrument = memo(function CompareInstrument({
       slot: "R",
     });
     return structure && simple
-      ? { ...structure, label: "Reference", detail: undefined }
+      ? {
+          ...structure,
+          slot: undefined,
+          label: COMPARE_WORDS.normal,
+          detail: undefined,
+        }
       : structure;
   }, [result.reference_model, accession, simple]);
   const variantModel = useMemo(() => {
@@ -193,7 +203,12 @@ export const CompareInstrument = memo(function CompareInstrument({
       slot: "V",
     });
     return structure && simple
-      ? { ...structure, label: "Variant", detail: undefined }
+      ? {
+          ...structure,
+          slot: undefined,
+          label: COMPARE_WORDS.mutated,
+          detail: undefined,
+        }
       : structure;
   }, [result.variant_model, accession, simple]);
 
@@ -312,7 +327,41 @@ export const CompareInstrument = memo(function CompareInstrument({
   const siteRow = difference.per_residue.find(
     (entry) => entry.position === site,
   );
-  const strip = (
+  const strip = simple ? (
+    <ModelResultStrip
+      model={result.provider.model_name ?? result.provider.name}
+      origin={result.variant_model.origin}
+      metrics={[
+        {
+          label: COMPARE_WORDS.moved,
+          value: difference.superposition.rmsd,
+          unit: "Å",
+          caption: COMPARE_WORDS.angstrom,
+        },
+        {
+          label: `pLDDT, ${COMPARE_WORDS.normal.toLowerCase()}`,
+          value: siteRow?.plddt_reference,
+          explainer: "plddt",
+          missingReason: "Not modelled",
+        },
+        {
+          label: `pLDDT, ${COMPARE_WORDS.mutated.toLowerCase()}`,
+          value: siteRow?.plddt_variant,
+          explainer: "plddt",
+          missingReason: "Not modelled",
+        },
+        {
+          label: COMPARE_WORDS.partModelled,
+          value: `${result.construct.start}–${result.construct.end}`,
+          unit: `of ${plainLength(result.construct.protein_length)}`,
+        },
+      ]}
+      href={
+        result.origin === "cached_example" ? null : routes.job(result.job_id)
+      }
+      className="shrink-0"
+    />
+  ) : (
     <ModelResultStrip
       model={result.provider.model_name ?? result.provider.name}
       version={result.provider.model_version}
@@ -538,7 +587,14 @@ export const CompareInstrument = memo(function CompareInstrument({
 });
 
 /** The fixed caveat about single-substitution predictions: one quiet line, with its sources one click away. */
-export function CaveatLine({ caveats }: { caveats: Caveat[] }) {
+export function CaveatLine({
+  caveats,
+  simple = false,
+}: {
+  caveats: Caveat[];
+  /** the fixed plain caveat; the sourced text stays in the popover */
+  simple?: boolean;
+}) {
   const fixed =
     caveats.find((entry) => entry.id === "not_validated_for_substitutions") ??
     caveats[0];
@@ -550,10 +606,10 @@ export function CaveatLine({ caveats }: { caveats: Caveat[] }) {
       data-slot="comparison-caveat"
       className="flex min-w-0 flex-1 items-center gap-2"
     >
-      <span className="truncate" title={fixed.text}>
-        {fixed.text}
+      <span className="truncate" title={simple ? undefined : fixed.text}>
+        {simple ? `${PREDICTION_CAVEAT} ${COMPARE_WORDS.small}` : fixed.text}
       </span>
-      {lead && leadHref ? (
+      {lead && leadHref && !simple ? (
         <ExternalLink href={leadHref} className="shrink-0">
           {(lead.text ?? lead.title ?? "Source").split(",")[0]} {lead.year}
         </ExternalLink>
@@ -564,7 +620,7 @@ export function CaveatLine({ caveats }: { caveats: Caveat[] }) {
           className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-xs px-1 text-foreground hover:bg-accent aria-expanded:bg-active"
         >
           <InfoIcon className="size-3" />
-          Sources
+          {simple ? COMPARE_WORDS.sources : "Sources"}
         </PopoverTrigger>
         <PopoverContent
           side="top"

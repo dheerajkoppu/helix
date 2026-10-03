@@ -1,0 +1,18 @@
+{
+  "started_at": "2026-10-03T22:37:43Z",
+  "arms": "specialist_lab and single_agent_baseline through lab/run_lab.py",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "parallel_runs": 3,
+  "order": "Catalogue order; the lab starts first on odd-numbered variants, the control on even-numbered ones; one worker pool for both arms.",
+  "approvals": "Pre-approved with --approve under protocol.md section 5; every decision is written to the record with the operator below.",
+  "operator": "benchmark pre-approval rule (lab/experiments/protocol.md section 5), batch started by an automated build agent in dheeraj's session",
+  "run_timeout_seconds": 1500,
+  "retries_after_failure": 1,
+  "api_url": "http://localhost:8000",
+  "repeats_per_cell": 1,
+  "resumed_at": [],
+  "secondary": true
+}
