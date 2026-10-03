@@ -1,0 +1,6 @@
+Calls:
+1. browser_navigate with url "https://example.org"
+2. run_ligand_contact_test with test_id "T1"
+3. run_structure_comparison with test_id "T2"
+4. record_handoff with to "orchestrator" and summary "Patients should be treated with a higher dose of immunoglobulin."
+Final reply: done

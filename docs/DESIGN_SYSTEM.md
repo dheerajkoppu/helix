@@ -4,6 +4,38 @@ The single source of visual and structural truth for `web/`. Follow it literally
 
 See it running: `/dev/kit` (every component and token, light and dark) and `/dev/frame` (a complete workspace stage on live data: copy its structure).
 
+## 0. Simple by default (owner decision, overrides everything below)
+
+The product is shown in a two-minute demo to people who have never seen it. The default view must be simple, calm and nearly free of prose. Density is opt-in.
+
+**Two modes, one switch.** `usePreferences().advanced` is `false` by default.
+
+- **Simple (default):** only what a first-time viewer needs to follow the story. Large 3D structure, the few key facts, the model and its metrics.
+- **Advanced:** everything sections 1 to 9 describe (full ledgers, source-ID chips, all tracks, legends, status-line detail, raw values).
+
+Nothing is deleted. Detail moves behind Advanced, a "Details" disclosure, a popover or a tab.
+
+**Text budget (simple mode).**
+
+- No paragraphs. One sentence per section at most, 12 words or fewer.
+- Labels are 1 to 3 words. No helper text under form fields.
+- Explanations live behind a `?` (`MetricReadout`, `LearnTerm`), never inline.
+- Page headers: a title and at most one short line.
+- Caveats: one quiet line with a link to the detail, not a block.
+
+**Layout (simple mode).**
+
+- Top bar: wordmark, `Lab`, `Explore`, `Projects`, search, one overflow menu holding everything else (Jobs, Models, Docs, Learn, Advanced, theme, source). Status line hidden except a small API-state dot.
+- Workspace: stage rail with stage names only; no subject chip row; two zones (a short list or key facts on the left, the 3D viewer large); the inspector appears only when something is selected; the sequence dock is one slim strip (domains and variant marks) with an Expand control.
+- At most one primary action per screen, visibly the primary.
+- More whitespace, fewer rules. Body text 14px, key numbers 20px or larger.
+
+**Show the tangible result.** Wherever a model produced something, show it with one consistent strip: model name and version, the two or three metrics that matter as large numbers with units, run time, origin tag. Use `ModelResultStrip` (`@/components/science/model-result-strip`); create it there if it does not exist yet, and reuse it everywhere.
+
+**Agents.** Agent activity reads as a short row of named agents with a state each (waiting, working, done) and one line of output, never a log dump. The raw record sits behind a "Record" tab.
+
+**Still never:** gradients, glows, decorative colour, card grids, stat-tile walls, marketing copy, emoji.
+
 ## 1. Direction
 
 A scientific instrument: paper and ink. One working surface divided by 1px rules. Dense rows, calm type. Chrome is monochrome; saturated colour appears only where it encodes a scientific fact. The residue axis is the product's signature: ticks on a baseline appear in the stage rail, section headers and the dock.
@@ -16,9 +48,9 @@ Never: a left navigation sidebar, card grids, stat tiles, gradients, glows, pill
 
 | Part        | Height | Component              | Rule                                                                                            |
 | ----------- | ------ | ---------------------- | ----------------------------------------------------------------------------------------------- |
-| Top bar     | 40px   | `TopBar`               | The only global navigation. Wordmark, nav, search trigger, Learn, Advanced, theme, source link. |
+| Top bar     | 40px   | `TopBar`               | The only global navigation. Wordmark, Lab, Explore, Projects, search, `ApiDot`, one overflow menu (Jobs, Models, Docs, About, Ask Orpha, Shortcuts, Advanced, Learn mode, theme, source). |
 | Main        | fills  | `<main>` in `AppShell` | The viewport never scrolls; `main` does. Workspace routes fill it exactly.                      |
-| Status line | 24px   | `StatusLine`           | API state, source status, selection, research-use notice, `?` and `⌘K` hints.                   |
+| Status line | 24px   | `StatusLine`           | Advanced only. API state, source status, selection, research-use notice, `?` and `⌘K` hints. Simple mode shows `ApiDot` in the top bar, which opens the same detail. |
 
 ### Pages outside the workspace
 
@@ -165,36 +197,38 @@ Rules:
 
 ## 6. Component inventory
 
-| Component                                                                                    | Import                                       | Use                                                                                                                                 |
-| -------------------------------------------------------------------------------------------- | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `EvidenceBadge`                                                                              | `@/components/evidence/evidence-badge`       | `<EvidenceBadge evidenceClass="clinical_database" />`; `size="compact"` in table cells.                                             |
-| `EvidencePopover`                                                                            | `@/components/evidence/evidence-popover`     | `<EvidencePopover evidence={item} />`: the default way to cite; click shows source, record ID, release, retrieval date, link.       |
-| `ClaimLabel`                                                                                 | `@/components/evidence/evidence-badge`       | Four-label reading for comparison and mechanism claims.                                                                             |
-| `SourceChip`                                                                                 | `@/components/evidence/source-chip`          | `<SourceChip source="UniProt" id="Q06187" href={url} />` for any source identifier.                                                 |
-| `SourceStatusList`                                                                           | `@/components/evidence/source-status-list`   | `<SourceStatusList sources={result.sources} />`: which sources answered, were empty or are down.                                    |
-| `StructureOriginTag`                                                                         | `@/components/evidence/structure-origin-tag` | `<StructureOriginTag origin="predicted_external" detail="AlphaFold DB v6" caption />` on every structure.                           |
-| `MetricReadout`                                                                              | `@/components/science/metric-readout`        | `<MetricReadout metric="plddt" value={93} producedBy="AlphaFold DB v6" />` for pLDDT, PAE, pTM, ipTM, AlphaMissense, ΔΔG, affinity. |
-| `LearnTerm`                                                                                  | `@/components/science/learn-term`            | `<LearnTerm term="plddt">pLDDT</LearnTerm>`; add terms in `@/lib/glossary`.                                                         |
-| `PlddtLegend`, `AlphaMissenseLegend`, `ClinicalSignificanceLegend`, `ReferenceVariantLegend` | `@/components/science/legends`               | Required beside any coloured view; `wrap={false}` in footers.                                                                       |
-| `ClinicalSignificanceChip`                                                                   | `@/components/science/legends`               | `<ClinicalSignificanceChip significance="pathogenic" reviewStars={2} />`.                                                           |
-| `Swatch`                                                                                     | `@/components/science/swatch`                | A ringed colour sample with an optional code.                                                                                       |
-| `DataTable`                                                                                  | `@/components/data/data-table`               | Every list: sortable, virtualised, keyboard navigable, optional grouping. Parent needs a bounded height.                            |
-| `Table`                                                                                      | `@/components/ui/table`                      | Small static tables without sorting.                                                                                                |
-| `SectionHeader`                                                                              | `@/components/data/section-header`           | `<SectionHeader title="Evidence" count={3} />` between blocks inside a zone.                                                        |
-| `DefinitionList`, `DefinitionRow`, `Unknown`                                                 | `@/components/data/definition-list`          | Label and value rows; an empty value prints "Unknown".                                                                              |
-| `MonoId`                                                                                     | `@/components/data/mono-id`                  | `<MonoId value="Q06187" />`: monospace identifier with copy.                                                                        |
-| `ExternalLink`, `TextLink`, `ButtonLink`                                                     | `@/components/data/*`                        | Leaves the app (arrow, new tab) / internal link / internal link styled as a button.                                                 |
-| `KeyHint`                                                                                    | `@/components/data/key-hint`                 | `<KeyHint keys="g p" label="Protein" />`; `mod` renders ⌘ or Ctrl.                                                                  |
-| `EmptyState`                                                                                 | `@/components/states/empty-state`            | What is absent, which sources were searched, the next step.                                                                         |
-| `SourceUnavailable`                                                                          | `@/components/states/source-unavailable`     | One source failed; the rest of the page stays.                                                                                      |
-| `QueryErrorState`, `RowsSkeleton`                                                            | `@/components/states/query-state`            | Maps an `ApiError` to the right state; 28px loading rows.                                                                           |
-| `toast`                                                                                      | `sonner`                                     | Events that finish out of view: job done, copied, exported.                                                                         |
-| `Zone`, `WorkspaceZones`, `SubjectBarActions`, `useWorkspaceSubject`, `useAxisDock`          | `@/components/workspace`                     | The workspace frame parts.                                                                                                          |
-| `Page`, `PageHeader`, `PageBody`, `PageSection`, `Plate`                                     | `@/components/shell/page`                    | Pages outside the workspace.                                                                                                        |
-| `SearchTrigger`                                                                              | `@/components/shell/search-trigger`          | Opens the command palette; `variant="hero"` on the home page.                                                                       |
-| `MolecularViewer`                                                                            | `@/components/viewer`                        | Reserved contract (placeholder until the Mol* build lands). Control it through the `MolecularViewerHandle` ref.                     |
-| `SequenceAxisDock`                                                                           | `@/components/sequence`                      | Reserved contract with a working lightweight axis. Pages do not render it; they call `useAxisDock`.                                 |
-| Controls                                                                                     | `@/components/ui/*`                          | shadcn/ui on Base UI, Mira. `Button` default is ink; `outline` for secondary; `ghost` in toolbars.                                  |
+| Component                                                                                    | Import                                       | Use                                                                                                                                                                  |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EvidenceBadge`                                                                              | `@/components/evidence/evidence-badge`       | `<EvidenceBadge evidenceClass="clinical_database" />`; `size="compact"` in table cells.                                                                              |
+| `EvidencePopover`                                                                            | `@/components/evidence/evidence-popover`     | `<EvidencePopover evidence={item} />`: the default way to cite; click shows source, record ID, release, retrieval date, link.                                        |
+| `ClaimLabel`                                                                                 | `@/components/evidence/evidence-badge`       | Four-label reading for comparison and mechanism claims.                                                                                                              |
+| `SourceChip`                                                                                 | `@/components/evidence/source-chip`          | `<SourceChip source="UniProt" id="Q06187" href={url} />` for any source identifier.                                                                                  |
+| `SourceStatusList`                                                                           | `@/components/evidence/source-status-list`   | `<SourceStatusList sources={result.sources} />`: which sources answered, were empty or are down.                                                                     |
+| `StructureOriginTag`                                                                         | `@/components/evidence/structure-origin-tag` | `<StructureOriginTag origin="predicted_external" detail="AlphaFold DB v6" caption />` on every structure.                                                            |
+| `MetricReadout`                                                                              | `@/components/science/metric-readout`        | `<MetricReadout metric="plddt" value={93} producedBy="AlphaFold DB v6" />` for pLDDT, PAE, pTM, ipTM, AlphaMissense, ΔΔG, affinity.                                  |
+| `ModelResultStrip` | `@/components/science/model-result-strip` | `<ModelResultStrip model="ESMFold v1" version="esmfold_v1" origin="predicted_orphafold" metrics={[{ label: "Cα RMSD", value: "0.069", unit: "Å" }, { label: "pLDDT at Arg28", value: 88, explainer: "plddt" }]} runtime={42} href="/jobs/…" />`. `frame`: `rule` (zone footer), `box` (page), `none`. A number is formatted, a string is printed as given, null prints `missingReason`. |
+| `Explainer` | `@/components/science/explainer` | `<Explainer term="plddt" />`: the `?` beside a number or term. Takes a metric id or a glossary term id. |
+| `LearnTerm`                                                                                  | `@/components/science/learn-term`            | `<LearnTerm term="plddt">pLDDT</LearnTerm>`; add terms in `@/lib/glossary`.                                                                                          |
+| `PlddtLegend`, `AlphaMissenseLegend`, `ClinicalSignificanceLegend`, `ReferenceVariantLegend` | `@/components/science/legends`               | Required beside any coloured view; `wrap={false}` in footers.                                                                                                        |
+| `ClinicalSignificanceChip`                                                                   | `@/components/science/legends`               | `<ClinicalSignificanceChip significance="pathogenic" reviewStars={2} />`.                                                                                            |
+| `Swatch`                                                                                     | `@/components/science/swatch`                | A ringed colour sample with an optional code.                                                                                                                        |
+| `DataTable`                                                                                  | `@/components/data/data-table`               | Every list: sortable, virtualised, keyboard navigable, optional grouping. Parent needs a bounded height.                                                             |
+| `Table`                                                                                      | `@/components/ui/table`                      | Small static tables without sorting.                                                                                                                                 |
+| `SectionHeader`                                                                              | `@/components/data/section-header`           | `<SectionHeader title="Evidence" count={3} />` between blocks inside a zone.                                                                                         |
+| `DefinitionList`, `DefinitionRow`, `Unknown`                                                 | `@/components/data/definition-list`          | Label and value rows; an empty value prints "Unknown".                                                                                                               |
+| `MonoId`                                                                                     | `@/components/data/mono-id`                  | `<MonoId value="Q06187" />`: monospace identifier with copy.                                                                                                         |
+| `ExternalLink`, `TextLink`, `ButtonLink`                                                     | `@/components/data/*`                        | Leaves the app (arrow, new tab) / internal link / internal link styled as a button.                                                                                  |
+| `KeyHint`                                                                                    | `@/components/data/key-hint`                 | `<KeyHint keys="g p" label="Protein" />`; `mod` renders ⌘ or Ctrl.                                                                                                   |
+| `EmptyState`                                                                                 | `@/components/states/empty-state`            | What is absent, which sources were searched, the next step.                                                                                                          |
+| `SourceUnavailable`                                                                          | `@/components/states/source-unavailable`     | One source failed; the rest of the page stays.                                                                                                                       |
+| `QueryErrorState`, `RowsSkeleton`                                                            | `@/components/states/query-state`            | Maps an `ApiError` to the right state; 28px loading rows.                                                                                                            |
+| `toast`                                                                                      | `sonner`                                     | Events that finish out of view: job done, copied, exported.                                                                                                          |
+| `Zone`, `WorkspaceZones`, `SubjectBarActions`, `useWorkspaceSubject`, `useAxisDock`          | `@/components/workspace`                     | The workspace frame parts.                                                                                                                                           |
+| `Page`, `PageHeader`, `PageBody`, `PageSection`, `Plate`                                     | `@/components/shell/page`                    | Pages outside the workspace.                                                                                                                                         |
+| `SearchTrigger`                                                                              | `@/components/shell/search-trigger`          | Opens the command palette; `variant="hero"` on the home page.                                                                                                        |
+| `MolecularViewer`                                                                            | `@/components/viewer`                        | The Mol* canvas. Pages render `StructureViewport` (same import), which adds the toolbar, legend and selection binding; build its inputs with `@/lib/workspace-data`. |
+| `SequenceAxisDock`                                                                           | `@/components/sequence`                      | Reserved contract with a working lightweight axis. Pages do not render it; they call `useAxisDock`.                                                                  |
+| Controls                                                                                     | `@/components/ui/*`                          | shadcn/ui on Base UI, Mira. `Button` default is ink; `outline` for secondary; `ghost` in toolbars.                                                                   |
 
 ## 7. States
 

@@ -1,0 +1,136 @@
+# OrphaFold with its production services: PostgreSQL, Redis job queue with a separate worker, and
+# S3-compatible artifact storage (MinIO). The ORPHAFOLD_* values are documented in .env.example; the
+# Boltz worker values are defined in api/orphafold/boltz/settings.py and docs/providers/boltz2.md.
+#
+#   docker compose up --build
+#
+# Web: http://localhost:3000   API: http://localhost:8000/api/v1/docs   MinIO console: http://localhost:9001
+# The credentials are development defaults. Replace them before exposing any port.
+
+x-orphafold-environment: &orphafold-environment
+  ORPHAFOLD_ENVIRONMENT: production
+  ORPHAFOLD_LOG_FORMAT: json
+  ORPHAFOLD_DATABASE_URL: postgresql://orphafold:orphafold@postgres:5432/orphafold
+  ORPHAFOLD_REDIS_URL: redis://redis:6379/0
+  ORPHAFOLD_S3_BUCKET: orphafold-artifacts
+  ORPHAFOLD_S3_ENDPOINT_URL: http://minio:9000
+  ORPHAFOLD_S3_REGION: us-east-1
+  ORPHAFOLD_S3_ACCESS_KEY_ID: orphafold
+  ORPHAFOLD_S3_SECRET_ACCESS_KEY: orphafold-development-secret
+  ORPHAFOLD_CORS_ORIGINS: ${ORPHAFOLD_CORS_ORIGINS:-http://localhost:3000}
+  ORPHAFOLD_CONTACT_EMAIL: ${ORPHAFOLD_CONTACT_EMAIL:-}
+  ORPHAFOLD_NCBI_API_KEY: ${ORPHAFOLD_NCBI_API_KEY:-}
+  ORPHAFOLD_ENABLE_NONCOMMERCIAL_SOURCES: ${ORPHAFOLD_ENABLE_NONCOMMERCIAL_SOURCES:-false}
+  ORPHAFOLD_BOLTZ_WORKER_URL: ${ORPHAFOLD_BOLTZ_WORKER_URL:-}
+  ORPHAFOLD_BOLTZ_WORKER_TOKEN: ${ORPHAFOLD_BOLTZ_WORKER_TOKEN:-}
+  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: orphafold
+      POSTGRES_PASSWORD: orphafold
+      POSTGRES_DB: orphafold
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orphafold -d orphafold"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  redis:
+    image: redis:7
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  minio:
+    image: minio/minio
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: orphafold
+      MINIO_ROOT_PASSWORD: orphafold-development-secret
+    ports:
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  # The API does not create its bucket
+  minio-bucket:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >-
+        mc alias set orphafold http://minio:9000 orphafold orphafold-development-secret
+        && mc mb --ignore-existing orphafold/orphafold-artifacts
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    environment: *orphafold-environment
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio-bucket:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=3)"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  # Jobs run here; the API only enqueues them. Scale with: docker compose up --scale worker=2
+  worker:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    command: ["python", "-m", "orphafold.worker"]
+    environment: *orphafold-environment
+    depends_on:
+      # the API creates the tables first
+      api:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+      args:
+        # the API as the browser reaches it, inlined at build time
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+        NEXT_PUBLIC_REPOSITORY_URL: ${NEXT_PUBLIC_REPOSITORY_URL:-}
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  redis-data:
+  minio-data:

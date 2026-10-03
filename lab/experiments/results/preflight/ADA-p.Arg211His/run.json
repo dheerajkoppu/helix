@@ -1,0 +1,14 @@
+{
+  "run_id": "preflight-ADA-p.Arg211His",
+  "subject": {
+    "variant_id": "ADA-p.Arg211His",
+    "gene": "ADA",
+    "accession": "P00813",
+    "position": 211,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "clinvar_vcv": "VCV000001957",
+    "clinvar_review_status": "reviewed by expert panel",
+    "protein_change": "p.Arg211His"
+  }
+}

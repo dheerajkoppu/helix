@@ -1,0 +1,19 @@
+{
+  "run_id": "run_budget",
+  "objective": "Policy probe",
+  "subject": {
+    "gene": "BTK",
+    "variant_id": "BTK-p.Arg28His",
+    "accession": "Q06187",
+    "position": 28,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "protein_change": "p.Arg28His"
+  },
+  "mode": "specialist_lab",
+  "status": "running",
+  "budget": {
+    "max_tool_calls": 2,
+    "max_compute_seconds": 300
+  }
+}

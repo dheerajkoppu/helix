@@ -223,7 +223,11 @@ A provider never touches the database or HTTP layer. It receives a `RunContext` 
 progress, cancellation, scratch directory) and returns files plus metadata; the job handler stores
 them. Expected failures raise `ProviderError(code, message, detail)`.
 
-Implemented: `afdb` (retrieval of an existing AlphaFold DB model; origin `predicted_external`).
+Implemented: `afdb` (retrieval of an existing AlphaFold DB model; origin `predicted_external`),
+`esm_atlas` (remote ESMFold v1, one chain of at most 400 residues), `cached_examples` (stored real
+outputs only), `boltz2` (structure and binding prediction; unavailable until a backend is attached,
+see `docs/providers/boltz2.md`), `prankweb` (pockets), `europepmc_literature`, and the variant-effect
+providers. `GET /api/v1/models` is the authority on what is registered and available.
 
 ### Jobs
 
@@ -256,7 +260,10 @@ required only for handlers declared `requires_seed=True`, and `software.orphafol
 `null` when the deployment is not a git checkout. It adds `request` (the submitted params) and
 `execution.stages` (real stage timings).
 
-Implemented job kind: `structure_retrieval` (`{"provider": "afdb", "uniprot_accession": "Q06187"}`).
+Implemented job kinds: `structure_retrieval` (`{"provider": "afdb", "uniprot_accession": "Q06187"}`),
+`structure_prediction`, `variant_comparison` (`{"provider": ..., "variant_id": "BTK-p.Arg28His"}`; its two
+models are `of:<job_id>-reference` and `of:<job_id>-variant`) and `binding_prediction`.
+`GET /api/v1/job-kinds` returns each kind's params and result schema.
 `GET /api/v1/job-kinds` lists kinds with the JSON Schema of their params and result.
 
 ### Database tables
@@ -271,7 +278,14 @@ Implemented job kind: `structure_retrieval` (`{"provider": "afdb", "uniprot_acce
 Implemented: `GET /health`, `GET /meta`, `GET /explore/genes`, `GET /explore/facets`, `GET /models`,
 `GET /models/{id}`, `GET /job-kinds`, `POST /jobs`, `GET /jobs`, `GET /jobs/{id}`,
 `GET /jobs/{id}/events` (SSE), `GET /jobs/{id}/log`, `POST /jobs/{id}/cancel`,
-`GET /jobs/{id}/manifest`, `GET /jobs/{id}/artifacts/{name}`. All under `/api/v1`.
+`GET /jobs/{id}/manifest`, `GET /jobs/{id}/artifacts/{name}`, and the knowledge routes: `/search`,
+`/genes/{symbol}` (+ `/variants`, `/variants.csv`, `/axis-variants`, `/population-variants`,
+`/treatments`), `/proteins/{accession}` (+ `/fasta`, `/residues/{position}`,
+`/residues/{position}/effects`, `/effect-map`, `/structures`, `/interactions`, `/pathways`, `/pockets`,
+`/compounds`), `/variants/{id}`, `/structures/{id}` (+ `/file`, `/confidence`, `/residue-map`,
+`/ligands`), `/diseases`, `/diseases/{id}`, `/literature`, `/literature/{pmid}`, `/compounds/{id}`
+(+ `/depiction.svg`, `/analogs`), `/compare/{gene}/{change}`, `/compare/results/{job_id}`, `/projects`
+and `/snapshots`. All under `/api/v1`; `api/openapi.json` is the full list.
 
 Reserved prefixes, one router module each: `/search`, `/genes`, `/proteins`, `/variants`,
 `/structures`, `/diseases`, `/literature`, `/compounds`, `/projects`, `/snapshots`, `/compare`,

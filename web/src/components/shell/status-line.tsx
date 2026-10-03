@@ -18,6 +18,7 @@ import { API_BASE_URL, apiRequest, isApiError } from "@/lib/api/client";
 import type { Schema, SourceStatusState } from "@/lib/api/types";
 import { site } from "@/lib/site";
 import { useWorkspaceHover } from "@/lib/state/hover";
+import { useAdvancedMode } from "@/lib/state/preferences";
 import { describeRanges, useWorkspaceSelection } from "@/lib/state/selection";
 import { mergeSourceReports, useShell } from "@/lib/state/shell";
 
@@ -164,11 +165,95 @@ function SelectionSegment() {
 }
 
 /**
+ * Simple mode's whole status line: one dot in the top bar. It turns into a warning mark when the
+ * API or a source for this view is not answering, and opens the same detail the full line prints.
+ */
+export function ApiDot({ className }: { className?: string }) {
+  const health = useApiHealth();
+  const reports = useShell((state) => state.sourceReports);
+  const sources = mergeSourceReports(reports);
+  const summary = summarizeSources(sources);
+  const apiState: SourceStatusState = health.isPending
+    ? "not_configured"
+    : health.isError
+      ? "unavailable"
+      : "ok";
+  const state: SourceStatusState =
+    apiState === "ok" && summary.hasProblem ? "unavailable" : apiState;
+  const apiText = health.isPending
+    ? "Checking the API"
+    : health.isError
+      ? "API not reachable"
+      : "API connected";
+  const label =
+    state === "unavailable" && apiState === "ok"
+      ? `${apiText}, ${summary.text}`
+      : apiText;
+
+  return (
+    <Popover>
+      <PopoverTrigger
+        data-slot="api-dot"
+        aria-label={`${label}. Show status.`}
+        title={label}
+        className={cn(
+          "inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md hover:bg-accent aria-expanded:bg-active",
+          className,
+        )}
+      >
+        <SourceStateGlyph state={state} />
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-96 max-w-[calc(100vw-1.5rem)] gap-0 p-0">
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 border-b border-border-subtle px-3 py-2">
+          <span
+            className={cn(
+              "font-medium",
+              health.isError ? "text-warning" : "text-foreground",
+            )}
+          >
+            {apiText}
+          </span>
+          {health.data?.version ? (
+            <span className="font-mono text-2xs text-muted-foreground">
+              {health.data.version}
+            </span>
+          ) : null}
+          {health.data?.data_release ? (
+            <span className="font-mono text-2xs text-subtle-foreground">
+              data {health.data.data_release}
+            </span>
+          ) : null}
+        </div>
+        {sources.length > 0 ? (
+          <>
+            <p
+              className={cn(
+                "px-3 pt-2 text-2xs",
+                summary.hasProblem ? "text-warning" : "text-muted-foreground",
+              )}
+            >
+              {summary.text}
+            </p>
+            <SourceStatusList sources={sources} />
+          </>
+        ) : null}
+        <p className="border-t border-border-subtle px-3 py-2 text-2xs text-muted-foreground">
+          {site.researchUseNotice}
+        </p>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+/**
  * IDE-style status line: API state, source status and data releases, current selection,
  * the research-use notice and the two keys worth learning first. 24px, monospace.
+ * Advanced only; simple mode keeps `ApiDot` in the top bar.
  */
 export function StatusLine() {
+  const advanced = useAdvancedMode();
   const setShortcutsOpen = useShell((state) => state.setShortcutsOpen);
+  if (!advanced) return null;
   return (
     <footer className="z-40 flex h-6 shrink-0 items-center overflow-hidden border-t border-border bg-sunken font-mono text-[0.6875rem] leading-none whitespace-nowrap">
       <div className="flex h-full min-w-0 items-center overflow-hidden">

@@ -2,13 +2,8 @@
 
 import { cn } from "cn";
 
-import { EvidenceBadge } from "@/components/evidence/evidence-badge";
+import { Explainer } from "@/components/science/explainer";
 import { Swatch } from "@/components/science/swatch";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   METRICS,
   formatMetricValue,
@@ -34,8 +29,8 @@ export interface MetricReadoutProps {
 }
 
 /**
- * A technical metric with its reading and an inline explainer:
- * "pLDDT 93  Very high local structural confidence  What does this mean?"
+ * A technical metric with its reading; the explanation sits behind the `?`:
+ * "pLDDT 93  Very high local structural confidence  ?"
  * The value is never animated and never coloured; a swatch beside it carries the band.
  */
 export function MetricReadout({
@@ -81,7 +76,7 @@ export function MetricReadout({
           <span
             className={cn(
               "tabular font-mono font-medium text-foreground",
-              layout === "stack" ? "text-lg" : "text-sm",
+              layout === "stack" ? "text-2xl leading-7" : "text-sm",
             )}
           >
             {formatMetricValue(metric, value, advanced)}
@@ -100,62 +95,11 @@ export function MetricReadout({
         <span className="min-w-0 text-foreground">{interpretation.text}</span>
       ) : null}
 
-      <Popover>
-        <PopoverTrigger
-          className="shrink-0 cursor-pointer self-start rounded-xs text-left text-2xs text-subtle-foreground underline decoration-dotted decoration-1 underline-offset-[3px] hover:text-foreground aria-expanded:text-foreground"
-          aria-label={`What does ${definition.label} mean?`}
-        >
-          What does this mean?
-        </PopoverTrigger>
-        <PopoverContent align="start" className="w-[23rem] max-w-[calc(100vw-1.5rem)] gap-0 p-0">
-          <div className="flex items-center justify-between gap-2 border-b border-border-subtle px-3 py-2">
-            <div className="min-w-0">
-              <p className="font-medium text-foreground">{definition.label}</p>
-              <p className="text-2xs text-muted-foreground">
-                {definition.name}
-              </p>
-            </div>
-            <EvidenceBadge evidenceClass="computational_prediction" />
-          </div>
-          <p className="px-3 py-2 text-foreground">{definition.what}</p>
-          {definition.scale.length > 0 ? (
-            <ul className="border-t border-border-subtle py-1">
-              {definition.scale.map((row) => (
-                <li
-                  key={row.range}
-                  className="grid grid-cols-[0.875rem_7rem_minmax(0,1fr)] items-baseline gap-x-2 px-3 py-1"
-                >
-                  {row.swatchClass ? (
-                    <Swatch
-                      swatchClass={row.swatchClass}
-                      code={row.code}
-                      onFill={row.onFill}
-                      className="self-center"
-                    />
-                  ) : (
-                    <span aria-hidden />
-                  )}
-                  <span className="tabular font-mono text-2xs text-foreground">
-                    {row.range}
-                  </span>
-                  <span className="text-muted-foreground">{row.meaning}</span>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-          <p className="border-t border-border-subtle px-3 py-2 text-muted-foreground">
-            {definition.limits}
-          </p>
-          {producedBy ? (
-            <p className="border-t border-border-subtle px-3 py-2 text-2xs text-subtle-foreground">
-              Produced by{" "}
-              <span className="font-mono text-muted-foreground">
-                {producedBy}
-              </span>
-            </p>
-          ) : null}
-        </PopoverContent>
-      </Popover>
+      <Explainer
+        term={metric}
+        producedBy={producedBy}
+        className="self-center"
+      />
     </div>
   );
 }

@@ -1,9 +1,8 @@
 /**
- * Contract for the 3D viewer. The Mol* specialist replaces the implementation in this directory and
- * keeps every exported name. This file must stay free of Mol* imports so pages can import it statically.
+ * Contract for the 3D viewer. This file must stay free of Mol* imports so pages can import it statically.
  * Interface source: docs/research/molstar-recipes.md, section 5.
  */
-import type { Ref } from "react";
+import type { ReactNode, Ref } from "react";
 
 import type { StructureOrigin } from "@/lib/structure-origin";
 
@@ -62,6 +61,8 @@ export interface ViewerResidueRange {
 export interface ResiduePick {
   /** state ref of the structure node the pick belongs to */
   structureRef: string | undefined;
+  /** descriptor id of the loaded structure the pick belongs to, e.g. "afdb:AF-Q06187-F1" */
+  structureId?: string;
   entryId: string;
   labelAsymId: string;
   authAsymId: string;
@@ -90,6 +91,45 @@ export interface BindingSiteResidue {
   labelSeqId: number;
   authSeqId: number;
   compId: string;
+}
+
+export interface StructureChainSummary {
+  labelAsymId: string;
+  authAsymId: string;
+  entityId: string;
+  /** polymer residues with coordinates */
+  residueCount: number;
+  labelSeqRange: [number, number];
+  authSeqRange: [number, number];
+}
+
+/** What a loaded file contains, read from its coordinates. */
+export interface StructureSummary {
+  entryId: string;
+  /** polymer residues with coordinates, all chains */
+  residueCount: number;
+  /** polymer chains in file order */
+  chains: StructureChainSummary[];
+  /** non-polymer, non-water components, ions included */
+  ligands: LigandSelector[];
+}
+
+/**
+ * How UniProt canonical positions map onto one structure. Predicted models default to
+ * label_seq_id and experimental entries to auth_seq_id, both taken as equal to the UniProt
+ * position. Pass a map when an entry's numbering differs.
+ */
+export interface ResidueMap {
+  /** which mmCIF numbering the structure-side values use */
+  numbering: "label" | "auth";
+  /** structure seq id = UniProt position + offset */
+  offset?: number;
+  /** SIFTS-style segments; these win over `offset`, and positions outside every segment are unmapped */
+  segments?: Array<{
+    uniprotStart: number;
+    uniprotEnd: number;
+    structureStart: number;
+  }>;
 }
 
 export interface SuperpositionResult {
@@ -136,6 +176,12 @@ export interface StructureDescriptor {
   assemblyId?: string;
   representation?: RepresentationKind;
   colorMode?: ViewerColorMode;
+  /** printed after the corner tag: "AlphaFold DB v6", "X-ray 2.40 Å" */
+  detail?: string;
+  /** printed in the corner tag in place of the ID: "Reference", "Variant" */
+  label?: string;
+  /** scale of the pLDDT values in the B-factor column of a predicted file; default "0-100" */
+  plddtScale?: "0-1" | "0-100";
 }
 
 export interface SuperposeOptions {
@@ -163,10 +209,18 @@ export interface MolecularViewerHandle {
   setVisibility(id: string, visible: boolean): void;
   setOpacity(id: string, alpha: number): Promise<void>;
 
+  /** null clears; `add` keeps what is already marked on another structure of an overlay */
+  highlight(
+    id: string,
+    ranges: ViewerResidueRange[] | null,
+    options?: { add?: boolean },
+  ): void;
   /** null clears */
-  highlight(id: string, ranges: ViewerResidueRange[] | null): void;
-  /** null clears */
-  select(id: string, ranges: ViewerResidueRange[] | null): void;
+  select(
+    id: string,
+    ranges: ViewerResidueRange[] | null,
+    options?: { add?: boolean },
+  ): void;
   focus(
     id: string,
     ranges: ViewerResidueRange[],
@@ -179,10 +233,21 @@ export interface MolecularViewerHandle {
     radius?: number,
   ): Promise<BindingSiteResidue[]>;
   hideBindingSite(id: string): Promise<void>;
+  /** ball-and-stick for a residue set: variant site, pocket residues, an annotated binding site */
+  showResidueSet(
+    id: string,
+    setId: string,
+    ranges: ViewerResidueRange[],
+    options?: { color?: number; sizeFactor?: number },
+  ): Promise<void>;
+  hideResidueSet(id: string, setId: string): Promise<void>;
+  /** chains, residue count and bound components; undefined until the structure is loaded */
+  describe(id: string): StructureSummary | undefined;
   addLabel(
     id: string,
     range: ViewerResidueRange,
     text: string,
+    options?: { textColor?: number; borderColor?: number; textSize?: number },
   ): Promise<string | undefined>;
   removeLabel(labelId: string): Promise<void>;
 
@@ -226,4 +291,14 @@ export interface MolecularViewerProps {
   onHover?: (pick: ResiduePick | undefined) => void;
   onClick?: (pick: ResiduePick | undefined, info: PickInfo) => void;
   onError?: (error: Error) => void;
+  /** replaces the built-in hover readout, for pages that renumber residues */
+  hoverReadout?: (pick: ResiduePick) => ReactNode;
+  /** replaces the generated screen-reader description of the scene */
+  description?: string;
+  /** comparison slot printed before a corner tag, by structure id; default A, B when two are shown */
+  slots?: Record<string, string>;
+  /** structure ids loaded only as an alignment frame: no corner tag */
+  frameOnly?: string[];
+  /** extra viewport overlays, positioned by the caller */
+  children?: ReactNode;
 }

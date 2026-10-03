@@ -1,0 +1,3 @@
+# Lock files of the research record and the budget ledger
+runs/*/*.lock
+policy_checks/latest/*/*.lock

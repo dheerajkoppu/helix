@@ -100,6 +100,10 @@ export function SubjectBarActions({ children }: { children: React.ReactNode }) {
 export interface SubjectBarProps {
   /** pages reach the actions slot through SubjectBarActions, which must render below this bar */
   children?: React.ReactNode;
+  /** the stage rail; in simple mode it shares one row with the page actions */
+  rail?: React.ReactNode;
+  /** no chip row: the page actions sit at the end of the stage rail */
+  simple?: boolean;
   className?: string;
 }
 
@@ -107,7 +111,12 @@ export interface SubjectBarProps {
  * The entity chain as source-ID chips: label, class marker, source identifier, link to the source
  * record. It accumulates as the user moves through the stages. Scrolls on one line on phones.
  */
-export function SubjectBar({ children, className }: SubjectBarProps) {
+export function SubjectBar({
+  children,
+  rail,
+  simple = false,
+  className,
+}: SubjectBarProps) {
   const chain = useWorkspaceSubjectStore((state) => state.chain);
   const [actionsElement, setActionsElement] = useState<HTMLElement | null>(
     null,
@@ -116,8 +125,28 @@ export function SubjectBar({ children, className }: SubjectBarProps) {
     (kind) => SUBJECT_KINDS.includes(kind) && chain[kind],
   );
 
+  if (simple)
+    return (
+      <ActionsContext.Provider value={actionsElement}>
+        <div
+          className={cn(
+            "flex shrink-0 items-stretch border-b border-border-strong/70 bg-background",
+            className,
+          )}
+        >
+          <div className="min-w-0 flex-1">{rail}</div>
+          <div
+            ref={setActionsElement}
+            className="flex shrink-0 items-center gap-1 px-2 empty:hidden"
+          />
+        </div>
+        {children}
+      </ActionsContext.Provider>
+    );
+
   return (
     <ActionsContext.Provider value={actionsElement}>
+      {rail}
       <div
         className={cn(
           "flex h-8 shrink-0 items-center gap-2 border-b border-border bg-sunken pl-3",

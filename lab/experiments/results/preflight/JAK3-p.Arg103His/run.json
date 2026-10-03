@@ -1,0 +1,14 @@
+{
+  "run_id": "preflight-JAK3-p.Arg103His",
+  "subject": {
+    "variant_id": "JAK3-p.Arg103His",
+    "gene": "JAK3",
+    "accession": "P52333",
+    "position": 103,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "clinvar_vcv": "VCV000191102",
+    "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+    "protein_change": "p.Arg103His"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "run_id": "preflight-FOXP3-p.Ala384Thr",
+  "subject": {
+    "variant_id": "FOXP3-p.Ala384Thr",
+    "gene": "FOXP3",
+    "accession": "Q9BZS1",
+    "position": 384,
+    "reference_residue": "A",
+    "alternate_residue": "T",
+    "clinvar_vcv": "VCV000011410",
+    "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+    "protein_change": "p.Ala384Thr"
+  }
+}

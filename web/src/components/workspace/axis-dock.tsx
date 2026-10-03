@@ -5,7 +5,7 @@ import {
   ChevronsUpDownIcon,
   Rows3Icon,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { create } from "zustand";
 import { cn } from "cn";
 
@@ -15,6 +15,8 @@ import {
   type SequenceTrack,
   type SequenceVariant,
 } from "@/components/sequence";
+import { Swatch } from "@/components/science/swatch";
+import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Tooltip,
@@ -22,11 +24,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useHotkeys } from "@/hooks/use-hotkeys";
+import type { SourceStatus } from "@/lib/api/types";
 import { parseVariantId } from "@/lib/ids";
 import { setWorkspaceHover, useWorkspaceHover } from "@/lib/state/hover";
-import { usePreferences, type DockHeight } from "@/lib/state/preferences";
+import {
+  useAdvancedMode,
+  usePreferences,
+  type DockHeight,
+} from "@/lib/state/preferences";
 import { describeRanges, useWorkspaceSelection } from "@/lib/state/selection";
 import { useWorkspaceSubjectStore, type StageId } from "@/lib/state/subject";
+
+import { AxisStrip, pathogenicPositions } from "./axis-strip";
 
 export interface AxisDockData {
   /** UniProt accession the sequence belongs to */
@@ -35,20 +44,27 @@ export interface AxisDockData {
   sequence: string;
   tracks: SequenceTrack[];
   variants: SequenceVariant[];
+  /** state of the variant source, so an empty variant list says whether nothing exists or the source failed */
+  variantStatus?: SourceStatus | null;
 }
 
 interface AxisDockState {
   data: AxisDockData | null;
   loadingAccession: string | null;
+  /** simple mode: the slim strip is opened into the full axis */
+  expanded: boolean;
   setData: (data: AxisDockData | null) => void;
   setLoading: (accession: string | null) => void;
+  toggleExpanded: () => void;
 }
 
 const useAxisDockStore = create<AxisDockState>()((set) => ({
   data: null,
   loadingAccession: null,
+  expanded: false,
   setData: (data) => set({ data, loadingAccession: null }),
   setLoading: (loadingAccession) => set({ loadingAccession }),
+  toggleExpanded: () => set((state) => ({ expanded: !state.expanded })),
 }));
 
 /**
@@ -105,18 +121,27 @@ export function AxisDockSlot({ stage, className }: AxisDockSlotProps) {
   );
   const dockHeight = usePreferences((state) => state.dockHeight);
   const cycleDockHeight = usePreferences((state) => state.cycleDockHeight);
+  const simple = !useAdvancedMode();
+  const expanded = useAxisDockStore((state) => state.expanded);
+  const toggleExpanded = useAxisDockStore((state) => state.toggleExpanded);
 
   const ranges = useWorkspaceSelection((state) => state.ranges);
   const axisWindow = useWorkspaceSelection((state) => state.window);
   const setRanges = useWorkspaceSelection((state) => state.setRanges);
+  const selectResidue = useWorkspaceSelection((state) => state.selectResidue);
   const toggleRange = useWorkspaceSelection((state) => state.toggleRange);
   const selectVariant = useWorkspaceSelection((state) => state.selectVariant);
   const setWindow = useWorkspaceSelection((state) => state.setWindow);
   const hover = useWorkspaceHover();
 
   useHotkeys(
-    { a: cycleDockHeight },
+    { a: simple ? toggleExpanded : cycleDockHeight },
     { enabled: stage !== "disease" && stage !== null },
+  );
+
+  const markCount = useMemo(
+    () => (data ? pathogenicPositions(data.variants).length : 0),
+    [data],
   );
 
   if (stage === "disease" || stage === null) return null;
@@ -126,9 +151,84 @@ export function AxisDockSlot({ stage, className }: AxisDockSlotProps) {
     data !== null && (accession === null || data.accession === accession);
   const loading =
     !ready && loadingAccession !== null && loadingAccession === accession;
-  const height: DockHeight = ready ? dockHeight : "collapsed";
+  const height: DockHeight = !ready
+    ? "collapsed"
+    : simple
+      ? "normal"
+      : dockHeight;
   const HeightIcon =
     dockHeight === "tall" ? ChevronsDownUpIcon : ChevronsUpDownIcon;
+
+  if (simple && !(ready && expanded)) {
+    if (!ready && !loading) return null;
+    return (
+      <section
+        data-slot="axis-dock"
+        aria-label="Sequence axis"
+        className={cn(
+          "flex h-12 shrink-0 items-center gap-4 border-t border-border bg-background px-3",
+          className,
+        )}
+      >
+        <span className="flex shrink-0 items-baseline gap-2 text-xs">
+          <span className="font-medium text-foreground">Sequence</span>
+          {ready && data ? (
+            <span className="tabular font-mono text-2xs text-muted-foreground">
+              {describeRanges(ranges, data.sequence) ??
+                `${data.sequence.length} aa`}
+            </span>
+          ) : (
+            <Spinner className="size-3 self-center" />
+          )}
+        </span>
+        {ready && data ? (
+          <>
+            <AxisStrip
+              length={data.sequence.length}
+              tracks={data.tracks}
+              variants={data.variants}
+              selection={ranges}
+              hoverPosition={
+                hover?.accession === data.accession ? hover.position : null
+              }
+              onSelect={selectResidue}
+              onHover={(position) =>
+                setWorkspaceHover(
+                  position === null
+                    ? null
+                    : { accession: data.accession, position, origin: "axis" },
+                )
+              }
+            />
+            {markCount > 0 ? (
+              <span
+                className="hidden shrink-0 items-center gap-1.5 text-2xs text-muted-foreground md:flex"
+                title="Positions with a variant ClinVar or UniProt lists as pathogenic or likely pathogenic"
+              >
+                <Swatch swatchClass="bg-clin-pathogenic" />
+                <span className="tabular font-mono text-foreground">
+                  {markCount}
+                </span>
+                P / LP sites
+              </span>
+            ) : null}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="shrink-0"
+              aria-expanded={false}
+              onClick={toggleExpanded}
+            >
+              <ChevronsUpDownIcon data-icon="inline-start" />
+              Expand
+            </Button>
+          </>
+        ) : (
+          <span className="h-px flex-1 bg-border" aria-hidden />
+        )}
+      </section>
+    );
+  }
 
   return (
     <section
@@ -180,7 +280,18 @@ export function AxisDockSlot({ stage, className }: AxisDockSlotProps) {
             )}
           </span>
         )}
-        {ready ? (
+        {ready && simple ? (
+          <Button
+            variant="ghost"
+            size="xs"
+            className="ml-auto"
+            aria-expanded
+            onClick={toggleExpanded}
+          >
+            <ChevronsDownUpIcon data-icon="inline-start" />
+            Collapse
+          </Button>
+        ) : ready ? (
           <div className="ml-auto flex items-center gap-2">
             <KeyHint keys="a" className="hidden lg:inline-flex" />
             <Tooltip>
@@ -210,6 +321,7 @@ export function AxisDockSlot({ stage, className }: AxisDockSlotProps) {
             sequence={data.sequence}
             tracks={data.tracks}
             variants={data.variants}
+            variantStatus={data.variantStatus}
             selection={ranges}
             selectedVariantId={variantSubject?.id ?? null}
             hoverPosition={

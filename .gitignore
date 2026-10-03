@@ -39,3 +39,4 @@ data/seed/*.tmp
 .DS_Store
 .idea/
 .vscode/
+web/.dev.log

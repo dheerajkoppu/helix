@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "description": "Stored outputs of real variant_comparison jobs. Every directory holds the unmodified artifacts of one job beside its run manifest. Written by api/scripts/cache_examples.py.",
+  "examples": [
+    {
+      "job_id": "job_01M41NZS420XV8D1STVDF7HA2Y",
+      "directory": "BTK-p.Arg28His__esm_atlas",
+      "variant_id": "BTK-p.Arg28His",
+      "gene_symbol": "BTK",
+      "uniprot_accession": "Q06187",
+      "provider_id": "esm_atlas",
+      "provider_name": "ESM Atlas (ESMFold v1)",
+      "model_name": "ESMFold v1",
+      "model_version": "esmfold_v1",
+      "generated_at": "2026-10-03T20:06:19.693362Z",
+      "construct": {
+        "uniprot_accession": "Q06187",
+        "start": 1,
+        "end": 143,
+        "length": 143,
+        "protein_length": 659,
+        "full_length": false,
+        "rule": "uniprot_domain",
+        "rationale": "The protein has 659 residues, above the provider limit of 400. Residue 28 lies in the UniProt domain PH (3-133); the construct is that domain with up to 10 flanking residues on each side.",
+        "domain": {
+          "name": "PH",
+          "start": 3,
+          "end": 133,
+          "source": "UniProt feature of type Domain"
+        },
+        "flank": 10,
+        "max_residues": 400
+      },
+      "sequence_sha256": {
+        "reference": "e5469c7097cea9e09fed7796329c7e8ba7c2bb1da1ffc8160f067c67d551fbf4",
+        "variant": "661cf266ea34d27f9c44c00b21548de708349453cbb5426a907a7add6a8925cb"
+      },
+      "manifest_sha256": "ee5b9ff78557eabb707ddf269e2a1b0f7aec1901b0c0f551effa6ca75c1490b8",
+      "files": [
+        "difference.json",
+        "manifest.json",
+        "reference.cif",
+        "reference.esm_atlas.pdb",
+        "reference.plddt.json",
+        "result.json",
+        "variant.cif",
+        "variant.esm_atlas.pdb",
+        "variant.plddt.json"
+      ]
+    },
+    {
+      "job_id": "job_01M41NZW2NMC0VTKBZ7BG31B5H",
+      "directory": "BTK-p.Arg525Gln__esm_atlas",
+      "variant_id": "BTK-p.Arg525Gln",
+      "gene_symbol": "BTK",
+      "uniprot_accession": "Q06187",
+      "provider_id": "esm_atlas",
+      "provider_name": "ESM Atlas (ESMFold v1)",
+      "model_name": "ESMFold v1",
+      "model_version": "esmfold_v1",
+      "generated_at": "2026-10-03T20:08:45.508023Z",
+      "construct": {
+        "uniprot_accession": "Q06187",
+        "start": 392,
+        "end": 659,
+        "length": 268,
+        "protein_length": 659,
+        "full_length": false,
+        "rule": "uniprot_domain",
+        "rationale": "The protein has 659 residues, above the provider limit of 400. Residue 525 lies in the UniProt domain Protein kinase (402-655); the construct is that domain with up to 10 flanking residues on each side.",
+        "domain": {
+          "name": "Protein kinase",
+          "start": 402,
+          "end": 655,
+          "source": "UniProt feature of type Domain"
+        },
+        "flank": 10,
+        "max_residues": 400
+      },
+      "sequence_sha256": {
+        "reference": "d11fa06e22ee0b9e1db5468f3c59efbbddd4d5cbda0812adc8e2d7a883e5d0b5",
+        "variant": "775b7529a79d979523c8bb8f5562d1ab15b4dcce285f90d63dd28a3ee0f47981"
+      },
+      "manifest_sha256": "93a5a9ed51102602af12736fee2eed931bcf46685f1f3723c1fda57fafc82122",
+      "files": [
+        "difference.json",
+        "manifest.json",
+        "reference.cif",
+        "reference.esm_atlas.pdb",
+        "reference.plddt.json",
+        "result.json",
+        "variant.cif",
+        "variant.esm_atlas.pdb",
+        "variant.plddt.json"
+      ]
+    },
+    {
+      "job_id": "job_01M41P493S3X59WK29AKYDREDS",
+      "directory": "WAS-p.Thr45Met__esm_atlas",
+      "variant_id": "WAS-p.Thr45Met",
+      "gene_symbol": "WAS",
+      "uniprot_accession": "P42768",
+      "provider_id": "esm_atlas",
+      "provider_name": "ESM Atlas (ESMFold v1)",
+      "model_name": "ESMFold v1",
+      "model_version": "esmfold_v1",
+      "generated_at": "2026-10-03T20:08:53.914061Z",
+      "construct": {
+        "uniprot_accession": "P42768",
+        "start": 29,
+        "end": 158,
+        "length": 130,
+        "protein_length": 502,
+        "full_length": false,
+        "rule": "uniprot_domain",
+        "rationale": "The protein has 502 residues, above the provider limit of 400. Residue 45 lies in the UniProt domain WH1 (39-148); the construct is that domain with up to 10 flanking residues on each side.",
+        "domain": {
+          "name": "WH1",
+          "start": 39,
+          "end": 148,
+          "source": "UniProt feature of type Domain"
+        },
+        "flank": 10,
+        "max_residues": 400
+      },
+      "sequence_sha256": {
+        "reference": "c6611e6339997a9506e6f14c368ec83c7f5bd821fdfd6fcf6fa9ebb90969e1c3",
+        "variant": "6ce835ce12f7732df435c935ff0b3fb2c89241c640a6a966f8b7eeff101a8496"
+      },
+      "manifest_sha256": "148a7bebebdc86723f3a439344284f0171f8eff1cfc7dde8c545f8a621591186",
+      "files": [
+        "difference.json",
+        "manifest.json",
+        "reference.cif",
+        "reference.esm_atlas.pdb",
+        "reference.plddt.json",
+        "result.json",
+        "variant.cif",
+        "variant.esm_atlas.pdb",
+        "variant.plddt.json"
+      ]
+    }
+  ]
+}

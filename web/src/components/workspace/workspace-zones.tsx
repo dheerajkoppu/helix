@@ -26,7 +26,7 @@ export interface WorkspaceZonesProps {
   ledger?: React.ReactNode;
   /** centre: the 3D viewport or the stage's primary plot. Always present. */
   instrument: React.ReactNode;
-  /** right: evidence for the current selection. Omit for stages that have none. */
+  /** right: evidence for the current selection. Omit it while nothing is selected and the zone closes. */
   inspector?: React.ReactNode;
   /** names the persisted panel layout; use the stage id */
   layoutId?: string;
@@ -209,13 +209,14 @@ export function WorkspaceZones(props: WorkspaceZonesProps) {
       className={cn("size-full min-h-0", props.className)}
     >
       {!hydrated ? (
-        <div
-          aria-hidden
-          className="grid size-full lg:grid-cols-[320px_minmax(0,1fr)_340px]"
-        >
-          <div className="hidden border-r border-border lg:block" />
-          <div />
-          <div className="hidden border-l border-border lg:block" />
+        <div aria-hidden className="flex size-full">
+          {props.ledger ? (
+            <div className="hidden w-80 shrink-0 border-r border-border lg:block" />
+          ) : null}
+          <div className="flex-1" />
+          {props.inspector ? (
+            <div className="hidden w-[340px] shrink-0 border-l border-border lg:block" />
+          ) : null}
         </div>
       ) : desktop ? (
         <DesktopZones {...props} />

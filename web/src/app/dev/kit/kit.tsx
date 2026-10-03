@@ -33,6 +33,7 @@ import {
   ReferenceVariantLegend,
 } from "@/components/science/legends";
 import { MetricReadout } from "@/components/science/metric-readout";
+import { ModelResultStrip } from "@/components/science/model-result-strip";
 import { Swatch } from "@/components/science/swatch";
 import { SequenceAxisDock, type SequenceVariant } from "@/components/sequence";
 import { EmptyState } from "@/components/states/empty-state";
@@ -989,6 +990,45 @@ export function Kit() {
         title="Metrics and terms"
         description="A technical number is always shown with its reading and an inline explainer. Values are never animated and never coloured; a swatch beside the value carries the band."
       >
+        <Specimen
+          name="ModelResultStrip"
+          path="@/components/science/model-result-strip"
+          note="The one way a model's output is shown: model, version, origin, two or three numbers with units, run time. Values here are the cached BTK p.Arg28His comparison and the AlphaFold DB model of BTK."
+          wide
+        >
+          <div className="flex flex-col gap-4">
+            <ModelResultStrip
+              frame="box"
+              model="ESMFold v1"
+              version="esmfold_v1"
+              origin="predicted_orphafold"
+              metrics={[
+                { label: "Cα RMSD", value: "0.069", unit: "Å" },
+                { label: "pLDDT at Arg28", value: 88, explainer: "plddt" },
+                { label: "Contacts gained", value: 1 },
+              ]}
+              runtime="cached"
+              href="/compare/BTK/p.Arg28His"
+              hrefLabel="Open comparison"
+            />
+            <ModelResultStrip
+              frame="box"
+              model="AlphaFold DB"
+              version="v6"
+              origin="predicted_external"
+              metrics={[
+                { label: "Mean pLDDT", value: 87.3, explainer: "plddt" },
+                {
+                  label: "PAE",
+                  value: null,
+                  unit: "Å",
+                  explainer: "pae",
+                  missingReason: "Not loaded",
+                },
+              ]}
+            />
+          </div>
+        </Specimen>
         <Specimen
           name="MetricReadout"
           path="@/components/science/metric-readout"

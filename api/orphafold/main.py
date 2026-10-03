@@ -1,5 +1,6 @@
 """FastAPI application. Run: cd api && .venv/bin/uvicorn orphafold.main:app --port 8000"""
 
+import asyncio
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Any
@@ -62,6 +63,12 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.worker = worker
 
     await purge_http_cache()
+    # A first availability probe can take many seconds: start them now so no page waits for one
+    app.state.provider_probes = (
+        [asyncio.create_task(provider._checked_availability()) for provider in all_providers()]
+        if settings.environment != "test"
+        else []
+    )
     logger.info(
         "OrphaFold API %s ready: %d sources, %d providers, %d job kinds, queue=%s",
         __version__,
@@ -73,6 +80,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     try:
         yield
     finally:
+        for probe in app.state.provider_probes:
+            probe.cancel()
         if worker is not None:
             await worker.stop()
         await queue.close()

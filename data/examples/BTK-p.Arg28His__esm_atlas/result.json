@@ -1,0 +1,529 @@
+{
+  "id": "job_01M41NZS420XV8D1STVDF7HA2Y",
+  "kind": "variant_comparison",
+  "title": "ESM Atlas (ESMFold v1) reference and variant · BTK-p.Arg28His",
+  "status": "succeeded",
+  "provider_id": "esm_atlas",
+  "subject": {
+    "type": "variant",
+    "id": "BTK-p.Arg28His",
+    "label": "BTK-p.Arg28His",
+    "curie": null,
+    "href": "/variant/BTK-p.Arg28His"
+  },
+  "params": {
+    "provider": "esm_atlas",
+    "variant_id": "BTK-p.Arg28His",
+    "gene_symbol": "BTK",
+    "uniprot_accession": "Q06187",
+    "substitution": "p.Arg28His",
+    "residue_start": null,
+    "residue_end": null,
+    "seed": null
+  },
+  "stages": [
+    {
+      "id": "resolve_input",
+      "label": "Fetching sequence and domains from UniProt",
+      "status": "done",
+      "started_at": "2026-10-03T20:06:18.502692Z",
+      "completed_at": "2026-10-03T20:06:18.508705Z",
+      "detail": null,
+      "progress": null
+    },
+    {
+      "id": "reference_run_model",
+      "label": "Reference · Running ESMFold v1 on the ESM Atlas fold API",
+      "status": "done",
+      "started_at": "2026-10-03T20:06:18.509929Z",
+      "completed_at": "2026-10-03T20:06:18.950139Z",
+      "detail": null,
+      "progress": null
+    },
+    {
+      "id": "reference_read_model",
+      "label": "Reference · Reading coordinates and pLDDT",
+      "status": "done",
+      "started_at": "2026-10-03T20:06:18.951536Z",
+      "completed_at": "2026-10-03T20:06:18.958230Z",
+      "detail": null,
+      "progress": null
+    },
+    {
+      "id": "variant_run_model",
+      "label": "Variant · Running ESMFold v1 on the ESM Atlas fold API",
+      "status": "done",
+      "started_at": "2026-10-03T20:06:18.959540Z",
+      "completed_at": "2026-10-03T20:06:19.636605Z",
+      "detail": null,
+      "progress": null
+    },
+    {
+      "id": "variant_read_model",
+      "label": "Variant · Reading coordinates and pLDDT",
+      "status": "done",
+      "started_at": "2026-10-03T20:06:19.638726Z",
+      "completed_at": "2026-10-03T20:06:19.645852Z",
+      "detail": null,
+      "progress": null
+    },
+    {
+      "id": "difference",
+      "label": "Computing differences between the models",
+      "status": "done",
+      "started_at": "2026-10-03T20:06:19.647829Z",
+      "completed_at": "2026-10-03T20:06:19.671875Z",
+      "detail": null,
+      "progress": null
+    },
+    {
+      "id": "store_artifacts",
+      "label": "Storing files",
+      "status": "done",
+      "started_at": "2026-10-03T20:06:19.673584Z",
+      "completed_at": "2026-10-03T20:06:19.691939Z",
+      "detail": null,
+      "progress": {
+        "completed": 7.0,
+        "total": 7.0,
+        "unit": "files"
+      }
+    }
+  ],
+  "current_stage": null,
+  "result": {
+    "title": "Reference and variant models (predicted)",
+    "performs_inference": true,
+    "variant_id": "BTK-p.Arg28His",
+    "gene_symbol": "BTK",
+    "variant": {
+      "variant_id": "BTK-p.Arg28His",
+      "gene_symbol": "BTK",
+      "uniprot_accession": "Q06187",
+      "position": 28,
+      "reference": "R",
+      "alternate": "H",
+      "hgvs_p": "p.Arg28His",
+      "short": "R28H"
+    },
+    "construct": {
+      "uniprot_accession": "Q06187",
+      "start": 1,
+      "end": 143,
+      "length": 143,
+      "protein_length": 659,
+      "full_length": false,
+      "rule": "uniprot_domain",
+      "rationale": "The protein has 659 residues, above the provider limit of 400. Residue 28 lies in the UniProt domain PH (3-133); the construct is that domain with up to 10 flanking residues on each side.",
+      "domain": {
+        "name": "PH",
+        "start": 3,
+        "end": 133,
+        "source": "UniProt feature of type Domain"
+      },
+      "flank": 10,
+      "max_residues": 400
+    },
+    "provider": {
+      "id": "esm_atlas",
+      "name": "ESM Atlas (ESMFold v1)",
+      "model_name": "ESMFold v1",
+      "model_version": "esmfold_v1",
+      "execution_mode": "remote_api",
+      "performs_inference": true,
+      "deterministic": true,
+      "cached_from": null
+    },
+    "reference_model": {
+      "id": "of:job_01M41NZS420XV8D1STVDF7HA2Y-reference",
+      "origin": "predicted_orphafold",
+      "title": "Reference model · ESMFold v1 prediction of Q06187 residues 1-143",
+      "provider": "esm_atlas",
+      "provider_name": "ESM Atlas (ESMFold v1)",
+      "source_id": null,
+      "source_url": "https://api.esmatlas.com/foldSequence/v1/pdb/",
+      "model_name": "ESMFold v1",
+      "model_version": "esmfold_v1",
+      "method": "ESMFold v1",
+      "resolution": null,
+      "coverage": {
+        "uniprot_accession": "Q06187",
+        "ranges": [
+          {
+            "start": 1,
+            "end": 143,
+            "chain": "A"
+          }
+        ],
+        "covered_residues": 143,
+        "sequence_length": 659,
+        "fraction": 0.217
+      },
+      "confidence": {
+        "plddt_mean": 77.07,
+        "plddt_native_scale": "0-1",
+        "plddt_fractions": {
+          "very_low": 0.13286713286713286,
+          "low": 0.16083916083916083,
+          "confident": 0.4125874125874126,
+          "very_high": 0.2937062937062937
+        },
+        "pae_available": false,
+        "pae_max": null,
+        "ptm": null,
+        "iptm": null,
+        "ranking_score": null,
+        "ranking_score_name": null,
+        "provider_native": {
+          "title_line": "TITLE     ESMFOLD V1 PREDICTION FOR INPUT",
+          "plddt_b_factor_min": 0.38999998569488525,
+          "plddt_b_factor_max": 0.9599999785423279,
+          "plddt_native_scale": "0-1"
+        }
+      },
+      "license": "ESM METAGENOMIC ATLAS DATA IS AVAILABLE UNDER A CC-BY-4.0 LICENSE FOR ACADEMIC AND COMMERCIAL USE. COPYRIGHT (C) META PLATFORMS, INC. ALL RIGHTS RESERVED. USE OF THE ESM METAGENOMIC ATLAS DATA IS SUBJECT TO THE META OPEN SOURCE TERMS OF USE AND PRIVACY POLICY.",
+      "attribution": "ESMFold v1 prediction by the ESM Metagenomic Atlas fold API (Lin et al., Science 2023).",
+      "files": {
+        "cif_url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/artifacts/reference.cif",
+        "bcif_url": null,
+        "pdb_url": null,
+        "plddt_url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/artifacts/reference.plddt.json",
+        "pae_url": null,
+        "pae_image_url": null
+      },
+      "created_date": "2026-10-03",
+      "retrieved_at": "2026-10-03T20:06:18.959357Z",
+      "job_id": "job_01M41NZS420XV8D1STVDF7HA2Y",
+      "limitations": [
+        "Accepts one protein chain of at most 400 residues. Longer proteins are predicted as a residue window, which removes every contact with the rest of the chain.",
+        "Complexes, ligands, nucleic acids and modified residues are not supported.",
+        "Single-sequence language-model prediction; generally less accurate than MSA-based models.",
+        "Returns one model with pLDDT only. PAE and pTM are not provided by this model.",
+        "ESMFold is deterministic: there is no seed and one model per sequence, so run-to-run variation is not estimated.",
+        "Structure predictors are not validated for single-residue substitutions. A variant model that matches the reference carries no information about whether the variant is tolerated.",
+        "Low pLDDT means either disorder or insufficient information for a confident prediction, never misfolding caused by a variant.",
+        "Public service with no key, no documented rate limit and no service-level agreement. It can become unavailable without notice."
+      ],
+      "warnings": [],
+      "provenance": {
+        "source": "esm_atlas",
+        "source_name": "ESM Atlas fold API",
+        "release": null,
+        "method": "POST",
+        "request_url": "https://api.esmatlas.com/foldSequence/v1/pdb/",
+        "retrieved_at": "2026-10-03T20:06:18.949056Z",
+        "record_id": "sha256:e5469c7097cea9e09fed7796329c7e8ba7c2bb1da1ffc8160f067c67d551fbf4",
+        "record_url": null,
+        "license": "CC-BY-4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "attribution": "ESMFold v1 prediction by the ESM Metagenomic Atlas fold API (Lin et al., Science 2023).",
+        "response_sha256": "f497079a5e31922a4af2a2bc00034caca41a5f775e56ae13861615470d6885d8",
+        "from_cache": false,
+        "stale": false
+      },
+      "tag": "OF",
+      "origin_label": "OrphaFold-generated prediction"
+    },
+    "variant_model": {
+      "id": "of:job_01M41NZS420XV8D1STVDF7HA2Y-variant",
+      "origin": "predicted_orphafold",
+      "title": "Variant p.Arg28His model · ESMFold v1 prediction of Q06187 residues 1-143 with BTK-p.Arg28His",
+      "provider": "esm_atlas",
+      "provider_name": "ESM Atlas (ESMFold v1)",
+      "source_id": null,
+      "source_url": "https://api.esmatlas.com/foldSequence/v1/pdb/",
+      "model_name": "ESMFold v1",
+      "model_version": "esmfold_v1",
+      "method": "ESMFold v1",
+      "resolution": null,
+      "coverage": {
+        "uniprot_accession": "Q06187",
+        "ranges": [
+          {
+            "start": 1,
+            "end": 143,
+            "chain": "A"
+          }
+        ],
+        "covered_residues": 143,
+        "sequence_length": 659,
+        "fraction": 0.217
+      },
+      "confidence": {
+        "plddt_mean": 77.7,
+        "plddt_native_scale": "0-1",
+        "plddt_fractions": {
+          "very_low": 0.11888111888111888,
+          "low": 0.16083916083916083,
+          "confident": 0.3916083916083916,
+          "very_high": 0.32867132867132864
+        },
+        "pae_available": false,
+        "pae_max": null,
+        "ptm": null,
+        "iptm": null,
+        "ranking_score": null,
+        "ranking_score_name": null,
+        "provider_native": {
+          "title_line": "TITLE     ESMFOLD V1 PREDICTION FOR INPUT",
+          "plddt_b_factor_min": 0.4000000059604645,
+          "plddt_b_factor_max": 0.9599999785423279,
+          "plddt_native_scale": "0-1"
+        }
+      },
+      "license": "ESM METAGENOMIC ATLAS DATA IS AVAILABLE UNDER A CC-BY-4.0 LICENSE FOR ACADEMIC AND COMMERCIAL USE. COPYRIGHT (C) META PLATFORMS, INC. ALL RIGHTS RESERVED. USE OF THE ESM METAGENOMIC ATLAS DATA IS SUBJECT TO THE META OPEN SOURCE TERMS OF USE AND PRIVACY POLICY.",
+      "attribution": "ESMFold v1 prediction by the ESM Metagenomic Atlas fold API (Lin et al., Science 2023).",
+      "files": {
+        "cif_url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/artifacts/variant.cif",
+        "bcif_url": null,
+        "pdb_url": null,
+        "plddt_url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/artifacts/variant.plddt.json",
+        "pae_url": null,
+        "pae_image_url": null
+      },
+      "created_date": "2026-10-03",
+      "retrieved_at": "2026-10-03T20:06:19.647591Z",
+      "job_id": "job_01M41NZS420XV8D1STVDF7HA2Y",
+      "limitations": [
+        "Accepts one protein chain of at most 400 residues. Longer proteins are predicted as a residue window, which removes every contact with the rest of the chain.",
+        "Complexes, ligands, nucleic acids and modified residues are not supported.",
+        "Single-sequence language-model prediction; generally less accurate than MSA-based models.",
+        "Returns one model with pLDDT only. PAE and pTM are not provided by this model.",
+        "ESMFold is deterministic: there is no seed and one model per sequence, so run-to-run variation is not estimated.",
+        "Structure predictors are not validated for single-residue substitutions. A variant model that matches the reference carries no information about whether the variant is tolerated.",
+        "Low pLDDT means either disorder or insufficient information for a confident prediction, never misfolding caused by a variant.",
+        "Public service with no key, no documented rate limit and no service-level agreement. It can become unavailable without notice."
+      ],
+      "warnings": [],
+      "provenance": {
+        "source": "esm_atlas",
+        "source_name": "ESM Atlas fold API",
+        "release": null,
+        "method": "POST",
+        "request_url": "https://api.esmatlas.com/foldSequence/v1/pdb/",
+        "retrieved_at": "2026-10-03T20:06:19.635388Z",
+        "record_id": "sha256:661cf266ea34d27f9c44c00b21548de708349453cbb5426a907a7add6a8925cb",
+        "record_url": null,
+        "license": "CC-BY-4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "attribution": "ESMFold v1 prediction by the ESM Metagenomic Atlas fold API (Lin et al., Science 2023).",
+        "response_sha256": "eeb9ec03c9a5b03d13f11b8e8fa4e7d63258b00b6a224c971b9778873bd2333a",
+        "from_cache": false,
+        "stale": false
+      },
+      "tag": "OF",
+      "origin_label": "OrphaFold-generated prediction"
+    },
+    "difference_url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/artifacts/difference.json",
+    "summary": {
+      "rmsd_ca_all": 0.85,
+      "rmsd_ca_confident": 0.069,
+      "residues_confident": 101,
+      "local_rmsd_ca": 0.097,
+      "plddt_site_reference": 88.0,
+      "plddt_site_variant": 88.0,
+      "contacts_gained": 1,
+      "contacts_lost": 0,
+      "masked_residues": 42,
+      "total_residues": 143
+    },
+    "caveats": [
+      {
+        "id": "not_validated_for_substitutions",
+        "text": "Structure predictors are not validated for single-residue substitutions. A variant model that matches the reference carries no information about whether the variant is tolerated. Differences smaller than run-to-run variation are noise. See the evidence panel for functional, curated, population and predictor data.",
+        "quoted_from": null,
+        "citations": [
+          {
+            "text": "Buel & Walters, Nat Struct Mol Biol 2022, 29:1-2",
+            "title": "Can AlphaFold2 predict the impact of missense mutations on structure?",
+            "year": 2022,
+            "pmid": null,
+            "pmcid": null,
+            "doi": "10.1038/s41594-021-00714-2",
+            "url": null
+          },
+          {
+            "text": "Pak et al., PLoS ONE 2023, 18:e0282689",
+            "title": null,
+            "year": 2023,
+            "pmid": null,
+            "pmcid": null,
+            "doi": "10.1371/journal.pone.0282689",
+            "url": null
+          },
+          {
+            "text": "Feldman, Brogi & Skolnick, Comput Struct Biotechnol J 2026",
+            "title": null,
+            "year": 2026,
+            "pmid": null,
+            "pmcid": null,
+            "doi": "10.34133/csbj.0142",
+            "url": null
+          },
+          {
+            "text": "Terwilliger et al., Nat Methods 2024",
+            "title": null,
+            "year": 2024,
+            "pmid": null,
+            "pmcid": null,
+            "doi": "10.1038/s41592-023-02087-4",
+            "url": null
+          },
+          {
+            "text": "McBride et al., Phys Rev Lett 2023 (counterpoint)",
+            "title": null,
+            "year": 2023,
+            "pmid": null,
+            "pmcid": null,
+            "doi": "10.1103/PhysRevLett.131.218401",
+            "url": null
+          }
+        ]
+      },
+      {
+        "id": "alphafold_db_statement",
+        "text": "AlphaFold has not been validated for predicting the effect of mutations. In particular, AlphaFold is not expected to produce an unfolded protein structure given a sequence containing a destabilising point mutation.",
+        "quoted_from": "AlphaFold DB FAQ. OrphaFold applies the same caveat to every structure predictor.",
+        "citations": [
+          {
+            "text": "AlphaFold Protein Structure Database, FAQ",
+            "title": null,
+            "year": null,
+            "pmid": null,
+            "pmcid": null,
+            "doi": null,
+            "url": "https://alphafold.ebi.ac.uk/faq"
+          }
+        ]
+      },
+      {
+        "id": "similar_fold_is_uninformative",
+        "text": "A predictor producing a similar fold for the variant sequence is expected for most single substitutions and is uninformative about stability.",
+        "quoted_from": null,
+        "citations": []
+      },
+      {
+        "id": "plddt_is_model_behaviour",
+        "text": "pLDDT is each model's own confidence estimate. The two values at the site are model behaviour, never measured destabilisation. Low pLDDT means disorder or insufficient information.",
+        "quoted_from": null,
+        "citations": []
+      },
+      {
+        "id": "geometry_from_predicted_models",
+        "text": "Distances, contacts and displacements are geometry computed from predicted models, not observations of the protein.",
+        "quoted_from": null,
+        "citations": []
+      },
+      {
+        "id": "run_to_run_variation_not_estimated",
+        "text": "This model is deterministic: there is no seed and one model per sequence, so run-to-run variation is not estimated and no noise baseline is available for these differences.",
+        "quoted_from": null,
+        "citations": []
+      },
+      {
+        "id": "construct_is_a_window",
+        "text": "Both models cover a residue window, not the full-length protein. Contacts with the rest of the chain, with partners and with ligands are absent from both.",
+        "quoted_from": null,
+        "citations": []
+      }
+    ]
+  },
+  "error": null,
+  "artifacts": [
+    {
+      "id": "art_01M41NZT8VBT4H7WZWEAT9F4WE",
+      "name": "reference.cif",
+      "role": "structure",
+      "media_type": "chemical/x-mmcif",
+      "size_bytes": 80425,
+      "sha256": "4abb21b363d50ac8ff2becff449479bff3f175fa9a9cc07fe5241f1d6d18cfcc",
+      "url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/artifacts/reference.cif",
+      "structure_origin": "predicted_orphafold",
+      "sample_index": 0,
+      "created_at": "2026-10-03T20:06:19.675878Z"
+    },
+    {
+      "id": "art_01M41NZT8Y39VVZKZXB2QR1X9T",
+      "name": "reference.esm_atlas.pdb",
+      "role": "source_response",
+      "media_type": "chemical/x-pdb",
+      "size_bytes": 99105,
+      "sha256": "f497079a5e31922a4af2a2bc00034caca41a5f775e56ae13861615470d6885d8",
+      "url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/artifacts/reference.esm_atlas.pdb",
+      "structure_origin": null,
+      "sample_index": null,
+      "created_at": "2026-10-03T20:06:19.678658Z"
+    },
+    {
+      "id": "art_01M41NZT9026TSRAWHS9NR45MP",
+      "name": "reference.plddt.json",
+      "role": "plddt",
+      "media_type": "application/json",
+      "size_bytes": 1675,
+      "sha256": "b9672e88256a023a111843c85884ce06ef76efd00e8214c076a0825a2602e870",
+      "url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/artifacts/reference.plddt.json",
+      "structure_origin": null,
+      "sample_index": null,
+      "created_at": "2026-10-03T20:06:19.680152Z"
+    },
+    {
+      "id": "art_01M41NZT929Z2AVC4E3D6NNMX7",
+      "name": "variant.cif",
+      "role": "structure",
+      "media_type": "chemical/x-mmcif",
+      "size_bytes": 80450,
+      "sha256": "ffbf072ee5249b49cae577032291ec6d6303a0f9d9d412ada29e91c365c471f9",
+      "url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/artifacts/variant.cif",
+      "structure_origin": "predicted_orphafold",
+      "sample_index": 1,
+      "created_at": "2026-10-03T20:06:19.682660Z"
+    },
+    {
+      "id": "art_01M41NZT93TT4735YSWKDCXWB3",
+      "name": "variant.esm_atlas.pdb",
+      "role": "source_response",
+      "media_type": "chemical/x-pdb",
+      "size_bytes": 99024,
+      "sha256": "eeb9ec03c9a5b03d13f11b8e8fa4e7d63258b00b6a224c971b9778873bd2333a",
+      "url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/artifacts/variant.esm_atlas.pdb",
+      "structure_origin": null,
+      "sample_index": null,
+      "created_at": "2026-10-03T20:06:19.684113Z"
+    },
+    {
+      "id": "art_01M41NZT95BTSR3V99949AXGHW",
+      "name": "variant.plddt.json",
+      "role": "plddt",
+      "media_type": "application/json",
+      "size_bytes": 1675,
+      "sha256": "2fc3f39747a32e9573b41b20d685bb343d252da951989476ad68c68b661cfb85",
+      "url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/artifacts/variant.plddt.json",
+      "structure_origin": null,
+      "sample_index": null,
+      "created_at": "2026-10-03T20:06:19.685712Z"
+    },
+    {
+      "id": "art_01M41NZT98301HNS8HAS1WH958",
+      "name": "difference.json",
+      "role": "other",
+      "media_type": "application/json",
+      "size_bytes": 46839,
+      "sha256": "ac64718eef4b8f12f7c4a5d62505bb96351e4c88531ab8684e8667301564ac49",
+      "url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/artifacts/difference.json",
+      "structure_origin": null,
+      "sample_index": null,
+      "created_at": "2026-10-03T20:06:19.688394Z"
+    }
+  ],
+  "cancel_requested": false,
+  "attempts": 1,
+  "actor_id": "act_01M41NWP2056MJ78EZYTPS3Y69",
+  "project_id": null,
+  "parent_job_id": null,
+  "manifest_sha256": "ee5b9ff78557eabb707ddf269e2a1b0f7aec1901b0c0f551effa6ca75c1490b8",
+  "manifest_url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/manifest",
+  "events_url": "/api/v1/jobs/job_01M41NZS420XV8D1STVDF7HA2Y/events",
+  "created_at": "2026-10-03T20:06:18.498399Z",
+  "started_at": "2026-10-03T20:06:18.499636Z",
+  "completed_at": "2026-10-03T20:06:19.693362Z"
+}

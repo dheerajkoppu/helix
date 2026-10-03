@@ -1,0 +1,2963 @@
+{
+  "schema_version": "1.0",
+  "title": "Reference and variant models (predicted)",
+  "geometry_label": "computed from predicted model",
+  "numbering": "uniprot_canonical",
+  "generated_at": "2026-10-03T20:08:45.481939Z",
+  "job_id": "job_01M41NZW2NMC0VTKBZ7BG31B5H",
+  "variant": {
+    "variant_id": "BTK-p.Arg525Gln",
+    "gene_symbol": "BTK",
+    "uniprot_accession": "Q06187",
+    "position": 525,
+    "reference": "R",
+    "alternate": "Q",
+    "hgvs_p": "p.Arg525Gln",
+    "short": "R525Q"
+  },
+  "construct": {
+    "uniprot_accession": "Q06187",
+    "start": 392,
+    "end": 659,
+    "length": 268,
+    "protein_length": 659,
+    "full_length": false,
+    "rule": "uniprot_domain",
+    "rationale": "The protein has 659 residues, above the provider limit of 400. Residue 525 lies in the UniProt domain Protein kinase (402-655); the construct is that domain with up to 10 flanking residues on each side.",
+    "domain": {
+      "name": "Protein kinase",
+      "start": 402,
+      "end": 655,
+      "source": "UniProt feature of type Domain"
+    },
+    "flank": 10,
+    "max_residues": 400
+  },
+  "provider": {
+    "id": "esm_atlas",
+    "name": "ESM Atlas (ESMFold v1)",
+    "model_name": "ESMFold v1",
+    "model_version": "esmfold_v1",
+    "execution_mode": "remote_api",
+    "performs_inference": true,
+    "deterministic": true,
+    "cached_from": null
+  },
+  "models": [
+    {
+      "role": "reference",
+      "structure_id": "of:job_01M41NZW2NMC0VTKBZ7BG31B5H-reference",
+      "file": "reference.cif",
+      "sequence_sha256": "d11fa06e22ee0b9e1db5468f3c59efbbddd4d5cbda0812adc8e2d7a883e5d0b5",
+      "residues": 268,
+      "plddt_mean": 85.28
+    },
+    {
+      "role": "variant",
+      "structure_id": "of:job_01M41NZW2NMC0VTKBZ7BG31B5H-variant",
+      "file": "variant.cif",
+      "sequence_sha256": "775b7529a79d979523c8bb8f5562d1ab15b4dcce285f90d63dd28a3ee0f47981",
+      "residues": 268,
+      "plddt_mean": 85.14
+    }
+  ],
+  "superposition": {
+    "method": "Least-squares rigid-body fit (Kabsch) of the variant model onto the reference model",
+    "atoms": "C-alpha",
+    "scope_rule": "confident_in_both",
+    "scope": "C-alpha atoms of the 240 residues with pLDDT of at least 70 in both models",
+    "residues_used": 240,
+    "rmsd": 0.038,
+    "transform": {
+      "rotation": [
+        [
+          0.995241,
+          -0.084991,
+          0.047654
+        ],
+        [
+          0.086448,
+          0.995823,
+          -0.029395
+        ],
+        [
+          -0.044957,
+          0.033375,
+          0.998431
+        ]
+      ],
+      "translation": [
+        -0.0016,
+        -0.1554,
+        0.0217
+      ],
+      "applies_to": "variant"
+    }
+  },
+  "global_difference": {
+    "rmsd_ca_all": 0.248,
+    "residues_all": 268,
+    "rmsd_ca_confident": 0.038,
+    "residues_confident": 240
+  },
+  "local_difference": {
+    "radius": 8.0,
+    "centre_position": 525,
+    "scope": "C-alpha atoms within 8 angstroms of the C-alpha of residue 525 in the reference model, the site included",
+    "residues": 10,
+    "rmsd_ca_global_fit": 0.048,
+    "rmsd_ca_local_fit": 0.035
+  },
+  "site": {
+    "position": 525,
+    "plddt_reference": 86.0,
+    "plddt_variant": 85.0,
+    "band_reference": "confident",
+    "band_variant": "confident",
+    "confident_in_both": true,
+    "ca_displacement": 0.068
+  },
+  "contacts": {
+    "cutoff": 4.0,
+    "atoms": "heavy",
+    "exclusion": "The residues bonded to the site in sequence (positions -1 and +1) are left out.",
+    "label": "computed from predicted model",
+    "reference": [
+      {
+        "position": 481,
+        "residue": "C",
+        "min_distance": 2.88,
+        "site_atom": "CA",
+        "partner_atom": "SG",
+        "plddt": 87.0
+      },
+      {
+        "position": 483,
+        "residue": "L",
+        "min_distance": 3.98,
+        "site_atom": "N",
+        "partner_atom": "CB",
+        "plddt": 89.0
+      },
+      {
+        "position": 521,
+        "residue": "D",
+        "min_distance": 2.84,
+        "site_atom": "NH2",
+        "partner_atom": "OD1",
+        "plddt": 84.0
+      },
+      {
+        "position": 523,
+        "residue": "A",
+        "min_distance": 3.12,
+        "site_atom": "N",
+        "partner_atom": "O",
+        "plddt": 90.0
+      },
+      {
+        "position": 527,
+        "residue": "C",
+        "min_distance": 3.44,
+        "site_atom": "C",
+        "partner_atom": "N",
+        "plddt": 91.0
+      },
+      {
+        "position": 547,
+        "residue": "L",
+        "min_distance": 3.4,
+        "site_atom": "NE",
+        "partner_atom": "CD1",
+        "plddt": 35.0
+      },
+      {
+        "position": 560,
+        "residue": "P",
+        "min_distance": 3.29,
+        "site_atom": "NH2",
+        "partner_atom": "CB",
+        "plddt": 80.0
+      },
+      {
+        "position": 563,
+        "residue": "W",
+        "min_distance": 3.18,
+        "site_atom": "NH1",
+        "partner_atom": "CH2",
+        "plddt": 93.0
+      }
+    ],
+    "variant": [
+      {
+        "position": 481,
+        "residue": "C",
+        "min_distance": 3.84,
+        "site_atom": "O",
+        "partner_atom": "CB",
+        "plddt": 87.0
+      },
+      {
+        "position": 523,
+        "residue": "A",
+        "min_distance": 3.09,
+        "site_atom": "N",
+        "partner_atom": "C",
+        "plddt": 90.0
+      },
+      {
+        "position": 527,
+        "residue": "C",
+        "min_distance": 3.4,
+        "site_atom": "C",
+        "partner_atom": "N",
+        "plddt": 91.0
+      },
+      {
+        "position": 545,
+        "residue": "Y",
+        "min_distance": 3.88,
+        "site_atom": "NE2",
+        "partner_atom": "CE1",
+        "plddt": 38.0
+      }
+    ],
+    "gained": [
+      545
+    ],
+    "lost": [
+      483,
+      521,
+      547,
+      560,
+      563
+    ],
+    "kept": [
+      481,
+      523,
+      527
+    ],
+    "low_confidence_positions": [
+      545,
+      547
+    ]
+  },
+  "neighbours": {
+    "radius": 8.0,
+    "atoms": "C-alpha",
+    "label": "computed from predicted model",
+    "residues": [
+      {
+        "position": 481,
+        "residue": "C",
+        "ca_distance_reference": 5.527,
+        "ca_distance_variant": 5.488,
+        "within_reference": true,
+        "within_variant": true,
+        "plddt_reference": 87.0,
+        "plddt_variant": 87.0,
+        "masked": false
+      },
+      {
+        "position": 482,
+        "residue": "L",
+        "ca_distance_reference": 5.936,
+        "ca_distance_variant": 5.891,
+        "within_reference": true,
+        "within_variant": true,
+        "plddt_reference": 92.0,
+        "plddt_variant": 92.0,
+        "masked": false
+      },
+      {
+        "position": 483,
+        "residue": "L",
+        "ca_distance_reference": 5.031,
+        "ca_distance_variant": 5.024,
+        "within_reference": true,
+        "within_variant": true,
+        "plddt_reference": 89.0,
+        "plddt_variant": 89.0,
+        "masked": false
+      },
+      {
+        "position": 484,
+        "residue": "N",
+        "ca_distance_reference": 7.602,
+        "ca_distance_variant": 7.612,
+        "within_reference": true,
+        "within_variant": true,
+        "plddt_reference": 87.0,
+        "plddt_variant": 87.0,
+        "masked": false
+      },
+      {
+        "position": 523,
+        "residue": "A",
+        "ca_distance_reference": 5.384,
+        "ca_distance_variant": 5.317,
+        "within_reference": true,
+        "within_variant": true,
+        "plddt_reference": 90.0,
+        "plddt_variant": 90.0,
+        "masked": false
+      },
+      {
+        "position": 524,
+        "residue": "A",
+        "ca_distance_reference": 3.856,
+        "ca_distance_variant": 3.802,
+        "within_reference": true,
+        "within_variant": true,
+        "plddt_reference": 91.0,
+        "plddt_variant": 91.0,
+        "masked": false
+      },
+      {
+        "position": 526,
+        "residue": "N",
+        "ca_distance_reference": 3.873,
+        "ca_distance_variant": 3.869,
+        "within_reference": true,
+        "within_variant": true,
+        "plddt_reference": 85.0,
+        "plddt_variant": 85.0,
+        "masked": false
+      },
+      {
+        "position": 527,
+        "residue": "C",
+        "ca_distance_reference": 5.602,
+        "ca_distance_variant": 5.578,
+        "within_reference": true,
+        "within_variant": true,
+        "plddt_reference": 91.0,
+        "plddt_variant": 91.0,
+        "masked": false
+      },
+      {
+        "position": 528,
+        "residue": "L",
+        "ca_distance_reference": 7.653,
+        "ca_distance_variant": 7.616,
+        "within_reference": true,
+        "within_variant": true,
+        "plddt_reference": 91.0,
+        "plddt_variant": 91.0,
+        "masked": false
+      }
+    ]
+  },
+  "masking": {
+    "plddt_threshold": 70.0,
+    "rule": "A residue is masked when either model has pLDDT below 70 there. Masked residues carry no displacement.",
+    "masked_residues": 28,
+    "total_residues": 268,
+    "masked_ranges": [
+      {
+        "start": 392,
+        "end": 393,
+        "chain": null
+      },
+      {
+        "start": 411,
+        "end": 413,
+        "chain": null
+      },
+      {
+        "start": 435,
+        "end": 437,
+        "chain": null
+      },
+      {
+        "start": 540,
+        "end": 559,
+        "chain": null
+      }
+    ]
+  },
+  "per_residue": [
+    {
+      "position": 392,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 43.0,
+      "plddt_variant": 43.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 393,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 55.0,
+      "plddt_variant": 54.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 394,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 72.0,
+      "plddt_variant": 71.0,
+      "masked": false,
+      "ca_displacement": 0.042
+    },
+    {
+      "position": 395,
+      "reference_residue": "W",
+      "variant_residue": "W",
+      "plddt_reference": 81.0,
+      "plddt_variant": 81.0,
+      "masked": false,
+      "ca_displacement": 0.031
+    },
+    {
+      "position": 396,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 85.0,
+      "plddt_variant": 85.0,
+      "masked": false,
+      "ca_displacement": 0.039
+    },
+    {
+      "position": 397,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 88.0,
+      "plddt_variant": 88.0,
+      "masked": false,
+      "ca_displacement": 0.037
+    },
+    {
+      "position": 398,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 89.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.047
+    },
+    {
+      "position": 399,
+      "reference_residue": "P",
+      "variant_residue": "P",
+      "plddt_reference": 89.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.042
+    },
+    {
+      "position": 400,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.049
+    },
+    {
+      "position": 401,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.043
+    },
+    {
+      "position": 402,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.028
+    },
+    {
+      "position": 403,
+      "reference_residue": "T",
+      "variant_residue": "T",
+      "plddt_reference": 93.0,
+      "plddt_variant": 93.0,
+      "masked": false,
+      "ca_displacement": 0.028
+    },
+    {
+      "position": 404,
+      "reference_residue": "F",
+      "variant_residue": "F",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.018
+    },
+    {
+      "position": 405,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.018
+    },
+    {
+      "position": 406,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.02
+    },
+    {
+      "position": 407,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 88.0,
+      "plddt_variant": 88.0,
+      "masked": false,
+      "ca_displacement": 0.018
+    },
+    {
+      "position": 408,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 83.0,
+      "plddt_variant": 83.0,
+      "masked": false,
+      "ca_displacement": 0.025
+    },
+    {
+      "position": 409,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 78.0,
+      "plddt_variant": 78.0,
+      "masked": false,
+      "ca_displacement": 0.031
+    },
+    {
+      "position": 410,
+      "reference_residue": "T",
+      "variant_residue": "T",
+      "plddt_reference": 74.0,
+      "plddt_variant": 74.0,
+      "masked": false,
+      "ca_displacement": 0.045
+    },
+    {
+      "position": 411,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 64.0,
+      "plddt_variant": 64.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 412,
+      "reference_residue": "Q",
+      "variant_residue": "Q",
+      "plddt_reference": 59.0,
+      "plddt_variant": 58.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 413,
+      "reference_residue": "F",
+      "variant_residue": "F",
+      "plddt_reference": 64.0,
+      "plddt_variant": 62.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 414,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 73.0,
+      "plddt_variant": 73.0,
+      "masked": false,
+      "ca_displacement": 0.082
+    },
+    {
+      "position": 415,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 82.0,
+      "plddt_variant": 81.0,
+      "masked": false,
+      "ca_displacement": 0.035
+    },
+    {
+      "position": 416,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 84.0,
+      "plddt_variant": 84.0,
+      "masked": false,
+      "ca_displacement": 0.019
+    },
+    {
+      "position": 417,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 89.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.01
+    },
+    {
+      "position": 418,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.012
+    },
+    {
+      "position": 419,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 93.0,
+      "plddt_variant": 93.0,
+      "masked": false,
+      "ca_displacement": 0.017
+    },
+    {
+      "position": 420,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.021
+    },
+    {
+      "position": 421,
+      "reference_residue": "W",
+      "variant_residue": "W",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.026
+    },
+    {
+      "position": 422,
+      "reference_residue": "R",
+      "variant_residue": "R",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.037
+    },
+    {
+      "position": 423,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 89.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.038
+    },
+    {
+      "position": 424,
+      "reference_residue": "Q",
+      "variant_residue": "Q",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.034
+    },
+    {
+      "position": 425,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.031
+    },
+    {
+      "position": 426,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 93.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.024
+    },
+    {
+      "position": 427,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.014
+    },
+    {
+      "position": 428,
+      "reference_residue": "A",
+      "variant_residue": "A",
+      "plddt_reference": 89.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.011
+    },
+    {
+      "position": 429,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 89.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.017
+    },
+    {
+      "position": 430,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 83.0,
+      "plddt_variant": 83.0,
+      "masked": false,
+      "ca_displacement": 0.018
+    },
+    {
+      "position": 431,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 85.0,
+      "plddt_variant": 84.0,
+      "masked": false,
+      "ca_displacement": 0.027
+    },
+    {
+      "position": 432,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 78.0,
+      "plddt_variant": 77.0,
+      "masked": false,
+      "ca_displacement": 0.029
+    },
+    {
+      "position": 433,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 76.0,
+      "plddt_variant": 75.0,
+      "masked": false,
+      "ca_displacement": 0.029
+    },
+    {
+      "position": 434,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 73.0,
+      "plddt_variant": 72.0,
+      "masked": false,
+      "ca_displacement": 0.038
+    },
+    {
+      "position": 435,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 70.0,
+      "plddt_variant": 69.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 436,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 61.0,
+      "plddt_variant": 61.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 437,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 65.0,
+      "plddt_variant": 65.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 438,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 72.0,
+      "plddt_variant": 72.0,
+      "masked": false,
+      "ca_displacement": 0.095
+    },
+    {
+      "position": 439,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 75.0,
+      "plddt_variant": 75.0,
+      "masked": false,
+      "ca_displacement": 0.087
+    },
+    {
+      "position": 440,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 76.0,
+      "plddt_variant": 76.0,
+      "masked": false,
+      "ca_displacement": 0.092
+    },
+    {
+      "position": 441,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 71.0,
+      "plddt_variant": 70.0,
+      "masked": false,
+      "ca_displacement": 0.095
+    },
+    {
+      "position": 442,
+      "reference_residue": "F",
+      "variant_residue": "F",
+      "plddt_reference": 75.0,
+      "plddt_variant": 75.0,
+      "masked": false,
+      "ca_displacement": 0.067
+    },
+    {
+      "position": 443,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 77.0,
+      "plddt_variant": 77.0,
+      "masked": false,
+      "ca_displacement": 0.057
+    },
+    {
+      "position": 444,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 76.0,
+      "plddt_variant": 76.0,
+      "masked": false,
+      "ca_displacement": 0.037
+    },
+    {
+      "position": 445,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 75.0,
+      "plddt_variant": 75.0,
+      "masked": false,
+      "ca_displacement": 0.049
+    },
+    {
+      "position": 446,
+      "reference_residue": "A",
+      "variant_residue": "A",
+      "plddt_reference": 78.0,
+      "plddt_variant": 78.0,
+      "masked": false,
+      "ca_displacement": 0.04
+    },
+    {
+      "position": 447,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 79.0,
+      "plddt_variant": 79.0,
+      "masked": false,
+      "ca_displacement": 0.03
+    },
+    {
+      "position": 448,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 77.0,
+      "plddt_variant": 76.0,
+      "masked": false,
+      "ca_displacement": 0.039
+    },
+    {
+      "position": 449,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 78.0,
+      "plddt_variant": 78.0,
+      "masked": false,
+      "ca_displacement": 0.051
+    },
+    {
+      "position": 450,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 82.0,
+      "plddt_variant": 82.0,
+      "masked": false,
+      "ca_displacement": 0.026
+    },
+    {
+      "position": 451,
+      "reference_residue": "N",
+      "variant_residue": "N",
+      "plddt_reference": 83.0,
+      "plddt_variant": 83.0,
+      "masked": false,
+      "ca_displacement": 0.038
+    },
+    {
+      "position": 452,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 85.0,
+      "plddt_variant": 85.0,
+      "masked": false,
+      "ca_displacement": 0.035
+    },
+    {
+      "position": 453,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 87.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.036
+    },
+    {
+      "position": 454,
+      "reference_residue": "H",
+      "variant_residue": "H",
+      "plddt_reference": 93.0,
+      "plddt_variant": 93.0,
+      "masked": false,
+      "ca_displacement": 0.025
+    },
+    {
+      "position": 455,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 93.0,
+      "plddt_variant": 93.0,
+      "masked": false,
+      "ca_displacement": 0.026
+    },
+    {
+      "position": 456,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.018
+    },
+    {
+      "position": 457,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.015
+    },
+    {
+      "position": 458,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.009
+    },
+    {
+      "position": 459,
+      "reference_residue": "Q",
+      "variant_residue": "Q",
+      "plddt_reference": 88.0,
+      "plddt_variant": 88.0,
+      "masked": false,
+      "ca_displacement": 0.004
+    },
+    {
+      "position": 460,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 86.0,
+      "plddt_variant": 86.0,
+      "masked": false,
+      "ca_displacement": 0.01
+    },
+    {
+      "position": 461,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 87.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.019
+    },
+    {
+      "position": 462,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 86.0,
+      "plddt_variant": 86.0,
+      "masked": false,
+      "ca_displacement": 0.027
+    },
+    {
+      "position": 463,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 86.0,
+      "plddt_variant": 86.0,
+      "masked": false,
+      "ca_displacement": 0.033
+    },
+    {
+      "position": 464,
+      "reference_residue": "C",
+      "variant_residue": "C",
+      "plddt_reference": 87.0,
+      "plddt_variant": 86.0,
+      "masked": false,
+      "ca_displacement": 0.043
+    },
+    {
+      "position": 465,
+      "reference_residue": "T",
+      "variant_residue": "T",
+      "plddt_reference": 83.0,
+      "plddt_variant": 83.0,
+      "masked": false,
+      "ca_displacement": 0.055
+    },
+    {
+      "position": 466,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 81.0,
+      "plddt_variant": 81.0,
+      "masked": false,
+      "ca_displacement": 0.056
+    },
+    {
+      "position": 467,
+      "reference_residue": "Q",
+      "variant_residue": "Q",
+      "plddt_reference": 81.0,
+      "plddt_variant": 81.0,
+      "masked": false,
+      "ca_displacement": 0.053
+    },
+    {
+      "position": 468,
+      "reference_residue": "R",
+      "variant_residue": "R",
+      "plddt_reference": 83.0,
+      "plddt_variant": 83.0,
+      "masked": false,
+      "ca_displacement": 0.049
+    },
+    {
+      "position": 469,
+      "reference_residue": "P",
+      "variant_residue": "P",
+      "plddt_reference": 84.0,
+      "plddt_variant": 84.0,
+      "masked": false,
+      "ca_displacement": 0.038
+    },
+    {
+      "position": 470,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 83.0,
+      "plddt_variant": 83.0,
+      "masked": false,
+      "ca_displacement": 0.038
+    },
+    {
+      "position": 471,
+      "reference_residue": "F",
+      "variant_residue": "F",
+      "plddt_reference": 87.0,
+      "plddt_variant": 86.0,
+      "masked": false,
+      "ca_displacement": 0.037
+    },
+    {
+      "position": 472,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 85.0,
+      "plddt_variant": 85.0,
+      "masked": false,
+      "ca_displacement": 0.023
+    },
+    {
+      "position": 473,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 89.0,
+      "plddt_variant": 88.0,
+      "masked": false,
+      "ca_displacement": 0.022
+    },
+    {
+      "position": 474,
+      "reference_residue": "T",
+      "variant_residue": "T",
+      "plddt_reference": 88.0,
+      "plddt_variant": 88.0,
+      "masked": false,
+      "ca_displacement": 0.002
+    },
+    {
+      "position": 475,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.015
+    },
+    {
+      "position": 476,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.01
+    },
+    {
+      "position": 477,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.018
+    },
+    {
+      "position": 478,
+      "reference_residue": "A",
+      "variant_residue": "A",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.014
+    },
+    {
+      "position": 479,
+      "reference_residue": "N",
+      "variant_residue": "N",
+      "plddt_reference": 90.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.013
+    },
+    {
+      "position": 480,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 87.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.033
+    },
+    {
+      "position": 481,
+      "reference_residue": "C",
+      "variant_residue": "C",
+      "plddt_reference": 87.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.046
+    },
+    {
+      "position": 482,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.021
+    },
+    {
+      "position": 483,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 89.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.054
+    },
+    {
+      "position": 484,
+      "reference_residue": "N",
+      "variant_residue": "N",
+      "plddt_reference": 87.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.064
+    },
+    {
+      "position": 485,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.049
+    },
+    {
+      "position": 486,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 93.0,
+      "plddt_variant": 93.0,
+      "masked": false,
+      "ca_displacement": 0.046
+    },
+    {
+      "position": 487,
+      "reference_residue": "R",
+      "variant_residue": "R",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.068
+    },
+    {
+      "position": 488,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.072
+    },
+    {
+      "position": 489,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 90.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.065
+    },
+    {
+      "position": 490,
+      "reference_residue": "R",
+      "variant_residue": "R",
+      "plddt_reference": 87.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.055
+    },
+    {
+      "position": 491,
+      "reference_residue": "H",
+      "variant_residue": "H",
+      "plddt_reference": 87.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.039
+    },
+    {
+      "position": 492,
+      "reference_residue": "R",
+      "variant_residue": "R",
+      "plddt_reference": 89.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.049
+    },
+    {
+      "position": 493,
+      "reference_residue": "F",
+      "variant_residue": "F",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.036
+    },
+    {
+      "position": 494,
+      "reference_residue": "Q",
+      "variant_residue": "Q",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.035
+    },
+    {
+      "position": 495,
+      "reference_residue": "T",
+      "variant_residue": "T",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.025
+    },
+    {
+      "position": 496,
+      "reference_residue": "Q",
+      "variant_residue": "Q",
+      "plddt_reference": 93.0,
+      "plddt_variant": 93.0,
+      "masked": false,
+      "ca_displacement": 0.029
+    },
+    {
+      "position": 497,
+      "reference_residue": "Q",
+      "variant_residue": "Q",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.027
+    },
+    {
+      "position": 498,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.019
+    },
+    {
+      "position": 499,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 96.0,
+      "plddt_variant": 96.0,
+      "masked": false,
+      "ca_displacement": 0.016
+    },
+    {
+      "position": 500,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 96.0,
+      "plddt_variant": 96.0,
+      "masked": false,
+      "ca_displacement": 0.021
+    },
+    {
+      "position": 501,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 96.0,
+      "plddt_variant": 96.0,
+      "masked": false,
+      "ca_displacement": 0.015
+    },
+    {
+      "position": 502,
+      "reference_residue": "C",
+      "variant_residue": "C",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.013
+    },
+    {
+      "position": 503,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.011
+    },
+    {
+      "position": 504,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.009
+    },
+    {
+      "position": 505,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.006
+    },
+    {
+      "position": 506,
+      "reference_residue": "C",
+      "variant_residue": "C",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.006
+    },
+    {
+      "position": 507,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.01
+    },
+    {
+      "position": 508,
+      "reference_residue": "A",
+      "variant_residue": "A",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.01
+    },
+    {
+      "position": 509,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.006
+    },
+    {
+      "position": 510,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 96.0,
+      "plddt_variant": 96.0,
+      "masked": false,
+      "ca_displacement": 0.011
+    },
+    {
+      "position": 511,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.021
+    },
+    {
+      "position": 512,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.022
+    },
+    {
+      "position": 513,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 94.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.024
+    },
+    {
+      "position": 514,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.035
+    },
+    {
+      "position": 515,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.047
+    },
+    {
+      "position": 516,
+      "reference_residue": "Q",
+      "variant_residue": "Q",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.048
+    },
+    {
+      "position": 517,
+      "reference_residue": "F",
+      "variant_residue": "F",
+      "plddt_reference": 86.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.042
+    },
+    {
+      "position": 518,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 87.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.042
+    },
+    {
+      "position": 519,
+      "reference_residue": "H",
+      "variant_residue": "H",
+      "plddt_reference": 86.0,
+      "plddt_variant": 86.0,
+      "masked": false,
+      "ca_displacement": 0.057
+    },
+    {
+      "position": 520,
+      "reference_residue": "R",
+      "variant_residue": "R",
+      "plddt_reference": 84.0,
+      "plddt_variant": 84.0,
+      "masked": false,
+      "ca_displacement": 0.055
+    },
+    {
+      "position": 521,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 84.0,
+      "plddt_variant": 83.0,
+      "masked": false,
+      "ca_displacement": 0.12
+    },
+    {
+      "position": 522,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.042
+    },
+    {
+      "position": 523,
+      "reference_residue": "A",
+      "variant_residue": "A",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.085
+    },
+    {
+      "position": 524,
+      "reference_residue": "A",
+      "variant_residue": "A",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.006
+    },
+    {
+      "position": 525,
+      "reference_residue": "R",
+      "variant_residue": "Q",
+      "plddt_reference": 86.0,
+      "plddt_variant": 85.0,
+      "masked": false,
+      "ca_displacement": 0.068
+    },
+    {
+      "position": 526,
+      "reference_residue": "N",
+      "variant_residue": "N",
+      "plddt_reference": 85.0,
+      "plddt_variant": 85.0,
+      "masked": false,
+      "ca_displacement": 0.032
+    },
+    {
+      "position": 527,
+      "reference_residue": "C",
+      "variant_residue": "C",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.013
+    },
+    {
+      "position": 528,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.015
+    },
+    {
+      "position": 529,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 93.0,
+      "plddt_variant": 93.0,
+      "masked": false,
+      "ca_displacement": 0.014
+    },
+    {
+      "position": 530,
+      "reference_residue": "N",
+      "variant_residue": "N",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.035
+    },
+    {
+      "position": 531,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.055
+    },
+    {
+      "position": 532,
+      "reference_residue": "Q",
+      "variant_residue": "Q",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.043
+    },
+    {
+      "position": 533,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 91.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.031
+    },
+    {
+      "position": 534,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.012
+    },
+    {
+      "position": 535,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 96.0,
+      "plddt_variant": 96.0,
+      "masked": false,
+      "ca_displacement": 0.006
+    },
+    {
+      "position": 536,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.007
+    },
+    {
+      "position": 537,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.008
+    },
+    {
+      "position": 538,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 85.0,
+      "plddt_variant": 85.0,
+      "masked": false,
+      "ca_displacement": 0.047
+    },
+    {
+      "position": 539,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 73.0,
+      "plddt_variant": 73.0,
+      "masked": false,
+      "ca_displacement": 0.044
+    },
+    {
+      "position": 540,
+      "reference_residue": "F",
+      "variant_residue": "F",
+      "plddt_reference": 51.0,
+      "plddt_variant": 53.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 541,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 47.0,
+      "plddt_variant": 48.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 542,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 45.0,
+      "plddt_variant": 45.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 543,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 40.0,
+      "plddt_variant": 40.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 544,
+      "reference_residue": "R",
+      "variant_residue": "R",
+      "plddt_reference": 39.0,
+      "plddt_variant": 41.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 545,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 37.0,
+      "plddt_variant": 38.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 546,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 33.0,
+      "plddt_variant": 34.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 547,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 35.0,
+      "plddt_variant": 35.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 548,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 33.0,
+      "plddt_variant": 32.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 549,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 33.0,
+      "plddt_variant": 32.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 550,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 32.0,
+      "plddt_variant": 33.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 551,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 38.0,
+      "plddt_variant": 38.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 552,
+      "reference_residue": "T",
+      "variant_residue": "T",
+      "plddt_reference": 33.0,
+      "plddt_variant": 33.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 553,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 36.0,
+      "plddt_variant": 36.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 554,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 30.0,
+      "plddt_variant": 30.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 555,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 32.0,
+      "plddt_variant": 31.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 556,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 34.0,
+      "plddt_variant": 34.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 557,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 45.0,
+      "plddt_variant": 43.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 558,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 55.0,
+      "plddt_variant": 52.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 559,
+      "reference_residue": "F",
+      "variant_residue": "F",
+      "plddt_reference": 66.0,
+      "plddt_variant": 64.0,
+      "masked": true,
+      "ca_displacement": null
+    },
+    {
+      "position": 560,
+      "reference_residue": "P",
+      "variant_residue": "P",
+      "plddt_reference": 80.0,
+      "plddt_variant": 78.0,
+      "masked": false,
+      "ca_displacement": 0.099
+    },
+    {
+      "position": 561,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 85.0,
+      "plddt_variant": 84.0,
+      "masked": false,
+      "ca_displacement": 0.049
+    },
+    {
+      "position": 562,
+      "reference_residue": "R",
+      "variant_residue": "R",
+      "plddt_reference": 89.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.066
+    },
+    {
+      "position": 563,
+      "reference_residue": "W",
+      "variant_residue": "W",
+      "plddt_reference": 93.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.058
+    },
+    {
+      "position": 564,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 91.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.044
+    },
+    {
+      "position": 565,
+      "reference_residue": "P",
+      "variant_residue": "P",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.037
+    },
+    {
+      "position": 566,
+      "reference_residue": "P",
+      "variant_residue": "P",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.038
+    },
+    {
+      "position": 567,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 90.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.023
+    },
+    {
+      "position": 568,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 88.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.054
+    },
+    {
+      "position": 569,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 87.0,
+      "plddt_variant": 86.0,
+      "masked": false,
+      "ca_displacement": 0.073
+    },
+    {
+      "position": 570,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 85.0,
+      "plddt_variant": 85.0,
+      "masked": false,
+      "ca_displacement": 0.05
+    },
+    {
+      "position": 571,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 84.0,
+      "plddt_variant": 83.0,
+      "masked": false,
+      "ca_displacement": 0.052
+    },
+    {
+      "position": 572,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 81.0,
+      "plddt_variant": 81.0,
+      "masked": false,
+      "ca_displacement": 0.067
+    },
+    {
+      "position": 573,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 85.0,
+      "plddt_variant": 85.0,
+      "masked": false,
+      "ca_displacement": 0.061
+    },
+    {
+      "position": 574,
+      "reference_residue": "F",
+      "variant_residue": "F",
+      "plddt_reference": 86.0,
+      "plddt_variant": 86.0,
+      "masked": false,
+      "ca_displacement": 0.066
+    },
+    {
+      "position": 575,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.056
+    },
+    {
+      "position": 576,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.033
+    },
+    {
+      "position": 577,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.02
+    },
+    {
+      "position": 578,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.03
+    },
+    {
+      "position": 579,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.032
+    },
+    {
+      "position": 580,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.016
+    },
+    {
+      "position": 581,
+      "reference_residue": "W",
+      "variant_residue": "W",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.023
+    },
+    {
+      "position": 582,
+      "reference_residue": "A",
+      "variant_residue": "A",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.029
+    },
+    {
+      "position": 583,
+      "reference_residue": "F",
+      "variant_residue": "F",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.024
+    },
+    {
+      "position": 584,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.021
+    },
+    {
+      "position": 585,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.018
+    },
+    {
+      "position": 586,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.018
+    },
+    {
+      "position": 587,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.007
+    },
+    {
+      "position": 588,
+      "reference_residue": "W",
+      "variant_residue": "W",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.007
+    },
+    {
+      "position": 589,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 96.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.022
+    },
+    {
+      "position": 590,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.014
+    },
+    {
+      "position": 591,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 96.0,
+      "plddt_variant": 96.0,
+      "masked": false,
+      "ca_displacement": 0.011
+    },
+    {
+      "position": 592,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.017
+    },
+    {
+      "position": 593,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.039
+    },
+    {
+      "position": 594,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.048
+    },
+    {
+      "position": 595,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.021
+    },
+    {
+      "position": 596,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 90.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.032
+    },
+    {
+      "position": 597,
+      "reference_residue": "P",
+      "variant_residue": "P",
+      "plddt_reference": 93.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.03
+    },
+    {
+      "position": 598,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.035
+    },
+    {
+      "position": 599,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 89.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.043
+    },
+    {
+      "position": 600,
+      "reference_residue": "R",
+      "variant_residue": "R",
+      "plddt_reference": 90.0,
+      "plddt_variant": 89.0,
+      "masked": false,
+      "ca_displacement": 0.057
+    },
+    {
+      "position": 601,
+      "reference_residue": "F",
+      "variant_residue": "F",
+      "plddt_reference": 88.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.045
+    },
+    {
+      "position": 602,
+      "reference_residue": "T",
+      "variant_residue": "T",
+      "plddt_reference": 84.0,
+      "plddt_variant": 83.0,
+      "masked": false,
+      "ca_displacement": 0.051
+    },
+    {
+      "position": 603,
+      "reference_residue": "N",
+      "variant_residue": "N",
+      "plddt_reference": 82.0,
+      "plddt_variant": 82.0,
+      "masked": false,
+      "ca_displacement": 0.047
+    },
+    {
+      "position": 604,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 83.0,
+      "plddt_variant": 82.0,
+      "masked": false,
+      "ca_displacement": 0.04
+    },
+    {
+      "position": 605,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 87.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.049
+    },
+    {
+      "position": 606,
+      "reference_residue": "T",
+      "variant_residue": "T",
+      "plddt_reference": 89.0,
+      "plddt_variant": 88.0,
+      "masked": false,
+      "ca_displacement": 0.037
+    },
+    {
+      "position": 607,
+      "reference_residue": "A",
+      "variant_residue": "A",
+      "plddt_reference": 88.0,
+      "plddt_variant": 87.0,
+      "masked": false,
+      "ca_displacement": 0.04
+    },
+    {
+      "position": 608,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 90.0,
+      "plddt_variant": 90.0,
+      "masked": false,
+      "ca_displacement": 0.043
+    },
+    {
+      "position": 609,
+      "reference_residue": "H",
+      "variant_residue": "H",
+      "plddt_reference": 92.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.036
+    },
+    {
+      "position": 610,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 93.0,
+      "plddt_variant": 93.0,
+      "masked": false,
+      "ca_displacement": 0.029
+    },
+    {
+      "position": 611,
+      "reference_residue": "A",
+      "variant_residue": "A",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.026
+    },
+    {
+      "position": 612,
+      "reference_residue": "Q",
+      "variant_residue": "Q",
+      "plddt_reference": 93.0,
+      "plddt_variant": 92.0,
+      "masked": false,
+      "ca_displacement": 0.034
+    },
+    {
+      "position": 613,
+      "reference_residue": "G",
+      "variant_residue": "G",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.04
+    },
+    {
+      "position": 614,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.046
+    },
+    {
+      "position": 615,
+      "reference_residue": "R",
+      "variant_residue": "R",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.039
+    },
+    {
+      "position": 616,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 96.0,
+      "plddt_variant": 96.0,
+      "masked": false,
+      "ca_displacement": 0.031
+    },
+    {
+      "position": 617,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 96.0,
+      "plddt_variant": 96.0,
+      "masked": false,
+      "ca_displacement": 0.028
+    },
+    {
+      "position": 618,
+      "reference_residue": "R",
+      "variant_residue": "R",
+      "plddt_reference": 96.0,
+      "plddt_variant": 96.0,
+      "masked": false,
+      "ca_displacement": 0.026
+    },
+    {
+      "position": 619,
+      "reference_residue": "P",
+      "variant_residue": "P",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.017
+    },
+    {
+      "position": 620,
+      "reference_residue": "H",
+      "variant_residue": "H",
+      "plddt_reference": 93.0,
+      "plddt_variant": 93.0,
+      "masked": false,
+      "ca_displacement": 0.021
+    },
+    {
+      "position": 621,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 93.0,
+      "plddt_variant": 93.0,
+      "masked": false,
+      "ca_displacement": 0.025
+    },
+    {
+      "position": 622,
+      "reference_residue": "A",
+      "variant_residue": "A",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.027
+    },
+    {
+      "position": 623,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.039
+    },
+    {
+      "position": 624,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.042
+    },
+    {
+      "position": 625,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 96.0,
+      "plddt_variant": 96.0,
+      "masked": false,
+      "ca_displacement": 0.038
+    },
+    {
+      "position": 626,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.03
+    },
+    {
+      "position": 627,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.028
+    },
+    {
+      "position": 628,
+      "reference_residue": "T",
+      "variant_residue": "T",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.035
+    },
+    {
+      "position": 629,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.026
+    },
+    {
+      "position": 630,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.016
+    },
+    {
+      "position": 631,
+      "reference_residue": "Y",
+      "variant_residue": "Y",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.029
+    },
+    {
+      "position": 632,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.025
+    },
+    {
+      "position": 633,
+      "reference_residue": "C",
+      "variant_residue": "C",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.017
+    },
+    {
+      "position": 634,
+      "reference_residue": "W",
+      "variant_residue": "W",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.028
+    },
+    {
+      "position": 635,
+      "reference_residue": "H",
+      "variant_residue": "H",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.026
+    },
+    {
+      "position": 636,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.035
+    },
+    {
+      "position": 637,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 93.0,
+      "plddt_variant": 93.0,
+      "masked": false,
+      "ca_displacement": 0.028
+    },
+    {
+      "position": 638,
+      "reference_residue": "A",
+      "variant_residue": "A",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.015
+    },
+    {
+      "position": 639,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.01
+    },
+    {
+      "position": 640,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.02
+    },
+    {
+      "position": 641,
+      "reference_residue": "R",
+      "variant_residue": "R",
+      "plddt_reference": 98.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.017
+    },
+    {
+      "position": 642,
+      "reference_residue": "P",
+      "variant_residue": "P",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.014
+    },
+    {
+      "position": 643,
+      "reference_residue": "T",
+      "variant_residue": "T",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.007
+    },
+    {
+      "position": 644,
+      "reference_residue": "F",
+      "variant_residue": "F",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.009
+    },
+    {
+      "position": 645,
+      "reference_residue": "K",
+      "variant_residue": "K",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.016
+    },
+    {
+      "position": 646,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.015
+    },
+    {
+      "position": 647,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.014
+    },
+    {
+      "position": 648,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 98.0,
+      "plddt_variant": 98.0,
+      "masked": false,
+      "ca_displacement": 0.016
+    },
+    {
+      "position": 649,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.021
+    },
+    {
+      "position": 650,
+      "reference_residue": "N",
+      "variant_residue": "N",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.021
+    },
+    {
+      "position": 651,
+      "reference_residue": "I",
+      "variant_residue": "I",
+      "plddt_reference": 97.0,
+      "plddt_variant": 97.0,
+      "masked": false,
+      "ca_displacement": 0.021
+    },
+    {
+      "position": 652,
+      "reference_residue": "L",
+      "variant_residue": "L",
+      "plddt_reference": 96.0,
+      "plddt_variant": 96.0,
+      "masked": false,
+      "ca_displacement": 0.028
+    },
+    {
+      "position": 653,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 96.0,
+      "plddt_variant": 96.0,
+      "masked": false,
+      "ca_displacement": 0.031
+    },
+    {
+      "position": 654,
+      "reference_residue": "V",
+      "variant_residue": "V",
+      "plddt_reference": 95.0,
+      "plddt_variant": 95.0,
+      "masked": false,
+      "ca_displacement": 0.032
+    },
+    {
+      "position": 655,
+      "reference_residue": "M",
+      "variant_residue": "M",
+      "plddt_reference": 94.0,
+      "plddt_variant": 94.0,
+      "masked": false,
+      "ca_displacement": 0.031
+    },
+    {
+      "position": 656,
+      "reference_residue": "D",
+      "variant_residue": "D",
+      "plddt_reference": 93.0,
+      "plddt_variant": 93.0,
+      "masked": false,
+      "ca_displacement": 0.043
+    },
+    {
+      "position": 657,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 91.0,
+      "plddt_variant": 91.0,
+      "masked": false,
+      "ca_displacement": 0.045
+    },
+    {
+      "position": 658,
+      "reference_residue": "E",
+      "variant_residue": "E",
+      "plddt_reference": 83.0,
+      "plddt_variant": 83.0,
+      "masked": false,
+      "ca_displacement": 0.045
+    },
+    {
+      "position": 659,
+      "reference_residue": "S",
+      "variant_residue": "S",
+      "plddt_reference": 79.0,
+      "plddt_variant": 79.0,
+      "masked": false,
+      "ca_displacement": 0.047
+    }
+  ],
+  "property_change": {
+    "reference": {
+      "residue": "R",
+      "name": "Arg",
+      "volume_a3": 173.4,
+      "volume_class": "large",
+      "charge_class": "positive",
+      "polarity_class": "polar",
+      "hydropathy": -4.5
+    },
+    "variant": {
+      "residue": "Q",
+      "name": "Gln",
+      "volume_a3": 143.8,
+      "volume_class": "medium",
+      "charge_class": "uncharged",
+      "polarity_class": "polar",
+      "hydropathy": -3.5
+    },
+    "volume_change_a3": -29.6,
+    "hydropathy_change": 1.0,
+    "charge_changed": true,
+    "polarity_changed": false,
+    "volume_class_changed": true,
+    "sources": [
+      {
+        "text": "Zamyatnin AA, Prog Biophys Mol Biol (1972) 24:107-123",
+        "title": "Protein volume in solution",
+        "year": 1972,
+        "pmid": null,
+        "pmcid": null,
+        "doi": "10.1016/0079-6107(72)90005-3",
+        "url": null
+      },
+      {
+        "text": "Pommie C et al., J Mol Recognit (2004) 17:17-32",
+        "title": "IMGT standardized criteria for statistical analysis of immunoglobulin V-REGION amino acid properties",
+        "year": 2004,
+        "pmid": null,
+        "pmcid": null,
+        "doi": "10.1002/jmr.647",
+        "url": null
+      },
+      {
+        "text": "Kyte J, Doolittle RF, J Mol Biol (1982) 157:105-132",
+        "title": "A simple method for displaying the hydropathic character of a protein",
+        "year": 1982,
+        "pmid": null,
+        "pmcid": null,
+        "doi": "10.1016/0022-2836(82)90515-0",
+        "url": null
+      }
+    ]
+  },
+  "summary": {
+    "rmsd_ca_all": 0.248,
+    "rmsd_ca_confident": 0.038,
+    "residues_confident": 240,
+    "local_rmsd_ca": 0.048,
+    "plddt_site_reference": 86.0,
+    "plddt_site_variant": 85.0,
+    "contacts_gained": 1,
+    "contacts_lost": 5,
+    "masked_residues": 28,
+    "total_residues": 268
+  },
+  "caveats": [
+    {
+      "id": "not_validated_for_substitutions",
+      "text": "Structure predictors are not validated for single-residue substitutions. A variant model that matches the reference carries no information about whether the variant is tolerated. Differences smaller than run-to-run variation are noise. See the evidence panel for functional, curated, population and predictor data.",
+      "quoted_from": null,
+      "citations": [
+        {
+          "text": "Buel & Walters, Nat Struct Mol Biol 2022, 29:1-2",
+          "title": "Can AlphaFold2 predict the impact of missense mutations on structure?",
+          "year": 2022,
+          "pmid": null,
+          "pmcid": null,
+          "doi": "10.1038/s41594-021-00714-2",
+          "url": null
+        },
+        {
+          "text": "Pak et al., PLoS ONE 2023, 18:e0282689",
+          "title": null,
+          "year": 2023,
+          "pmid": null,
+          "pmcid": null,
+          "doi": "10.1371/journal.pone.0282689",
+          "url": null
+        },
+        {
+          "text": "Feldman, Brogi & Skolnick, Comput Struct Biotechnol J 2026",
+          "title": null,
+          "year": 2026,
+          "pmid": null,
+          "pmcid": null,
+          "doi": "10.34133/csbj.0142",
+          "url": null
+        },
+        {
+          "text": "Terwilliger et al., Nat Methods 2024",
+          "title": null,
+          "year": 2024,
+          "pmid": null,
+          "pmcid": null,
+          "doi": "10.1038/s41592-023-02087-4",
+          "url": null
+        },
+        {
+          "text": "McBride et al., Phys Rev Lett 2023 (counterpoint)",
+          "title": null,
+          "year": 2023,
+          "pmid": null,
+          "pmcid": null,
+          "doi": "10.1103/PhysRevLett.131.218401",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "alphafold_db_statement",
+      "text": "AlphaFold has not been validated for predicting the effect of mutations. In particular, AlphaFold is not expected to produce an unfolded protein structure given a sequence containing a destabilising point mutation.",
+      "quoted_from": "AlphaFold DB FAQ. OrphaFold applies the same caveat to every structure predictor.",
+      "citations": [
+        {
+          "text": "AlphaFold Protein Structure Database, FAQ",
+          "title": null,
+          "year": null,
+          "pmid": null,
+          "pmcid": null,
+          "doi": null,
+          "url": "https://alphafold.ebi.ac.uk/faq"
+        }
+      ]
+    },
+    {
+      "id": "similar_fold_is_uninformative",
+      "text": "A predictor producing a similar fold for the variant sequence is expected for most single substitutions and is uninformative about stability.",
+      "quoted_from": null,
+      "citations": []
+    },
+    {
+      "id": "plddt_is_model_behaviour",
+      "text": "pLDDT is each model's own confidence estimate. The two values at the site are model behaviour, never measured destabilisation. Low pLDDT means disorder or insufficient information.",
+      "quoted_from": null,
+      "citations": []
+    },
+    {
+      "id": "geometry_from_predicted_models",
+      "text": "Distances, contacts and displacements are geometry computed from predicted models, not observations of the protein.",
+      "quoted_from": null,
+      "citations": []
+    },
+    {
+      "id": "run_to_run_variation_not_estimated",
+      "text": "This model is deterministic: there is no seed and one model per sequence, so run-to-run variation is not estimated and no noise baseline is available for these differences.",
+      "quoted_from": null,
+      "citations": []
+    },
+    {
+      "id": "construct_is_a_window",
+      "text": "Both models cover a residue window, not the full-length protein. Contacts with the rest of the chain, with partners and with ligands are absent from both.",
+      "quoted_from": null,
+      "citations": []
+    }
+  ],
+  "software": {
+    "gemmi": "0.7.5",
+    "numpy": "2.5.3"
+  }
+}

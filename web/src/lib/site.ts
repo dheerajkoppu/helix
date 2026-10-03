@@ -18,7 +18,9 @@ export interface NavItem {
   match: string[];
 }
 
+/** The three destinations printed in the top bar. */
 export const PRIMARY_NAV: NavItem[] = [
+  { label: "Lab", href: "/lab", match: ["/lab"] },
   {
     label: "Explore",
     href: "/explore",
@@ -36,7 +38,12 @@ export const PRIMARY_NAV: NavItem[] = [
     href: "/projects",
     match: ["/projects", "/project", "/s/"],
   },
+];
+
+/** Everything else, listed in the top bar's overflow menu. */
+export const SECONDARY_NAV: NavItem[] = [
   { label: "Jobs", href: "/jobs", match: ["/jobs"] },
   { label: "Models", href: "/models", match: ["/models"] },
   { label: "Docs", href: "/docs", match: ["/docs"] },
+  { label: "About", href: "/about", match: ["/about"] },
 ];

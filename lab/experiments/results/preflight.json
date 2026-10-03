@@ -1,0 +1,3283 @@
+{
+  "generated_at": "2026-10-03T22:04:11Z",
+  "api_url": "http://localhost:8000",
+  "what": "Per variant: 11 retrieval tool calls and 3 retrieval-only tests in a fixed order, no agent, twice. The first pass also fills the API caches before the benchmark.",
+  "n_variants": 13,
+  "median_first_pass_seconds": 1.74,
+  "median_second_pass_seconds": 0.56,
+  "variants": [
+    {
+      "variant_id": "ADA-p.Arg211His",
+      "first_pass": {
+        "retrieval_seconds": 1.05,
+        "test_seconds": 1.53,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.05,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.68,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.21,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 211 is not within 4.5 Å of any non-solvent ligand in the 2 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.98,
+            "ok": true,
+            "error": null,
+            "verdict": "predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +8.21 kcal/mol for R211H, at or above the destabilising threshold of 2.0 kcal/mol."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.54,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 211: lines none of the 4 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "2 experimental structures observe residue 211 and hold a non-solvent ligand (2 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 1-363 (363 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.3,
+        "test_seconds": 0.23,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.18,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 211 is not within 4.5 Å of any non-solvent ligand in the 2 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null,
+            "verdict": "predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +8.21 kcal/mol for R211H, at or above the destabilising threshold of 2.0 kcal/mol."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 211: lines none of the 4 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "2 experimental structures observe residue 211 and hold a non-solvent ligand (2 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 1-363 (363 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB",
+        "gnomAD"
+      ]
+    },
+    {
+      "variant_id": "IL2RG-p.Arg226Cys",
+      "first_pass": {
+        "retrieval_seconds": 1.49,
+        "test_seconds": 1.04,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.68,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.28,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.4,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.58,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 226 is not within 4.5 Å of any non-solvent ligand in the 12 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.26,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +0.51 kcal/mol for R226C, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 96.69)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.2,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 226: lines none of the 1 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "12 experimental structures observe residue 226 and hold a non-solvent ligand (14 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: None); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 1-369 (369 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.28,
+        "test_seconds": 0.24,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.15,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 226 is not within 4.5 Å of any non-solvent ligand in the 12 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +0.51 kcal/mol for R226C, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 96.69)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 226: lines none of the 1 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "12 experimental structures observe residue 226 and hold a non-solvent ligand (14 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: None); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 1-369 (369 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB"
+      ]
+    },
+    {
+      "variant_id": "BTK-p.Arg28His",
+      "first_pass": {
+        "retrieval_seconds": 0.37,
+        "test_seconds": 0.29,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.17,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.06,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.07,
+            "ok": true,
+            "error": null,
+            "verdict": "contact_with_organic_ligand",
+            "headline": "Residue 28 is within 4.5 Å of an organic ligand in 32 of 39 ligand-bound structures (4IP, 4PT, A1B6F, A1B6G, A1B6H, A1B6I); closest 2.58 Å to 4PT ((2R)-3-{[(S)-{[(2S,3R,5S,6S)-2,6-DIHYDROXY-3,4,5-TRIS(PHOSPHONOOXY)CY…) in PDB 2Z0P."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG -0.76 kcal/mol for R28H, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 94.31)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 28: lines none of the 13 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "39 experimental structures observe residue 28 and hold a non-solvent ligand (39 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 1-143 (143 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.45,
+        "test_seconds": 0.29,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.14,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.16,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.06,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.07,
+            "ok": true,
+            "error": null,
+            "verdict": "contact_with_organic_ligand",
+            "headline": "Residue 28 is within 4.5 Å of an organic ligand in 32 of 39 ligand-bound structures (4IP, 4PT, A1B6F, A1B6G, A1B6H, A1B6I); closest 2.58 Å to 4PT ((2R)-3-{[(S)-{[(2S,3R,5S,6S)-2,6-DIHYDROXY-3,4,5-TRIS(PHOSPHONOOXY)CY…) in PDB 2Z0P."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG -0.76 kcal/mol for R28H, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 94.31)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 28: lines none of the 13 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "39 experimental structures observe residue 28 and hold a non-solvent ligand (39 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 1-143 (143 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB",
+        "gnomAD"
+      ]
+    },
+    {
+      "variant_id": "WAS-p.Thr45Met",
+      "first_pass": {
+        "retrieval_seconds": 1.29,
+        "test_seconds": 0.45,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.74,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.18,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.25,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_bound_structure",
+            "headline": "No experimental structure observing residue 45 holds a non-solvent ligand."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.24,
+            "ok": true,
+            "error": null,
+            "verdict": "predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +3.56 kcal/mol for T45M, at or above the destabilising threshold of 2.0 kcal/mol."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.2,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 45: lines none of the 1 P2Rank pockets; lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": false,
+            "detail": "0 experimental structures observe residue 45 and hold a non-solvent ligand (1 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 29-158 (130 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.37,
+        "test_seconds": 0.22,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.24,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_bound_structure",
+            "headline": "No experimental structure observing residue 45 holds a non-solvent ligand."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +3.56 kcal/mol for T45M, at or above the destabilising threshold of 2.0 kcal/mol."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 45: lines none of the 1 P2Rank pockets; lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": false,
+            "detail": "0 experimental structures observe residue 45 and hold a non-solvent ligand (1 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 29-158 (130 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB",
+        "gnomAD"
+      ]
+    },
+    {
+      "variant_id": "RAG1-p.Arg404Gln",
+      "first_pass": {
+        "retrieval_seconds": 0.75,
+        "test_seconds": 0.45,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.2,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.24,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.16,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_bound_structure",
+            "headline": "No experimental structure observing residue 404 holds a non-solvent ligand."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.23,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG -0.79 kcal/mol for R404Q, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 93.56)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.21,
+            "ok": true,
+            "error": null,
+            "verdict": "not_in_predicted_pocket",
+            "headline": "Residue 404: lines none of the 12 P2Rank pockets; lies in 0 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": false,
+            "detail": "0 experimental structures observe residue 404 and hold a non-solvent ligand (0 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 204-603 (400 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.28,
+        "test_seconds": 0.22,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.17,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_bound_structure",
+            "headline": "No experimental structure observing residue 404 holds a non-solvent ligand."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG -0.79 kcal/mol for R404Q, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 93.56)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.2,
+            "ok": true,
+            "error": null,
+            "verdict": "not_in_predicted_pocket",
+            "headline": "Residue 404: lines none of the 12 P2Rank pockets; lies in 0 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": false,
+            "detail": "0 experimental structures observe residue 404 and hold a non-solvent ligand (0 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 204-603 (400 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "PDBe SIFTS",
+        "UniProtKB",
+        "gnomAD"
+      ]
+    },
+    {
+      "variant_id": "JAK3-p.Arg103His",
+      "first_pass": {
+        "retrieval_seconds": 0.71,
+        "test_seconds": 0.24,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.05,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.07,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.27,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.05,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_bound_structure",
+            "headline": "No experimental structure observing residue 103 holds a non-solvent ligand."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null,
+            "verdict": "predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +4.15 kcal/mol for R103H, at or above the destabilising threshold of 2.0 kcal/mol."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.2,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 103: lines P2Rank pocket rank 4 of 34 (probability 0.732); lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": false,
+            "detail": "0 experimental structures observe residue 103 and hold a non-solvent ligand (0 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 14-366 (353 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.31,
+        "test_seconds": 0.41,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.17,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_bound_structure",
+            "headline": "No experimental structure observing residue 103 holds a non-solvent ligand."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.2,
+            "ok": true,
+            "error": null,
+            "verdict": "predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +4.15 kcal/mol for R103H, at or above the destabilising threshold of 2.0 kcal/mol."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.2,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 103: lines P2Rank pocket rank 4 of 34 (probability 0.732); lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": false,
+            "detail": "0 experimental structures observe residue 103 and hold a non-solvent ligand (0 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 14-366 (353 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "PDBe SIFTS",
+        "UniProtKB",
+        "gnomAD"
+      ]
+    },
+    {
+      "variant_id": "CYBB-p.His101Arg",
+      "first_pass": {
+        "retrieval_seconds": 1.7,
+        "test_seconds": 0.69,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 1.15,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.23,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.18,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "contact_with_organic_ligand",
+            "headline": "Residue 101 is within 4.5 Å of an organic ligand in 5 of 5 ligand-bound structures (HEM); closest 2.0 Å to HEM (PROTOPORPHYRIN IX CONTAINING FE) in PDB 8GZ3."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.47,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG -1.04 kcal/mol for H101R, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 97.0)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.2,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 101: lines P2Rank pocket rank 2 of 13 (probability 0.987); lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "5 experimental structures observe residue 101 and hold a non-solvent ligand (5 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 44-296 (253 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.29,
+        "test_seconds": 0.22,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.17,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "contact_with_organic_ligand",
+            "headline": "Residue 101 is within 4.5 Å of an organic ligand in 5 of 5 ligand-bound structures (HEM); closest 2.0 Å to HEM (PROTOPORPHYRIN IX CONTAINING FE) in PDB 8GZ3."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG -1.04 kcal/mol for H101R, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 97.0)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.18,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 101: lines P2Rank pocket rank 2 of 13 (probability 0.987); lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "5 experimental structures observe residue 101 and hold a non-solvent ligand (5 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 44-296 (253 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB"
+      ]
+    },
+    {
+      "variant_id": "STAT3-p.Arg382Trp",
+      "first_pass": {
+        "retrieval_seconds": 0.87,
+        "test_seconds": 0.97,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.06,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.35,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.27,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 382 is not within 4.5 Å of any non-solvent ligand in the 2 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.76,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +1.96 kcal/mol for R382W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 88.0)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 382: lines P2Rank pocket rank 9 of 10 (probability 0.012); lies in 5 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "2 experimental structures observe residue 382 and hold a non-solvent ligand (4 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: None); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 182-581 (400 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.41,
+        "test_seconds": 0.26,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.26,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 382 is not within 4.5 Å of any non-solvent ligand in the 2 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.05,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +1.96 kcal/mol for R382W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 88.0)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 382: lines P2Rank pocket rank 9 of 10 (probability 0.012); lies in 5 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "2 experimental structures observe residue 382 and hold a non-solvent ligand (4 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: None); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 182-581 (400 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB"
+      ]
+    },
+    {
+      "variant_id": "STAT1-p.Arg274Trp",
+      "first_pass": {
+        "retrieval_seconds": 0.65,
+        "test_seconds": 0.58,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.26,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.24,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 274 is not within 4.5 Å of any non-solvent ligand in the 4 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.36,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG -0.60 kcal/mol for R274W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 94.62)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.2,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 274: lines P2Rank pocket rank 5 of 11 (probability 0.028); lies in 3 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "4 experimental structures observe residue 274 and hold a non-solvent ligand (8 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: None); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 74-473 (400 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.43,
+        "test_seconds": 0.25,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.28,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 274 is not within 4.5 Å of any non-solvent ligand in the 4 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG -0.60 kcal/mol for R274W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 94.62)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 274: lines P2Rank pocket rank 5 of 11 (probability 0.028); lies in 3 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "4 experimental structures observe residue 274 and hold a non-solvent ligand (8 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: None); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 74-473 (400 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB"
+      ]
+    },
+    {
+      "variant_id": "FOXP3-p.Ala384Thr",
+      "first_pass": {
+        "retrieval_seconds": 1.67,
+        "test_seconds": 0.42,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 1.08,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.29,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 384 is not within 4.5 Å of any non-solvent ligand in the 1 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.23,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +1.16 kcal/mol for A384T, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 95.38)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.18,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 384: lines none of the 3 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "1 experimental structures observe residue 384 and hold a non-solvent ligand (2 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: None); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 32-431 (400 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.31,
+        "test_seconds": 0.21,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 384 is not within 4.5 Å of any non-solvent ligand in the 1 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +1.16 kcal/mol for A384T, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 95.38)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.18,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 384: lines none of the 3 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "1 experimental structures observe residue 384 and hold a non-solvent ligand (2 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: None); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 32-431 (400 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB"
+      ]
+    },
+    {
+      "variant_id": "CD40LG-p.Thr254Met",
+      "first_pass": {
+        "retrieval_seconds": 1.36,
+        "test_seconds": 0.44,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.79,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.25,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 254 is not within 4.5 Å of any non-solvent ligand in the 6 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.22,
+            "ok": true,
+            "error": null,
+            "verdict": "predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +2.74 kcal/mol for T254M, at or above the destabilising threshold of 2.0 kcal/mol."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 254: lines none of the 1 P2Rank pockets; lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "6 experimental structures observe residue 254 and hold a non-solvent ligand (8 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 1-261 (261 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.29,
+        "test_seconds": 0.22,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 254 is not within 4.5 Å of any non-solvent ligand in the 6 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG +2.74 kcal/mol for T254M, at or above the destabilising threshold of 2.0 kcal/mol."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.18,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 254: lines none of the 1 P2Rank pockets; lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "6 experimental structures observe residue 254 and hold a non-solvent ligand (8 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 1-261 (261 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "IUIS 2024 classification",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB"
+      ]
+    },
+    {
+      "variant_id": "PIK3CD-p.Glu1021Lys",
+      "first_pass": {
+        "retrieval_seconds": 0.83,
+        "test_seconds": 0.33,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.07,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.25,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.35,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.11,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 1021 is not within 4.5 Å of any non-solvent ligand in the 20 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG -1.03 kcal/mol for E1021K, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 86.06)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.2,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 1021: lines none of the 22 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "20 experimental structures observe residue 1021 and hold a non-solvent ligand (20 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: None); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 735-1037 (303 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.38,
+        "test_seconds": 0.25,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.0,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.24,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 1021 is not within 4.5 Å of any non-solvent ligand in the 20 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG -1.03 kcal/mol for E1021K, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 86.06)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.2,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 1021: lines none of the 22 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "20 experimental structures observe residue 1021 and hold a non-solvent ligand (20 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: None); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 735-1037 (303 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB",
+        "gnomAD"
+      ]
+    },
+    {
+      "variant_id": "CTLA4-p.Arg75Trp",
+      "first_pass": {
+        "retrieval_seconds": 0.78,
+        "test_seconds": 0.22,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.03,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.43,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.04,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 75 is not within 4.5 Å of any non-solvent ligand in the 6 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG -0.11 kcal/mol for R75W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 95.38)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 75: lines none of the 0 P2Rank pockets; lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "6 experimental structures observe residue 75 and hold a non-solvent ligand (20 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 1-223 (223 residues)."
+          }
+        }
+      },
+      "second_pass": {
+        "retrieval_seconds": 0.34,
+        "test_seconds": 0.22,
+        "failed_calls": [],
+        "steps": [
+          {
+            "tool": "get_gene",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_protein",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_variants_near",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_residue_annotations",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_variant_effect_values",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_structure_ledger",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "get_interactions",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_literature",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "search_openalex",
+            "seconds": 0.23,
+            "ok": true,
+            "error": null
+          },
+          {
+            "tool": "list_available_tests",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null
+          }
+        ],
+        "tests": {
+          "ligand_contact": {
+            "tool": "ligand_contact",
+            "seconds": 0.02,
+            "ok": true,
+            "error": null,
+            "verdict": "no_ligand_contact",
+            "headline": "Residue 75 is not within 4.5 Å of any non-solvent ligand in the 6 ligand-bound structures examined."
+          },
+          "stability_effect": {
+            "tool": "stability_effect",
+            "seconds": 0.01,
+            "ok": true,
+            "error": null,
+            "verdict": "not_predicted_destabilising",
+            "headline": "FoldX predicts ΔΔG -0.11 kcal/mol for R75W, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 95.38)."
+          },
+          "structural_context": {
+            "tool": "structural_context",
+            "seconds": 0.19,
+            "ok": true,
+            "error": null,
+            "verdict": "in_predicted_pocket",
+            "headline": "Residue 75: lines none of the 0 P2Rank pockets; lies in 2 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar)."
+          }
+        },
+        "availability": {
+          "ligand_contact": {
+            "can_run": true,
+            "detail": "6 experimental structures observe residue 75 and hold a non-solvent ligand (20 observe the residue)."
+          },
+          "stability_effect": {
+            "can_run": true,
+            "detail": "FoldX prediction state at this substitution: ok. The value is not shown before the test runs."
+          },
+          "structural_context": {
+            "can_run": true,
+            "detail": "ProtVar pocket and interface data answer for this residue (interface state: not_covered); P2Rank runs on the AlphaFold model."
+          },
+          "structure_comparison": {
+            "can_run": true,
+            "detail": "Construct residues 1-223 (223 residues)."
+          }
+        }
+      },
+      "databases_returned": [
+        "AlphaFold DB",
+        "AlphaMissense",
+        "ClinVar",
+        "EBI ProtVar",
+        "Ensembl VEP",
+        "Europe PMC",
+        "IUIS 2024 classification",
+        "IntAct",
+        "InterPro",
+        "OpenAlex",
+        "PDBe SIFTS",
+        "RCSB PDB",
+        "UniProtKB",
+        "gnomAD"
+      ]
+    }
+  ]
+}

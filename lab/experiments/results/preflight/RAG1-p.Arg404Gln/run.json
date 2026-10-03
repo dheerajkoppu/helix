@@ -1,0 +1,14 @@
+{
+  "run_id": "preflight-RAG1-p.Arg404Gln",
+  "subject": {
+    "variant_id": "RAG1-p.Arg404Gln",
+    "gene": "RAG1",
+    "accession": "P15918",
+    "position": 404,
+    "reference_residue": "R",
+    "alternate_residue": "Q",
+    "clinvar_vcv": "VCV001072413",
+    "clinvar_review_status": "reviewed by expert panel",
+    "protein_change": "p.Arg404Gln"
+  }
+}

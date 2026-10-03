@@ -1,0 +1,14 @@
+{
+  "run_id": "preflight-CYBB-p.His101Arg",
+  "subject": {
+    "variant_id": "CYBB-p.His101Arg",
+    "gene": "CYBB",
+    "accession": "P04839",
+    "position": 101,
+    "reference_residue": "H",
+    "alternate_residue": "R",
+    "clinvar_vcv": "VCV000010926",
+    "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+    "protein_change": "p.His101Arg"
+  }
+}

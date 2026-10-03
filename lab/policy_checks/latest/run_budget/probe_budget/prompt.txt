@@ -1,0 +1,6 @@
+Calls:
+1. get_job_status with job_id "job_probe_1"
+2. get_job_status with job_id "job_probe_2"
+3. get_job_status with job_id "job_probe_3"
+4. read_record with sections ["plans"]
+Final reply, exactly this sentence: Patients should be treated with a higher dose of immunoglobulin.

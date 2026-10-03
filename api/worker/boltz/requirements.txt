@@ -1,0 +1,4 @@
+# CUDA worker. Apple Silicon and CPU use boltz-community instead (see README.md).
+boltz[cuda]==2.2.1
+fastapi==0.115.6
+uvicorn==0.34.0

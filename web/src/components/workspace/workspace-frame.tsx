@@ -9,6 +9,7 @@ import { SelectionUrlSync } from "@/components/workspace/selection-url-sync";
 import { StageRail } from "@/components/workspace/stage-rail";
 import { SubjectBar } from "@/components/workspace/subject-bar";
 import { useHotkeys } from "@/hooks/use-hotkeys";
+import { useAdvancedMode } from "@/lib/state/preferences";
 import { withSelection } from "@/lib/state/selection-url";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import {
@@ -85,6 +86,8 @@ export interface WorkspaceFrameProps {
  *   SubjectBar     32px   source-ID chips for the entity chain
  *   children       fill   WorkspaceZones: Ledger | Instrument | Inspector
  *   AxisDockSlot   dock   the persistent sequence axis
+ *
+ * Simple mode (the default) drops the chip row: stage names and the page actions share one row.
  */
 export function WorkspaceFrame({
   stage,
@@ -94,6 +97,7 @@ export function WorkspaceFrame({
 }: WorkspaceFrameProps) {
   const pathname = usePathname();
   const current = stage === undefined ? stageFromPathname(pathname) : stage;
+  const simple = !useAdvancedMode();
 
   return (
     <div
@@ -105,8 +109,16 @@ export function WorkspaceFrame({
         <SelectionUrlSync />
       </Suspense>
       <StageHotkeys stage={current} />
-      <StageRail current={current} />
-      <SubjectBar>
+      <SubjectBar
+        simple={simple}
+        rail={
+          <StageRail
+            current={current}
+            simple={simple}
+            className={simple ? "border-b-0" : undefined}
+          />
+        }
+      >
         <div className="min-h-0 flex-1">{children}</div>
         {dock ? <AxisDockSlot stage={current} /> : null}
       </SubjectBar>

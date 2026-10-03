@@ -13,6 +13,8 @@ WEB_PORT ?= 3000
 EXTRAS   ?= dev
 # Passed to the seed builder, e.g. make seed SEED_ARGS="--refresh clinvar"
 SEED_ARGS ?=
+# Passed to the cache warmer, e.g. make warm WARM_ARGS="BTK ADA --passes 2"
+WARM_ARGS ?=
 
 UVICORN_FLAGS := --port $(API_PORT)
 ifdef RELOAD
@@ -23,11 +25,12 @@ endif
 WEB_ENV := $(if $(API_URL),NEXT_PUBLIC_API_URL=$(API_URL))
 
 .DEFAULT_GOAL := help
-.PHONY: help setup setup-api setup-web seed api worker web dev types build check lint clean
+.PHONY: help setup setup-api setup-web seed warm api worker web dev types build check lint clean
 
 help:
 	@echo "make setup    create api/.venv, install the API (EXTRAS=$(EXTRAS)) and the web dependencies"
 	@echo "make seed     rebuild data/seed/catalog.json from its sources (SEED_ARGS=\"--refresh all\")"
+	@echo "make warm     preload the upstream cache for the flagship genes (WARM_ARGS=\"BTK ADA\")"
 	@echo "make api      run the API on port $(API_PORT) (RELOAD=1 restarts it when api/orphafold changes)"
 	@echo "make web      run the web dev server on port $(WEB_PORT) (API_URL=http://host:port for another API)"
 	@echo "make dev      run API and web together"
@@ -50,6 +53,10 @@ setup-web:
 
 seed:
 	$(VENV)/bin/python api/scripts/build_seed.py $(SEED_ARGS)
+
+# Uses the API on API_PORT when it is running, otherwise the services in its own process
+warm:
+	cd api && .venv/bin/python scripts/warm_cache.py --api http://localhost:$(API_PORT) $(WARM_ARGS)
 
 api:
 	cd api && exec .venv/bin/uvicorn orphafold.main:app $(UVICORN_FLAGS)

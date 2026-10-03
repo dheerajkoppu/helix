@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: >-
+  If you use OrphaFold in your research, please cite the software as below, and cite the data
+  sources and models behind the results you use. Their required citations are listed in
+  ATTRIBUTION.md and on the model providers page.
+title: "OrphaFold: open protein research for rare disease"
+type: software
+authors:
+  - name: "The OrphaFold contributors"
+version: 0.1.0
+date-released: "2026-10-03"
+license: Apache-2.0
+abstract: >-
+  OrphaFold is an open-source platform for computational rare-disease research. It follows one path
+  from disease to gene, variant, protein, structural change, mechanism, candidate interventions and
+  research hypothesis, with the source and evidence class of every statement shown. The first
+  dataset is the IUIS classification of human inborn errors of immunity. It is a research and
+  hypothesis-generation tool, not clinical decision software.
+keywords:
+  - rare disease
+  - inborn errors of immunity
+  - protein structure
+  - variant interpretation
+  - provenance
+  - reproducibility
+references:
+  - type: article
+    title: >-
+      Human inborn errors of immunity: 2024 update on the classification from the International
+      Union of Immunological Societies Expert Committee
+    authors:
+      - family-names: Poli
+        given-names: M. Cecilia
+      - family-names: Aksentijevich
+        given-names: Ivona
+      - family-names: Bousfiha
+        given-names: Aziz A.
+      - name: "et al."
+    journal: "Journal of Human Immunity"
+    volume: 1
+    issue: 1
+    start: e20250003
+    year: 2025
+    doi: 10.70962/jhi.20250003

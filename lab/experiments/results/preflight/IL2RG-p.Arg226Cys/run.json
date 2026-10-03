@@ -1,0 +1,14 @@
+{
+  "run_id": "preflight-IL2RG-p.Arg226Cys",
+  "subject": {
+    "variant_id": "IL2RG-p.Arg226Cys",
+    "gene": "IL2RG",
+    "accession": "P31785",
+    "position": 226,
+    "reference_residue": "R",
+    "alternate_residue": "C",
+    "clinvar_vcv": "VCV000225195",
+    "clinvar_review_status": "reviewed by expert panel",
+    "protein_change": "p.Arg226Cys"
+  }
+}

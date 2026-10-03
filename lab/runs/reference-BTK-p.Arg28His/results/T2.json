@@ -1,0 +1,67 @@
+{
+  "test_id": "T2",
+  "test_kind": "structural_context",
+  "values": {
+    "headline": "Residue 28: lines none of the 13 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar).",
+    "verdict": "in_predicted_pocket",
+    "in_predicted_interface": false,
+    "p2rank_status": "ready",
+    "p2rank_model": "afdb:AF-Q06187-F1",
+    "p2rank_pockets_total": 13,
+    "p2rank_pockets_containing_residue": [],
+    "protvar_pockets_containing_residue": [
+      {
+        "pocket": 8,
+        "score": 889.4,
+        "buriedness": 0.8,
+        "mean_plddt": 86.3,
+        "residues": [
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          28,
+          39,
+          53,
+          54,
+          106,
+          108
+        ]
+      }
+    ],
+    "protvar_interface": {
+      "state": "not_covered",
+      "message": "No predicted interface contains this residue."
+    }
+  },
+  "sources": [
+    {
+      "database": "PrankWeb",
+      "record_id": "AF-Q06187-F1",
+      "url": "https://prankweb.cz"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "Q06187:pocket:8",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=Q06187:28"
+    }
+  ],
+  "controls": [
+    "Rank control: the rank and probability of the pocket among all predicted pockets of the model.",
+    "Confidence control: mean pLDDT of the pocket residues."
+  ],
+  "limitations": [
+    "Predicted pockets and interfaces are computational predictions, not measured binding sites."
+  ],
+  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments structural_context --accession Q06187 --position 28 --alternate-residue H --reference-residue R --gene BTK --variant-id BTK-p.Arg28His",
+  "elapsed_seconds": 0.6
+}

@@ -1,0 +1,358 @@
+{
+  "manifest_version": "1.0.0",
+  "job_id": "job_01M41P493S3X59WK29AKYDREDS",
+  "created_at": "2026-10-03T20:08:45.945954Z",
+  "started_at": "2026-10-03T20:08:45.947337Z",
+  "completed_at": "2026-10-03T20:08:53.914061Z",
+  "kind": "variant_comparison",
+  "status": "succeeded",
+  "research_use_only": true,
+  "actor": {
+    "actor_id": "act_01M41NWP2056MJ78EZYTPS3Y69",
+    "kind": "anonymous"
+  },
+  "project": null,
+  "inputs": {
+    "sequences": [
+      {
+        "entity_id": "reference",
+        "molecule_type": "protein",
+        "sequence": "DHENQRLFEMLGRKCLTLATAVVQLYLALPPGAEHWTKEHCGAVCFVKDNPQKSYFIRLYGLQAGRLLWEQELYSQLVYSTPTPFFHTFAGDDCQAGLNFADEDEAQAFRALVQEKIQKRNQRQSGDRRQ",
+        "length": 130,
+        "sha256": "c6611e6339997a9506e6f14c368ec83c7f5bd821fdfd6fcf6fa9ebb90969e1c3",
+        "md5": "73ceadbfcd928cc5d0da3114aaafed58",
+        "refget": "SQ.RmRiEwp6gRKTGJk3M3WU4gd8mR6fA0TY",
+        "uniprot_start": 29,
+        "is_variant_sequence": false,
+        "applied_variant_ids": [],
+        "source": {
+          "database": "uniprot",
+          "record_id": "P42768",
+          "record_version": "260",
+          "release": "2026_03",
+          "url": "https://www.uniprot.org/uniprotkb/P42768/entry"
+        }
+      },
+      {
+        "entity_id": "variant",
+        "molecule_type": "protein",
+        "sequence": "DHENQRLFEMLGRKCLMLATAVVQLYLALPPGAEHWTKEHCGAVCFVKDNPQKSYFIRLYGLQAGRLLWEQELYSQLVYSTPTPFFHTFAGDDCQAGLNFADEDEAQAFRALVQEKIQKRNQRQSGDRRQ",
+        "length": 130,
+        "sha256": "6ce835ce12f7732df435c935ff0b3fb2c89241c640a6a966f8b7eeff101a8496",
+        "md5": "211e6445f8bd00e2c4d0a9058caddc3f",
+        "refget": "SQ.mo8eV2t4KXQss0w3jVujyufLBSKSAG3I",
+        "uniprot_start": 29,
+        "is_variant_sequence": true,
+        "applied_variant_ids": [
+          "WAS-p.Thr45Met"
+        ],
+        "source": {
+          "database": "uniprot",
+          "record_id": "P42768",
+          "record_version": "260",
+          "release": "2026_03",
+          "url": "https://www.uniprot.org/uniprotkb/P42768/entry"
+        }
+      }
+    ],
+    "variants": [
+      {
+        "variant_id": "WAS-p.Thr45Met",
+        "hgvs": {
+          "p": "p.Thr45Met"
+        },
+        "vrs_id": null,
+        "vrs_version": null,
+        "transcript": null,
+        "transcript_status": null,
+        "protein_change": {
+          "position": 45,
+          "ref": "T",
+          "alt": "M"
+        },
+        "xrefs": []
+      }
+    ],
+    "ligands": [],
+    "structures": [],
+    "database_identifiers": [
+      "uniprot:P42768"
+    ]
+  },
+  "request": {
+    "provider": "esm_atlas",
+    "variant_id": "WAS-p.Thr45Met",
+    "gene_symbol": "WAS",
+    "uniprot_accession": "P42768",
+    "substitution": "p.Thr45Met",
+    "residue_start": null,
+    "residue_end": null,
+    "seed": null
+  },
+  "model": {
+    "provider": "esm_atlas",
+    "name": "ESMFold v1",
+    "version": "esmfold_v1",
+    "license": "CC-BY-4.0",
+    "execution_mode": "remote_api",
+    "code": {
+      "repository": "https://github.com/facebookresearch/esm",
+      "revision": null,
+      "package": null
+    },
+    "weights": []
+  },
+  "parameters": {
+    "seed": null,
+    "provider": {
+      "endpoint": "https://api.esmatlas.com/foldSequence/v1/pdb/",
+      "msa": "none (single-sequence language model)",
+      "seed": null,
+      "deterministic": true,
+      "samples": 1,
+      "response_title": "TITLE     ESMFOLD V1 PREDICTION FOR INPUT",
+      "plddt_native_scale": "0-1",
+      "residue_start": 29,
+      "residue_end": 158
+    },
+    "construct": {
+      "uniprot_accession": "P42768",
+      "start": 29,
+      "end": 158,
+      "length": 130,
+      "protein_length": 502,
+      "full_length": false,
+      "rule": "uniprot_domain",
+      "rationale": "The protein has 502 residues, above the provider limit of 400. Residue 45 lies in the UniProt domain WH1 (39-148); the construct is that domain with up to 10 flanking residues on each side.",
+      "domain": {
+        "name": "WH1",
+        "start": 39,
+        "end": 148,
+        "source": "UniProt feature of type Domain"
+      },
+      "flank": 10,
+      "max_residues": 400
+    },
+    "same_provider_and_construct_for_both_models": true,
+    "analysis": {
+      "superposition": "Least-squares rigid-body fit (Kabsch) of the variant model onto the reference model",
+      "superposition_scope": "C-alpha atoms of the 121 residues with pLDDT of at least 70 in both models",
+      "plddt_mask_threshold": 70.0,
+      "contact_cutoff_angstrom": 4.0,
+      "neighbour_radius_angstrom": 8.0
+    }
+  },
+  "msa": {
+    "mode": "single_sequence",
+    "server_url": null,
+    "pairing_strategy": null,
+    "search_tool": null,
+    "databases": [],
+    "artifact_ids": []
+  },
+  "source_datasets": [
+    {
+      "name": "UniProtKB",
+      "version": "2026_03",
+      "retrieved_at": "2026-10-03T20:05:01.863263Z",
+      "license": "CC-BY-4.0",
+      "url": "https://rest.uniprot.org/uniprotkb/P42768.json"
+    }
+  ],
+  "software": {
+    "orphafold": {
+      "version": "0.1.0",
+      "git_commit": "21513b0e8821158b5ea14162bd42f206d38e2a06"
+    },
+    "python": "3.14.8",
+    "os": "darwin",
+    "container": null,
+    "cuda": null,
+    "hardware": null,
+    "packages": [
+      {
+        "name": "gemmi",
+        "version": "0.7.5"
+      },
+      {
+        "name": "httpx",
+        "version": "0.28.1"
+      },
+      {
+        "name": "numpy",
+        "version": "2.5.3"
+      }
+    ]
+  },
+  "outputs": {
+    "artifacts": [
+      {
+        "artifact_id": "art_01M41P4GW6S6D8Z1QYKMD1QPX4",
+        "role": "structure",
+        "path": "reference.cif",
+        "media_type": "chemical/x-mmcif",
+        "size_bytes": 70449,
+        "sha256": "55ebe6d1d64108b54b6ad9ad250847e5bed4fdaa4f8d72904587cd645910ff18",
+        "structure_origin": "predicted_orphafold",
+        "sample_index": 0
+      },
+      {
+        "artifact_id": "art_01M41P4GWA5GAGRDVZXY5EWD5X",
+        "role": "source_response",
+        "path": "reference.esm_atlas.pdb",
+        "media_type": "chemical/x-pdb",
+        "size_bytes": 87198,
+        "sha256": "3a65748974bd80512e11938c8993b0138f46850de84b5c17186f3a3af13a06bf",
+        "structure_origin": null,
+        "sample_index": null
+      },
+      {
+        "artifact_id": "art_01M41P4GWCDJFT3HGS78R4V8F2",
+        "role": "plddt",
+        "path": "reference.plddt.json",
+        "media_type": "application/json",
+        "size_bytes": 1569,
+        "sha256": "3346cbc483eeb4fb845e1ec5fa552ca4a5534c55ef886f265ac2ec68f61f92a5",
+        "structure_origin": null,
+        "sample_index": null
+      },
+      {
+        "artifact_id": "art_01M41P4GWE0DQ2HB4RQPR076CX",
+        "role": "structure",
+        "path": "variant.cif",
+        "media_type": "chemical/x-mmcif",
+        "size_bytes": 70558,
+        "sha256": "11c9b7f689194669736fe8fe0439c4542308e480453f871602d8eba8de9f6d73",
+        "structure_origin": "predicted_orphafold",
+        "sample_index": 1
+      },
+      {
+        "artifact_id": "art_01M41P4GWG6TM7904MJPWAHHMV",
+        "role": "source_response",
+        "path": "variant.esm_atlas.pdb",
+        "media_type": "chemical/x-pdb",
+        "size_bytes": 87279,
+        "sha256": "a97c8f20993a68e07e52dfc06a4ff24f8ccb9fa574b5c84fcb67e5cfe64cdf38",
+        "structure_origin": null,
+        "sample_index": null
+      },
+      {
+        "artifact_id": "art_01M41P4GWJ8ZEJPRZZB3MKMHPM",
+        "role": "plddt",
+        "path": "variant.plddt.json",
+        "media_type": "application/json",
+        "size_bytes": 1569,
+        "sha256": "847339abf1822505d2e8bef8dee4e3a96f360f892f2b89e4e6ca71562e0a1209",
+        "structure_origin": null,
+        "sample_index": null
+      },
+      {
+        "artifact_id": "art_01M41P4GWNZW8RRVRA8MNW6HXW",
+        "role": "other",
+        "path": "difference.json",
+        "media_type": "application/json",
+        "size_bytes": 42752,
+        "sha256": "dab338f3937481e9e9c80be2383d7bc9cabc671e2a9a8ab51a6a24e398275c95",
+        "structure_origin": null,
+        "sample_index": null
+      }
+    ],
+    "confidence": {
+      "ranking_metric": null,
+      "samples": [
+        {
+          "sample_index": 0,
+          "structure_artifact_id": "art_01M41P4GW6S6D8Z1QYKMD1QPX4",
+          "metrics": {
+            "model_role": "reference",
+            "plddt_mean": 87.31,
+            "plddt_min": 52.0,
+            "plddt_max": 96.0,
+            "title_line": "TITLE     ESMFOLD V1 PREDICTION FOR INPUT",
+            "plddt_b_factor_min": 0.5199999809265137,
+            "plddt_b_factor_max": 0.9599999785423279,
+            "plddt_native_scale": "0-1"
+          }
+        },
+        {
+          "sample_index": 1,
+          "structure_artifact_id": "art_01M41P4GWE0DQ2HB4RQPR076CX",
+          "metrics": {
+            "model_role": "variant",
+            "plddt_mean": 87.78,
+            "plddt_min": 52.0,
+            "plddt_max": 96.0,
+            "title_line": "TITLE     ESMFOLD V1 PREDICTION FOR INPUT",
+            "plddt_b_factor_min": 0.5199999809265137,
+            "plddt_b_factor_max": 0.9599999785423279,
+            "plddt_native_scale": "0-1"
+          }
+        }
+      ]
+    }
+  },
+  "execution": {
+    "worker_id": "worker-0c76fb5a",
+    "attempts": 1,
+    "argv": null,
+    "exit_code": null,
+    "wall_time_seconds": 7.966724,
+    "parent_job_id": null,
+    "stages": [
+      {
+        "id": "resolve_input",
+        "label": "Fetching sequence and domains from UniProt",
+        "status": "done",
+        "started_at": "2026-10-03T20:08:45.951410Z",
+        "completed_at": "2026-10-03T20:08:45.957997Z"
+      },
+      {
+        "id": "reference_run_model",
+        "label": "Reference · Running ESMFold v1 on the ESM Atlas fold API",
+        "status": "done",
+        "started_at": "2026-10-03T20:08:45.959334Z",
+        "completed_at": "2026-10-03T20:08:48.239547Z"
+      },
+      {
+        "id": "reference_read_model",
+        "label": "Reference · Reading coordinates and pLDDT",
+        "status": "done",
+        "started_at": "2026-10-03T20:08:48.241665Z",
+        "completed_at": "2026-10-03T20:08:48.248236Z"
+      },
+      {
+        "id": "variant_run_model",
+        "label": "Variant · Running ESMFold v1 on the ESM Atlas fold API",
+        "status": "done",
+        "started_at": "2026-10-03T20:08:48.249791Z",
+        "completed_at": "2026-10-03T20:08:53.862957Z"
+      },
+      {
+        "id": "variant_read_model",
+        "label": "Variant · Reading coordinates and pLDDT",
+        "status": "done",
+        "started_at": "2026-10-03T20:08:53.867925Z",
+        "completed_at": "2026-10-03T20:08:53.876322Z"
+      },
+      {
+        "id": "difference",
+        "label": "Computing differences between the models",
+        "status": "done",
+        "started_at": "2026-10-03T20:08:53.877955Z",
+        "completed_at": "2026-10-03T20:08:53.891228Z"
+      },
+      {
+        "id": "store_artifacts",
+        "label": "Storing files",
+        "status": "done",
+        "started_at": "2026-10-03T20:08:53.892574Z",
+        "completed_at": "2026-10-03T20:08:53.912501Z"
+      }
+    ],
+    "error": null
+  },
+  "integrity": {
+    "canonicalization": "RFC8785",
+    "manifest_sha256": "148a7bebebdc86723f3a439344284f0171f8eff1cfc7dde8c545f8a621591186"
+  }
+}

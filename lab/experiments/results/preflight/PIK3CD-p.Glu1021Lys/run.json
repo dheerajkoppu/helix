@@ -1,0 +1,14 @@
+{
+  "run_id": "preflight-PIK3CD-p.Glu1021Lys",
+  "subject": {
+    "variant_id": "PIK3CD-p.Glu1021Lys",
+    "gene": "PIK3CD",
+    "accession": "O00329",
+    "position": 1021,
+    "reference_residue": "E",
+    "alternate_residue": "K",
+    "clinvar_vcv": "VCV000088675",
+    "clinvar_review_status": "reviewed by expert panel",
+    "protein_change": "p.Glu1021Lys"
+  }
+}

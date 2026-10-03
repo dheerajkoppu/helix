@@ -47,6 +47,8 @@ function useStageTargets() {
 export interface StageRailProps {
   /** overrides the stage derived from the pathname */
   current?: StageId | null;
+  /** stage names only: the entity that fills each stage is left out */
+  simple?: boolean;
   className?: string;
 }
 
@@ -54,7 +56,11 @@ export interface StageRailProps {
  * The six stages as positions on an axis. Each cell shows the stage and the entity that fills it;
  * a stage that cannot open yet says what it needs. On phones the rail collapses to a stepper.
  */
-export function StageRail({ current, className }: StageRailProps) {
+export function StageRail({
+  current,
+  simple = false,
+  className,
+}: StageRailProps) {
   const pathname = usePathname();
   const active = current === undefined ? stageFromPathname(pathname) : current;
   const targets = useStageTargets();
@@ -69,7 +75,7 @@ export function StageRail({ current, className }: StageRailProps) {
         className,
       )}
     >
-      <ol className="hidden h-9 grid-cols-6 lg:grid">
+      <ol className={cn("hidden grid-cols-6 lg:grid", simple ? "h-10" : "h-9")}>
         {targets.map(({ stage, target, href }) => {
           const isActive = stage.id === active;
           const body = (
@@ -82,10 +88,15 @@ export function StageRail({ current, className }: StageRailProps) {
               >
                 {stage.number}
               </span>
-              <span className={cn("shrink-0", isActive && "font-medium")}>
+              <span
+                className={cn(
+                  simple ? "min-w-0 truncate" : "shrink-0",
+                  isActive && "font-medium",
+                )}
+              >
                 {stage.label}
               </span>
-              {target.subject ? (
+              {target.subject && !simple ? (
                 <span
                   className="min-w-0 truncate font-mono text-2xs text-muted-foreground"
                   translate="no"
@@ -96,7 +107,8 @@ export function StageRail({ current, className }: StageRailProps) {
             </>
           );
           const cell = cn(
-            "relative flex h-full min-w-0 items-center gap-2 px-3 text-xs outline-offset-[-2px]",
+            "relative flex h-full min-w-0 items-center gap-2 px-3 outline-offset-[-2px]",
+            simple ? "text-sm" : "text-xs",
             // tick on the axis at the start of every stage
             "before:absolute before:bottom-0 before:left-0 before:h-1.5 before:w-px before:bg-border-strong",
             isActive &&
@@ -150,7 +162,7 @@ export function StageRail({ current, className }: StageRailProps) {
           <span className="font-medium">
             {activeEntry?.stage.label ?? "Choose a stage"}
           </span>
-          {activeEntry?.target.subject ? (
+          {activeEntry?.target.subject && !simple ? (
             <span
               className="min-w-0 truncate font-mono text-xs text-muted-foreground"
               translate="no"
@@ -170,7 +182,7 @@ export function StageRail({ current, className }: StageRailProps) {
         >
           <SheetHeader className="border-b border-border-subtle px-4 py-3">
             <SheetTitle>Research stages</SheetTitle>
-            <SheetDescription>
+            <SheetDescription className="sr-only">
               Move between stages. The current disease, gene, variant and
               protein stay in context.
             </SheetDescription>

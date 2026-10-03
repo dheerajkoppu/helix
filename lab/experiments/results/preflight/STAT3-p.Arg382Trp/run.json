@@ -1,0 +1,14 @@
+{
+  "run_id": "preflight-STAT3-p.Arg382Trp",
+  "subject": {
+    "variant_id": "STAT3-p.Arg382Trp",
+    "gene": "STAT3",
+    "accession": "P40763",
+    "position": 382,
+    "reference_residue": "R",
+    "alternate_residue": "W",
+    "clinvar_vcv": "VCV000018304",
+    "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+    "protein_change": "p.Arg382Trp"
+  }
+}

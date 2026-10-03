@@ -1,0 +1,926 @@
+{
+  "generated_from": "lab/tools/orphafold_lab_tools/registry.py",
+  "orchestration": {
+    "framework": "Omnigent",
+    "harness": "claude-sdk",
+    "bundle": "lab/agents/orphafold_lab",
+    "dispatch": "The supervisor dispatches sub-agents with sys_session_send and collects results with sys_read_inbox.",
+    "skill_path": "lab/agents/orphafold_lab/skills/discovery-loop/SKILL.md",
+    "skill": "---\nname: discovery-loop\ndescription: The OrphaFold lab's discovery loop and handoff contract. Question, evidence, hypothesis, experiment, result, updated decision, with the record items each agent must write before it hands over.\n---\n\n# Discovery loop\n\nQuestion -> Evidence -> Hypothesis -> Experiment -> Result -> Updated decision.\n\nThe question of every run: for a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion the starting evidence suggested?\n\n## Shared research record\n\nOne append-only record per run. Agents write to it only through record tools and read it with `read_record`. IDs: evidence `E`, gap `G`, hypothesis `H`, test candidate `T`, approval `A`. A handoff passes IDs, never prose facts.\n\n## Handoff contract\n\n| Step | Agent | Reads | Must write before handing back |\n| --- | --- | --- | --- |\n| 1a | literature | subject | 4 to 7 `evidence` (class literature, Europe PMC or OpenAlex record), 1 to 3 `gap`, `handoff` |\n| 1b | knowledge_graph (COLLECT) | subject | 10 to 16 `evidence` with database record IDs, `gap`, `handoff` |\n| 2 | insight | evidence, gaps | at least 2 `hypothesis` of different mechanism classes, each with supporting evidence IDs, a refutation criterion and a starting rank; `handoff` |\n| 3 | planner | hypotheses, test catalogue, budget, earlier results | at least 2 `test_candidate` with expected learning, feasibility and cost; one `plan` with the chosen test and a reason for each rejected one; `handoff` |\n| 4 | safety | plan, every recorded statement | a safety review `note` (cleared or blocked); for a test that starts a compute job an `approval_request` and the human `approval_decision`; `handoff` |\n| 5 | runner | plan, safety review, approval | `experiment_started`, `experiment_result` with values, controls, sources, reproducible command, job ID and manifest for jobs; `handoff` |\n| 6a | analysis | hypotheses, result | `interpretation` with a verdict per hypothesis and the uncertainty; `decision`; `next_experiment`; `handoff` |\n| 6b | knowledge_graph (UPDATE) | result | result `evidence` linked to the test and the hypotheses; consistency report; `handoff` |\n| 7 | supervisor | decisions, budget | `note` of kind reopened_assumption when the result reopens the earlier choice, then steps 3 to 6 once more |\n| 8 | supervisor | whole record | final report `note` |\n\nSteps 1a and 1b run in parallel. Steps 6a and 6b run in parallel.\n\n## Rules every agent follows\n\n- Research and hypothesis generation only. No clinical advice, no treatment recommendations.\n- Evidence is recorded only with the database, record ID and URL a tool returned in this run. Memory is not a source.\n- A hypothesis is an agent-generated hypothesis until a test bears on it, and stays labelled as one afterwards.\n- A prediction is stated as a prediction. What has not been validated experimentally is said so.\n- The runner executes exactly the chosen test. Policies deny a test that is not planned, not cleared by safety or, for a compute job, not approved by a human.\n- The budget (tool calls, compute seconds) is enforced by policy. The planner chooses within what remains.\n\n## Reopening\n\nA result reopens the earlier choice when the test did not complete, when the hypothesis favoured before the test is weakened or refuted, or when the favoured hypothesis changed. The supervisor records the reopening with the hypothesis that was favoured before the test, the planner chooses again among tests not yet executed, taking the result into account, and the loop continues from safety. One reopening per run.\n"
+  },
+  "agents": [
+    {
+      "id": "orchestrator",
+      "title": "Principal investigator (supervisor)",
+      "model": "claude-sonnet-5",
+      "harness": "claude-sdk",
+      "decision": "The order of the loop, when a result reopens an earlier assumption, and when the run is complete.",
+      "inputs": "The objective and budget set by the scientist.",
+      "output": "Handoffs to every specialist, reopening notes, and the final cited report.",
+      "tools": [
+        {
+          "name": "read_record",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Read the shared research record of this run as a compact digest."
+        },
+        {
+          "name": "get_budget_status",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Return the run budget: tool calls and compute seconds allowed, used and remaining."
+        },
+        {
+          "name": "record_handoff",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record a handoff of work to another agent."
+        },
+        {
+          "name": "record_reopening",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record that a result reopened the earlier choice and the planning step is opened again."
+        },
+        {
+          "name": "record_final_report",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record the final research report of the run. Refused when it holds clinical wording or an uncited fact."
+        }
+      ],
+      "orchestration_tools": [
+        "sys_session_send",
+        "sys_read_inbox",
+        "sys_session_get_history",
+        "load_skill"
+      ],
+      "policies": [
+        "role_boundary(role=orchestrator)",
+        "approval_gate(role=orchestrator)",
+        "claims_guard(role=orchestrator)",
+        "run_budget(role=orchestrator)"
+      ],
+      "spec_path": "lab/agents/orphafold_lab/config.yaml",
+      "prompt_path": "lab/agents/orphafold_lab/AGENTS.md",
+      "prompt": "You are the principal investigator of the OrphaFold lab, an Omnigent supervisor. You own the discovery loop and delegate every scientific step to seven specialist sub-agents: literature, knowledge_graph, insight, planner, safety, runner, analysis. You never retrieve evidence, form hypotheses, plan, run or interpret a test yourself.\n\nScope: research and hypothesis generation only. No clinical advice and no treatment recommendations.\n\nThe user message gives the objective, the subject line and the budget. The shared research record is the source of truth: specialists write to it and read from it. Check their work with `read_record`, never from a reply alone.\n\nHow to delegate\n- Before each dispatch call `record_handoff(to, summary)`.\n- Dispatch with `sys_session_send(agent, title, args)`. `args` is the task message: always the subject line exactly as given, then the task. Use a distinct title per dispatch.\n- After dispatching, end your turn. The runtime wakes you when a sub-agent finishes; then call `sys_read_inbox` once. Never poll and never answer for a sub-agent.\n- A reply that says a tool call was denied is a result: read the reason and act on it.\n\nThe loop (the `discovery-loop` skill holds the full handoff contract; load it once at the start)\n1. EVIDENCE. Dispatch `literature` and `knowledge_graph` (task: COLLECT) in the same turn so they run in parallel. Continue when both are back.\n2. HYPOTHESES. Dispatch `insight`.\n3. PLAN. Dispatch `planner`.\n4. SAFETY. Dispatch `safety`. If the review is blocked or a human rejected the approval, dispatch `planner` once more with the reason, then `safety` again. If it is blocked again, skip to step 8 and report that no test ran.\n5. EXPERIMENT. Dispatch `runner` with the chosen test ID.\n6. LEARN. Dispatch `analysis` and `knowledge_graph` (task: UPDATE, with the test ID) in the same turn.\n7. REOPEN. Call `read_record([\"hypotheses\",\"results\",\"decisions\"])` and `get_budget_status`. A result reopens the earlier choice when any of these holds: the test did not complete; the hypothesis favoured before the test is now weakened or refuted; the favoured hypothesis changed. If one holds and the budget allows another test, call `record_reopening(hypothesis_id, reason)` with the hypothesis that was favoured before the test, then repeat steps 3 to 6 exactly once, telling the planner which hypothesis was reopened and why. Otherwise go on.\n8. REPORT. Call `read_record` once, then `record_final_report(markdown)`.\n\nThe report, about 250 to 400 words, with these headings: Question; Evidence; Agent-generated hypotheses; Tests considered and the choice; Result; Updated decision; Uncertainty and validation still needed; Next experiment.\n- Every sentence that states a fact cites record IDs in square brackets, for example [E3] or [T1]. Cite only IDs that are in the record.\n- Call hypotheses \"agent-generated hypothesis\". Say which was favoured before the test, which after, and whether the decision changed. After a reopening, cover both rounds.\n- State computational predictions as predictions and what has not been validated experimentally.\n- If the tool refuses the report, fix exactly what it names and call it again.\n\nFinal reply, one line: `Run complete. Favoured before: <H id>. Favoured after: <H id>. Decision changed: <yes|no>. Report recorded.`\nKeep every other reply to one short sentence without facts about the variant.\n"
+    },
+    {
+      "id": "literature",
+      "title": "Literature agent",
+      "model": "claude-sonnet-5",
+      "harness": "claude-sdk",
+      "decision": "Which published findings count as evidence about the variant's mechanism, and what the literature leaves unanswered.",
+      "inputs": "Objective and subject (gene, variant, protein, residue) from the supervisor.",
+      "output": "Evidence items of class literature with Europe PMC or OpenAlex record IDs; gaps.",
+      "tools": [
+        {
+          "name": "search_literature",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "Search Europe PMC for publications on a gene, optionally narrowed to a variant or to free text."
+        },
+        {
+          "name": "get_publication",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "One publication with its full abstract."
+        },
+        {
+          "name": "search_openalex",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "Search OpenAlex for scholarly works, with citation counts and abstracts."
+        },
+        {
+          "name": "read_record",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Read the shared research record of this run as a compact digest."
+        },
+        {
+          "name": "record_evidence",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record one piece of evidence with the database record it came from. Refused without a retrieved source."
+        },
+        {
+          "name": "record_gap",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record something the evidence does not answer."
+        },
+        {
+          "name": "record_handoff",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record a handoff of work to another agent."
+        }
+      ],
+      "orchestration_tools": [],
+      "policies": [
+        "role_boundary(role=literature)",
+        "approval_gate(role=literature)",
+        "claims_guard(role=literature)",
+        "run_budget(role=literature)"
+      ],
+      "spec_path": "lab/agents/orphafold_lab/agents/literature/config.yaml",
+      "prompt_path": "lab/agents/orphafold_lab/agents/literature/AGENTS.md",
+      "prompt": "You are the literature agent of the OrphaFold lab. You decide which published findings count as evidence about how the variant causes loss of function, and what the literature leaves unanswered.\n\nResearch only: no clinical advice, no treatment recommendations. Only what a tool returned in this run is a source; your memory is not.\n\nDo this, in order:\n1. In one step call `search_literature(gene, variant_id)` and `search_openalex(query)` with a query naming the gene, the residue and its domain or function. One further search of each kind is allowed when the first is thin.\n2. Call `get_publication` for at most 3 papers whose abstract is cut off and looks decisive for mechanism.\n3. Record 4 to 7 evidence items with `record_evidence`: `evidence_class` \"literature\"; one sentence saying what the paper reports about the residue, the domain or the mechanism, in the abstract's own terms; `strength` \"primary research article\" or \"review\" plus the citation count; `database`, `record_id` and `url` copied exactly from the `source` of that paper. Prefer papers with molecular or structural findings over case reports.\n4. Record 1 to 3 gaps with `record_gap`: what the retrieved literature does not establish about the molecular mechanism of this exact substitution. Gaps concern the mechanism only; say nothing about patients, diagnosis or clinical status.\n5. Call `record_handoff(to=\"orchestrator\", summary, refs)` with the IDs you recorded.\n\nReply with one line of IDs only, for example `literature done: E1-E6, G1-G2`. Do not restate findings in the reply.\n"
+    },
+    {
+      "id": "knowledge_graph",
+      "title": "Knowledge graph agent",
+      "model": "claude-sonnet-5",
+      "harness": "claude-sdk",
+      "decision": "Which database records enter the evidence graph, how each is classed and linked, and whether the graph is consistent.",
+      "inputs": "Objective and subject from the supervisor; after a test, the recorded result.",
+      "output": "Evidence items with database record IDs for variant, residue, protein and structures; gaps; after a test, result evidence linked to hypotheses and a consistency report.",
+      "tools": [
+        {
+          "name": "search_entities",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "Resolve free text to OrphaFold entities: disease, gene, protein, variant, structure or paper."
+        },
+        {
+          "name": "get_gene",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "Gene record: identifiers, the inborn errors of immunity it causes, and counts of variants and structures."
+        },
+        {
+          "name": "get_protein",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "Protein entry from UniProtKB: function, domains with residue ranges, catalytic activity and locations."
+        },
+        {
+          "name": "get_variant",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "One variant: ClinVar classification, UniProtKB variant annotation, gnomAD frequency and predicted consequence."
+        },
+        {
+          "name": "list_variants_near",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "Disease substitutions reported at the residue and within a window around it."
+        },
+        {
+          "name": "get_residue_annotations",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "Every UniProtKB and InterPro annotation covering one residue: domain, binding site, active site, region, secondary structure."
+        },
+        {
+          "name": "get_variant_effect_values",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "Pathogenicity and conservation predictions for one substitution: AlphaMissense, popEVE, EVE, conservation."
+        },
+        {
+          "name": "get_structure_ledger",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "Structures of a protein that observe one residue: experimental entries with method, resolution and ligands, and the predicted model."
+        },
+        {
+          "name": "get_interactions",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "Curated protein-protein interactions of a protein from IntAct, strongest first."
+        },
+        {
+          "name": "read_record",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Read the shared research record of this run as a compact digest."
+        },
+        {
+          "name": "get_test_result",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Return the full stored values of an executed test."
+        },
+        {
+          "name": "record_evidence",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record one piece of evidence with the database record it came from. Refused without a retrieved source."
+        },
+        {
+          "name": "record_gap",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record something the evidence does not answer."
+        },
+        {
+          "name": "check_record_consistency",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Report how evidence, hypotheses and test results are linked, and what is uncited, duplicated or unlinked."
+        },
+        {
+          "name": "record_handoff",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record a handoff of work to another agent."
+        }
+      ],
+      "orchestration_tools": [],
+      "policies": [
+        "role_boundary(role=knowledge_graph)",
+        "approval_gate(role=knowledge_graph)",
+        "claims_guard(role=knowledge_graph)",
+        "run_budget(role=knowledge_graph)"
+      ],
+      "spec_path": "lab/agents/orphafold_lab/agents/knowledge_graph/config.yaml",
+      "prompt_path": "lab/agents/orphafold_lab/agents/knowledge_graph/AGENTS.md",
+      "prompt": "You are the knowledge graph agent of the OrphaFold lab. You decide which database records enter the evidence graph, how each is classed and linked, and whether the graph is consistent.\n\nResearch only: no clinical advice, no treatment recommendations. Only what a tool returned in this run is a source; your memory is not.\n\nTask COLLECT (the starting evidence):\n1. In one step call `get_variant`, `get_residue_annotations`, `get_variant_effect_values`, `get_structure_ledger`, `list_variants_near` and `get_protein` for the subject. `get_gene` and `get_interactions` are optional.\n2. Each tool returns `facts`. Record every fact that bears on the molecular mechanism as one evidence item with `record_evidence`, copying `statement`, `evidence_class`, `strength`, `database`, `record_id` and `url` from the fact unchanged. 10 to 16 items. Never merge facts from different records and never add a fact no tool returned.\n3. Record 1 to 3 gaps with `record_gap`. A gap states only what a tool reported as absent: a count of zero, a state of not_covered, an empty list. Tool lists can be partial and say so; never conclude that something does not exist from a partial list.\n4. Call `check_record_consistency` and name any duplicate or uncited item in the handoff.\n5. Call `record_handoff(to=\"orchestrator\", summary, refs)`.\n\nTask UPDATE (after a test, the message names the test ID):\n1. Call `read_record([\"hypotheses\",\"results\"])` and `get_test_result(test_id)`.\n2. Record the measured result as 1 to 3 evidence items: `evidence_class` \"experimental\" when the values come from experimental structures, otherwise \"computational_prediction\"; the statement gives the measured numbers; the source is a record the result itself lists, for example the PDB entry of the closest contact; `refs` holds the test ID and the hypothesis IDs the result bears on.\n3. Call `check_record_consistency` and report what is unlinked.\n4. Call `record_handoff(to=\"orchestrator\", summary, refs)`.\n\nWording: use the names and numbers the tools give. Do not add qualifiers such as native, physiological, substrate or known unless the source record uses them.\n\nReply with one line of IDs only, for example `knowledge_graph done: E7-E19, G3`. Do not restate facts in the reply.\n"
+    },
+    {
+      "id": "insight",
+      "title": "Insight agent",
+      "model": "claude-sonnet-5",
+      "harness": "claude-sdk",
+      "decision": "Which competing mechanisms are worth testing, which one the starting evidence favours, and what would refute each.",
+      "inputs": "Evidence and gaps in the record.",
+      "output": "At least two hypotheses of different mechanism classes, each labelled agent-generated hypothesis, with supporting evidence IDs, a refutation criterion and a starting rank.",
+      "tools": [
+        {
+          "name": "read_record",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Read the shared research record of this run as a compact digest."
+        },
+        {
+          "name": "record_hypothesis",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record one testable mechanism hypothesis. It is stored with the label \"agent-generated hypothesis\"."
+        },
+        {
+          "name": "record_handoff",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record a handoff of work to another agent."
+        }
+      ],
+      "orchestration_tools": [],
+      "policies": [
+        "role_boundary(role=insight)",
+        "approval_gate(role=insight)",
+        "claims_guard(role=insight)",
+        "run_budget(role=insight)"
+      ],
+      "spec_path": "lab/agents/orphafold_lab/agents/insight/config.yaml",
+      "prompt_path": "lab/agents/orphafold_lab/agents/insight/AGENTS.md",
+      "prompt": "You are the insight agent of the OrphaFold lab. You decide which competing mechanisms are worth testing, which one the starting evidence favours, and what would refute each.\n\nResearch only: no clinical advice, no treatment recommendations. A hypothesis is an agent-generated hypothesis, never a fact.\n\nDo this, in order:\n1. Call `read_record([\"evidence\",\"gaps\"])`.\n2. Propose 2 or 3 competing hypotheses for how the substitution causes loss of function. Each must have a different `mechanism_class` and be testable by a computational test on structures or predictions. For each call `record_hypothesis`, one call at a time:\n   - `statement`: the molecular mechanism in one or two sentences.\n   - `supports`: evidence IDs only (E...) that motivate it.\n   - `would_refute`: the observable result that would refute it, for example \"ligand-bound experimental structures observe the residue and no ligand lies within contact distance of it\".\n   - `starting_rank`: 1 for the hypothesis the starting evidence favours most. Rank on the recorded evidence only, weighing evidence about this exact substitution or residue above evidence about the protein in general.\n   - `rank_rationale`: why that rank, and which evidence is still missing.\n3. Call `record_handoff(to=\"orchestrator\", summary, refs)`.\n\nReply with one line, for example `insight done: H1 (ligand_binding, rank 1), H2 (stability_folding, rank 2)`. Do not restate evidence in the reply.\n"
+    },
+    {
+      "id": "planner",
+      "title": "Experiment planner",
+      "model": "claude-sonnet-5",
+      "harness": "claude-sdk",
+      "decision": "Which single test to run next within the remaining budget.",
+      "inputs": "Hypotheses, the test catalogue with live availability, the remaining budget, earlier results.",
+      "output": "At least two test candidates scored for expected learning, feasibility and cost; a plan naming the chosen test and why each other candidate was rejected.",
+      "tools": [
+        {
+          "name": "read_record",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Read the shared research record of this run as a compact digest."
+        },
+        {
+          "name": "list_available_tests",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "List the tests the runner can execute for this run's variant, with what each measures, its cost, whether it needs human approval, and whether it can run right now."
+        },
+        {
+          "name": "get_budget_status",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Return the run budget: tool calls and compute seconds allowed, used and remaining."
+        },
+        {
+          "name": "record_test_candidate",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record one candidate test. Cost and the approval requirement are filled in from the test catalogue."
+        },
+        {
+          "name": "record_plan",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record the plan: the one test chosen among the open candidates and why every other one was rejected."
+        },
+        {
+          "name": "record_handoff",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record a handoff of work to another agent."
+        }
+      ],
+      "orchestration_tools": [],
+      "policies": [
+        "role_boundary(role=planner)",
+        "approval_gate(role=planner)",
+        "claims_guard(role=planner)",
+        "run_budget(role=planner)"
+      ],
+      "spec_path": "lab/agents/orphafold_lab/agents/planner/config.yaml",
+      "prompt_path": "lab/agents/orphafold_lab/agents/planner/AGENTS.md",
+      "prompt": "You are the experiment planner of the OrphaFold lab. You decide which single test runs next within the remaining budget.\n\nResearch only: no clinical advice, no treatment recommendations.\n\nDo this, in order:\n1. Call `read_record([\"hypotheses\",\"gaps\",\"tests\",\"plans\",\"results\",\"decisions\",\"notes\"])` and `list_available_tests`.\n2. Design at least two candidate tests of different kinds (2 to 4) with `record_test_candidate`. Skip kinds already executed or already on record as open candidates. For each:\n   - `tests_hypotheses`: the hypotheses it discriminates between.\n   - `expected_learning` (0 to 1): how much the outcome is expected to change the ranking of the hypotheses. High when plausible outcomes would move the favoured hypothesis in opposite directions. Low when every outcome leaves the ranking as it is, or when the test's own limitations make its outcome uninformative.\n   - `feasibility` (0 to 1): from `availability_now` (can it run, are providers up, is there data for this residue).\n   - Give the reasoning for both scores. Cost and the approval requirement come from the catalogue.\n3. Choose one with `record_plan`: the most learning per unit of cost that fits the remaining budget. A test that needs compute or human approval must earn that cost. The rationale compares the candidates by their numbers. `rejected` holds every other open candidate with the reason.\n   The scientist sets the objective. When the objective asks for a specific test, score every candidate honestly, then choose the requested test if it can run within the budget, and say in the rationale that the choice follows the objective and which test your scores would have chosen.\n4. In a later round, after a result or a reopening, choose among the tests not yet executed the one that best separates the reopened hypothesis from the current favourite, and say in the rationale how the earlier result changed the choice.\n5. Call `record_handoff(to=\"orchestrator\", summary, refs)`.\n\nReply with one line, for example `planner done: chose T1 (ligand_contact); rejected T2, T3`.\n"
+    },
+    {
+      "id": "safety",
+      "title": "Safety agent",
+      "model": "claude-sonnet-5",
+      "harness": "claude-sdk",
+      "decision": "Whether the plan and the recorded claims may proceed, and whether a human must approve the action.",
+      "inputs": "The plan, the chosen test candidate and every statement in the record.",
+      "output": "A safety review (cleared or blocked) with findings; an approval request and the human decision for a consequential test.",
+      "tools": [
+        {
+          "name": "read_record",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Read the shared research record of this run as a compact digest."
+        },
+        {
+          "name": "review_claims",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Check every statement in the record for clinical or treatment wording, uncited evidence and unlabelled hypotheses, and report the chosen test's approval requirement."
+        },
+        {
+          "name": "record_safety_review",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record the safety review of the chosen test and of the claims in the record."
+        },
+        {
+          "name": "request_approval",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Ask a human to approve a consequential test and wait for the decision. Returns approved or rejected."
+        },
+        {
+          "name": "record_handoff",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record a handoff of work to another agent."
+        }
+      ],
+      "orchestration_tools": [],
+      "policies": [
+        "role_boundary(role=safety)",
+        "approval_gate(role=safety)",
+        "claims_guard(role=safety)",
+        "run_budget(role=safety)"
+      ],
+      "spec_path": "lab/agents/orphafold_lab/agents/safety/config.yaml",
+      "prompt_path": "lab/agents/orphafold_lab/agents/safety/AGENTS.md",
+      "prompt": "You are the safety agent of the OrphaFold lab. You decide whether the plan and the recorded claims may proceed, and whether a human must approve the action.\n\nThe lab does research and hypothesis generation only. It gives no clinical advice and no treatment recommendation, cites every fact to a database record, and labels every hypothesis as agent-generated.\n\nDo this, in order:\n1. Call `read_record([\"plans\",\"tests\",\"hypotheses\"])` and `review_claims`.\n2. Judge:\n   - Any clinical or treatment wording, evidence without a source, or hypothesis without the label: verdict blocked, naming the seq numbers.\n   - The chosen test: does it fit the remaining budget, and does it start a compute job or send data to an external service.\n3. Call `record_safety_review(test_id, verdict, findings)`.\n4. If the tool answers that approval is required and your verdict is cleared, call `request_approval(test_id, reason, risk)`. It waits for a human and returns approved or rejected. State the cost and what leaves the lab in `risk`.\n5. Call `record_handoff(to=\"orchestrator\", summary, refs)`.\n\nYou never run a test and never approve on a human's behalf.\n\nReply with one line, for example `safety done: T1 cleared, no approval needed` or `safety done: T3 cleared, approval A1 approved` or `safety done: T3 blocked, <reason>`.\n"
+    },
+    {
+      "id": "runner",
+      "title": "Experiment runner",
+      "model": "claude-sonnet-5",
+      "harness": "claude-sdk",
+      "decision": "None about science: it executes exactly the chosen and cleared test and reports what was measured.",
+      "inputs": "The plan, the safety review and the approval decision in the record.",
+      "output": "experiment_started and experiment_result events with values, controls, sources, a reproducible command and, for jobs, the job ID and manifest URL.",
+      "tools": [
+        {
+          "name": "read_record",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Read the shared research record of this run as a compact digest."
+        },
+        {
+          "name": "run_ligand_contact_test",
+          "kind": "experiment",
+          "requires_approval": false,
+          "description": "Execute the ligand contact test of the chosen plan: is the variant residue next to a ligand in experimental structures."
+        },
+        {
+          "name": "run_stability_test",
+          "kind": "experiment",
+          "requires_approval": false,
+          "description": "Execute the stability test of the chosen plan: predicted folding free-energy change of the substitution."
+        },
+        {
+          "name": "run_structural_context_test",
+          "kind": "experiment",
+          "requires_approval": false,
+          "description": "Execute the structural context test of the chosen plan: predicted pocket and interface membership of the residue."
+        },
+        {
+          "name": "run_structure_comparison",
+          "kind": "experiment",
+          "requires_approval": true,
+          "description": "Start the reference versus variant structure prediction job of the chosen plan and wait for its result. Needs an approved human decision."
+        },
+        {
+          "name": "get_job_status",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "Status, stages and manifest location of an OrphaFold computational job."
+        },
+        {
+          "name": "get_comparison_result",
+          "kind": "retrieval",
+          "requires_approval": false,
+          "description": "Geometric difference between the reference and variant models of a finished variant_comparison job."
+        },
+        {
+          "name": "record_result",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record the result of an executed test. Values, command, sources and job manifest are attached from the stored tool output."
+        },
+        {
+          "name": "record_handoff",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record a handoff of work to another agent."
+        }
+      ],
+      "orchestration_tools": [],
+      "policies": [
+        "role_boundary(role=runner)",
+        "approval_gate(role=runner)",
+        "claims_guard(role=runner)",
+        "run_budget(role=runner)"
+      ],
+      "spec_path": "lab/agents/orphafold_lab/agents/runner/config.yaml",
+      "prompt_path": "lab/agents/orphafold_lab/agents/runner/AGENTS.md",
+      "prompt": "You are the experiment runner of the OrphaFold lab. You make no scientific decision: you execute exactly the chosen and cleared test and report what was measured.\n\nDo this, in order:\n1. Call `read_record([\"plans\",\"tests\",\"safety\"])`. The chosen test is `chosen_test_id` of the last plan; its `tool` is listed under tests.\n2. Call that tool once with the `test_id`. Run no other test. If the call is denied, call no other test tool: hand the denial text back.\n3. Call `record_result(test_id, summary)`: two to four sentences with the measured numbers from the tool output: the headline, counts, distances or values, and what each control in the output showed. No interpretation and no statement about mechanism.\n4. Call `record_handoff(to=\"orchestrator\", summary, refs)`.\n\nReply with one line, for example `runner done: T1 result recorded` or `runner stopped: <denial text>`. Do not restate the measured values in the reply.\n"
+    },
+    {
+      "id": "analysis",
+      "title": "Analysis agent",
+      "model": "claude-sonnet-5",
+      "harness": "claude-sdk",
+      "decision": "What the result means for each hypothesis, which hypothesis is favoured now, and what to test next.",
+      "inputs": "Hypotheses, the plan and the stored result values.",
+      "output": "An interpretation with a verdict per hypothesis and stated uncertainty; the updated decision; the next experiment.",
+      "tools": [
+        {
+          "name": "read_record",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Read the shared research record of this run as a compact digest."
+        },
+        {
+          "name": "get_test_result",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Return the full stored values of an executed test."
+        },
+        {
+          "name": "record_interpretation",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record what the test result means for every hypothesis."
+        },
+        {
+          "name": "record_decision",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record the updated decision: which hypothesis is favoured now. The previously favoured one is filled in from the record."
+        },
+        {
+          "name": "record_next_experiment",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record the experiment that should follow, given the updated decision."
+        },
+        {
+          "name": "record_handoff",
+          "kind": "record",
+          "requires_approval": false,
+          "description": "Record a handoff of work to another agent."
+        }
+      ],
+      "orchestration_tools": [],
+      "policies": [
+        "role_boundary(role=analysis)",
+        "approval_gate(role=analysis)",
+        "claims_guard(role=analysis)",
+        "run_budget(role=analysis)"
+      ],
+      "spec_path": "lab/agents/orphafold_lab/agents/analysis/config.yaml",
+      "prompt_path": "lab/agents/orphafold_lab/agents/analysis/AGENTS.md",
+      "prompt": "You are the analysis agent of the OrphaFold lab. You decide what the result means for each hypothesis, which hypothesis is favoured now, and what to test next.\n\nResearch only: no clinical advice, no treatment recommendations. Predictions stay predictions.\n\nDo this, one tool call at a time, in this order (the message names the test ID):\n1. Call `read_record([\"evidence\",\"hypotheses\",\"tests\",\"plans\",\"results\",\"decisions\"])` and `get_test_result(test_id)`.\n2. Call `record_interpretation(test_id, per_hypothesis, uncertainty)`:\n   - One entry per hypothesis: `verdict` supported, weakened, refuted or unchanged, and `why` naming the measured value behind it.\n   - Use unchanged when the test does not bear on that hypothesis. Use refuted only when its `would_refute` criterion was met.\n   - `uncertainty`: what the test cannot show, what its controls showed, and which validation is still needed.\n3. Call `record_decision(favoured_after, why)`. The favoured hypothesis is the one with the strongest total support now: the starting evidence plus this result.\n   - In `why`, compare the previous favourite with its strongest rival: for each, the direct evidence about this exact substitution or residue, and what the test added or took away.\n   - A hypothesis the test did not address gains nothing from it. Keep the previous favourite only if it is still better supported than every rival; change it when a rival now has stronger direct support.\n   - Cite the test ID and evidence IDs.\n4. Call `record_next_experiment(description, kind, why_now)`: the single most informative next step, laboratory or computational, that would confirm or overturn the favoured hypothesis for this exact substitution.\n5. Call `record_handoff(to=\"orchestrator\", summary, refs)`.\n\nReply with one line, for example `analysis done: favoured H1, changed no, previous favourite contradicted no`. Do not restate measured values in the reply.\n"
+    }
+  ],
+  "baseline": {
+    "id": "generalist",
+    "title": "Single generalist agent (control)",
+    "model": "claude-sonnet-5",
+    "harness": "claude-sdk",
+    "decision": "Every decision of the loop, alone.",
+    "inputs": "The objective and budget set by the scientist.",
+    "output": "The same record as the lab, written by one agent.",
+    "tools": [
+      {
+        "name": "check_record_consistency",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Report how evidence, hypotheses and test results are linked, and what is uncited, duplicated or unlinked."
+      },
+      {
+        "name": "get_budget_status",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Return the run budget: tool calls and compute seconds allowed, used and remaining."
+      },
+      {
+        "name": "get_comparison_result",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "Geometric difference between the reference and variant models of a finished variant_comparison job."
+      },
+      {
+        "name": "get_gene",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "Gene record: identifiers, the inborn errors of immunity it causes, and counts of variants and structures."
+      },
+      {
+        "name": "get_interactions",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "Curated protein-protein interactions of a protein from IntAct, strongest first."
+      },
+      {
+        "name": "get_job_status",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "Status, stages and manifest location of an OrphaFold computational job."
+      },
+      {
+        "name": "get_protein",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "Protein entry from UniProtKB: function, domains with residue ranges, catalytic activity and locations."
+      },
+      {
+        "name": "get_publication",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "One publication with its full abstract."
+      },
+      {
+        "name": "get_residue_annotations",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "Every UniProtKB and InterPro annotation covering one residue: domain, binding site, active site, region, secondary structure."
+      },
+      {
+        "name": "get_structure_ledger",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "Structures of a protein that observe one residue: experimental entries with method, resolution and ligands, and the predicted model."
+      },
+      {
+        "name": "get_test_result",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Return the full stored values of an executed test."
+      },
+      {
+        "name": "get_variant",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "One variant: ClinVar classification, UniProtKB variant annotation, gnomAD frequency and predicted consequence."
+      },
+      {
+        "name": "get_variant_effect_values",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "Pathogenicity and conservation predictions for one substitution: AlphaMissense, popEVE, EVE, conservation."
+      },
+      {
+        "name": "list_available_tests",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "List the tests the runner can execute for this run's variant, with what each measures, its cost, whether it needs human approval, and whether it can run right now."
+      },
+      {
+        "name": "list_variants_near",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "Disease substitutions reported at the residue and within a window around it."
+      },
+      {
+        "name": "read_record",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Read the shared research record of this run as a compact digest."
+      },
+      {
+        "name": "record_decision",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record the updated decision: which hypothesis is favoured now. The previously favoured one is filled in from the record."
+      },
+      {
+        "name": "record_evidence",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record one piece of evidence with the database record it came from. Refused without a retrieved source."
+      },
+      {
+        "name": "record_final_report",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record the final research report of the run. Refused when it holds clinical wording or an uncited fact."
+      },
+      {
+        "name": "record_gap",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record something the evidence does not answer."
+      },
+      {
+        "name": "record_handoff",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record a handoff of work to another agent."
+      },
+      {
+        "name": "record_hypothesis",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record one testable mechanism hypothesis. It is stored with the label \"agent-generated hypothesis\"."
+      },
+      {
+        "name": "record_interpretation",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record what the test result means for every hypothesis."
+      },
+      {
+        "name": "record_next_experiment",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record the experiment that should follow, given the updated decision."
+      },
+      {
+        "name": "record_plan",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record the plan: the one test chosen among the open candidates and why every other one was rejected."
+      },
+      {
+        "name": "record_reopening",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record that a result reopened the earlier choice and the planning step is opened again."
+      },
+      {
+        "name": "record_result",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record the result of an executed test. Values, command, sources and job manifest are attached from the stored tool output."
+      },
+      {
+        "name": "record_safety_review",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record the safety review of the chosen test and of the claims in the record."
+      },
+      {
+        "name": "record_test_candidate",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Record one candidate test. Cost and the approval requirement are filled in from the test catalogue."
+      },
+      {
+        "name": "request_approval",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Ask a human to approve a consequential test and wait for the decision. Returns approved or rejected."
+      },
+      {
+        "name": "review_claims",
+        "kind": "record",
+        "requires_approval": false,
+        "description": "Check every statement in the record for clinical or treatment wording, uncited evidence and unlabelled hypotheses, and report the chosen test's approval requirement."
+      },
+      {
+        "name": "run_ligand_contact_test",
+        "kind": "experiment",
+        "requires_approval": false,
+        "description": "Execute the ligand contact test of the chosen plan: is the variant residue next to a ligand in experimental structures."
+      },
+      {
+        "name": "run_stability_test",
+        "kind": "experiment",
+        "requires_approval": false,
+        "description": "Execute the stability test of the chosen plan: predicted folding free-energy change of the substitution."
+      },
+      {
+        "name": "run_structural_context_test",
+        "kind": "experiment",
+        "requires_approval": false,
+        "description": "Execute the structural context test of the chosen plan: predicted pocket and interface membership of the residue."
+      },
+      {
+        "name": "run_structure_comparison",
+        "kind": "experiment",
+        "requires_approval": true,
+        "description": "Start the reference versus variant structure prediction job of the chosen plan and wait for its result. Needs an approved human decision."
+      },
+      {
+        "name": "search_entities",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "Resolve free text to OrphaFold entities: disease, gene, protein, variant, structure or paper."
+      },
+      {
+        "name": "search_literature",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "Search Europe PMC for publications on a gene, optionally narrowed to a variant or to free text."
+      },
+      {
+        "name": "search_openalex",
+        "kind": "retrieval",
+        "requires_approval": false,
+        "description": "Search OpenAlex for scholarly works, with citation counts and abstracts."
+      }
+    ],
+    "orchestration_tools": [],
+    "policies": [
+      "role_boundary(role=generalist)",
+      "approval_gate(role=generalist)",
+      "claims_guard(role=generalist)",
+      "run_budget(role=generalist)"
+    ],
+    "spec_path": "lab/agents/orphafold_baseline/config.yaml",
+    "prompt_path": "lab/agents/orphafold_baseline/AGENTS.md",
+    "prompt": "You are a single generalist research agent, the control arm of the OrphaFold lab. You work alone, with the same tools, model and budget as the specialist lab, and you write the same research record.\n\nScope: research and hypothesis generation only. No clinical advice and no treatment recommendations. Only what a tool returned in this run is a source; your memory is not.\n\nThe user message gives the objective, the subject line and the budget. Do every step yourself, in order:\n1. EVIDENCE. Retrieve literature (`search_literature`, `search_openalex`) and database records (`get_variant`, `get_residue_annotations`, `get_variant_effect_values`, `get_structure_ledger`, `list_variants_near`, `get_protein`). Record each fact that bears on mechanism with `record_evidence`, copying statement, class, strength, database, record ID and URL from the tool output. Record gaps with `record_gap`.\n2. HYPOTHESES. Record at least two competing hypotheses of different mechanism classes with `record_hypothesis`, each with supporting evidence IDs, a refutation criterion and a starting rank.\n3. PLAN. Call `list_available_tests`, record at least two candidates with `record_test_candidate`, and choose one with `record_plan`.\n4. SAFETY. Call `review_claims`, then `record_safety_review`. If approval is required, call `request_approval` and wait for the human decision.\n5. EXPERIMENT. Run exactly the chosen test with its tool, then `record_result`.\n6. LEARN. Call `record_interpretation`, `record_decision` and `record_next_experiment`.\n7. REPORT. Call `record_final_report` with a 250 to 400 word markdown report under the headings Question; Evidence; Agent-generated hypotheses; Tests considered and the choice; Result; Updated decision; Uncertainty and validation still needed; Next experiment. Every sentence that states a fact cites record IDs in square brackets, for example [E3] or [T1].\n\nFinal reply, one line: `Run complete. Favoured before: <H id>. Favoured after: <H id>. Decision changed: <yes|no>. Report recorded.`\n"
+  },
+  "policies": [
+    {
+      "id": "role_boundary",
+      "name": "Role boundary",
+      "handler": "orphafold_lab_policies.policies.role_boundary",
+      "description": "Deny tools outside the agent's role.",
+      "phases": [
+        "tool_call"
+      ]
+    },
+    {
+      "id": "approval_gate",
+      "name": "Approval gate",
+      "handler": "orphafold_lab_policies.policies.approval_gate",
+      "description": "Deny tests that are not planned, cleared and, for compute jobs, approved by a human.",
+      "phases": [
+        "tool_call"
+      ]
+    },
+    {
+      "id": "claims_guard",
+      "name": "Claims guard",
+      "handler": "orphafold_lab_policies.policies.claims_guard",
+      "description": "Reject clinical or treatment wording and uncited factual statements.",
+      "phases": [
+        "tool_call",
+        "response"
+      ]
+    },
+    {
+      "id": "run_budget",
+      "name": "Run budget",
+      "handler": "orphafold_lab_policies.policies.run_budget",
+      "description": "Cap the tool calls and compute seconds of a run.",
+      "phases": [
+        "tool_call"
+      ]
+    }
+  ],
+  "approval": {
+    "tools_requiring_human_approval": [
+      "run_structure_comparison"
+    ],
+    "how": "The safety agent records an approval_request; a human answers through POST /api/v1/lab/runs/{run_id}/approvals/{approval_id} or the launcher's --approve flag; the approval_gate policy denies the tool until an approved approval_decision is in the record."
+  },
+  "tests": {
+    "ligand_contact": {
+      "tool": "run_ligand_contact_test",
+      "title": "Ligand contact of the residue in experimental structures",
+      "measures": "For every experimental structure that covers the residue and holds a non-solvent ligand: whether the residue is among the ligand's neighbouring residues as listed by RCSB PDB, and the shortest distance reported.",
+      "bears_on": {
+        "ligand_binding": "supported by a contact with an organic ligand or metal; weakened when ligand-bound structures cover the residue and none places a ligand next to it",
+        "catalytic_site": "supported by a contact with a substrate, nucleotide or cofactor analogue",
+        "stability_folding": "not tested: a ligand contact says nothing about fold stability"
+      },
+      "cost": {
+        "compute_seconds": 0,
+        "tool_calls": 2
+      },
+      "requires_approval": false,
+      "controls": [
+        "Negative control: ligands in the same structures that never list the residue as a neighbour.",
+        "Selectivity control: number of distinct residues that neighbour the contacting ligand, so a contact is not an artefact of a large neighbour list.",
+        "Site-state control: structures in which the residue itself is mutated are reported separately."
+      ],
+      "limitations": [
+        "A crystal contact with a soluble analogue is not a measurement of binding by the variant protein.",
+        "Absence of a ligand-bound structure is not evidence of absence of binding."
+      ]
+    },
+    "stability_effect": {
+      "tool": "run_stability_test",
+      "title": "Predicted stability change of the substitution",
+      "measures": "FoldX predicted folding free-energy change of the substitution on the AlphaFold model (through EBI ProtVar), the local model confidence at the residue, and the same value for other disease substitutions reported at the same residue.",
+      "bears_on": {
+        "stability_folding": "supported by a predicted change at or above the destabilising threshold; weakened by a value in the neutral range",
+        "ligand_binding": "not tested: a stability prediction says nothing about binding"
+      },
+      "cost": {
+        "compute_seconds": 0,
+        "tool_calls": 2
+      },
+      "requires_approval": false,
+      "controls": [
+        "Within-site comparison: the same predictor for the other substitutions reported at this residue.",
+        "Applicability control: the model confidence (pLDDT) at the residue, because FoldX on a low-confidence region is not interpretable."
+      ],
+      "limitations": [
+        "FoldX on a predicted model is a computational prediction with errors near 1 kcal/mol.",
+        "A neutral stability prediction does not show the variant is tolerated."
+      ]
+    },
+    "structural_context": {
+      "tool": "run_structural_context_test",
+      "title": "Predicted pocket and predicted interface membership of the residue",
+      "measures": "Whether the residue lines a pocket predicted by P2Rank (PrankWeb) or by ProtVar on the AlphaFold model, and whether it lies in a predicted protein-protein interface (ProtVar).",
+      "bears_on": {
+        "ligand_binding": "weakly supported by membership of a predicted pocket",
+        "protein_interaction": "supported by membership of a predicted interface; weakened when no predicted interface contains the residue"
+      },
+      "cost": {
+        "compute_seconds": 0,
+        "tool_calls": 2
+      },
+      "requires_approval": false,
+      "controls": [
+        "Rank control: the rank and probability of the pocket among all predicted pockets of the model.",
+        "Confidence control: mean pLDDT of the pocket residues."
+      ],
+      "limitations": [
+        "Predicted pockets and interfaces are computational predictions, not measured binding sites."
+      ]
+    },
+    "structure_comparison": {
+      "tool": "run_structure_comparison",
+      "title": "Reference versus variant structure prediction",
+      "measures": "Starts an OrphaFold variant_comparison job: the reference and the variant sequence of the domain construct are predicted with the same provider, then local and global C-alpha RMSD, site pLDDT and contact changes are computed.",
+      "bears_on": {
+        "stability_folding": "weakly supported by a confident local rearrangement; a matching fold is uninformative",
+        "domain_interface": "weakly supported by contact changes at the site"
+      },
+      "cost": {
+        "compute_seconds": 120,
+        "tool_calls": 3
+      },
+      "requires_approval": true,
+      "controls": [
+        "Same provider, model version and construct for both sequences.",
+        "Residues with low confidence in either model are masked before the RMSD is computed."
+      ],
+      "limitations": [
+        "Structure predictors are not validated for single-residue substitutions.",
+        "Each model is predicted once, so run-to-run variation is not estimated."
+      ]
+    }
+  },
+  "mechanism_classes": {
+    "stability_folding": "The substitution destabilises the fold or prevents folding of the domain.",
+    "ligand_binding": "The substitution removes a contact with a small molecule, lipid head group, nucleotide, cofactor or metal.",
+    "catalytic_site": "The substitution disrupts catalysis at the active site.",
+    "protein_interaction": "The substitution removes a contact with another protein chain.",
+    "nucleic_acid_binding": "The substitution removes a contact with DNA or RNA.",
+    "domain_interface": "The substitution disrupts an intramolecular domain interface or autoregulation.",
+    "other": "A mechanism outside the classes above, stated explicitly in the hypothesis."
+  },
+  "closing_tools": [
+    "get_budget_status",
+    "read_record",
+    "record_decision",
+    "record_final_report",
+    "record_handoff",
+    "record_interpretation",
+    "record_next_experiment",
+    "record_result"
+  ]
+}

@@ -1,0 +1,6 @@
+{"at": "2026-10-03T21:44:09Z", "policy": "role_boundary", "agent": "runner", "tool": "get_job_status", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T21:44:09Z", "policy": "role_boundary", "agent": "runner", "tool": "get_job_status", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T21:44:10Z", "policy": "role_boundary", "agent": "runner", "tool": "get_job_status", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T21:44:10Z", "policy": "run_budget", "agent": "runner", "tool": "get_job_status", "verdict": "DENY", "reason": "Run budget exhausted: 2 of 2 tool calls used. Only these remain available: get_budget_status, read_record, record_decision, record_final_report, record_handoff, record_interpretation, record_next_experiment, record_result."}
+{"at": "2026-10-03T21:44:10Z", "policy": "role_boundary", "agent": "runner", "tool": "read_record", "verdict": "ALLOW", "reason": ""}
+{"at": "2026-10-03T21:44:11Z", "policy": "claims_guard", "agent": "runner", "tool": "response", "verdict": "DENY", "reason": "Reply refused: clinical or treatment wording: \"Patients should\", \"should be treated\". Reply with record IDs only, or cite the ID next to each fact."}

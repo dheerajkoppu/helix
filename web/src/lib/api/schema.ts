@@ -4,6 +4,196 @@
  */
 
 export interface paths {
+    "/api/v1/assistant/chat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ask the assistant; the answer streams as server-sent events
+         * @description Events: `status` (thinking, answering), `tool_call` and `tool_result` (one per lookup), `segment_delta` (index, kind, delta) while the answer is written, `answer_reset` when a partial answer is discarded, `answer` (the validated AssistantAnswer), `error` (code, message) and `done`. Only `answer` is authoritative: segment labels in `segment_delta` are the model's own and have not been checked yet.
+         */
+        post: operations["chat_api_v1_assistant_chat_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/digest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cited source records for the open entities, assembled without a model */
+        get: operations["get_digest_api_v1_assistant_digest_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Whether the assistant model is configured */
+        get: operations["get_status_api_v1_assistant_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/compare/examples/{job_id}/files/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A stored file of a cached example */
+        get: operations["get_example_file_api_v1_compare_examples__job_id__files__name__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/compare/results/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Both models and the difference payload of one comparison */
+        get: operations["get_comparison_result_api_v1_compare_results__job_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/compare/{gene}/{change}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** What a reference-versus-variant comparison of this variant would run, and existing results */
+        get: operations["get_comparison_plan_api_v1_compare__gene___change__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/compounds/{compound_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A compound by InChIKey or ChEMBL ID: cross-references, mechanisms, indications, targets */
+        get: operations["get_compound_api_v1_compounds__compound_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/compounds/{compound_id}/analogs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Structurally similar ChEMBL compounds with the similarity value */
+        get: operations["get_compound_analogs_api_v1_compounds__compound_id__analogs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/compounds/{compound_id}/depiction.svg": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 2D depiction of a compound (RDKit), transparent background */
+        get: operations["get_compound_depiction_api_v1_compounds__compound_id__depiction_svg_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/diseases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Browse the IUIS disease catalog */
+        get: operations["browse_diseases_api_v1_diseases_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/diseases/{disease_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Disease bundle: catalog record, gene and protein, sourced treatments, research status and relationship graph */
+        get: operations["read_disease_api_v1_diseases__disease_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/explore/facets": {
         parameters: {
             query?: never;
@@ -30,6 +220,108 @@ export interface paths {
         };
         /** Filter, sort and page the IEI gene set, with facet counts */
         get: operations["list_genes_api_v1_explore_genes_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/genes/{symbol}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gene record: IDs, statistics with definitions, IEI entries, transcripts and protein summary */
+        get: operations["read_gene_api_v1_genes__symbol__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/genes/{symbol}/axis-variants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Clinical and population variants of a gene, slim rows for the sequence axis */
+        get: operations["get_axis_variants_api_v1_genes__symbol__axis_variants_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/genes/{symbol}/population-variants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** gnomAD single-residue protein variants of a gene */
+        get: operations["get_population_variants_api_v1_genes__symbol__population_variants_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/genes/{symbol}/treatments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Drugs and clinical candidates whose recorded mechanism acts on the gene product (Open Targets) */
+        get: operations["read_treatments_api_v1_genes__symbol__treatments_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/genes/{symbol}/variants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Variants of a gene: ClinVar merged with UniProt natural variants */
+        get: operations["get_gene_variants_api_v1_genes__symbol__variants_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/genes/{symbol}/variants.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Variants of a gene as CSV */
+        get: operations["get_gene_variants_csv_api_v1_genes__symbol__variants_csv_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -192,6 +484,143 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/lab/agents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Agent specifications, tool permissions, policies and tests of the lab */
+        get: operations["get_lab_agents_api_v1_lab_agents_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/lab/benchmark": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Measured comparison of the lab with the single-agent control */
+        get: operations["get_lab_benchmark_api_v1_lab_benchmark_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/lab/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lab runs, newest first */
+        get: operations["list_lab_runs_api_v1_lab_runs_get"];
+        put?: never;
+        /** Start a discovery run in the background */
+        post: operations["start_lab_run_api_v1_lab_runs_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/lab/runs/{run_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One run: run.json, every record event and the report */
+        get: operations["get_lab_run_api_v1_lab_runs__run_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/lab/runs/{run_id}/approvals/{approval_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Approve or reject a consequential action; the decision is written to the record */
+        post: operations["decide_lab_approval_api_v1_lab_runs__run_id__approvals__approval_id__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/lab/runs/{run_id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Record events after a sequence number, for following a run */
+        get: operations["get_lab_run_events_api_v1_lab_runs__run_id__events_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/literature": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Publications for a gene, disease, variant, protein or residue, with the rules that matched */
+        get: operations["list_literature_api_v1_literature_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/literature/{pmid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One publication by PMID */
+        get: operations["read_publication_api_v1_literature__pmid__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/meta": {
         parameters: {
             query?: never;
@@ -243,6 +672,659 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Projects of the calling workspace, or public ones */
+        get: operations["list_projects_api_v1_projects_get"];
+        put?: never;
+        /** Create a project */
+        post: operations["create_project_api_v1_projects_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One project with items, trail and snapshots */
+        get: operations["get_project_api_v1_projects__project_id__get"];
+        put?: never;
+        post?: never;
+        /** Delete a project; published snapshots stay readable */
+        delete: operations["delete_project_api_v1_projects__project_id__delete"];
+        options?: never;
+        head?: never;
+        /** Change title, description, visibility */
+        patch: operations["update_project_api_v1_projects__project_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/export.json": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** project.json of the working project */
+        get: operations["export_json_api_v1_projects__project_id__export_json_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/export.md": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Markdown research report of the working project */
+        get: operations["export_markdown_api_v1_projects__project_id__export_md_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/export.zip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Zip with manifest, items, hypotheses, citations and run manifests */
+        get: operations["export_zip_api_v1_projects__project_id__export_zip_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/fork": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Fork a public, unlisted or own project into the calling workspace */
+        post: operations["fork_project_api_v1_projects__project_id__fork_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/forks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Forks visible to the caller */
+        get: operations["list_forks_api_v1_projects__project_id__forks_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/hypotheses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Hypotheses of a project */
+        get: operations["list_hypotheses_api_v1_projects__project_id__hypotheses_get"];
+        put?: never;
+        /** Record a hypothesis that rests on project items */
+        post: operations["add_hypothesis_api_v1_projects__project_id__hypotheses_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Items of a project */
+        get: operations["list_items_api_v1_projects__project_id__items_get"];
+        put?: never;
+        /** Save an item after the active trail node */
+        post: operations["add_item_api_v1_projects__project_id__items_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/items/{item_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One item */
+        get: operations["get_item_api_v1_projects__project_id__items__item_id__get"];
+        put?: never;
+        post?: never;
+        /** Remove an item; its steps move up */
+        delete: operations["delete_item_api_v1_projects__project_id__items__item_id__delete"];
+        options?: never;
+        head?: never;
+        /** Change an item */
+        patch: operations["update_item_api_v1_projects__project_id__items__item_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Freeze the project as an immutable snapshot with a stable share path */
+        post: operations["publish_project_api_v1_projects__project_id__publish_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/snapshots": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Published snapshots */
+        get: operations["list_snapshots_api_v1_projects__project_id__snapshots_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/trail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The research trail as an ordered graph */
+        get: operations["get_trail_api_v1_projects__project_id__trail_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/proteins/{accession}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Protein entry: names, sequence, annotations and feature tracks from UniProt and InterPro */
+        get: operations["read_protein_api_v1_proteins__accession__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/proteins/{accession}/compounds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Compounds with experimental ligand evidence for a protein */
+        get: operations["get_protein_compounds_api_v1_proteins__accession__compounds_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/proteins/{accession}/effect-map": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Per-residue AlphaMissense summary, with the substitution matrix on request */
+        get: operations["get_effect_map_api_v1_proteins__accession__effect_map_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/proteins/{accession}/fasta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Canonical sequence in FASTA format, as UniProt serves it */
+        get: operations["read_fasta_api_v1_proteins__accession__fasta_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/proteins/{accession}/interactions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** IntAct curated interactions, and STRING physical associations as a separate layer */
+        get: operations["read_interactions_api_v1_proteins__accession__interactions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/proteins/{accession}/pathways": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Reactome pathways of a protein */
+        get: operations["read_pathways_api_v1_proteins__accession__pathways_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/proteins/{accession}/pockets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Predicted pockets (P2Rank through PrankWeb) of an AlphaFold DB model or a PDB entry */
+        get: operations["get_protein_pockets_api_v1_proteins__accession__pockets_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/proteins/{accession}/residues/{position}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One residue: the amino acid and every feature and InterPro entry covering it */
+        get: operations["read_residue_api_v1_proteins__accession__residues__position__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/proteins/{accession}/residues/{position}/effects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Effect evidence at a residue, grouped by evidence kind */
+        get: operations["get_residue_effects_api_v1_proteins__accession__residues__position__effects_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/proteins/{accession}/structures": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Structure ledger of a protein, grouped by origin */
+        get: operations["get_protein_structures_api_v1_proteins__accession__structures_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Resolve a disease, gene, protein, variant, structure, compound or paper */
+        get: operations["get_search_api_v1_search_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/snapshots/{snapshot_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A frozen project state */
+        get: operations["get_snapshot_api_v1_snapshots__snapshot_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/snapshots/{snapshot_id}/export.json": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** project.json of the snapshot */
+        get: operations["export_json_api_v1_snapshots__snapshot_id__export_json_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/snapshots/{snapshot_id}/export.md": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Markdown research report of the snapshot */
+        get: operations["export_markdown_api_v1_snapshots__snapshot_id__export_md_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/snapshots/{snapshot_id}/export.zip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Zip with manifest, items, hypotheses, citations and run manifests */
+        get: operations["export_zip_api_v1_snapshots__snapshot_id__export_zip_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/snapshots/{snapshot_id}/fork": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Fork a snapshot into a new project of the calling workspace */
+        post: operations["fork_snapshot_api_v1_snapshots__snapshot_id__fork_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/snapshots/{snapshot_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** List a withdrawn snapshot again */
+        post: operations["restore_snapshot_api_v1_snapshots__snapshot_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/snapshots/{snapshot_id}/withdraw": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Unlist a snapshot (owner) */
+        post: operations["withdraw_snapshot_api_v1_snapshots__snapshot_id__withdraw_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/structures/{structure_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Describe a structure */
+        get: operations["get_structure_api_v1_structures__structure_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/structures/{structure_id}/confidence": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Per-residue pLDDT (0-100) and the PAE matrix of a predicted model */
+        get: operations["get_structure_confidence_api_v1_structures__structure_id__confidence_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/structures/{structure_id}/file": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Coordinate file of a structure */
+        get: operations["get_structure_file_api_v1_structures__structure_id__file_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/structures/{structure_id}/ligands": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bound non-solvent ligands and their neighbouring residues in UniProt numbering */
+        get: operations["get_structure_ligands_api_v1_structures__structure_id__ligands_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/structures/{structure_id}/residue-map": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** UniProt numbering to chain, entity and author numbering */
+        get: operations["get_structure_residue_map_api_v1_structures__structure_id__residue_map_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/variants/{variant_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One variant: ClinVar, UniProt, gnomAD, reference check and identifiers */
+        get: operations["get_variant_api_v1_variants__variant_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/variants/{variant_id}/mechanisms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Candidate mechanisms of a single-residue variant, each with the records that raise it */
+        get: operations["get_variant_mechanisms_api_v1_variants__variant_id__mechanisms_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -256,6 +1338,36 @@ export interface components {
              * @enum {string}
              */
             kind: "anonymous" | "account" | "system";
+        };
+        /** AnswerSegment */
+        AnswerSegment: {
+            /**
+             * Citations
+             * @description Keys into the answer's evidence list; only keys that resolved
+             */
+            citations: string[];
+            /**
+             * Claimed Kind
+             * @description The label the model gave when the server changed it
+             */
+            claimed_kind: ("database_fact" | "paper_finding" | "computational_result" | "reasoning_hypothesis") | null;
+            /**
+             * Heading
+             * @description Section of a source digest
+             */
+            heading: string | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "database_fact" | "paper_finding" | "computational_result" | "reasoning_hypothesis";
+            /**
+             * Note
+             * @description Why the server changed the label or dropped citations
+             */
+            note: string | null;
+            /** Text */
+            text: string;
         };
         /** ArtifactOut */
         ArtifactOut: {
@@ -289,6 +1401,130 @@ export interface components {
          * @enum {string}
          */
         ArtifactRole: "structure" | "confidence_summary" | "pae" | "pde" | "plddt" | "affinity" | "msa" | "model_input" | "source_response" | "log" | "manifest" | "other";
+        /** AssistantAnswer */
+        AssistantAnswer: {
+            /** Audience */
+            audience: ("high_school" | "undergraduate" | "researcher" | "structural_biologist") | null;
+            /**
+             * Downgraded
+             * @description Segments the server relabelled as reasoning
+             * @default 0
+             */
+            downgraded: number;
+            /** Evidence */
+            evidence: components["schemas"]["CitedEvidence"][];
+            /**
+             * Generated By
+             * @enum {string}
+             */
+            generated_by: "model" | "source_digest";
+            /** Lookups */
+            lookups: components["schemas"]["Lookup"][];
+            /**
+             * Model
+             * @description Model that served the answer; null for a digest
+             */
+            model: string | null;
+            /**
+             * Relabelled
+             * @description Segments moved to the label their citations support
+             * @default 0
+             */
+            relabelled: number;
+            /** Segments */
+            segments: components["schemas"]["AnswerSegment"][];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Usage */
+            usage: {
+                [key: string]: unknown;
+            };
+        };
+        /**
+         * AssistantContext
+         * @description What the reader was looking at when they asked. Every field is optional.
+         */
+        AssistantContext: {
+            /**
+             * Accession
+             * @description UniProt accession
+             */
+            accession?: string | null;
+            /**
+             * Comparison
+             * @description Comparison result (job) ID
+             */
+            comparison?: string | null;
+            /**
+             * Compound
+             * @description InChIKey or ChEMBL ID
+             */
+            compound?: string | null;
+            /**
+             * Disease
+             * @description Catalog disease slug
+             */
+            disease?: string | null;
+            /**
+             * Gene
+             * @description HGNC symbol
+             */
+            gene?: string | null;
+            /**
+             * Project
+             * @description Project ID
+             */
+            project?: string | null;
+            /**
+             * Residue
+             * @description UniProt canonical position
+             */
+            residue?: number | null;
+            /** Route */
+            route?: string | null;
+            /**
+             * Structure
+             * @description pdb:, afdb: or of: structure ID
+             */
+            structure?: string | null;
+            /**
+             * Variant
+             * @description GENE-p.Ref3PosAlt3 or ClinVar VCV
+             */
+            variant?: string | null;
+        };
+        /** AssistantStatus */
+        AssistantStatus: {
+            /** Audiences */
+            audiences: components["schemas"]["AudienceOption"][];
+            /** Configured */
+            configured: boolean;
+            /** Message */
+            message: string;
+            /** Model */
+            model: string;
+            /** Segment Kinds */
+            segment_kinds: components["schemas"]["SegmentKindOption"][];
+            /**
+             * Setting
+             * @default ANTHROPIC_API_KEY
+             */
+            setting: string;
+            /** Tools */
+            tools: string[];
+        };
+        /** AudienceOption */
+        AudienceOption: {
+            /** Description */
+            description: string;
+            /**
+             * Id
+             * @enum {string}
+             */
+            id: "high_school" | "undergraduate" | "researcher" | "structural_biologist";
+            /** Label */
+            label: string;
+        };
         /** Authoring */
         Authoring: {
             /**
@@ -296,10 +1532,7 @@ export interface components {
              * @enum {string}
              */
             method: "human" | "llm_assisted";
-            /**
-             * Model
-             * @default null
-             */
+            /** Model */
             model: string | null;
         };
         /** Availability */
@@ -316,6 +1549,190 @@ export interface components {
              * @description Human-readable: why the provider can or cannot run here
              */
             reason: string;
+        };
+        /** AxisClinicalVariant */
+        AxisClinicalVariant: {
+            /** Alternate Residue */
+            alternate_residue: string | null;
+            /** Change Kind */
+            change_kind: string | null;
+            /** Clinical Significance */
+            clinical_significance: string | null;
+            /** Condition */
+            condition: string | null;
+            /** Consequence */
+            consequence: string | null;
+            /** Id */
+            id: string;
+            /**
+             * In Clinvar
+             * @default false
+             */
+            in_clinvar: boolean;
+            /**
+             * In Uniprot
+             * @default false
+             */
+            in_uniprot: boolean;
+            /** Position */
+            position: number;
+            /** Protein Change */
+            protein_change: string | null;
+            /** Reference Residue */
+            reference_residue: string | null;
+            /** Review Stars */
+            review_stars: number | null;
+            /** Review Status */
+            review_status: string | null;
+            /** Row Key */
+            row_key: string;
+            /** Significance Keys */
+            significance_keys: string[];
+            /** Uniprot Feature Id */
+            uniprot_feature_id: string | null;
+            /** Vcv */
+            vcv: string | null;
+        };
+        /** AxisVariantsResponse */
+        AxisVariantsResponse: {
+            /** Clinical */
+            clinical: components["schemas"]["AxisClinicalVariant"][];
+            /**
+             * Clinical Total
+             * @default 0
+             */
+            clinical_total: number;
+            /**
+             * Clinical Without Position
+             * @default 0
+             */
+            clinical_without_position: number;
+            /** Clinvar Release */
+            clinvar_release: string | null;
+            /**
+             * Frequency Basis
+             * @default Allele count and allele number are the sums of gnomAD's exome and genome call sets; allele_frequency is that count divided by that number. The per-call-set values are returned unchanged.
+             */
+            frequency_basis: string;
+            gene: components["schemas"]["EntityRef"];
+            /** Population */
+            population: components["schemas"]["PopulationVariant"][];
+            /**
+             * Population Dataset
+             * @default gnomAD v4.1
+             */
+            population_dataset: string;
+            /** Population Transcript Id */
+            population_transcript_id: string | null;
+            protein: components["schemas"]["EntityRef"] | null;
+            /**
+             * Scope Note
+             * @default Clinical rows are the gene's ClinVar and UniProt variants whose position is confirmed on the UniProt canonical sequence; rows numbered on another isoform are counted, not drawn. Variants on the gnomAD canonical transcript whose protein consequence gnomAD reports as a single-residue change. Positions are the transcript's protein positions as gnomAD reports them; they match UniProt canonical numbering only where that transcript encodes the canonical sequence.
+             */
+            scope_note: string;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /**
+             * Truncated
+             * @default false
+             */
+            truncated: boolean;
+        };
+        /**
+         * BindingPredictionEligibility
+         * @description Whether the compound may be sent to a binding prediction. Decided by modality alone.
+         */
+        BindingPredictionEligibility: {
+            /** Eligible */
+            eligible: boolean;
+            /** Reason */
+            reason: string;
+        };
+        /** BindingResidue */
+        BindingResidue: {
+            /** Author Seq Id */
+            author_seq_id: number | null;
+            /**
+             * Distance
+             * @description Shortest distance to the ligand in angstroms
+             */
+            distance: number | null;
+            /** Entity Seq Id */
+            entity_seq_id: number | null;
+            /** Residue Name */
+            residue_name: string | null;
+            /** Struct Asym Id */
+            struct_asym_id: string | null;
+            /** Uniprot Accession */
+            uniprot_accession: string | null;
+            /**
+             * Uniprot Position
+             * @description Null when the residue has no UniProt mapping
+             */
+            uniprot_position: number | null;
+        };
+        /** BoundLigand */
+        BoundLigand: {
+            /**
+             * Binding Site
+             * @description Neighbouring residues of all instances merged into UniProt ranges, per accession
+             */
+            binding_site: components["schemas"]["ResidueRange"][];
+            /** Binding Site Positions */
+            binding_site_positions: number[];
+            /**
+             * Chains
+             * @description Author chain IDs the ligand is assigned to
+             */
+            chains: string[];
+            /**
+             * Common Additive
+             * @description Component ID is on OrphaFold's fixed list of common crystallisation and buffer additives. The entry itself does not say whether the molecule is functionally relevant.
+             * @default false
+             */
+            common_additive: boolean;
+            /**
+             * Comp Id
+             * @description PDB chemical component ID
+             */
+            comp_id: string;
+            /** Formula */
+            formula: string | null;
+            /** Formula Weight */
+            formula_weight: number | null;
+            /** Inchikey */
+            inchikey: string | null;
+            /** Instances */
+            instances: components["schemas"]["LigandInstance"][];
+            /** Name */
+            name: string | null;
+            /** Smiles */
+            smiles: string | null;
+            /** Url */
+            url: string | null;
+        };
+        /**
+         * CachedOrigin
+         * @description Where a cached example came from: the real run that produced it.
+         */
+        CachedOrigin: {
+            /**
+             * Generated At
+             * Format: date-time
+             */
+            generated_at: string;
+            /** Job Id */
+            job_id: string;
+            /** Label */
+            label: string;
+            /** Model Name */
+            model_name: string | null;
+            /** Model Version */
+            model_version: string | null;
+            /** Provider Id */
+            provider_id: string;
+            /** Provider Name */
+            provider_name: string | null;
         };
         /** CatalogCounts */
         CatalogCounts: {
@@ -379,6 +1796,49 @@ export interface components {
             skipped_records: number;
             state: components["schemas"]["CatalogState"];
         };
+        /** ChatRequest */
+        ChatRequest: {
+            /**
+             * Audience
+             * @default researcher
+             * @enum {string}
+             */
+            audience: "high_school" | "undergraduate" | "researcher" | "structural_biologist";
+            context?: components["schemas"]["AssistantContext"];
+            /** Messages */
+            messages: components["schemas"]["ChatTurn"][];
+        };
+        /** ChatTurn */
+        ChatTurn: {
+            /** Content */
+            content: string;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "user" | "assistant";
+        };
+        /** ChemblTargetRef */
+        ChemblTargetRef: {
+            /** Accessions */
+            accessions: string[];
+            /** Chembl Id */
+            chembl_id: string;
+            /** Name */
+            name: string | null;
+            /** Organism */
+            organism: string | null;
+            /**
+             * Source
+             * @default chembl
+             * @constant
+             */
+            source: "chembl";
+            /** Target Type */
+            target_type: string | null;
+            /** Url */
+            url: string;
+        };
         /** Citation */
         Citation: {
             /** Doi */
@@ -396,18 +1856,560 @@ export interface components {
             /** Year */
             year: number | null;
         };
+        /** CitedEvidence */
+        CitedEvidence: {
+            evidence: components["schemas"]["Evidence"];
+            /**
+             * Key
+             * @description Citation key used by the segments, e.g. e3
+             */
+            key: string;
+            /**
+             * Tool
+             * @description The lookup that returned the record
+             */
+            tool: string | null;
+        };
         /**
          * ClaimLabel
          * @description Four-label view used by comparison and mechanism stages.
          * @enum {string}
          */
         ClaimLabel: "known_experimentally" | "database_annotation" | "computational_prediction" | "orphafold_hypothesis";
+        /** ClinVarRecord */
+        ClinVarRecord: {
+            /** Classification */
+            classification: string | null;
+            /** Clinical Impact Classification */
+            clinical_impact_classification: string | null;
+            /** Conditions */
+            conditions: components["schemas"]["VariantCondition"][];
+            /** Consequences */
+            consequences: string[];
+            evidence: components["schemas"]["Evidence"] | null;
+            /** Hgvs C */
+            hgvs_c: string | null;
+            /** Last Evaluated */
+            last_evaluated: string | null;
+            /** Oncogenicity Classification */
+            oncogenicity_classification: string | null;
+            /**
+             * Protein Changes
+             * @description Protein changes on every isoform, as ClinVar lists them
+             */
+            protein_changes: string[];
+            /** Review Stars */
+            review_stars: number | null;
+            /** Review Status */
+            review_status: string | null;
+            /** Rsid */
+            rsid: string | null;
+            /** Significance Keys */
+            significance_keys: ("pathogenic" | "likely_pathogenic" | "uncertain_significance" | "likely_benign" | "benign" | "conflicting" | "other" | "not_classified")[];
+            /** Spdi */
+            spdi: string | null;
+            submission_summary: components["schemas"]["SubmissionSummary"] | null;
+            /** Title */
+            title: string | null;
+            /** Url */
+            url: string | null;
+            /** Variant Type */
+            variant_type: string | null;
+            /** Variation Id */
+            variation_id: string;
+            /** Vcv */
+            vcv: string | null;
+            /** Vcv Version */
+            vcv_version: string | null;
+        };
+        /** ClinVarSubmission */
+        ClinVarSubmission: {
+            /** Classification */
+            classification: string | null;
+            /**
+             * Contributes To Aggregate
+             * @default false
+             */
+            contributes_to_aggregate: boolean;
+            /** Date Updated */
+            date_updated: string | null;
+            /** Last Evaluated */
+            last_evaluated: string | null;
+            /** Method */
+            method: string | null;
+            /** Origins */
+            origins: string[];
+            /** Pmids */
+            pmids: string[];
+            /** Review Status */
+            review_status: string | null;
+            /** Scv */
+            scv: string | null;
+            /** Submitter */
+            submitter: string | null;
+            /** Version */
+            version: string | null;
+        };
+        /** ClinicalReport */
+        ClinicalReport: {
+            /** Clinical Stage */
+            clinical_stage: string | null;
+            /** Id */
+            id: string | null;
+            /** Source */
+            source: string | null;
+            /** Title */
+            title: string | null;
+            /** Type */
+            type: string | null;
+            /** Url */
+            url: string | null;
+            /** Year */
+            year: number | null;
+        };
+        /** CoCrystalRecord */
+        CoCrystalRecord: {
+            /**
+             * Binding Positions
+             * @description UniProt positions PDBe lists as interacting
+             */
+            binding_positions: number[];
+            /** Ccd Id */
+            ccd_id: string;
+            /** Name */
+            name: string | null;
+            /** Pdb Entry Count */
+            pdb_entry_count: number;
+            /** Pdb Ids */
+            pdb_ids: string[];
+            /**
+             * Source
+             * @default pdbe
+             * @constant
+             */
+            source: "pdbe";
+        };
+        /** ComparePlanResponse */
+        ComparePlanResponse: {
+            /** Caveats */
+            caveats: components["schemas"]["ComparisonCaveat"][];
+            /** Domains */
+            domains: components["schemas"]["ConstructDomain"][];
+            gene: components["schemas"]["EntityRef"];
+            /**
+             * Job Kind
+             * @default variant_comparison
+             */
+            job_kind: string;
+            property_change: components["schemas"]["PropertyChange"] | null;
+            proposed_construct: components["schemas"]["ComparisonConstruct"] | null;
+            protein: components["schemas"]["EntityRef"] | null;
+            /** Protein Length */
+            protein_length: number | null;
+            /** Providers */
+            providers: components["schemas"]["ProviderOption"][];
+            reference_check: components["schemas"]["ReferenceCheck"];
+            /** Results */
+            results: components["schemas"]["ComparisonResultSummary"][];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /**
+             * Title
+             * @default Reference and variant models (predicted)
+             */
+            title: string;
+            variant: components["schemas"]["ComparisonVariant"];
+        };
+        /** CompareResultResponse */
+        CompareResultResponse: {
+            cached_from: components["schemas"]["CachedOrigin"] | null;
+            /** Caveats */
+            caveats: components["schemas"]["ComparisonCaveat"][];
+            confidence: components["schemas"]["ComparisonConfidence"];
+            construct: components["schemas"]["ComparisonConstruct"];
+            difference: components["schemas"]["DifferencePayload"];
+            /** Difference Url */
+            difference_url: string;
+            /** Generated At */
+            generated_at: string | null;
+            /** Job Id */
+            job_id: string;
+            /** Label */
+            label: string;
+            /** Manifest Url */
+            manifest_url: string | null;
+            /**
+             * Origin
+             * @enum {string}
+             */
+            origin: "job" | "cached_example";
+            /** Performs Inference */
+            performs_inference: boolean;
+            provider: components["schemas"]["ComparisonProvider"];
+            reference_model: components["schemas"]["StructureDescriptor"];
+            /**
+             * Title
+             * @default Reference and variant models (predicted)
+             */
+            title: string;
+            variant: components["schemas"]["ComparisonVariant"];
+            variant_model: components["schemas"]["StructureDescriptor"];
+        };
+        /** ComparisonCaveat */
+        ComparisonCaveat: {
+            /** Citations */
+            citations: components["schemas"]["Citation"][];
+            /** Id */
+            id: string;
+            /**
+             * Quoted From
+             * @description Set when the text is a verbatim quotation
+             */
+            quoted_from: string | null;
+            /** Text */
+            text: string;
+        };
+        /** ComparisonConfidence */
+        ComparisonConfidence: {
+            reference: components["schemas"]["ConfidenceSummary"] | null;
+            site: components["schemas"]["SiteConfidence"];
+            variant: components["schemas"]["ConfidenceSummary"] | null;
+        };
+        /**
+         * ComparisonConstruct
+         * @description The residue range that was, or would be, submitted to the model. Both models of a
+         *     comparison use the same construct.
+         */
+        ComparisonConstruct: {
+            domain: components["schemas"]["ConstructDomain"] | null;
+            /** End */
+            end: number;
+            /**
+             * Flank
+             * @description Residues added on each side of the domain
+             */
+            flank: number | null;
+            /** Full Length */
+            full_length: boolean;
+            /** Length */
+            length: number;
+            /**
+             * Max Residues
+             * @description Provider limit the construct was fitted to
+             */
+            max_residues: number | null;
+            /** Protein Length */
+            protein_length: number;
+            /** Rationale */
+            rationale: string;
+            /**
+             * Rule
+             * @enum {string}
+             */
+            rule: "full_length" | "uniprot_domain" | "centred_window" | "user_window";
+            /** Start */
+            start: number;
+            /** Uniprot Accession */
+            uniprot_accession: string | null;
+        };
+        /** ComparisonModel */
+        ComparisonModel: {
+            /**
+             * File
+             * @description Artifact name of the mmCIF file
+             */
+            file: string;
+            /** Plddt Mean */
+            plddt_mean: number;
+            /** Residues */
+            residues: number;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "reference" | "variant";
+            /** Sequence Sha256 */
+            sequence_sha256: string;
+            /** Structure Id */
+            structure_id: string;
+        };
+        /** ComparisonProvider */
+        ComparisonProvider: {
+            cached_from: components["schemas"]["CachedOrigin"] | null;
+            /**
+             * Deterministic
+             * @description True when the model has no seed; null when not stated by the provider
+             */
+            deterministic: boolean | null;
+            /** Execution Mode */
+            execution_mode: string;
+            /** Id */
+            id: string;
+            /** Model Name */
+            model_name: string | null;
+            /** Model Version */
+            model_version: string | null;
+            /** Name */
+            name: string;
+            /** Performs Inference */
+            performs_inference: boolean;
+        };
+        /** ComparisonResultSummary */
+        ComparisonResultSummary: {
+            construct: components["schemas"]["ComparisonConstruct"];
+            /** Generated At */
+            generated_at: string | null;
+            /** Label */
+            label: string;
+            /** Manifest Url */
+            manifest_url: string | null;
+            /**
+             * Origin
+             * @enum {string}
+             */
+            origin: "job" | "cached_example";
+            provider: components["schemas"]["ComparisonProvider"];
+            /**
+             * Result Id
+             * @description Job ID; pass it to GET /api/v1/compare/results/{job_id}
+             */
+            result_id: string;
+            /** Result Url */
+            result_url: string;
+            summary: components["schemas"]["DifferenceSummary"];
+        };
+        /** ComparisonVariant */
+        ComparisonVariant: {
+            /**
+             * Alternate
+             * @description One-letter variant residue
+             */
+            alternate: string;
+            /** Gene Symbol */
+            gene_symbol: string | null;
+            /** Hgvs P */
+            hgvs_p: string;
+            /**
+             * Position
+             * @description UniProt canonical position
+             */
+            position: number;
+            /**
+             * Reference
+             * @description One-letter reference residue
+             */
+            reference: string;
+            /** Short */
+            short: string;
+            /** Uniprot Accession */
+            uniprot_accession: string | null;
+            /**
+             * Variant Id
+             * @description GENE-p.Ref3PosAlt3; null without a gene symbol
+             */
+            variant_id: string | null;
+        };
+        /** CompoundAnalog */
+        CompoundAnalog: {
+            binding_prediction: components["schemas"]["BindingPredictionEligibility"];
+            /** Chembl Id */
+            chembl_id: string | null;
+            /**
+             * Depiction Url
+             * @description API path; add ?theme=dark|light
+             */
+            depiction_url: string | null;
+            /**
+             * Field Sources
+             * @description Source adapter ID of each populated field
+             */
+            field_sources: {
+                [key: string]: string;
+            };
+            /** First Approval */
+            first_approval: number | null;
+            /**
+             * Id
+             * @description InChIKey; the ChEMBL ID when the source gives no structure
+             */
+            id: string;
+            /** Inchikey */
+            inchikey: string | null;
+            /**
+             * Max Phase
+             * @description ChEMBL max_phase; null when ChEMBL gives none
+             */
+            max_phase: number | null;
+            modality: components["schemas"]["Modality"];
+            /**
+             * Modality Basis
+             * @description The source field the modality was read from
+             */
+            modality_basis: string;
+            /** Molecular Formula */
+            molecular_formula: string | null;
+            /** Molecular Weight */
+            molecular_weight: number | null;
+            /**
+             * Molecule Type
+             * @description ChEMBL molecule_type, verbatim
+             */
+            molecule_type: string | null;
+            /** Name */
+            name: string | null;
+            /**
+             * Similarity
+             * @description ChEMBL similarity search value, percent
+             */
+            similarity: number;
+            /** Smiles */
+            smiles: string | null;
+        };
+        /** CompoundAnalogsResponse */
+        CompoundAnalogsResponse: {
+            /** Analogs */
+            analogs: components["schemas"]["CompoundAnalog"][];
+            /** Message */
+            message: string | null;
+            query: components["schemas"]["CompoundCore"];
+            /**
+             * Similarity Source
+             * @default chembl
+             * @constant
+             */
+            similarity_source: "chembl";
+            /**
+             * Similarity Unit
+             * @default percent
+             */
+            similarity_unit: string;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Threshold */
+            threshold: number;
+        };
+        /** CompoundCore */
+        CompoundCore: {
+            binding_prediction: components["schemas"]["BindingPredictionEligibility"];
+            /** Chembl Id */
+            chembl_id: string | null;
+            /**
+             * Depiction Url
+             * @description API path; add ?theme=dark|light
+             */
+            depiction_url: string | null;
+            /**
+             * Field Sources
+             * @description Source adapter ID of each populated field
+             */
+            field_sources: {
+                [key: string]: string;
+            };
+            /** First Approval */
+            first_approval: number | null;
+            /**
+             * Id
+             * @description InChIKey; the ChEMBL ID when the source gives no structure
+             */
+            id: string;
+            /** Inchikey */
+            inchikey: string | null;
+            /**
+             * Max Phase
+             * @description ChEMBL max_phase; null when ChEMBL gives none
+             */
+            max_phase: number | null;
+            modality: components["schemas"]["Modality"];
+            /**
+             * Modality Basis
+             * @description The source field the modality was read from
+             */
+            modality_basis: string;
+            /** Molecular Formula */
+            molecular_formula: string | null;
+            /** Molecular Weight */
+            molecular_weight: number | null;
+            /**
+             * Molecule Type
+             * @description ChEMBL molecule_type, verbatim
+             */
+            molecule_type: string | null;
+            /** Name */
+            name: string | null;
+            /** Smiles */
+            smiles: string | null;
+        };
+        /** CompoundCounts */
+        CompoundCounts: {
+            /** Co Crystallised */
+            co_crystallised: number;
+            /**
+             * Pdb Ligands Total
+             * @description Ligands PDBe lists that pass the solvent and size filter
+             */
+            pdb_ligands_total: number | null;
+            /**
+             * Qualifying Activities In Chembl
+             * @description Rows passing the filter for this target, across all compounds
+             */
+            qualifying_activities_in_chembl: number | null;
+            /** With Measured Affinity */
+            with_measured_affinity: number;
+            /** With Mechanism */
+            with_mechanism: number;
+        };
+        /** CompoundDetailResponse */
+        CompoundDetailResponse: {
+            compound: components["schemas"]["CompoundCore"];
+            /** Cross References */
+            cross_references: components["schemas"]["orphafold__schemas__compounds__CrossReference"][];
+            /** Evidence */
+            evidence: components["schemas"]["Evidence"][];
+            /** Inchi */
+            inchi: string | null;
+            /** Indications */
+            indications: components["schemas"]["IndicationRecord"][];
+            /** Indications Note */
+            indications_note: string;
+            /** Mechanisms */
+            mechanisms: components["schemas"]["MechanismRecord"][];
+            /** Parent Chembl Id */
+            parent_chembl_id: string | null;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Targets */
+            targets: components["schemas"]["CompoundTarget"][];
+        };
+        /** CompoundTarget */
+        CompoundTarget: {
+            /** Accessions */
+            accessions: string[];
+            /** Action Types */
+            action_types: string[];
+            /** Chembl Id */
+            chembl_id: string;
+            /** Name */
+            name: string | null;
+            /** Organism */
+            organism: string | null;
+            /** Protein Refs */
+            protein_refs: components["schemas"]["EntityRef"][];
+            /**
+             * Source
+             * @default chembl
+             * @constant
+             */
+            source: "chembl";
+            /** Target Type */
+            target_type: string | null;
+            /** Url */
+            url: string;
+        };
         /** ConfidenceSummary */
         ConfidenceSummary: {
             /**
              * Iptm
              * @description Null for single-chain structures
-             * @default null
              */
             iptm: number | null;
             /**
@@ -418,21 +2420,15 @@ export interface components {
             /**
              * Pae Max
              * @description Cap of the PAE matrix in angstroms
-             * @default null
              */
             pae_max: number | null;
-            /** @default null */
             plddt_fractions: components["schemas"]["PlddtFractions"] | null;
             /**
              * Plddt Mean
              * @description Normalised to 0-100
-             * @default null
              */
             plddt_mean: number | null;
-            /**
-             * Plddt Native Scale
-             * @default null
-             */
+            /** Plddt Native Scale */
             plddt_native_scale: ("0-1" | "0-100") | null;
             /**
              * Provider Native
@@ -441,21 +2437,191 @@ export interface components {
             provider_native: {
                 [key: string]: unknown;
             };
-            /**
-             * Ptm
-             * @default null
-             */
+            /** Ptm */
             ptm: number | null;
-            /**
-             * Ranking Score
-             * @default null
-             */
+            /** Ranking Score */
             ranking_score: number | null;
-            /**
-             * Ranking Score Name
-             * @default null
-             */
+            /** Ranking Score Name */
             ranking_score_name: string | null;
+        };
+        /** ConstructDomain */
+        ConstructDomain: {
+            /** End */
+            end: number;
+            /** Name */
+            name: string;
+            /**
+             * Source
+             * @default UniProt feature of type Domain
+             */
+            source: string;
+            /** Start */
+            start: number;
+        };
+        /** ContactChanges */
+        ContactChanges: {
+            /**
+             * Atoms
+             * @default heavy
+             * @constant
+             */
+            atoms: "heavy";
+            /** Cutoff */
+            cutoff: number;
+            /** Exclusion */
+            exclusion: string;
+            /**
+             * Gained
+             * @description Positions in contact in the variant model only
+             */
+            gained: number[];
+            /** Kept */
+            kept: number[];
+            /** Label */
+            label: string;
+            /**
+             * Lost
+             * @description Positions in contact in the reference model only
+             */
+            lost: number[];
+            /**
+             * Low Confidence Positions
+             * @description Listed positions where either model is below the pLDDT threshold
+             */
+            low_confidence_positions: number[];
+            /**
+             * Reference
+             * @description Contacts of the site in the reference model
+             */
+            reference: components["schemas"]["SiteContact"][];
+            /**
+             * Variant
+             * @description Contacts of the site in the variant model
+             */
+            variant: components["schemas"]["SiteContact"][];
+        };
+        /** CountRow */
+        CountRow: {
+            /** Count */
+            count: number;
+            /**
+             * Keys
+             * @description Filter keys this row answers to
+             */
+            keys: string[];
+            /**
+             * Value
+             * @description The term as the source writes it
+             */
+            value: string;
+        };
+        /** CrossReferenceGroup */
+        CrossReferenceGroup: {
+            /** Count */
+            count: number;
+            /** Database */
+            database: string;
+            /** Items */
+            items: components["schemas"]["orphafold__schemas__proteins__CrossReference"][];
+        };
+        /**
+         * CuratedInteraction
+         * @description One partner with the IntAct evidence rows behind it.
+         */
+        CuratedInteraction: {
+            evidence: components["schemas"]["Evidence"] | null;
+            /**
+             * Evidence Count
+             * @description IntAct evidence rows for this pair
+             */
+            evidence_count: number;
+            /**
+             * In Catalog
+             * @description The partner's gene is an IUIS inborn-errors-of-immunity gene
+             */
+            in_catalog: boolean;
+            /**
+             * Interaction Acs
+             * @description IntAct interaction accessions
+             */
+            interaction_acs: string[];
+            /** Interaction Types */
+            interaction_types: components["schemas"]["OntologyTerm"][];
+            /**
+             * Measured With Mutant
+             * @description At least one row was measured with a mutated form of the query protein
+             * @default false
+             */
+            measured_with_mutant: boolean;
+            /**
+             * Methods
+             * @description PSI-MI detection methods
+             */
+            methods: components["schemas"]["OntologyTerm"][];
+            /**
+             * Mi Score
+             * @description IntAct MI score, 0 to 1, as IntAct reports it
+             */
+            mi_score: number | null;
+            partner: components["schemas"]["EntityRef"];
+            /**
+             * Partner Id
+             * @description UniProt accession of the partner
+             */
+            partner_id: string;
+            /** Partner Symbol */
+            partner_symbol: string | null;
+            /** Pmids */
+            pmids: string[];
+            /** Url */
+            url: string | null;
+        };
+        /** CuratedLayer */
+        CuratedLayer: {
+            /**
+             * Description
+             * @default Binary interactions curated by IntAct from published experiments. Each has a detection method and a publication.
+             */
+            description: string;
+            /**
+             * Label
+             * @default Curated interactions (IntAct)
+             */
+            label: string;
+            /**
+             * Negative Rows
+             * @description Rows IntAct marks as negative; left out of partners
+             * @default 0
+             */
+            negative_rows: number;
+            /**
+             * Non Human Or Non Protein Rows
+             * @default 0
+             */
+            non_human_or_non_protein_rows: number;
+            /** Partners */
+            partners: components["schemas"]["CuratedInteraction"][];
+            /**
+             * Rows Truncated
+             * @default false
+             */
+            rows_truncated: boolean;
+            /**
+             * Self Interaction Rows
+             * @default 0
+             */
+            self_interaction_rows: number;
+            /**
+             * Source
+             * @default intact
+             */
+            source: string;
+            /**
+             * Total Rows
+             * @description Evidence rows IntAct returned for the protein
+             * @default 0
+             */
+            total_rows: number;
         };
         /** DatasetInfo */
         DatasetInfo: {
@@ -494,6 +2660,322 @@ export interface components {
             /** Version */
             version: string;
         };
+        /**
+         * DifferencePayload
+         * @description difference.json: geometry computed from two predicted models of the same construct.
+         */
+        DifferencePayload: {
+            /** Caveats */
+            caveats: components["schemas"]["ComparisonCaveat"][];
+            construct: components["schemas"]["ComparisonConstruct"];
+            contacts: components["schemas"]["ContactChanges"];
+            /**
+             * Generated At
+             * Format: date-time
+             */
+            generated_at: string;
+            /**
+             * Geometry Label
+             * @default computed from predicted model
+             */
+            geometry_label: string;
+            global_difference: components["schemas"]["GlobalDifference"];
+            /** Job Id */
+            job_id: string | null;
+            local_difference: components["schemas"]["LocalDifference"];
+            masking: components["schemas"]["Masking"];
+            /** Models */
+            models: components["schemas"]["ComparisonModel"][];
+            neighbours: components["schemas"]["Neighbourhood"];
+            /**
+             * Numbering
+             * @default uniprot_canonical
+             * @constant
+             */
+            numbering: "uniprot_canonical";
+            /** Per Residue */
+            per_residue: components["schemas"]["ResidueDifference"][];
+            property_change: components["schemas"]["PropertyChange"];
+            provider: components["schemas"]["ComparisonProvider"];
+            /**
+             * Schema Version
+             * @default 1.0
+             */
+            schema_version: string;
+            site: components["schemas"]["SiteConfidence"];
+            /** Software */
+            software: {
+                [key: string]: string;
+            };
+            summary: components["schemas"]["DifferenceSummary"];
+            superposition: components["schemas"]["Superposition"];
+            /**
+             * Title
+             * @default Reference and variant models (predicted)
+             */
+            title: string;
+            variant: components["schemas"]["ComparisonVariant"];
+        };
+        /**
+         * DifferenceSummary
+         * @description The scalar measurements of a comparison, for listings.
+         */
+        DifferenceSummary: {
+            /** Contacts Gained */
+            contacts_gained: number;
+            /** Contacts Lost */
+            contacts_lost: number;
+            /** Local Rmsd Ca */
+            local_rmsd_ca: number | null;
+            /** Masked Residues */
+            masked_residues: number;
+            /** Plddt Site Reference */
+            plddt_site_reference: number;
+            /** Plddt Site Variant */
+            plddt_site_variant: number;
+            /** Residues Confident */
+            residues_confident: number;
+            /** Rmsd Ca All */
+            rmsd_ca_all: number;
+            /** Rmsd Ca Confident */
+            rmsd_ca_confident: number | null;
+            /** Total Residues */
+            total_residues: number;
+        };
+        /** DiseaseCategory */
+        DiseaseCategory: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string | null;
+            /** Subcategory Id */
+            subcategory_id: string | null;
+            /** Subcategory Name */
+            subcategory_name: string | null;
+            /** Table */
+            table: number | null;
+        };
+        /** DiseaseCategoryFacet */
+        DiseaseCategoryFacet: {
+            /**
+             * Count
+             * @description Diseases in the category that match the text query
+             */
+            count: number;
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Table */
+            table: number | null;
+        };
+        /** DiseaseDefinition */
+        DiseaseDefinition: {
+            /**
+             * One Line
+             * @description First sentence of the sourced definition
+             */
+            one_line: string;
+            source: components["schemas"]["RecordSource"] | null;
+            /** Text */
+            text: string;
+        };
+        /** DiseaseGeneSummary */
+        DiseaseGeneSummary: {
+            /** Chromosome */
+            chromosome: string | null;
+            /** Ensembl Gene Id */
+            ensembl_gene_id: string | null;
+            /** Hgnc Id */
+            hgnc_id: string | null;
+            /** Href */
+            href: string;
+            /**
+             * In Catalog
+             * @default true
+             */
+            in_catalog: boolean;
+            /** Name */
+            name: string | null;
+            /** Ncbi Gene Id */
+            ncbi_gene_id: string | null;
+            /**
+             * Other Disease Count
+             * @default 0
+             */
+            other_disease_count: number;
+            source: components["schemas"]["RecordSource"] | null;
+            /** Symbol */
+            symbol: string;
+        };
+        /** DiseaseInheritance */
+        DiseaseInheritance: {
+            /** Codes */
+            codes: string[];
+            /** Raw */
+            raw: string | null;
+            source: components["schemas"]["RecordSource"] | null;
+            /** Terms */
+            terms: components["schemas"]["DiseaseTerm"][];
+        };
+        /** DiseaseListItem */
+        DiseaseListItem: {
+            /** Aliases */
+            aliases: string[];
+            /** Category Id */
+            category_id: string | null;
+            /** Category Name */
+            category_name: string | null;
+            /** Clinvar Pathogenic Count */
+            clinvar_pathogenic_count: number | null;
+            /** Experimental Structure Count */
+            experimental_structure_count: number | null;
+            /** Explanation */
+            explanation: string | null;
+            /** Gene Symbol */
+            gene_symbol: string | null;
+            /** Href */
+            href: string;
+            /** Id */
+            id: string;
+            /** Inheritance Codes */
+            inheritance_codes: string[];
+            /**
+             * Is Phenocopy
+             * @default false
+             */
+            is_phenocopy: boolean;
+            /** Mechanism */
+            mechanism: string[];
+            /** Name */
+            name: string;
+            /**
+             * Phenotype Count
+             * @default 0
+             */
+            phenotype_count: number;
+            /** Subcategory Id */
+            subcategory_id: string | null;
+            /** Subcategory Name */
+            subcategory_name: string | null;
+        };
+        /** DiseaseListResponse */
+        DiseaseListResponse: {
+            /** Categories */
+            categories: components["schemas"]["DiseaseCategoryFacet"][];
+            /** Has More */
+            readonly has_more: boolean;
+            /** Items */
+            items: components["schemas"]["DiseaseListItem"][];
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Total */
+            total: number;
+        };
+        /** DiseasePhenotype */
+        DiseasePhenotype: {
+            /**
+             * Frequency
+             * @description The source's own wording
+             */
+            frequency: string | null;
+            /** Hpo Id */
+            hpo_id: string;
+            /** Label */
+            label: string | null;
+            source: components["schemas"]["RecordSource"] | null;
+            /** Url */
+            url: string;
+        };
+        /** DiseaseProteinSummary */
+        DiseaseProteinSummary: {
+            /** Accession */
+            accession: string;
+            /** Family */
+            family: string | null;
+            /** Href */
+            href: string;
+            /** Length */
+            length: number | null;
+            /** Name */
+            name: string | null;
+            source: components["schemas"]["RecordSource"] | null;
+        };
+        /** DiseaseResponse */
+        DiseaseResponse: {
+            /** Aliases */
+            aliases: string[];
+            category: components["schemas"]["DiseaseCategory"] | null;
+            definition: components["schemas"]["DiseaseDefinition"] | null;
+            /**
+             * Explanation
+             * @description One line: first sentence of the definition
+             */
+            explanation: string | null;
+            gene: components["schemas"]["DiseaseGeneSummary"] | null;
+            graph: components["schemas"]["RelationshipGraph"];
+            /** Id */
+            id: string;
+            inheritance: components["schemas"]["DiseaseInheritance"];
+            /**
+             * Is Phenocopy
+             * @default false
+             */
+            is_phenocopy: boolean;
+            /**
+             * Mechanism
+             * @description As stated by IUIS; empty when it states none
+             */
+            mechanism: string[];
+            /** Name */
+            name: string;
+            /** Phenotypes */
+            phenotypes: components["schemas"]["DiseasePhenotype"][];
+            protein: components["schemas"]["DiseaseProteinSummary"] | null;
+            /** Record Sources */
+            record_sources: components["schemas"]["RecordSource"][];
+            ref: components["schemas"]["EntityRef"];
+            /** Research Status */
+            research_status: components["schemas"]["ResearchStatusItem"][];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Target Drug Total */
+            target_drug_total: number | null;
+            /**
+             * Target Drugs
+             * @description Drugs acting on the gene product, for any indication
+             */
+            target_drugs: components["schemas"]["Treatment"][];
+            /**
+             * Treatment Total
+             * @description Null when Open Targets did not answer
+             */
+            treatment_total: number | null;
+            /**
+             * Treatments
+             * @description Drugs with this disease as a recorded indication in Open Targets
+             */
+            treatments: components["schemas"]["Treatment"][];
+            /** Xrefs */
+            xrefs: components["schemas"]["orphafold__schemas__diseases__CrossReference"][];
+        };
+        /** DiseaseTerm */
+        DiseaseTerm: {
+            /** Id */
+            id: string;
+            /** Label */
+            label: string | null;
+            /** Url */
+            url: string | null;
+        };
         /** EcoRef */
         EcoRef: {
             /**
@@ -503,11 +2985,248 @@ export interface components {
             assigned_by: "source" | "orphafold_mapping";
             /** Id */
             id: string;
-            /**
-             * Label
-             * @default null
-             */
+            /** Label */
             label: string | null;
+        };
+        /** EffectFlag */
+        EffectFlag: {
+            /**
+             * Code
+             * @enum {string}
+             */
+            code: "plddt_below_70" | "gap_frequency_above_0.5" | "reference_residue_mismatch";
+            /** Message */
+            message: string;
+        };
+        /** EffectGroup */
+        EffectGroup: {
+            /**
+             * Empty Message
+             * @description Shown when no value is in the group
+             */
+            empty_message: string | null;
+            evidence_class: components["schemas"]["EvidenceClass"];
+            /**
+             * Id
+             * @enum {string}
+             */
+            id: "computational_predictions" | "experimental_functional" | "curated_annotation" | "structural_context";
+            /** Label */
+            label: string;
+            /** Note */
+            note: string | null;
+            /** Values */
+            values: components["schemas"]["EffectValue"][];
+        };
+        /** EffectMapResidue */
+        EffectMapResidue: {
+            /** Ambiguous */
+            ambiguous: number;
+            /** Likely Benign */
+            likely_benign: number;
+            /** Likely Pathogenic */
+            likely_pathogenic: number;
+            /** Max Pathogenicity */
+            max_pathogenicity: number;
+            /**
+             * Mean Pathogenicity
+             * @description Arithmetic mean over the substitutions in the file
+             */
+            mean_pathogenicity: number;
+            /** Min Pathogenicity */
+            min_pathogenicity: number;
+            /** Position */
+            position: number;
+            /** Reference */
+            reference: string;
+            /** Substitutions */
+            substitutions: number;
+        };
+        /** EffectMapResponse */
+        EffectMapResponse: {
+            /** Class Vocabulary */
+            class_vocabulary: {
+                [key: string]: string;
+            };
+            /**
+             * Direction
+             * @enum {string}
+             */
+            direction: "higher_more_damaging" | "lower_more_damaging" | "positive_destabilising" | "none";
+            evidence: components["schemas"]["Evidence"] | null;
+            /** Flags */
+            flags: components["schemas"]["EffectFlag"][];
+            /** License */
+            license: string | null;
+            /** Limitations */
+            limitations: string[];
+            matrix: components["schemas"]["EffectMatrix"] | null;
+            protein: components["schemas"]["EntityRef"];
+            provenance: components["schemas"]["Provenance"] | null;
+            /** Residues */
+            residues: components["schemas"]["EffectMapResidue"][];
+            /** Scale */
+            scale: string;
+            /** Sequence Length */
+            sequence_length: number | null;
+            /** Sequence Matches Model */
+            sequence_matches_model: boolean | null;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Structure Id */
+            structure_id: string | null;
+            /** Summary Method */
+            summary_method: string;
+            /** Thresholds */
+            thresholds: components["schemas"]["EffectThreshold"][];
+            /** Tool */
+            tool: string;
+        };
+        /** EffectMatrix */
+        EffectMatrix: {
+            /**
+             * Alternates
+             * @description Column order, one-letter codes
+             */
+            alternates: string;
+            /**
+             * Classes
+             * @description Source class strings, same layout
+             */
+            classes: (string | null)[][];
+            /**
+             * Scores
+             * @description One row per residue; null at the reference residue
+             */
+            scores: (number | null)[][];
+        };
+        /**
+         * EffectStructureBasis
+         * @description The structure a structure-based value was computed on.
+         */
+        EffectStructureBasis: {
+            /** Fragment */
+            fragment: string | null;
+            /**
+             * Id
+             * @description pdb:<ID>, afdb:<entryId> or of:<job_id>
+             */
+            id: string;
+            origin: components["schemas"]["StructureOrigin"];
+            /** Residue Plddt */
+            residue_plddt: number | null;
+        };
+        /**
+         * EffectThreshold
+         * @description A bin published by the source, in the source's own words.
+         */
+        EffectThreshold: {
+            /** Defined By */
+            defined_by: string;
+            /** Label */
+            label: string;
+            /** Lower */
+            lower: number | null;
+            /** Upper */
+            upper: number | null;
+        };
+        /** EffectValue */
+        EffectValue: {
+            /** Citation Doi */
+            citation_doi: string | null;
+            /**
+             * Class Label
+             * @description Display wording that names the source
+             */
+            class_label: string | null;
+            /** Commercial Use */
+            commercial_use: ("allowed" | "restricted" | "unknown") | null;
+            /**
+             * Details
+             * @description Further source fields, verbatim
+             */
+            details: {
+                [key: string]: unknown;
+            };
+            /**
+             * Direction
+             * @default none
+             * @enum {string}
+             */
+            direction: "higher_more_damaging" | "lower_more_damaging" | "positive_destabilising" | "none";
+            evidence: components["schemas"]["Evidence"] | null;
+            /** Flags */
+            flags: components["schemas"]["EffectFlag"][];
+            /**
+             * Input Basis
+             * @description sequence, alignment or structure
+             */
+            input_basis: string | null;
+            /**
+             * Key
+             * @description Stable key, e.g. alphamissense.pathogenicity, foldx.ddg
+             */
+            key: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "pathogenicity" | "language_model_llr" | "conservation" | "stability_ddg" | "structural_feature" | "functional_assay" | "curated_feature";
+            /** Label */
+            label: string;
+            /** License */
+            license: string | null;
+            /**
+             * Message
+             * @description Why there is no value, or a caveat
+             */
+            message: string | null;
+            /**
+             * Normalized Class
+             * @description Vocabulary only; never recomputed
+             */
+            normalized_class: string | null;
+            provenance: components["schemas"]["Provenance"] | null;
+            /**
+             * Scale
+             * @description The source's native scale, in words
+             */
+            scale: string | null;
+            /**
+             * Source Class
+             * @description Class string exactly as the source gives it
+             */
+            source_class: string | null;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "ok" | "not_covered" | "unavailable" | "disabled_by_license";
+            structure: components["schemas"]["EffectStructureBasis"] | null;
+            /** Thresholds */
+            thresholds: components["schemas"]["EffectThreshold"][];
+            /** Tool */
+            tool: string | null;
+            /** Tool Version */
+            tool_version: string | null;
+            /** Unit */
+            unit: string | null;
+            /** Value */
+            value: number | string | null;
+        };
+        /**
+         * EngineeredMutations
+         * @description Mutations of a polymer entity as the depositors described them (pdbx_mutation), verbatim.
+         */
+        EngineeredMutations: {
+            /** Description */
+            description: string | null;
+            /** Entity Id */
+            entity_id: string;
+            /** Mutation Count */
+            mutation_count: number | null;
+            /** Mutations */
+            mutations: string[];
         };
         /**
          * EntityRef
@@ -556,12 +3275,8 @@ export interface components {
          * @description One attributable scientific statement.
          */
         Evidence: {
-            /**
-             * Asserted At
-             * @default null
-             */
+            /** Asserted At */
             asserted_at: string | null;
-            /** @default null */
             authoring: components["schemas"]["Authoring"] | null;
             /** Citations */
             citations: components["schemas"]["Citation"][];
@@ -582,13 +3297,11 @@ export interface components {
             derived_from: string[];
             /** @default supports */
             direction: components["schemas"]["EvidenceDirection"];
-            /** @default null */
             eco: components["schemas"]["EcoRef"] | null;
             evidence_class: components["schemas"]["EvidenceClass"];
             /**
              * Generated By
              * @description Job ID for OrphaFold computations
-             * @default null
              */
             generated_by: string | null;
             /** Id */
@@ -600,31 +3313,19 @@ export interface components {
              * @description e.g. manual, auto, text_mining
              */
             modifiers: string[];
-            /** @default null */
             object: components["schemas"]["EvidenceObject"] | null;
-            /**
-             * Predicate
-             * @default null
-             */
+            /** Predicate */
             predicate: string | null;
-            /** @default null */
             source: components["schemas"]["SourceRecord"] | null;
             /**
              * Statement
              * @description The claim in the source's own words
-             * @default null
              */
             statement: string | null;
-            /** @default null */
             strength: components["schemas"]["EvidenceStrength"] | null;
-            /** @default null */
             structure_origin: components["schemas"]["StructureOrigin"] | null;
-            /** @default null */
             subject: components["schemas"]["EntityRef"] | null;
-            /**
-             * Supersedes
-             * @default null
-             */
+            /** Supersedes */
             supersedes: string | null;
         };
         /**
@@ -643,27 +3344,15 @@ export interface components {
             context: {
                 [key: string]: unknown;
             }[];
-            /**
-             * Id
-             * @default null
-             */
+            /** Id */
             id: string | null;
-            /**
-             * Label
-             * @default null
-             */
+            /** Label */
             label: string | null;
             /** Type */
             type: string;
-            /**
-             * Unit
-             * @default null
-             */
+            /** Unit */
             unit: string | null;
-            /**
-             * Value
-             * @default null
-             */
+            /** Value */
             value: string | number | boolean | null;
         };
         /**
@@ -673,15 +3362,11 @@ export interface components {
         EvidenceStrength: {
             /** Criteria */
             criteria: string[];
-            /**
-             * Max Rank
-             * @default null
-             */
+            /** Max Rank */
             max_rank: number | null;
             /**
              * Rank
              * @description Order inside this scheme only
-             * @default null
              */
             rank: number | null;
             /**
@@ -689,15 +3374,9 @@ export interface components {
              * @description e.g. clinvar_review_status, uniprot_eco, plddt, pdb_resolution
              */
             scheme: string;
-            /**
-             * Unit
-             * @default null
-             */
+            /** Unit */
             unit: string | null;
-            /**
-             * Value
-             * @default null
-             */
+            /** Value */
             value: string | number | null;
         };
         /**
@@ -705,6 +3384,29 @@ export interface components {
          * @enum {string}
          */
         ExecutionMode: "retrieval" | "remote_api" | "local_cli" | "gpu_worker";
+        /** ExperimentalStructure */
+        ExperimentalStructure: {
+            /** Chains */
+            chains: components["schemas"]["LedgerChain"][];
+            citation: components["schemas"]["Citation"] | null;
+            /** Deposit Date */
+            deposit_date: string | null;
+            /** Engineered Mutations */
+            engineered_mutations: components["schemas"]["EngineeredMutations"][];
+            evidence: components["schemas"]["Evidence"] | null;
+            /** Ligands */
+            ligands: components["schemas"]["LigandSummary"][];
+            /** R Free */
+            r_free: number | null;
+            /** Release Date */
+            release_date: string | null;
+            /**
+             * Sifts Rank
+             * @description Best rank of any chain of the entry in PDBe SIFTS
+             */
+            sifts_rank: number | null;
+            structure: components["schemas"]["StructureDescriptor"];
+        };
         /** ExploreDisease */
         ExploreDisease: {
             /** Category Id */
@@ -836,6 +3538,46 @@ export interface components {
          * @enum {string}
          */
         ExploreSort: "relevance" | "symbol" | "name" | "pathogenic_variants" | "total_variants" | "publications" | "experimental_structures" | "protein_length";
+        /**
+         * ExternalModel
+         * @description A model listed by 3D-Beacons from another provider. A link-out, not an OrphaFold structure ID.
+         */
+        ExternalModel: {
+            /**
+             * Confidence Avg Local Score
+             * @description On the provider's own scale; see confidence_type
+             */
+            confidence_avg_local_score: number | null;
+            /** Confidence Type */
+            confidence_type: string | null;
+            /** Confidence Version */
+            confidence_version: string | null;
+            /** Coverage */
+            coverage: number | null;
+            /** Created */
+            created: string | null;
+            /**
+             * Model Category
+             * @description 3D-Beacons wording, verbatim
+             */
+            model_category: string | null;
+            /** Model Identifier */
+            model_identifier: string;
+            /** Model Page Url */
+            model_page_url: string | null;
+            /** Model Url */
+            model_url: string | null;
+            /** Oligomeric State */
+            oligomeric_state: string | null;
+            /** Provider */
+            provider: string | null;
+            /** Sequence Identity */
+            sequence_identity: number | null;
+            /** Uniprot End */
+            uniprot_end: number | null;
+            /** Uniprot Start */
+            uniprot_start: number | null;
+        };
         /** FacetValue */
         FacetValue: {
             /** Count */
@@ -848,6 +3590,104 @@ export interface components {
             table: number | null;
             /** Value */
             value: string;
+        };
+        /**
+         * Feature
+         * @description One positional annotation. Positions are UniProt canonical residue numbers.
+         */
+        Feature: {
+            /** Alternatives */
+            alternatives: string[];
+            /**
+             * Cross References
+             * @description CURIEs the source attaches, e.g. dbSNP:rs128620183
+             */
+            cross_references: string[];
+            /** Description */
+            description: string | null;
+            /** End */
+            end: number | null;
+            /** End Modifier */
+            end_modifier: string | null;
+            /** Evidence */
+            evidence: components["schemas"]["Evidence"][];
+            /** Id */
+            id: string;
+            ligand: components["schemas"]["FeatureLigand"] | null;
+            /**
+             * Original
+             * @description Reference residues of a variant or mutagenesis
+             */
+            original: string | null;
+            /**
+             * Signatures
+             * @description InterPro member database signatures
+             */
+            signatures: {
+                [key: string]: unknown;
+            }[];
+            /**
+             * Source
+             * @description Source adapter ID: uniprot or interpro
+             */
+            source: string;
+            /**
+             * Source Feature Id
+             * @description e.g. VAR_006216, PRO_0000088065, IPR000719
+             */
+            source_feature_id: string | null;
+            /** Start */
+            start: number | null;
+            /**
+             * Start Modifier
+             * @description EXACT, OUTSIDE or UNKNOWN (UniProt)
+             */
+            start_modifier: string | null;
+            /** Track */
+            track: string;
+            /**
+             * Type
+             * @description The source's own feature type, e.g. Domain, Binding site, family
+             */
+            type: string;
+            /** Url */
+            url: string | null;
+            /**
+             * Variant Id
+             * @description GENE-p.Ref3PosAlt3 for a single substitution
+             */
+            variant_id: string | null;
+        };
+        /** FeatureLigand */
+        FeatureLigand: {
+            /**
+             * Id
+             * @description ChEBI CURIE when UniProt gives one
+             */
+            id: string | null;
+            /** Label */
+            label: string | null;
+            /** Name */
+            name: string;
+            /** Note */
+            note: string | null;
+            /** Url */
+            url: string | null;
+        };
+        /** FeatureTrack */
+        FeatureTrack: {
+            /** Count */
+            count: number;
+            /** Features */
+            features: components["schemas"]["Feature"][];
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /** Source */
+            source: string;
+            /** Source Name */
+            source_name: string;
         };
         /** Features */
         Features: {
@@ -876,6 +3716,338 @@ export interface components {
             message: string;
             /** Type */
             type?: string | null;
+        };
+        /** ForkRequest */
+        ForkRequest: {
+            /** Title */
+            title?: string | null;
+        };
+        /**
+         * GeneDisease
+         * @description One IUIS entry naming the gene.
+         */
+        GeneDisease: {
+            /** Category Id */
+            category_id: string | null;
+            /** Category Name */
+            category_name: string | null;
+            /** Category Table */
+            category_table: number | null;
+            /** Href */
+            href: string;
+            /** Id */
+            id: string;
+            /** Inheritance Codes */
+            inheritance_codes: string[];
+            /**
+             * Inheritance Raw
+             * @description The IUIS inheritance string
+             */
+            inheritance_raw: string | null;
+            /** Inheritance Terms */
+            inheritance_terms: components["schemas"]["GeneDiseaseTerm"][];
+            /**
+             * Is Phenocopy
+             * @default false
+             */
+            is_phenocopy: boolean;
+            /**
+             * Mechanism
+             * @description As stated by IUIS; empty when IUIS states none
+             */
+            mechanism: string[];
+            /** Mondo */
+            mondo: string[];
+            /** Name */
+            name: string;
+            /** Omim */
+            omim: string[];
+            /** Orphanet */
+            orphanet: string[];
+            /** Sources */
+            sources: components["schemas"]["RecordSource"][];
+            /** Subcategory Id */
+            subcategory_id: string | null;
+            /** Subcategory Name */
+            subcategory_name: string | null;
+        };
+        /** GeneDiseaseTerm */
+        GeneDiseaseTerm: {
+            /** Id */
+            id: string;
+            /** Label */
+            label: string | null;
+        };
+        /** GeneProteinSummary */
+        GeneProteinSummary: {
+            /** Accession */
+            accession: string;
+            /** Entry Name */
+            entry_name: string | null;
+            /**
+             * Family
+             * @description UniProt 'Belongs to the ...' statement
+             */
+            family: string | null;
+            /** Function */
+            function: components["schemas"]["TextAnnotation"][];
+            /** Isoform Count */
+            isoform_count: number | null;
+            /** Length */
+            length: number | null;
+            /** Mass Da */
+            mass_da: number | null;
+            /** Name */
+            name: string | null;
+            protein: components["schemas"]["EntityRef"];
+            provenance: components["schemas"]["Provenance"] | null;
+            /** Reviewed */
+            reviewed: boolean | null;
+        };
+        /** GeneResponse */
+        GeneResponse: {
+            /** Biotype */
+            biotype: string | null;
+            /** Chromosome */
+            chromosome: string | null;
+            /** Diseases */
+            diseases: components["schemas"]["GeneDisease"][];
+            /** Ensembl Gene Id */
+            ensembl_gene_id: string | null;
+            /** Ensembl Gene Version */
+            ensembl_gene_version: number | null;
+            ensembl_provenance: components["schemas"]["Provenance"] | null;
+            gene: components["schemas"]["EntityRef"];
+            /** Hgnc Id */
+            hgnc_id: string | null;
+            /**
+             * In Catalog
+             * @description False for a gene outside the IEI catalog, resolved live
+             */
+            in_catalog: boolean;
+            /**
+             * Is Flagship
+             * @default false
+             */
+            is_flagship: boolean;
+            location: components["schemas"]["GenomicLocation"] | null;
+            /** Locus Type */
+            locus_type: string | null;
+            /** Name */
+            name: string | null;
+            /** Ncbi Gene Id */
+            ncbi_gene_id: string | null;
+            protein: components["schemas"]["GeneProteinSummary"] | null;
+            /**
+             * Record Sources
+             * @description Seed records behind the catalog fields
+             */
+            record_sources: components["schemas"]["RecordSource"][];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Statistics */
+            statistics: components["schemas"]["GeneStatistic"][];
+            /** Symbol */
+            symbol: string;
+            transcripts: components["schemas"]["GeneTranscripts"];
+            /** Uniprot Accession */
+            uniprot_accession: string | null;
+        };
+        /**
+         * GeneStatistic
+         * @description One single-source count with its definition. A null value means the source had none.
+         */
+        GeneStatistic: {
+            /** Definition */
+            definition: string;
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Retrieved At */
+            retrieved_at: string | null;
+            source: components["schemas"]["RecordSource"] | null;
+            /** Value */
+            value: number | boolean | null;
+        };
+        /** GeneTranscripts */
+        GeneTranscripts: {
+            /** Mane Plus Clinical */
+            mane_plus_clinical: components["schemas"]["Transcript"][];
+            mane_select: components["schemas"]["Transcript"] | null;
+            /** Others */
+            others: components["schemas"]["Transcript"][];
+            /**
+             * Total
+             * @description Transcripts Ensembl lists; null when Ensembl did not answer
+             */
+            total: number | null;
+        };
+        /** GeneVariantsResponse */
+        GeneVariantsResponse: {
+            /**
+             * Clinvar Release
+             * @description Date of the ClinVar build queried
+             */
+            clinvar_release: string | null;
+            filters: components["schemas"]["VariantFilters"];
+            gene: components["schemas"]["EntityRef"];
+            /** Has More */
+            readonly has_more: boolean;
+            /** Items */
+            items: components["schemas"]["VariantSummary"][];
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            protein: components["schemas"]["EntityRef"] | null;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            summary: components["schemas"]["VariantCounts"];
+            /** Total */
+            total: number;
+            /**
+             * Truncated
+             * @description True when only pathogenic and likely pathogenic ClinVar records were loaded
+             * @default false
+             */
+            truncated: boolean;
+        };
+        /** GenomicLocation */
+        GenomicLocation: {
+            /** Assembly */
+            assembly: string | null;
+            /** Chromosome */
+            chromosome: string | null;
+            /** End */
+            end: number | null;
+            /** Start */
+            start: number | null;
+            /** Strand */
+            strand: number | null;
+        };
+        /** GlobalDifference */
+        GlobalDifference: {
+            /** Residues All */
+            residues_all: number;
+            /** Residues Confident */
+            residues_confident: number;
+            /**
+             * Rmsd Ca All
+             * @description Angstroms, every residue of the construct
+             */
+            rmsd_ca_all: number;
+            /**
+             * Rmsd Ca Confident
+             * @description Angstroms, residues with pLDDT of at least the threshold in both models
+             */
+            rmsd_ca_confident: number | null;
+        };
+        /** GnomadAllele */
+        GnomadAllele: {
+            /** Consequence */
+            consequence: string | null;
+            evidence: components["schemas"]["Evidence"] | null;
+            /** @description Null: not seen in exomes */
+            exome: components["schemas"]["GnomadFrequency"] | null;
+            /** Flags */
+            flags: string[];
+            /** @description Null: not seen in genomes */
+            genome: components["schemas"]["GnomadFrequency"] | null;
+            /** Hgvsc */
+            hgvsc: string | null;
+            /** Hgvsp */
+            hgvsp: string | null;
+            /** Rsids */
+            rsids: string[];
+            /** Transcript Id */
+            transcript_id: string | null;
+            /** Url */
+            url: string | null;
+            /** Variant Id */
+            variant_id: string;
+        };
+        /** GnomadFrequency */
+        GnomadFrequency: {
+            /** Allele Count */
+            allele_count: number | null;
+            /** Allele Frequency */
+            allele_frequency: number | null;
+            /** Allele Number */
+            allele_number: number | null;
+            /** Filters */
+            filters: string[];
+            /** Hemizygote Count */
+            hemizygote_count: number | null;
+            /** Homozygote Count */
+            homozygote_count: number | null;
+        };
+        /**
+         * GnomadObservation
+         * @description Presence in gnomAD. Absence is 'not_observed', never an allele frequency of zero.
+         */
+        GnomadObservation: {
+            /** Alleles */
+            alleles: components["schemas"]["GnomadAllele"][];
+            /** Dataset */
+            dataset: string;
+            /** Label */
+            label: string;
+            /** Matched By */
+            matched_by: ("clinvar_variation_id" | "genomic_position" | "protein_change") | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "observed" | "not_observed" | "unknown";
+            /**
+             * X Linked
+             * @description True: read the hemizygote count
+             */
+            x_linked: boolean | null;
+        };
+        /** GraphEdge */
+        GraphEdge: {
+            /** Evidence */
+            evidence: components["schemas"]["Evidence"][];
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /**
+             * Layer
+             * @description Source of the relationship: iuis, uniprot, reactome, intact or string
+             */
+            layer: string;
+            /** Source */
+            source: string;
+            /** Target */
+            target: string;
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "caused_by" | "encodes" | "participates_in" | "interacts_with" | "physically_associated_with";
+        };
+        /** GraphNode */
+        GraphNode: {
+            /** Id */
+            id: string;
+            /**
+             * In Catalog
+             * @default false
+             */
+            in_catalog: boolean;
+            /** Label */
+            label: string;
+            ref: components["schemas"]["EntityRef"] | null;
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "disease" | "gene" | "protein" | "pathway" | "interactor";
+            /** Url */
+            url: string | null;
         };
         /** Hardware */
         Hardware: {
@@ -928,6 +4100,189 @@ export interface components {
             version: string;
             /** Worker */
             worker: string;
+        };
+        /** HypothesisCreate */
+        HypothesisCreate: {
+            /** Label */
+            label?: string | null;
+            /** Note */
+            note?: string | null;
+            origin?: components["schemas"]["ItemOriginInput"] | null;
+            /** Parent Item Id */
+            parent_item_id?: string | null;
+            /** Statement */
+            statement: string;
+            /** @default draft */
+            status: components["schemas"]["HypothesisStatus"];
+            /**
+             * Supporting Item Ids
+             * @description Project items the statement rests on; at least one
+             */
+            supporting_item_ids: string[];
+        };
+        /** HypothesisInput */
+        HypothesisInput: {
+            /** Statement */
+            statement: string;
+            /** @default draft */
+            status: components["schemas"]["HypothesisStatus"];
+            /**
+             * Supporting Item Ids
+             * @description Project items the statement rests on; at least one
+             */
+            supporting_item_ids: string[];
+        };
+        /** HypothesisOut */
+        HypothesisOut: {
+            /**
+             * Derived From
+             * @description Item, evidence and job IDs the statement rests on
+             */
+            derived_from: string[];
+            /** @description The hypothesis as an evidence record, class orphafold_hypothesis */
+            record: components["schemas"]["Evidence"];
+            /** Statement */
+            statement: string;
+            status: components["schemas"]["HypothesisStatus"];
+            /** Supporting Item Ids */
+            supporting_item_ids: string[];
+        };
+        /**
+         * HypothesisStatus
+         * @enum {string}
+         */
+        HypothesisStatus: "draft" | "open" | "supported" | "contradicted" | "retired";
+        /** HypothesisUpdate */
+        HypothesisUpdate: {
+            /** Statement */
+            statement?: string | null;
+            status?: components["schemas"]["HypothesisStatus"] | null;
+            /** Supporting Item Ids */
+            supporting_item_ids?: string[] | null;
+        };
+        /** IndicationRecord */
+        IndicationRecord: {
+            /** Efo Id */
+            efo_id: string | null;
+            /** Efo Term */
+            efo_term: string | null;
+            /** Indication Id */
+            indication_id: string;
+            /** Max Phase For Indication */
+            max_phase_for_indication: number | null;
+            /** Mesh Heading */
+            mesh_heading: string | null;
+            /** Mesh Id */
+            mesh_id: string | null;
+            /** References */
+            references: {
+                [key: string]: string | null;
+            }[];
+            /**
+             * Source
+             * @default chembl
+             * @constant
+             */
+            source: "chembl";
+        };
+        /** InterProEntry */
+        InterProEntry: {
+            /** Accession */
+            accession: string;
+            evidence: components["schemas"]["Evidence"] | null;
+            /** Go Terms */
+            go_terms: {
+                [key: string]: unknown;
+            }[];
+            /** Locations */
+            locations: {
+                [key: string]: unknown;
+            }[];
+            /** Name */
+            name: string | null;
+            /** Signatures */
+            signatures: {
+                [key: string]: unknown;
+            }[];
+            /** Type */
+            type: string | null;
+            /** Url */
+            url: string | null;
+        };
+        /** InteractionsResponse */
+        InteractionsResponse: {
+            curated: components["schemas"]["CuratedLayer"];
+            gene: components["schemas"]["EntityRef"] | null;
+            protein: components["schemas"]["EntityRef"];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            string_physical: components["schemas"]["StringLayer"];
+        };
+        /** Isoform */
+        Isoform: {
+            /**
+             * Id
+             * @description UniProt isoform ID, e.g. Q06187-1
+             */
+            id: string;
+            /**
+             * Is Canonical
+             * @default false
+             */
+            is_canonical: boolean;
+            /** Name */
+            name: string | null;
+            /** Note */
+            note: string | null;
+            /**
+             * Sequence Status
+             * @description Displayed, Described, External or Not described
+             */
+            sequence_status: string | null;
+            /** Synonyms */
+            synonyms: string[];
+        };
+        /**
+         * ItemKind
+         * @enum {string}
+         */
+        ItemKind: "disease" | "gene" | "variant" | "protein" | "structure" | "residue" | "compound" | "paper" | "job" | "note" | "hypothesis" | "screenshot";
+        /**
+         * ItemOrigin
+         * @description Where an item came from: the view it was saved from and the trail node it followed.
+         */
+        ItemOrigin: {
+            /** Created At */
+            created_at: string | null;
+            /** Forked From Item Id */
+            forked_from_item_id: string | null;
+            /** Note */
+            note: string | null;
+            /** Parent Item Id */
+            parent_item_id: string | null;
+            /**
+             * Route
+             * @description App path the item was saved from, with its query
+             */
+            route: string | null;
+            /**
+             * Url State
+             * @description URL parameters of that view
+             */
+            url_state: {
+                [key: string]: string;
+            };
+        };
+        /** ItemOriginInput */
+        ItemOriginInput: {
+            /** Note */
+            note?: string | null;
+            /** Route */
+            route?: string | null;
+            /** Url State */
+            url_state?: {
+                [key: string]: string;
+            };
         };
         /** JobCreate */
         JobCreate: {
@@ -1089,6 +4444,856 @@ export interface components {
          * @enum {string}
          */
         JobStatus: "queued" | "running" | "succeeded" | "failed" | "cancelled";
+        /** LabAgent */
+        LabAgent: {
+            /**
+             * Decision
+             * @description The scientific decision the agent owns
+             */
+            decision: string;
+            /** Harness */
+            harness: string;
+            /** Id */
+            id: string;
+            /** Inputs */
+            inputs: string;
+            /** Model */
+            model: string;
+            /** Orchestration Tools */
+            orchestration_tools: string[];
+            /** Output */
+            output: string;
+            /** Policies */
+            policies: string[];
+            /** Prompt */
+            prompt: string | null;
+            /** Prompt Path */
+            prompt_path: string;
+            /** Spec Path */
+            spec_path: string;
+            /** Title */
+            title: string;
+            /** Tools */
+            tools: components["schemas"]["LabAgentTool"][];
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabAgentTool */
+        LabAgentTool: {
+            /** Description */
+            description: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "retrieval" | "record" | "experiment";
+            /** Name */
+            name: string;
+            /** Requires Approval */
+            requires_approval: boolean;
+        } & {
+            [key: string]: unknown;
+        };
+        /**
+         * LabAgentsResponse
+         * @description Agent specifications and policies of the lab, as generated from the registry.
+         */
+        LabAgentsResponse: {
+            /** Agents */
+            agents: components["schemas"]["LabAgent"][];
+            /** Approval */
+            approval: {
+                [key: string]: unknown;
+            };
+            baseline: components["schemas"]["LabAgent"];
+            /** Closing Tools */
+            closing_tools: string[];
+            /** Generated From */
+            generated_from: string;
+            /** Mechanism Classes */
+            mechanism_classes: {
+                [key: string]: string;
+            };
+            /** Orchestration */
+            orchestration: {
+                [key: string]: unknown;
+            };
+            /** Policies */
+            policies: components["schemas"]["LabPolicy"][];
+            /** Tests */
+            tests: {
+                [key: string]: components["schemas"]["LabTest"];
+            };
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabApprovalInput */
+        LabApprovalInput: {
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "approved" | "rejected";
+            /** Note */
+            note?: string | null;
+        };
+        /** LabApprovalResult */
+        LabApprovalResult: {
+            /** Approval Id */
+            approval_id: string;
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "approved" | "rejected";
+            event: components["schemas"]["LabEvent"];
+            /** Run Id */
+            run_id: string;
+        };
+        /**
+         * LabBenchmark
+         * @description lab/experiments/results/latest.json: the lab measured against the single-agent control.
+         */
+        LabBenchmark: {
+            /** Arms */
+            arms: components["schemas"]["LabBenchmarkArm"][];
+            /** Caveats */
+            caveats: string[];
+            comparison: components["schemas"]["LabBenchmarkComparison"] | null;
+            /** Conditions */
+            conditions: {
+                [key: string]: unknown;
+            };
+            /** Controls */
+            controls: string[];
+            /** Generated At */
+            generated_at: string | null;
+            /** N Variants */
+            n_variants: number | null;
+            /** Next Experiment */
+            next_experiment: string | null;
+            /** Per Variant */
+            per_variant: components["schemas"]["LabBenchmarkVariant"][];
+            /** Question */
+            question: string | null;
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabBenchmarkAgreement */
+        LabBenchmarkAgreement: {
+            /**
+             * N Agree
+             * @default 0
+             */
+            n_agree: number;
+            /**
+             * N With Reference
+             * @default 0
+             */
+            n_with_reference: number;
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabBenchmarkArm */
+        LabBenchmarkArm: {
+            agreement: components["schemas"]["LabBenchmarkAgreement"] | null;
+            /** Decision Changed */
+            decision_changed: number | null;
+            /**
+             * Id
+             * @enum {string}
+             */
+            id: "specialist_lab" | "single_agent_baseline";
+            /** Label */
+            label: string | null;
+            /** Mean Distinct Sources */
+            mean_distinct_sources: number | null;
+            /** Mean Evidence Items */
+            mean_evidence_items: number | null;
+            /** Mean Tool Calls */
+            mean_tool_calls: number | null;
+            /** Median Wall Seconds */
+            median_wall_seconds: number | null;
+            /**
+             * Runs
+             * @default 0
+             */
+            runs: number;
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabBenchmarkComparison */
+        LabBenchmarkComparison: {
+            /** Baseline */
+            baseline: number | null;
+            /** Lab */
+            lab: number | null;
+            /** Metric */
+            metric: string | null;
+            /** Note */
+            note: string | null;
+            /** Ratio */
+            ratio: number | null;
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabBenchmarkVariant */
+        LabBenchmarkVariant: {
+            /** Agrees */
+            agrees: boolean | null;
+            /**
+             * Arm
+             * @enum {string}
+             */
+            arm: "specialist_lab" | "single_agent_baseline";
+            /** Decision Changed */
+            decision_changed: boolean | null;
+            /** Distinct Sources */
+            distinct_sources: number | null;
+            /** Favoured After */
+            favoured_after: string | null;
+            /** Reference Mechanism */
+            reference_mechanism: string | null;
+            /** Run Id */
+            run_id: string | null;
+            /** Variant Id */
+            variant_id: string;
+            /** Wall Seconds */
+            wall_seconds: number | null;
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabBudget */
+        LabBudget: {
+            /** Max Compute Seconds */
+            max_compute_seconds: number;
+            /** Max Tool Calls */
+            max_tool_calls: number;
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabBudgetInput */
+        LabBudgetInput: {
+            /** Max Compute Seconds */
+            max_compute_seconds?: number | null;
+            /** Max Tool Calls */
+            max_tool_calls?: number | null;
+        };
+        /**
+         * LabEvent
+         * @description One line of record.jsonl, the shared research record.
+         */
+        LabEvent: {
+            /**
+             * Agent
+             * @enum {string}
+             */
+            agent: "orchestrator" | "literature" | "knowledge_graph" | "insight" | "planner" | "safety" | "runner" | "analysis" | "human";
+            /** At */
+            at: string;
+            /** Payload */
+            payload: {
+                [key: string]: unknown;
+            };
+            /** Refs */
+            refs: string[];
+            /** Run Id */
+            run_id: string;
+            /** Seq */
+            seq: number;
+            /** Sources */
+            sources: components["schemas"]["LabSource"][];
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "objective" | "handoff" | "evidence" | "gap" | "hypothesis" | "test_candidate" | "plan" | "approval_request" | "approval_decision" | "experiment_started" | "experiment_result" | "interpretation" | "decision" | "next_experiment" | "note";
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabEventsPage */
+        LabEventsPage: {
+            /** Events */
+            events: components["schemas"]["LabEvent"][];
+            /**
+             * Last Seq
+             * @description Highest seq in the record; pass it as after to get what follows
+             */
+            last_seq: number;
+            /** Pending Approvals */
+            pending_approvals: string[];
+            /** Run Id */
+            run_id: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "running" | "awaiting_approval" | "succeeded" | "failed" | "cancelled";
+        };
+        /** LabMetrics */
+        LabMetrics: {
+            /**
+             * Approvals
+             * @default 0
+             */
+            approvals: number;
+            /**
+             * Distinct Sources
+             * @default 0
+             */
+            distinct_sources: number;
+            /**
+             * Evidence Items
+             * @default 0
+             */
+            evidence_items: number;
+            /**
+             * Hypotheses
+             * @default 0
+             */
+            hypotheses: number;
+            /**
+             * Tests Considered
+             * @default 0
+             */
+            tests_considered: number;
+            /**
+             * Tool Calls
+             * @default 0
+             */
+            tool_calls: number;
+            /** Wall Seconds */
+            wall_seconds: number | null;
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabOmnigent */
+        LabOmnigent: {
+            /** Harness */
+            harness: string | null;
+            /** Model */
+            model: string | null;
+            /**
+             * Models
+             * @description Model of every agent, by agent ID
+             */
+            models: {
+                [key: string]: string;
+            };
+            /** Session Id */
+            session_id: string | null;
+            /** Version */
+            version: string | null;
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabOutcome */
+        LabOutcome: {
+            /**
+             * Decision Changed
+             * @default false
+             */
+            decision_changed: boolean;
+            /**
+             * Favoured After
+             * @description Mechanism class favoured after the test
+             */
+            favoured_after: string | null;
+            /**
+             * Favoured Before
+             * @description Mechanism class the starting evidence favoured
+             */
+            favoured_before: string | null;
+            /** Next Experiment */
+            next_experiment: string | null;
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabPolicy */
+        LabPolicy: {
+            /** Description */
+            description: string;
+            /** Handler */
+            handler: string;
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Phases */
+            phases: string[];
+        } & {
+            [key: string]: unknown;
+        };
+        /**
+         * LabRun
+         * @description run.json of one lab run.
+         */
+        LabRun: {
+            budget: components["schemas"]["LabBudget"];
+            /** Error */
+            error: string | null;
+            /** Finished At */
+            finished_at: string | null;
+            metrics: components["schemas"]["LabMetrics"];
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "specialist_lab" | "single_agent_baseline";
+            /** Objective */
+            objective: string;
+            omnigent: components["schemas"]["LabOmnigent"];
+            outcome: components["schemas"]["LabOutcome"];
+            /**
+             * Pending Approvals
+             * @description IDs of approval requests that wait for a human decision
+             */
+            pending_approvals: string[];
+            /** Run Id */
+            run_id: string;
+            /** Spec Hash */
+            spec_hash: string | null;
+            /** Started At */
+            started_at: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "running" | "awaiting_approval" | "succeeded" | "failed" | "cancelled";
+            subject: components["schemas"]["LabSubject"];
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabRunCreate */
+        LabRunCreate: {
+            budget?: components["schemas"]["LabBudgetInput"] | null;
+            /**
+             * Mode
+             * @default specialist_lab
+             * @enum {string}
+             */
+            mode: "specialist_lab" | "single_agent_baseline";
+            /**
+             * Objective
+             * @description The scientist's objective
+             */
+            objective?: string | null;
+            /**
+             * Variant Id
+             * @description GENE-p.Ref3PosAlt3, for example BTK-p.Arg28His
+             */
+            variant_id: string;
+        };
+        /** LabRunDetail */
+        LabRunDetail: {
+            budget: components["schemas"]["LabBudget"];
+            /** Error */
+            error: string | null;
+            /** Events */
+            events: components["schemas"]["LabEvent"][];
+            /** Finished At */
+            finished_at: string | null;
+            metrics: components["schemas"]["LabMetrics"];
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "specialist_lab" | "single_agent_baseline";
+            /** Objective */
+            objective: string;
+            omnigent: components["schemas"]["LabOmnigent"];
+            outcome: components["schemas"]["LabOutcome"];
+            /**
+             * Pending Approvals
+             * @description IDs of approval requests that wait for a human decision
+             */
+            pending_approvals: string[];
+            /**
+             * Report
+             * @description The final report in markdown, when one was recorded
+             */
+            report: string | null;
+            /** Run Id */
+            run_id: string;
+            /** Spec Hash */
+            spec_hash: string | null;
+            /** Started At */
+            started_at: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "running" | "awaiting_approval" | "succeeded" | "failed" | "cancelled";
+            subject: components["schemas"]["LabSubject"];
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabRunList */
+        LabRunList: {
+            /** Items */
+            items: components["schemas"]["LabRun"][];
+            /** Total */
+            total: number;
+        };
+        /** LabRunStarted */
+        LabRunStarted: {
+            /** Events Url */
+            events_url: string;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "specialist_lab" | "single_agent_baseline";
+            /** Run Id */
+            run_id: string;
+            /** Run Url */
+            run_url: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "running" | "awaiting_approval" | "succeeded" | "failed" | "cancelled";
+        };
+        /** LabSource */
+        LabSource: {
+            /** Database */
+            database: string;
+            /** Record Id */
+            record_id: string;
+            /** Url */
+            url: string;
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabSubject */
+        LabSubject: {
+            /** Accession */
+            accession: string | null;
+            /** Alternate Residue */
+            alternate_residue: string | null;
+            /** Gene */
+            gene: string | null;
+            /** Position */
+            position: number | null;
+            /** Protein Change */
+            protein_change: string | null;
+            /** Reference Residue */
+            reference_residue: string | null;
+            /** Variant Id */
+            variant_id: string;
+        } & {
+            [key: string]: unknown;
+        };
+        /** LabTest */
+        LabTest: {
+            /** Bears On */
+            bears_on: {
+                [key: string]: string;
+            };
+            /** Controls */
+            controls: string[];
+            /** Cost */
+            cost: {
+                [key: string]: number;
+            };
+            /** Limitations */
+            limitations: string[];
+            /** Measures */
+            measures: string;
+            /** Requires Approval */
+            requires_approval: boolean;
+            /** Title */
+            title: string;
+            /** Tool */
+            tool: string;
+        } & {
+            [key: string]: unknown;
+        };
+        /**
+         * LedgerChain
+         * @description One chain of a PDB entry mapped to the protein by SIFTS, in UniProt numbering.
+         */
+        LedgerChain: {
+            /**
+             * Chain Id
+             * @description Author chain ID
+             */
+            chain_id: string;
+            /**
+             * Coverage
+             * @description Fraction of the UniProt sequence, as PDBe reports it
+             */
+            coverage: number | null;
+            /** Entity Id */
+            entity_id: number | null;
+            /**
+             * Observed Regions
+             * @description Residues with coordinates; empty when PDBe lists none
+             */
+            observed_regions: components["schemas"]["ResidueRange"][];
+            /**
+             * Sifts Rank
+             * @description Position in the PDBe best_structures list, from 1
+             */
+            sifts_rank: number;
+            /** Unp End */
+            unp_end: number;
+            /** Unp Start */
+            unp_start: number;
+        };
+        /** LigandInstance */
+        LigandInstance: {
+            /** Author Seq Id */
+            author_seq_id: string | null;
+            /**
+             * Chain Id
+             * @description Author chain ID
+             */
+            chain_id: string | null;
+            /** Residues */
+            residues: components["schemas"]["BindingResidue"][];
+            /** Struct Asym Id */
+            struct_asym_id: string | null;
+        };
+        /** LigandSummary */
+        LigandSummary: {
+            /**
+             * Chains
+             * @description Author chain IDs the ligand is assigned to
+             */
+            chains: string[];
+            /**
+             * Common Additive
+             * @description Component ID is on OrphaFold's fixed list of common crystallisation and buffer additives. The entry itself does not say whether the molecule is functionally relevant.
+             * @default false
+             */
+            common_additive: boolean;
+            /**
+             * Comp Id
+             * @description PDB chemical component ID
+             */
+            comp_id: string;
+            /** Formula */
+            formula: string | null;
+            /** Formula Weight */
+            formula_weight: number | null;
+            /** Inchikey */
+            inchikey: string | null;
+            /** Name */
+            name: string | null;
+            /** Smiles */
+            smiles: string | null;
+            /** Url */
+            url: string | null;
+        };
+        /** Lineage */
+        Lineage: {
+            /**
+             * Fork Count
+             * @description Projects in this lineage other than the root
+             */
+            fork_count: number;
+            /** Fork Depth */
+            fork_depth: number;
+            /** Forked From Project Id */
+            forked_from_project_id: string | null;
+            /** Forked From Snapshot Id */
+            forked_from_snapshot_id: string | null;
+            /** Forked From Title */
+            forked_from_title: string | null;
+            /** Root Project Id */
+            root_project_id: string;
+        };
+        /**
+         * LiteratureContext
+         * @description What the request resolved to, so the interface can state what was searched.
+         */
+        LiteratureContext: {
+            /** Accession */
+            accession: string | null;
+            /** Disease */
+            disease: string | null;
+            /** Disease Name */
+            disease_name: string | null;
+            /** Gene */
+            gene: string | null;
+            /**
+             * Kind
+             * @default all
+             * @enum {string}
+             */
+            kind: "all" | "review" | "primary";
+            /** Q */
+            q: string | null;
+            /** Residue */
+            residue: string | null;
+            /** Residue Terms */
+            residue_terms: string[];
+            /**
+             * Sort
+             * @default relevance
+             * @enum {string}
+             */
+            sort: "relevance" | "cited" | "date";
+            /** Variant */
+            variant: string | null;
+            /** Variant Terms */
+            variant_terms: string[];
+        };
+        /** LiteraturePublication */
+        LiteraturePublication: {
+            /**
+             * Abstract
+             * @description Null when Europe PMC holds no abstract
+             */
+            abstract: string | null;
+            /** Author String */
+            author_string: string | null;
+            /** Authors */
+            authors: string[];
+            /**
+             * Cited By Count
+             * @description Europe PMC citation count
+             */
+            cited_by_count: number | null;
+            /** Doi */
+            doi: string | null;
+            /** Doi Url */
+            doi_url: string | null;
+            evidence: components["schemas"]["Evidence"] | null;
+            /** Full Text Url */
+            full_text_url: string | null;
+            /** Is Open Access */
+            is_open_access: boolean | null;
+            /**
+             * Is Review
+             * @default false
+             */
+            is_review: boolean;
+            /** Journal */
+            journal: string | null;
+            /** Journal Abbreviation */
+            journal_abbreviation: string | null;
+            /**
+             * License
+             * @description Article licence as Europe PMC reports it
+             */
+            license: string | null;
+            /** Pmcid */
+            pmcid: string | null;
+            /** Pmid */
+            pmid: string | null;
+            /** Publication Types */
+            publication_types: string[];
+            /**
+             * Published
+             * @description First publication date, ISO
+             */
+            published: string | null;
+            /** Pubmed Url */
+            pubmed_url: string | null;
+            /** Relevance */
+            relevance: components["schemas"]["RelevanceReason"][];
+            /** Title */
+            title: string;
+            /**
+             * Url
+             * @description Europe PMC record page
+             */
+            url: string | null;
+            /** Year */
+            year: number | null;
+        };
+        /** LiteratureRecordResponse */
+        LiteratureRecordResponse: {
+            publication: components["schemas"]["LiteraturePublication"] | null;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+        };
+        /** LiteratureResponse */
+        LiteratureResponse: {
+            context: components["schemas"]["LiteratureContext"];
+            /**
+             * Has More
+             * @default false
+             */
+            has_more: boolean;
+            /** Highly Cited Threshold */
+            highly_cited_threshold: number;
+            /** Items */
+            items: components["schemas"]["LiteraturePublication"][];
+            /** Notes */
+            notes: string[];
+            /**
+             * Page
+             * @default 1
+             */
+            page: number;
+            /**
+             * Page Size
+             * @default 25
+             */
+            page_size: number;
+            /**
+             * Query
+             * @description The Europe PMC query that was run, verbatim
+             */
+            query: string | null;
+            /**
+             * Query Url
+             * @description The same search on europepmc.org
+             */
+            query_url: string | null;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /**
+             * Total
+             * @description Hits upstream; null when the source did not answer
+             */
+            total: number | null;
+        };
+        /** LocalDifference */
+        LocalDifference: {
+            /** Centre Position */
+            centre_position: number;
+            /** Radius */
+            radius: number;
+            /** Residues */
+            residues: number;
+            /**
+             * Rmsd Ca Global Fit
+             * @description After the construct-wide fit
+             */
+            rmsd_ca_global_fit: number | null;
+            /**
+             * Rmsd Ca Local Fit
+             * @description After a fit on these residues only
+             */
+            rmsd_ca_local_fit: number | null;
+            /** Scope */
+            scope: string;
+        };
+        /**
+         * Lookup
+         * @description One call the assistant made to an OrphaFold service.
+         */
+        Lookup: {
+            /**
+             * Evidence Count
+             * @default 0
+             */
+            evidence_count: number;
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /** Message */
+            message: string | null;
+            /** Ok */
+            ok: boolean;
+            /** Tool */
+            tool: string;
+        };
         /** ManifestArtifact */
         ManifestArtifact: {
             /** Artifact Id */
@@ -1380,6 +5585,421 @@ export interface components {
             /** Xrefs */
             xrefs: string[];
         };
+        /** Masking */
+        Masking: {
+            /** Masked Ranges */
+            masked_ranges: components["schemas"]["ResidueRange"][];
+            /** Masked Residues */
+            masked_residues: number;
+            /** Plddt Threshold */
+            plddt_threshold: number;
+            /** Rule */
+            rule: string;
+            /** Total Residues */
+            total_residues: number;
+        };
+        /**
+         * MatchKind
+         * @description How the query reached the result, from strongest to weakest.
+         * @enum {string}
+         */
+        MatchKind: "identifier" | "exact" | "alias" | "prefix" | "token" | "fuzzy" | "related" | "live";
+        /** MaveScoreSet */
+        MaveScoreSet: {
+            /**
+             * Assay
+             * @description The score set's short description
+             */
+            assay: string | null;
+            /** Covers Residue */
+            covers_residue: boolean;
+            /**
+             * Declared Offset
+             * @description Offset as the record states it
+             */
+            declared_offset: number | null;
+            /** Has Calibration */
+            has_calibration: boolean | null;
+            /** License */
+            license: string | null;
+            /**
+             * Mapping
+             * @enum {string}
+             */
+            mapping: "located_in_uniprot_sequence" | "not_located";
+            /** Num Variants */
+            num_variants: number | null;
+            /** Publications */
+            publications: {
+                [key: string]: unknown;
+            }[];
+            /** Published Date */
+            published_date: string | null;
+            /** Target Name */
+            target_name: string | null;
+            /** Title */
+            title: string | null;
+            /** Uniprot End */
+            uniprot_end: number | null;
+            /** Uniprot Start */
+            uniprot_start: number | null;
+            /** Url */
+            url: string;
+            /** Urn */
+            urn: string;
+        };
+        /**
+         * MeasuredAffinity
+         * @description One ChEMBL activity row, verbatim.
+         */
+        MeasuredAffinity: {
+            /** Activity Id */
+            activity_id: string;
+            /** Assay Chembl Id */
+            assay_chembl_id: string | null;
+            /** Assay Description */
+            assay_description: string | null;
+            /** Assay Format */
+            assay_format: string | null;
+            /** Document Chembl Id */
+            document_chembl_id: string | null;
+            /** Pchembl */
+            pchembl: number | null;
+            /** Relation */
+            relation: string;
+            /**
+             * Source
+             * @default chembl
+             * @constant
+             */
+            source: "chembl";
+            /** Standard Type */
+            standard_type: string;
+            /** Units */
+            units: string;
+            /** Url */
+            url: string | null;
+            /** Value */
+            value: number;
+            /** Year */
+            year: number | null;
+        };
+        /**
+         * MeasuredAffinitySummary
+         * @description Summary of the qualifying ChEMBL activity rows of one compound against the target.
+         */
+        MeasuredAffinitySummary: {
+            /**
+             * Activity Count
+             * @description Qualifying rows summarised
+             */
+            activity_count: number;
+            /**
+             * Assay Count
+             * @description Distinct assays among those rows
+             */
+            assay_count: number;
+            /**
+             * Assay Format
+             * @enum {string}
+             */
+            assay_format: "single protein format" | "any assay format";
+            /**
+             * Incomplete
+             * @description True when ChEMBL held more rows than were read; the median covers the rows read
+             * @default false
+             */
+            incomplete: boolean;
+            /** Max Pchembl */
+            max_pchembl: number;
+            /** Median Pchembl */
+            median_pchembl: number;
+            /** Min Pchembl */
+            min_pchembl: number;
+            /** @description The qualifying row closest to the median pChEMBL */
+            representative: components["schemas"]["MeasuredAffinity"];
+            /**
+             * Source
+             * @default chembl
+             * @constant
+             */
+            source: "chembl";
+            /**
+             * Standard Types
+             * @description Rows per standard type, e.g. IC50, Ki, Kd
+             */
+            standard_types: {
+                [key: string]: number;
+            };
+        };
+        /** MechanismCandidate */
+        MechanismCandidate: {
+            /**
+             * Category
+             * @enum {string}
+             */
+            category: "stability" | "folding" | "catalytic_site" | "ligand_binding" | "protein_interaction" | "localisation" | "signalling" | "domain_interface";
+            /**
+             * Claim
+             * @description The candidate as a question to test, worded as a possibility
+             */
+            claim: string;
+            /**
+             * Confidence Basis
+             * @description Why the candidate carries this label
+             */
+            confidence_basis: string;
+            /** Disputing Count */
+            disputing_count: number;
+            /**
+             * Evidence Ids
+             * @description Evidence IDs a saved hypothesis derives from
+             */
+            evidence_ids: string[];
+            highlight: components["schemas"]["MechanismHighlight"];
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /** Limitations */
+            limitations: string[];
+            /** Observations */
+            observations: components["schemas"]["MechanismObservation"][];
+            /**
+             * Rank
+             * @description Order in the ledger: support kind, then proximity, then record count
+             */
+            rank: number;
+            /**
+             * Support
+             * @enum {string}
+             */
+            support: "experimental_annotation" | "curated_annotation" | "computational_prediction";
+            /** Support Label */
+            support_label: string;
+            /** Supporting Count */
+            supporting_count: number;
+            /**
+             * Tests
+             * @description What would be needed to test the candidate
+             */
+            tests: string[];
+        };
+        /**
+         * MechanismHighlight
+         * @description What the 3D view marks for a candidate. Positions are UniProt canonical.
+         */
+        MechanismHighlight: {
+            /** Ligands */
+            ligands: components["schemas"]["MechanismLigandRef"][];
+            /** Partners */
+            partners: components["schemas"]["EntityRef"][];
+            /** Positions */
+            positions: number[];
+            /**
+             * Structure Id
+             * @description Structure the supporting record refers to
+             */
+            structure_id: string | null;
+            structure_origin: components["schemas"]["StructureOrigin"] | null;
+        };
+        /** MechanismLigandRef */
+        MechanismLigandRef: {
+            /** Author Seq Id */
+            author_seq_id: number | null;
+            /**
+             * Chain Id
+             * @description Author chain ID of the ligand instance
+             */
+            chain_id: string | null;
+            /** Comp Id */
+            comp_id: string;
+            /**
+             * Distance
+             * @description Shortest distance to the residue in angstroms
+             */
+            distance: number | null;
+            /** Name */
+            name: string | null;
+            /** Structure Id */
+            structure_id: string;
+            /** Url */
+            url: string | null;
+        };
+        /**
+         * MechanismObservation
+         * @description One retrieved record read against the variant's residue.
+         */
+        MechanismObservation: {
+            /** @default supports */
+            direction: components["schemas"]["EvidenceDirection"];
+            evidence: components["schemas"]["Evidence"];
+            evidence_class: components["schemas"]["EvidenceClass"];
+            /** Id */
+            id: string;
+            ligand: components["schemas"]["MechanismLigandRef"] | null;
+            /**
+             * Metric
+             * @description Effect key of a numeric value, e.g. foldx.ddg
+             */
+            metric: string | null;
+            partner: components["schemas"]["EntityRef"] | null;
+            /**
+             * Positions
+             * @description UniProt positions the record names
+             */
+            positions: number[];
+            /**
+             * Proximity
+             * @enum {string}
+             */
+            proximity: "at_residue" | "structure_contact" | "covering_region" | "sequence_neighbour" | "protein_level";
+            /**
+             * Raises Candidate
+             * @description False for context rows: they never raise a candidate on their own
+             * @default true
+             */
+            raises_candidate: boolean;
+            range: components["schemas"]["ResidueRange"] | null;
+            /**
+             * Rule
+             * @description ID of the rule that produced the observation, see rules
+             */
+            rule: string;
+            /**
+             * Same Substitution
+             * @description For statements about a substitution: whether it is this variant's
+             */
+            same_substitution: boolean | null;
+            /**
+             * Sequence Distance
+             * @description Residues between the variant and the annotated position; 0 at the residue
+             */
+            sequence_distance: number | null;
+            /**
+             * Source Statement
+             * @description The record's own text, verbatim
+             */
+            source_statement: string | null;
+            /** Structure Id */
+            structure_id: string | null;
+            structure_origin: components["schemas"]["StructureOrigin"] | null;
+            /**
+             * Summary
+             * @description What the record says about this residue, built from its fields
+             */
+            summary: string;
+            /**
+             * Support
+             * @enum {string}
+             */
+            support: "experimental_annotation" | "curated_annotation" | "computational_prediction";
+            /** Unit */
+            unit: string | null;
+            /** Value */
+            value: number | string | null;
+        };
+        /** MechanismRecord */
+        MechanismRecord: {
+            /** Action Type */
+            action_type: string | null;
+            /** Binding Site Comment */
+            binding_site_comment: string | null;
+            /** Direct Interaction */
+            direct_interaction: boolean | null;
+            /** Max Phase */
+            max_phase: number | null;
+            /** Mechanism Comment */
+            mechanism_comment: string | null;
+            /** Mechanism Id */
+            mechanism_id: string;
+            /** Mechanism Of Action */
+            mechanism_of_action: string | null;
+            /**
+             * Molecule Chembl Id
+             * @description The form the mechanism is recorded on; may be a salt
+             */
+            molecule_chembl_id: string;
+            /** References */
+            references: {
+                [key: string]: string | null;
+            }[];
+            /** Selectivity Comment */
+            selectivity_comment: string | null;
+            /**
+             * Source
+             * @default chembl
+             * @constant
+             */
+            source: "chembl";
+            /** Target Accessions */
+            target_accessions: string[];
+            /** Target Chembl Id */
+            target_chembl_id: string | null;
+            /** Target Name */
+            target_name: string | null;
+            /** Target Type */
+            target_type: string | null;
+        };
+        /** MechanismRule */
+        MechanismRule: {
+            /**
+             * Category
+             * @enum {string}
+             */
+            category: "stability" | "folding" | "catalytic_site" | "ligand_binding" | "protein_interaction" | "localisation" | "signalling" | "domain_interface";
+            /**
+             * Data
+             * @description The source record the rule reads
+             */
+            data: string;
+            /** Description */
+            description: string;
+            /** Id */
+            id: string;
+        };
+        /** MechanismsResponse */
+        MechanismsResponse: {
+            /** Alternate */
+            alternate: string | null;
+            /**
+             * Applicable
+             * @description False when the variant is not a single-residue substitution
+             */
+            applicable: boolean;
+            /** Candidates */
+            candidates: components["schemas"]["MechanismCandidate"][];
+            /** Domain Boundary Window */
+            domain_boundary_window: number;
+            gene: components["schemas"]["EntityRef"];
+            /** Limitations */
+            limitations: string[];
+            /** Message */
+            message: string | null;
+            /** Method */
+            method: string;
+            /** Neighbour Window */
+            neighbour_window: number;
+            /** Position */
+            position: number | null;
+            protein: components["schemas"]["EntityRef"] | null;
+            /** Protein Change */
+            protein_change: string | null;
+            /** Reference */
+            reference: string | null;
+            /** Rules */
+            rules: components["schemas"]["MechanismRule"][];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Support Order */
+            support_order: components["schemas"]["SupportKindInfo"][];
+            /** Unsupported */
+            unsupported: components["schemas"]["UnsupportedCategory"][];
+            /** Variant Id */
+            variant_id: string;
+            /** Warnings */
+            warnings: string[];
+        };
         /** MetaResponse */
         MetaResponse: {
             /** Api Prefix */
@@ -1414,6 +6034,11 @@ export interface components {
             /** Version */
             version: string;
         };
+        /**
+         * Modality
+         * @enum {string}
+         */
+        Modality: "small_molecule" | "biologic" | "cell_or_gene_therapy" | "unknown";
         /** ModelCode */
         ModelCode: {
             /**
@@ -1481,6 +6106,42 @@ export interface components {
             /** Providers */
             providers: components["schemas"]["ProviderInfo"][];
         };
+        /** NeighbourResidue */
+        NeighbourResidue: {
+            /** Ca Distance Reference */
+            ca_distance_reference: number;
+            /** Ca Distance Variant */
+            ca_distance_variant: number;
+            /** Masked */
+            masked: boolean;
+            /** Plddt Reference */
+            plddt_reference: number;
+            /** Plddt Variant */
+            plddt_variant: number;
+            /** Position */
+            position: number;
+            /** Residue */
+            residue: string;
+            /** Within Reference */
+            within_reference: boolean;
+            /** Within Variant */
+            within_variant: boolean;
+        };
+        /** Neighbourhood */
+        Neighbourhood: {
+            /**
+             * Atoms
+             * @default C-alpha
+             * @constant
+             */
+            atoms: "C-alpha";
+            /** Label */
+            label: string;
+            /** Radius */
+            radius: number;
+            /** Residues */
+            residues: components["schemas"]["NeighbourResidue"][];
+        };
         /**
          * NumericRange
          * @description Bounds over the whole catalog, for range controls. Null when no gene has a value.
@@ -1496,6 +6157,13 @@ export interface components {
             /** Min */
             min: number | null;
         };
+        /** OntologyTerm */
+        OntologyTerm: {
+            /** Id */
+            id: string | null;
+            /** Label */
+            label: string | null;
+        };
         /** OrphaFoldSoftware */
         OrphaFoldSoftware: {
             /**
@@ -1505,6 +6173,31 @@ export interface components {
             git_commit: string | null;
             /** Version */
             version: string;
+        };
+        /** PaeMatrix */
+        PaeMatrix: {
+            /**
+             * Matrix
+             * @description Predicted aligned error, row = aligned residue
+             */
+            matrix: number[][];
+            /**
+             * Max
+             * @description Cap of the matrix
+             */
+            max: number | null;
+            /**
+             * Residue Start
+             * @description Residue number of row and column 0
+             */
+            residue_start: number;
+            /** Size */
+            size: number;
+            /**
+             * Unit
+             * @default angstrom
+             */
+            unit: string;
         };
         /** Page[JobOut] */
         Page_JobOut_: {
@@ -1517,6 +6210,87 @@ export interface components {
             /** Offset */
             offset: number;
             /** Total */
+            total: number;
+        };
+        /** Page[ProjectOut] */
+        Page_ProjectOut_: {
+            /** Has More */
+            readonly has_more: boolean;
+            /** Items */
+            items: components["schemas"]["ProjectOut"][];
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** Total */
+            total: number;
+        };
+        /**
+         * ParsedIdentifier
+         * @description What the local parser recognised in the query before any lookup.
+         */
+        ParsedIdentifier: {
+            /** Description */
+            description: string;
+            /**
+             * Kind
+             * @description e.g. uniprot_accession, hgnc_id, clinvar_vcv, rsid, protein_change
+             */
+            kind: string;
+            /** Value */
+            value: string;
+        };
+        /** Pathway */
+        Pathway: {
+            /** Diagram Url */
+            diagram_url: string | null;
+            /** Doi */
+            doi: string | null;
+            evidence: components["schemas"]["Evidence"] | null;
+            /**
+             * Has Diagram
+             * @default false
+             */
+            has_diagram: boolean;
+            /**
+             * Id
+             * @description Reactome stable ID
+             */
+            id: string;
+            /**
+             * In Disease
+             * @description Reactome's isInDisease flag
+             */
+            in_disease: boolean;
+            /**
+             * Inferred
+             * @default false
+             */
+            inferred: boolean;
+            /** Name */
+            name: string;
+            /** Url */
+            url: string;
+            /** Version */
+            version: string | null;
+        };
+        /** PathwaysResponse */
+        PathwaysResponse: {
+            /**
+             * Disease Pathway Count
+             * @default 0
+             */
+            disease_pathway_count: number;
+            gene: components["schemas"]["EntityRef"] | null;
+            /** Pathways */
+            pathways: components["schemas"]["Pathway"][];
+            protein: components["schemas"]["EntityRef"];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /**
+             * Total
+             * @default 0
+             */
             total: number;
         };
         /**
@@ -1532,6 +6306,220 @@ export interface components {
             very_high: number;
             /** Very Low */
             very_low: number;
+        };
+        /** PlddtTrack */
+        PlddtTrack: {
+            /** Categories */
+            categories: ("very_low" | "low" | "confident" | "very_high")[];
+            /** Chain */
+            chain: string | null;
+            fractions: components["schemas"]["PlddtFractions"] | null;
+            /** Mean */
+            mean: number | null;
+            /** Native Scale */
+            native_scale: ("0-1" | "0-100") | null;
+            /** Residue Numbers */
+            residue_numbers: number[];
+            /**
+             * Scores
+             * @description pLDDT on 0-100
+             */
+            scores: number[];
+        };
+        /** PocketMethod */
+        PocketMethod: {
+            /** Model Name */
+            model_name: string;
+            /** Model Version */
+            model_version: string | null;
+            /** Provider */
+            provider: string;
+            /** Provider Name */
+            provider_name: string;
+            /** Service Url */
+            service_url: string | null;
+        };
+        /** PocketResidueRef */
+        PocketResidueRef: {
+            /**
+             * Chain
+             * @description Chain of the analysed structure
+             */
+            chain: string;
+            /**
+             * Position
+             * @description UniProt canonical position
+             */
+            position: number;
+            /**
+             * Residue
+             * @description One-letter code as PrankWeb read it
+             */
+            residue: string | null;
+        };
+        /** PocketsResponse */
+        PocketsResponse: {
+            /** @default computational_prediction */
+            evidence_class: components["schemas"]["EvidenceClass"];
+            /** Limitations */
+            limitations: string[];
+            method: components["schemas"]["PocketMethod"];
+            /** Pockets */
+            pockets: components["schemas"]["PredictedPocket"][];
+            protein: components["schemas"]["EntityRef"];
+            /** Queried Residue */
+            queried_residue: number | null;
+            /**
+             * Retry After Seconds
+             * @description Set while pending: ask again after this many seconds
+             */
+            retry_after_seconds: number | null;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ready" | "pending" | "failed" | "unavailable";
+            /** Status Detail */
+            status_detail: string | null;
+            /** Structure Id */
+            structure_id: string;
+            structure_origin: components["schemas"]["StructureOrigin"];
+            /** Warnings */
+            warnings: string[];
+        };
+        /** PopulationCallSet */
+        PopulationCallSet: {
+            /** Allele Count */
+            allele_count: number | null;
+            /** Allele Frequency */
+            allele_frequency: number | null;
+            /** Allele Number */
+            allele_number: number | null;
+            /** Hemizygote Count */
+            hemizygote_count: number | null;
+            /** Homozygote Count */
+            homozygote_count: number | null;
+        };
+        /** PopulationVariant */
+        PopulationVariant: {
+            /** Allele Count */
+            allele_count: number | null;
+            /** Allele Frequency */
+            allele_frequency: number | null;
+            /** Allele Number */
+            allele_number: number | null;
+            /** Alternate Residue */
+            alternate_residue: string | null;
+            /** Change Kind */
+            change_kind: string;
+            /** Consequence */
+            consequence: string | null;
+            exome: components["schemas"]["PopulationCallSet"] | null;
+            /** Flags */
+            flags: string[];
+            genome: components["schemas"]["PopulationCallSet"] | null;
+            /** Gnomad Id */
+            gnomad_id: string;
+            /** Hgvs P */
+            hgvs_p: string;
+            /** Position */
+            position: number;
+            /** Reference Residue */
+            reference_residue: string | null;
+            /** Rsids */
+            rsids: string[];
+            /** Url */
+            url: string | null;
+            /** Variant Id */
+            variant_id: string | null;
+        };
+        /** PopulationVariantsResponse */
+        PopulationVariantsResponse: {
+            /** Dataset */
+            dataset: string;
+            /**
+             * Frequency Basis
+             * @default Allele count and allele number are the sums of gnomAD's exome and genome call sets; allele_frequency is that count divided by that number. The per-call-set values are returned unchanged.
+             */
+            frequency_basis: string;
+            gene: components["schemas"]["EntityRef"];
+            /** Items */
+            items: components["schemas"]["PopulationVariant"][];
+            protein: components["schemas"]["EntityRef"] | null;
+            provenance: components["schemas"]["Provenance"] | null;
+            /**
+             * Scope Note
+             * @default Variants on the gnomAD canonical transcript whose protein consequence gnomAD reports as a single-residue change. Positions are the transcript's protein positions as gnomAD reports them; they match UniProt canonical numbering only where that transcript encodes the canonical sequence.
+             */
+            scope_note: string;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Total In Gene */
+            total_in_gene: number | null;
+            /** Transcript Id */
+            transcript_id: string | null;
+            /** X Linked */
+            x_linked: boolean | null;
+        };
+        /** PredictedPocket */
+        PredictedPocket: {
+            /**
+             * Center
+             * @description Pocket centre in the coordinate frame of the analysed structure, Å
+             */
+            center: [
+                number,
+                number,
+                number
+            ] | null;
+            /**
+             * Contains Residue
+             * @description Whether the residue asked for lines this pocket; null when none was asked
+             */
+            contains_residue: boolean | null;
+            evidence: components["schemas"]["Evidence"] | null;
+            /** @default computational_prediction */
+            evidence_class: components["schemas"]["EvidenceClass"];
+            /** Id */
+            id: string;
+            /**
+             * Mean Plddt
+             * @description Mean pLDDT of the pocket residues; AlphaFold DB models only
+             */
+            mean_plddt: number | null;
+            /** Name */
+            name: string;
+            /**
+             * Positions
+             * @description Distinct UniProt positions lining the pocket, ascending
+             */
+            positions: number[];
+            /**
+             * Probability
+             * @description P2Rank calibrated probability, 0 to 1
+             */
+            probability: number | null;
+            /** Rank */
+            rank: number;
+            /** Residues */
+            residues: components["schemas"]["PocketResidueRef"][];
+            /**
+             * Score
+             * @description P2Rank raw score
+             */
+            score: number | null;
+            /**
+             * Structure Residues
+             * @description Residues as PrankWeb names them: chain_authSeqId
+             */
+            structure_residues: string[];
+            /**
+             * Unmapped Residue Count
+             * @default 0
+             */
+            unmapped_residue_count: number;
         };
         /**
          * ProblemDetail
@@ -1557,6 +6545,249 @@ export interface components {
         } & {
             [key: string]: unknown;
         };
+        /** ProjectCreate */
+        ProjectCreate: {
+            /** Description */
+            description?: string | null;
+            /**
+             * License
+             * @default CC-BY-4.0
+             */
+            license: string;
+            /** Title */
+            title: string;
+            /** @default private */
+            visibility: components["schemas"]["ProjectVisibility"];
+        };
+        /** ProjectDetail */
+        ProjectDetail: {
+            /** Active Item Id */
+            active_item_id: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Description */
+            description: string | null;
+            /** Head Snapshot Id */
+            head_snapshot_id: string | null;
+            /** Id */
+            id: string;
+            /** Is Owner */
+            is_owner: boolean;
+            /** Item Count */
+            item_count: number;
+            /** Item Counts */
+            item_counts: {
+                [key: string]: number;
+            };
+            /** Items */
+            items: components["schemas"]["ProjectItemOut"][];
+            /** License */
+            license: string;
+            lineage: components["schemas"]["Lineage"];
+            owner: components["schemas"]["ActorRef"];
+            /** Share Path */
+            share_path: string | null;
+            /** Snapshots */
+            snapshots: components["schemas"]["SnapshotSummary"][];
+            /** Title */
+            title: string;
+            trail: components["schemas"]["TrailOut"];
+            /**
+             * Unpublished Changes
+             * @description The project differs from its head snapshot
+             */
+            unpublished_changes: boolean;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            visibility: components["schemas"]["ProjectVisibility"];
+        };
+        /** ProjectItemCreate */
+        ProjectItemCreate: {
+            /**
+             * Attach To Active
+             * @description Without parent_item_id, follow the project's active trail node
+             * @default true
+             */
+            attach_to_active: boolean;
+            /** Data */
+            data?: {
+                [key: string]: unknown;
+            };
+            /** Evidence */
+            evidence?: {
+                [key: string]: unknown;
+            }[];
+            /** @description Required when kind is hypothesis */
+            hypothesis?: components["schemas"]["HypothesisInput"] | null;
+            kind: components["schemas"]["ItemKind"];
+            /** Label */
+            label: string;
+            /** Note */
+            note?: string | null;
+            origin?: components["schemas"]["ItemOriginInput"] | null;
+            /**
+             * Parent Item Id
+             * @description Trail node this item follows; defaults to the active node
+             */
+            parent_item_id?: string | null;
+            /**
+             * Ref
+             * @description Entity ID in the binding ID scheme
+             */
+            ref?: string | null;
+        };
+        /** ProjectItemOut */
+        ProjectItemOut: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Data */
+            data: {
+                [key: string]: unknown;
+            };
+            /** Evidence */
+            evidence: {
+                [key: string]: unknown;
+            }[];
+            /** @description orphafold_hypothesis for hypotheses; null for saved entities, which carry their own evidence */
+            evidence_class: components["schemas"]["EvidenceClass"] | null;
+            /**
+             * Href
+             * @description App path that reopens the view the item was saved from
+             */
+            href: string | null;
+            hypothesis: components["schemas"]["HypothesisOut"] | null;
+            /** Id */
+            id: string;
+            kind: components["schemas"]["ItemKind"];
+            /** Label */
+            label: string;
+            /** Note */
+            note: string | null;
+            origin: components["schemas"]["ItemOrigin"];
+            /** Parent Item Id */
+            parent_item_id: string | null;
+            /** Position */
+            position: number;
+            /** Project Id */
+            project_id: string;
+            /** Ref */
+            ref: string | null;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** ProjectItemUpdate */
+        ProjectItemUpdate: {
+            /** Data */
+            data?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Detach
+             * @description Make the item a trail root
+             * @default false
+             */
+            detach: boolean;
+            hypothesis?: components["schemas"]["HypothesisUpdate"] | null;
+            /** Label */
+            label?: string | null;
+            /** Note */
+            note?: string | null;
+            /** Parent Item Id */
+            parent_item_id?: string | null;
+        };
+        /** ProjectOut */
+        ProjectOut: {
+            /** Active Item Id */
+            active_item_id: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Description */
+            description: string | null;
+            /** Head Snapshot Id */
+            head_snapshot_id: string | null;
+            /** Id */
+            id: string;
+            /** Is Owner */
+            is_owner: boolean;
+            /** Item Count */
+            item_count: number;
+            /** Item Counts */
+            item_counts: {
+                [key: string]: number;
+            };
+            /** License */
+            license: string;
+            lineage: components["schemas"]["Lineage"];
+            owner: components["schemas"]["ActorRef"];
+            /** Share Path */
+            share_path: string | null;
+            /** Title */
+            title: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            visibility: components["schemas"]["ProjectVisibility"];
+        };
+        /**
+         * ProjectScope
+         * @enum {string}
+         */
+        ProjectScope: "mine" | "public";
+        /** ProjectUpdate */
+        ProjectUpdate: {
+            /** Active Item Id */
+            active_item_id?: string | null;
+            /** Description */
+            description?: string | null;
+            /** License */
+            license?: string | null;
+            /** Title */
+            title?: string | null;
+            visibility?: components["schemas"]["ProjectVisibility"] | null;
+        };
+        /**
+         * ProjectVisibility
+         * @enum {string}
+         */
+        ProjectVisibility: "private" | "unlisted" | "public";
+        /**
+         * PropertyChange
+         * @description Side-chain properties of the two residues from published tables. A property of the amino
+         *     acids, not a measurement on this protein.
+         */
+        PropertyChange: {
+            /** Charge Changed */
+            charge_changed: boolean;
+            /** Hydropathy Change */
+            hydropathy_change: number;
+            /** Polarity Changed */
+            polarity_changed: boolean;
+            reference: components["schemas"]["ResidueProperties"];
+            /** Sources */
+            sources: components["schemas"]["Citation"][];
+            variant: components["schemas"]["ResidueProperties"];
+            /** Volume Change A3 */
+            volume_change_a3: number;
+            /** Volume Class Changed */
+            volume_class_changed: boolean;
+        };
         /** ProteinChange */
         ProteinChange: {
             /** Alt */
@@ -1566,51 +6797,165 @@ export interface components {
             /** Ref */
             ref: string;
         };
+        /** ProteinCompoundsResponse */
+        ProteinCompoundsResponse: {
+            /** Affinity Rule */
+            affinity_rule: string;
+            /** Compounds */
+            compounds: components["schemas"]["TargetCompound"][];
+            counts: components["schemas"]["CompoundCounts"];
+            /** Order Rule */
+            order_rule: string;
+            protein: components["schemas"]["EntityRef"];
+            /**
+             * Related Targets
+             * @description Complexes, families and interactions that include this protein
+             */
+            related_targets: components["schemas"]["ChemblTargetRef"][];
+            /** Selection Rule */
+            selection_rule: string;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** @description The single-protein ChEMBL target, when one exists */
+            target: components["schemas"]["ChemblTargetRef"] | null;
+        };
+        /** ProteinNames */
+        ProteinNames: {
+            /** Alternative */
+            alternative: string[];
+            /** Ec Numbers */
+            ec_numbers: string[];
+            /** Recommended */
+            recommended: string | null;
+            /** Short Names */
+            short_names: string[];
+        };
+        /** ProteinResponse */
+        ProteinResponse: {
+            /** Accession */
+            accession: string;
+            /** Annotation Score */
+            annotation_score: number | null;
+            /** Catalytic Activity */
+            catalytic_activity: components["schemas"]["TextAnnotation"][];
+            /** Cross References */
+            cross_references: components["schemas"]["CrossReferenceGroup"][];
+            /** Entry Name */
+            entry_name: string | null;
+            /** Entry Version */
+            entry_version: number | null;
+            /**
+             * Family
+             * @description UniProt sequence similarity statements ('Belongs to the ...')
+             */
+            family: components["schemas"]["TextAnnotation"][];
+            /** Function */
+            function: components["schemas"]["TextAnnotation"][];
+            gene: components["schemas"]["EntityRef"] | null;
+            /** Gene Synonyms */
+            gene_synonyms: string[];
+            /**
+             * In Catalog
+             * @default false
+             */
+            in_catalog: boolean;
+            /** Interpro Entries */
+            interpro_entries: components["schemas"]["InterProEntry"][];
+            /**
+             * Interpro Family
+             * @description InterPro entries of type family
+             */
+            interpro_family: components["schemas"]["InterProEntry"][];
+            interpro_provenance: components["schemas"]["Provenance"] | null;
+            /** Isoforms */
+            isoforms: components["schemas"]["Isoform"][];
+            /** Last Annotation Update */
+            last_annotation_update: string | null;
+            names: components["schemas"]["ProteinNames"];
+            /** Organism */
+            organism: string | null;
+            protein: components["schemas"]["EntityRef"];
+            /** Protein Existence */
+            protein_existence: string | null;
+            /** @description The UniProt entry request */
+            provenance: components["schemas"]["Provenance"] | null;
+            /**
+             * Reviewed
+             * @description Swiss-Prot (true) or TrEMBL (false)
+             */
+            reviewed: boolean | null;
+            /** Secondary Accessions */
+            secondary_accessions: string[];
+            sequence: components["schemas"]["ProteinSequence"];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Subcellular Locations */
+            subcellular_locations: components["schemas"]["SubcellularLocation"][];
+            /** Subunit */
+            subunit: components["schemas"]["TextAnnotation"][];
+            /** Taxon Id */
+            taxon_id: number | null;
+            /**
+             * Tracks
+             * @description UniProt feature tracks, then InterPro tracks. Empty tracks are omitted
+             */
+            tracks: components["schemas"]["FeatureTrack"][];
+        };
+        /** ProteinSequence */
+        ProteinSequence: {
+            /** Crc64 */
+            crc64: string | null;
+            /** Length */
+            length: number;
+            /**
+             * Mass Da
+             * @description Molecular weight in daltons, as UniProt states it
+             */
+            mass_da: number | null;
+            /**
+             * Md5
+             * @description MD5 of the sequence, lower-case hex
+             */
+            md5: string;
+            /** Value */
+            value: string;
+            /**
+             * Version
+             * @description UniProt sequence version
+             */
+            version: number | null;
+        };
         /**
          * Provenance
          * @description Envelope recorded on every upstream fetch.
          */
         Provenance: {
-            /**
-             * Attribution
-             * @default null
-             */
+            /** Attribution */
             attribution: string | null;
             /**
              * From Cache
              * @default false
              */
             from_cache: boolean;
-            /**
-             * License
-             * @default null
-             */
+            /** License */
             license: string | null;
-            /**
-             * License Url
-             * @default null
-             */
+            /** License Url */
             license_url: string | null;
             /**
              * Method
              * @default GET
              */
             method: string;
-            /**
-             * Record Id
-             * @default null
-             */
+            /** Record Id */
             record_id: string | null;
             /**
              * Record Url
              * @description Human-facing page of the record
-             * @default null
              */
             record_url: string | null;
             /**
              * Release
              * @description Source release; null when the source reports none
-             * @default null
              */
             release: string | null;
             /**
@@ -1618,10 +6963,7 @@ export interface components {
              * @description Request URL with secrets removed
              */
             request_url: string;
-            /**
-             * Response Sha256
-             * @default null
-             */
+            /** Response Sha256 */
             response_sha256: string | null;
             /**
              * Retrieved At
@@ -1707,6 +7049,63 @@ export interface components {
          * @enum {string}
          */
         ProviderKind: "structure_predictor" | "binding_predictor" | "variant_effect" | "pocket" | "literature";
+        /**
+         * ProviderOption
+         * @description One registered structure predictor and whether it can run this comparison here.
+         */
+        ProviderOption: {
+            /** Available */
+            available: boolean;
+            /** Can Run */
+            can_run: boolean;
+            construct: components["schemas"]["ComparisonConstruct"] | null;
+            /** Deterministic */
+            deterministic: boolean | null;
+            /** Execution Mode */
+            execution_mode: string;
+            /** Id */
+            id: string;
+            /**
+             * Job Params
+             * @description Body params for POST /api/v1/jobs with kind variant_comparison
+             */
+            job_params: {
+                [key: string]: unknown;
+            } | null;
+            /** Max Residues */
+            max_residues: number | null;
+            /** Model Name */
+            model_name: string | null;
+            /** Model Version */
+            model_version: string | null;
+            /** Name */
+            name: string;
+            /** Performs Inference */
+            performs_inference: boolean;
+            /**
+             * Reasons
+             * @description Why it cannot run; empty when it can
+             */
+            reasons: string[];
+        };
+        /** PublishRequest */
+        PublishRequest: {
+            /** Message */
+            message?: string | null;
+        };
+        /** RecommendedStructure */
+        RecommendedStructure: {
+            origin: components["schemas"]["StructureOrigin"];
+            /** Reason */
+            reason: string;
+            /**
+             * Rule
+             * @description The fixed selection rule that produced this default
+             */
+            rule: string;
+            /** Structure Id */
+            structure_id: string;
+        };
         /** RecordRef */
         RecordRef: {
             /** Database */
@@ -1730,19 +7129,327 @@ export interface components {
             url: string | null;
         };
         /**
+         * RecordSource
+         * @description Where a seeded value came from: the seed source and the record inside it.
+         */
+        RecordSource: {
+            /** License */
+            license: string | null;
+            /** Name */
+            name: string | null;
+            /** Record Id */
+            record_id: string | null;
+            /** Release */
+            release: string | null;
+            /** Retrieved At */
+            retrieved_at: string | null;
+            /** Source Id */
+            source_id: string;
+            /** Url */
+            url: string | null;
+        };
+        /** ReferenceCheck */
+        ReferenceCheck: {
+            /**
+             * Expected
+             * @description Reference residue the variant names
+             */
+            expected: string;
+            /**
+             * Found
+             * @description Residue at that position in the UniProt sequence
+             */
+            found: string | null;
+            /** Message */
+            message: string;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "match" | "mismatch" | "out_of_range" | "unknown";
+        };
+        /** ReferenceCheckResult */
+        ReferenceCheckResult: {
+            /** Accession */
+            accession: string | null;
+            /**
+             * Expected
+             * @description Reference residue of the variant
+             */
+            expected: string | null;
+            /**
+             * Found
+             * @description Residue in the UniProt canonical sequence
+             */
+            found: string | null;
+            /** Message */
+            message: string | null;
+            /** Position */
+            position: number | null;
+            /** Sequence Length */
+            sequence_length: number | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "match" | "mismatch" | "out_of_range" | "not_checked";
+        };
+        /** RelationshipGraph */
+        RelationshipGraph: {
+            /** Curated Partner Total */
+            curated_partner_total: number | null;
+            /** Edges */
+            edges: components["schemas"]["GraphEdge"][];
+            /** Nodes */
+            nodes: components["schemas"]["GraphNode"][];
+            /** Pathway Total */
+            pathway_total: number | null;
+            /** String Partner Total */
+            string_partner_total: number | null;
+        };
+        /**
+         * RelevanceReason
+         * @description One rule that fired for a publication. Rules are fixed string and count checks; no model.
+         */
+        RelevanceReason: {
+            /**
+             * Code
+             * @enum {string}
+             */
+            code: "variant_in_title" | "variant_in_abstract" | "residue_in_title" | "residue_in_abstract" | "matched_outside_abstract" | "uniprot_linked" | "gene_in_title" | "disease_in_title" | "review" | "highly_cited";
+            /**
+             * Detail
+             * @description The matched text or the count behind the rule
+             */
+            detail: string | null;
+            /** Label */
+            label: string;
+        };
+        /**
+         * ResearchStatusItem
+         * @description One count or classification from a single source. Null means the source had no value.
+         */
+        ResearchStatusItem: {
+            /** Definition */
+            definition: string;
+            evidence: components["schemas"]["Evidence"] | null;
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Retrieved At */
+            retrieved_at: string | null;
+            source: components["schemas"]["RecordSource"] | null;
+            /** Value */
+            value: number | boolean | string | null;
+        };
+        /** ResidueContext */
+        ResidueContext: {
+            /** Plddt */
+            plddt: number | null;
+            /** Plddt Structure Id */
+            plddt_structure_id: string | null;
+            /**
+             * Reference
+             * @description Residue in the sequence of the AlphaFold DB model
+             */
+            reference: string | null;
+            /** Sequence Length */
+            sequence_length: number | null;
+        };
+        /** ResidueDifference */
+        ResidueDifference: {
+            /**
+             * Ca Displacement
+             * @description Angstroms; null when masked
+             */
+            ca_displacement: number | null;
+            /** Masked */
+            masked: boolean;
+            /** Plddt Reference */
+            plddt_reference: number;
+            /** Plddt Variant */
+            plddt_variant: number;
+            /** Position */
+            position: number;
+            /** Reference Residue */
+            reference_residue: string;
+            /** Variant Residue */
+            variant_residue: string;
+        };
+        /** ResidueEffectsResponse */
+        ResidueEffectsResponse: {
+            /** Alternate */
+            alternate: string | null;
+            /**
+             * Disabled By License
+             * @description Values withheld because their source is restricted to non-commercial use
+             */
+            disabled_by_license: components["schemas"]["EffectValue"][];
+            /** Flags */
+            flags: components["schemas"]["EffectFlag"][];
+            /** Groups */
+            groups: components["schemas"]["EffectGroup"][];
+            /** Hgvs P */
+            hgvs_p: string | null;
+            /** Limitations */
+            limitations: string[];
+            /** Mave Score Sets */
+            mave_score_sets: components["schemas"]["MaveScoreSet"][];
+            /** Position */
+            position: number;
+            protein: components["schemas"]["EntityRef"];
+            /** Reference */
+            reference: string | null;
+            residue: components["schemas"]["ResidueContext"];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Variant Id */
+            variant_id: string | null;
+        };
+        /** ResidueMap */
+        ResidueMap: {
+            /** Numbering */
+            numbering: string;
+            origin: components["schemas"]["StructureOrigin"];
+            /** Segments */
+            segments: components["schemas"]["ResidueMapSegment"][];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Structure Id */
+            structure_id: string;
+        };
+        /**
+         * ResidueMapSegment
+         * @description UniProt position p maps to entity position entity_start + (p - unp_start) in struct_asym_id.
+         *     Author numbering is given at the segment ends as the entry states it.
+         */
+        ResidueMapSegment: {
+            /** Author End */
+            author_end: number | null;
+            /** Author End Insertion Code */
+            author_end_insertion_code: string | null;
+            /**
+             * Author Offset
+             * @description author number minus UniProt number when it is the same at both segment ends, else null
+             */
+            author_offset: number | null;
+            /**
+             * Author Start
+             * @description Null when the first residue is not observed
+             */
+            author_start: number | null;
+            /** Author Start Insertion Code */
+            author_start_insertion_code: string | null;
+            /**
+             * Chain Id
+             * @description Author chain ID (auth_asym_id)
+             */
+            chain_id: string;
+            /** Entity End */
+            entity_end: number | null;
+            /** Entity Id */
+            entity_id: number | null;
+            /**
+             * Entity Start
+             * @description label_seq_id of unp_start
+             */
+            entity_start: number | null;
+            /** Identity */
+            identity: number | null;
+            /**
+             * Struct Asym Id
+             * @description label_asym_id
+             */
+            struct_asym_id: string | null;
+            /** Uniprot Accession */
+            uniprot_accession: string;
+            /** Unp End */
+            unp_end: number;
+            /** Unp Start */
+            unp_start: number;
+        };
+        /** ResidueProperties */
+        ResidueProperties: {
+            /** Charge Class */
+            charge_class: string;
+            /** Hydropathy */
+            hydropathy: number;
+            /** Name */
+            name: string;
+            /** Polarity Class */
+            polarity_class: string;
+            /** Residue */
+            residue: string;
+            /** Volume A3 */
+            volume_a3: number;
+            /** Volume Class */
+            volume_class: string;
+        };
+        /**
          * ResidueRange
          * @description Inclusive range in UniProt canonical numbering.
          */
         ResidueRange: {
-            /**
-             * Chain
-             * @default null
-             */
+            /** Chain */
             chain: string | null;
             /** End */
             end: number;
             /** Start */
             start: number;
+        };
+        /** ResidueResponse */
+        ResidueResponse: {
+            /**
+             * Amino Acid
+             * @description One-letter code at this position of the canonical sequence
+             */
+            amino_acid: string;
+            /** Amino Acid Name */
+            amino_acid_name: string | null;
+            /** Amino Acid Three */
+            amino_acid_three: string | null;
+            /** Feature Count */
+            feature_count: number;
+            gene: components["schemas"]["EntityRef"] | null;
+            /** Interpro Entries */
+            interpro_entries: components["schemas"]["InterProEntry"][];
+            /** Position */
+            position: number;
+            protein: components["schemas"]["EntityRef"];
+            provenance: components["schemas"]["Provenance"] | null;
+            /** Sequence Length */
+            sequence_length: number;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /**
+             * Tracks
+             * @description Features covering the position, grouped as on the protein
+             */
+            tracks: components["schemas"]["FeatureTrack"][];
+            /**
+             * Window
+             * @description Canonical sequence around the position, starting at window_start
+             */
+            window: string;
+            /** Window Start */
+            window_start: number;
+        };
+        /**
+         * RigidTransform
+         * @description x' = rotation . x + translation, applied to the variant model to place it on the reference.
+         */
+        RigidTransform: {
+            /**
+             * Applies To
+             * @default variant
+             * @constant
+             */
+            applies_to: "variant";
+            /** Rotation */
+            rotation: number[][];
+            /** Translation */
+            translation: number[];
         };
         /** RunManifest */
         RunManifest: {
@@ -1802,6 +7509,117 @@ export interface components {
             started_at: string | null;
             status: components["schemas"]["JobStatus"];
         };
+        /** SearchGroup */
+        SearchGroup: {
+            /** Label */
+            label: string;
+            /** Results */
+            results: components["schemas"]["SearchResult"][];
+            /**
+             * Total
+             * @description Matches before the per-group limit
+             */
+            total: number;
+            type: components["schemas"]["SearchResultType"];
+        };
+        /** SearchIdentifier */
+        SearchIdentifier: {
+            /** Id */
+            id: string;
+            /**
+             * Source
+             * @description Database that owns the identifier, e.g. HGNC, UniProt, MONDO
+             */
+            source: string;
+            /** Url */
+            url: string | null;
+        };
+        /** SearchResponse */
+        SearchResponse: {
+            /** Groups */
+            groups: components["schemas"]["SearchGroup"][];
+            /**
+             * Outside Catalog
+             * @description True when the answer came only from outside the IEI catalog
+             */
+            outside_catalog: boolean;
+            /** Parsed */
+            parsed: components["schemas"]["ParsedIdentifier"][];
+            /** Query */
+            query: string;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Took Ms */
+            took_ms: number;
+            /** @description The row Enter opens */
+            top: components["schemas"]["SearchResult"] | null;
+            /** Total */
+            total: number;
+        };
+        /** SearchResult */
+        SearchResult: {
+            /** Accession */
+            accession: string | null;
+            /**
+             * Count
+             * @description Structure rows that stand for a set of entries
+             */
+            count: number | null;
+            /** Description */
+            description: string | null;
+            evidence_class: components["schemas"]["EvidenceClass"] | null;
+            /**
+             * External Url
+             * @description Record at the owning database
+             */
+            external_url: string | null;
+            /** Gene Symbol */
+            gene_symbol: string | null;
+            /**
+             * Href
+             * @description Web route to open; null when there is no page
+             */
+            href: string | null;
+            /**
+             * Id
+             * @description URL-facing ID of the entity
+             */
+            id: string;
+            /** Ids */
+            ids: components["schemas"]["SearchIdentifier"][];
+            /**
+             * In Catalog
+             * @description False for an entity outside the seeded IEI catalog
+             */
+            in_catalog: boolean;
+            /** Label */
+            label: string;
+            match: components["schemas"]["MatchKind"];
+            /**
+             * Match Reason
+             * @description Why this row answers the query, in words
+             */
+            match_reason: string;
+            /**
+             * Matched Text
+             * @description The name, alias or ID that matched
+             */
+            matched_text: string | null;
+            /** @description Structure rows only */
+            origin: components["schemas"]["StructureOrigin"] | null;
+            /**
+             * Source
+             * @description Source ID the row was read from, e.g. orphafold_seed, uniprot
+             */
+            source: string;
+            structures: components["schemas"]["StructureAvailability-Output"] | null;
+            type: components["schemas"]["SearchResultType"];
+        };
+        /**
+         * SearchResultType
+         * @enum {string}
+         */
+        SearchResultType: "gene" | "protein" | "disease" | "variant" | "structure" | "compound" | "paper" | "project";
         /** SeedCounts */
         SeedCounts: {
             /** Categories */
@@ -1832,6 +7650,155 @@ export interface components {
             /** Url */
             url: string | null;
         };
+        /** SegmentKindOption */
+        SegmentKindOption: {
+            /** Description */
+            description: string;
+            /**
+             * Id
+             * @enum {string}
+             */
+            id: "database_fact" | "paper_finding" | "computational_result" | "reasoning_hypothesis";
+            /** Label */
+            label: string;
+        };
+        /**
+         * SiteConfidence
+         * @description pLDDT of each model at the substituted residue. The two values are shown side by side as
+         *     model output; no difference between them is reported.
+         */
+        SiteConfidence: {
+            /**
+             * Band Reference
+             * @enum {string}
+             */
+            band_reference: "very_low" | "low" | "confident" | "very_high";
+            /**
+             * Band Variant
+             * @enum {string}
+             */
+            band_variant: "very_low" | "low" | "confident" | "very_high";
+            /**
+             * Ca Displacement
+             * @description Angstroms; null when the site is masked
+             */
+            ca_displacement: number | null;
+            /** Confident In Both */
+            confident_in_both: boolean;
+            /** Plddt Reference */
+            plddt_reference: number;
+            /** Plddt Variant */
+            plddt_variant: number;
+            /** Position */
+            position: number;
+        };
+        /** SiteContact */
+        SiteContact: {
+            /**
+             * Min Distance
+             * @description Angstroms, closest pair of heavy atoms
+             */
+            min_distance: number;
+            /** Partner Atom */
+            partner_atom: string;
+            /**
+             * Plddt
+             * @description pLDDT of the partner residue in this model
+             */
+            plddt: number;
+            /** Position */
+            position: number;
+            /**
+             * Residue
+             * @description One-letter residue at the partner position
+             */
+            residue: string;
+            /** Site Atom */
+            site_atom: string;
+        };
+        /** SnapshotOut */
+        SnapshotOut: {
+            /** Content Sha256 */
+            content_sha256: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            created_by: components["schemas"]["ActorRef"] | null;
+            /** Description */
+            description: string | null;
+            /**
+             * Document
+             * @description project.json of this snapshot
+             */
+            document: {
+                [key: string]: unknown;
+            };
+            /** Id */
+            id: string;
+            /** Is Head */
+            is_head: boolean;
+            /** Is Owner */
+            is_owner: boolean;
+            /** Items */
+            items: components["schemas"]["ProjectItemOut"][];
+            /** License */
+            license: string;
+            lineage: components["schemas"]["Lineage"];
+            /** Message */
+            message: string | null;
+            /** Parent Snapshot Id */
+            parent_snapshot_id: string | null;
+            /**
+             * Project Available
+             * @description The live project can be opened by the caller
+             */
+            project_available: boolean;
+            /** Project Id */
+            project_id: string;
+            project_visibility: components["schemas"]["ProjectVisibility"];
+            /** Sequence Number */
+            sequence_number: number;
+            /**
+             * Share Path
+             * @description Stable app path of the frozen view: /s/<snapshot_id>
+             */
+            share_path: string;
+            /** Title */
+            title: string;
+            trail: components["schemas"]["TrailOut"];
+            /** Withdrawn */
+            withdrawn: boolean;
+        };
+        /** SnapshotSummary */
+        SnapshotSummary: {
+            /** Content Sha256 */
+            content_sha256: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            created_by: components["schemas"]["ActorRef"] | null;
+            /** Id */
+            id: string;
+            /** Message */
+            message: string | null;
+            /** Parent Snapshot Id */
+            parent_snapshot_id: string | null;
+            /** Project Id */
+            project_id: string;
+            /** Sequence Number */
+            sequence_number: number;
+            /**
+             * Share Path
+             * @description Stable app path of the frozen view: /s/<snapshot_id>
+             */
+            share_path: string;
+            /** Withdrawn */
+            withdrawn: boolean;
+        };
         /** SoftwareItem */
         SoftwareItem: {
             /** Name */
@@ -1848,42 +7815,24 @@ export interface components {
         SourceRecord: {
             /** Database */
             database: string;
-            /**
-             * License
-             * @default null
-             */
+            /** License */
             license: string | null;
             /** Record Id */
             record_id: string;
-            /**
-             * Record Version
-             * @default null
-             */
+            /** Record Version */
             record_version: string | null;
-            /**
-             * Release
-             * @default null
-             */
+            /** Release */
             release: string | null;
-            /**
-             * Request
-             * @default null
-             */
+            /** Request */
             request: string | null;
-            /**
-             * Response Sha256
-             * @default null
-             */
+            /** Response Sha256 */
             response_sha256: string | null;
             /**
              * Retrieved At
              * Format: date-time
              */
             retrieved_at: string;
-            /**
-             * Url
-             * @default null
-             */
+            /** Url */
             url: string | null;
         };
         /**
@@ -1924,6 +7873,15 @@ export interface components {
             /** Url */
             url: string | null;
         };
+        /** StageCount */
+        StageCount: {
+            /** Count */
+            count: number;
+            /** Label */
+            label: string;
+            /** Stage */
+            stage: string;
+        };
         /**
          * StageProgress
          * @description Measured progress inside a stage. Present only when the work reports real counts.
@@ -1941,34 +7899,125 @@ export interface components {
          * @enum {string}
          */
         StageStatus: "pending" | "running" | "done" | "failed" | "skipped" | "cancelled";
+        /** StringAssociation */
+        StringAssociation: {
+            /**
+             * Also In Intact
+             * @description The same partner has a curated IntAct record in this response
+             * @default false
+             */
+            also_in_intact: boolean;
+            /**
+             * Channels
+             * @description STRING channel scores, verbatim: escore, dscore, tscore and others
+             */
+            channels: {
+                [key: string]: number | null;
+            };
+            /** Dominant Channel */
+            dominant_channel: string | null;
+            evidence: components["schemas"]["Evidence"] | null;
+            /**
+             * In Catalog
+             * @default false
+             */
+            in_catalog: boolean;
+            /** @description Set when the partner is a catalog gene with a UniProt accession */
+            partner: components["schemas"]["EntityRef"] | null;
+            /** Partner Symbol */
+            partner_symbol: string | null;
+            /**
+             * Score
+             * @description STRING combined score of the physical subnetwork
+             */
+            score: number | null;
+            /** String Id */
+            string_id: string;
+            /** Url */
+            url: string | null;
+        };
+        /** StringLayer */
+        StringLayer: {
+            /**
+             * Description
+             * @default STRING physical subnetwork. The score is a combined confidence over experiments, curated databases and text mining; it is not a curated interaction record and is kept apart from IntAct.
+             */
+            description: string;
+            /**
+             * Label
+             * @default Physical associations (STRING)
+             */
+            label: string;
+            /**
+             * Note
+             * @default STRING numbers residues on its own isoform; positions do not transfer to UniProt.
+             */
+            note: string | null;
+            /** Partners */
+            partners: components["schemas"]["StringAssociation"][];
+            /**
+             * Required Score
+             * @description Score threshold of the request, 0 to 1
+             */
+            required_score: number | null;
+            /**
+             * Source
+             * @default string
+             */
+            source: string;
+            /** String Id */
+            string_id: string | null;
+        };
         /**
          * StructureAvailability
          * @enum {string}
          */
-        StructureAvailability: "experimental" | "predicted" | "none" | "unknown";
+        "StructureAvailability-Input": "experimental" | "predicted" | "none" | "unknown";
+        /**
+         * StructureAvailability
+         * @description Source-native structure counts from the seed. Null means the lookup had no answer.
+         */
+        "StructureAvailability-Output": {
+            /**
+             * Experimental Count
+             * @description Distinct PDB entries in PDBe SIFTS
+             */
+            experimental_count: number | null;
+            /** Has Alphafold Model */
+            has_alphafold_model: boolean | null;
+        };
+        /** StructureConfidence */
+        StructureConfidence: {
+            /** Available */
+            available: boolean;
+            /** Limitations */
+            limitations: string[];
+            /** Message */
+            message: string | null;
+            origin: components["schemas"]["StructureOrigin"];
+            pae: components["schemas"]["PaeMatrix"] | null;
+            /**
+             * Pae Available
+             * @default false
+             */
+            pae_available: boolean;
+            plddt: components["schemas"]["PlddtTrack"] | null;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Structure Id */
+            structure_id: string;
+        };
         /** StructureCoverage */
         StructureCoverage: {
-            /**
-             * Covered Residues
-             * @default null
-             */
+            /** Covered Residues */
             covered_residues: number | null;
-            /**
-             * Fraction
-             * @default null
-             */
+            /** Fraction */
             fraction: number | null;
             /** Ranges */
             ranges: components["schemas"]["ResidueRange"][];
-            /**
-             * Sequence Length
-             * @default null
-             */
+            /** Sequence Length */
             sequence_length: number | null;
-            /**
-             * Uniprot Accession
-             * @default null
-             */
+            /** Uniprot Accession */
             uniprot_accession: string | null;
         };
         /**
@@ -1976,19 +8025,13 @@ export interface components {
          * @description A structure of any origin. The origin is always present and always shown.
          */
         StructureDescriptor: {
-            /**
-             * Attribution
-             * @default null
-             */
+            /** Attribution */
             attribution: string | null;
-            /** @default null */
             confidence: components["schemas"]["ConfidenceSummary"] | null;
-            /** @default null */
             coverage: components["schemas"]["StructureCoverage"] | null;
             /**
              * Created Date
              * @description Deposition, model creation or inference date
-             * @default null
              */
             created_date: string | null;
             files: components["schemas"]["StructureFiles"];
@@ -1997,111 +8040,63 @@ export interface components {
              * @description pdb:<ID>, afdb:<entryId> or of:<job_id>
              */
             id: string;
-            /**
-             * Job Id
-             * @default null
-             */
+            /** Job Id */
             job_id: string | null;
-            /**
-             * License
-             * @default null
-             */
+            /** License */
             license: string | null;
             /** Limitations */
             limitations: string[];
             /**
              * Method
              * @description Experimental method, or the tool that predicted it
-             * @default null
              */
             method: string | null;
-            /**
-             * Model Name
-             * @default null
-             */
+            /** Model Name */
             model_name: string | null;
-            /**
-             * Model Version
-             * @default null
-             */
+            /** Model Version */
             model_version: string | null;
             origin: components["schemas"]["StructureOrigin"];
             /** Origin Label */
             readonly origin_label: string;
-            /** @default null */
             provenance: components["schemas"]["Provenance"] | null;
             /**
              * Provider
              * @description Database or model provider ID, e.g. rcsb_pdb, afdb, boltz2
              */
             provider: string;
-            /**
-             * Provider Name
-             * @default null
-             */
+            /** Provider Name */
             provider_name: string | null;
             /**
              * Resolution
              * @description Angstroms; experimental structures only
-             * @default null
              */
             resolution: number | null;
-            /**
-             * Retrieved At
-             * @default null
-             */
+            /** Retrieved At */
             retrieved_at: string | null;
-            /**
-             * Source Id
-             * @default null
-             */
+            /** Source Id */
             source_id: string | null;
-            /**
-             * Source Url
-             * @default null
-             */
+            /** Source Url */
             source_url: string | null;
             /** Tag */
             readonly tag: string;
-            /**
-             * Title
-             * @default null
-             */
+            /** Title */
             title: string | null;
             /** Warnings */
             warnings: string[];
         };
         /** StructureFiles */
         StructureFiles: {
-            /**
-             * Bcif Url
-             * @default null
-             */
+            /** Bcif Url */
             bcif_url: string | null;
-            /**
-             * Cif Url
-             * @default null
-             */
+            /** Cif Url */
             cif_url: string | null;
-            /**
-             * Pae Image Url
-             * @default null
-             */
+            /** Pae Image Url */
             pae_image_url: string | null;
-            /**
-             * Pae Url
-             * @default null
-             */
+            /** Pae Url */
             pae_url: string | null;
-            /**
-             * Pdb Url
-             * @default null
-             */
+            /** Pdb Url */
             pdb_url: string | null;
-            /**
-             * Plddt Url
-             * @default null
-             */
+            /** Plddt Url */
             plddt_url: string | null;
         };
         /**
@@ -2133,16 +8128,885 @@ export interface components {
             variant_id: string | null;
         };
         /**
+         * StructureLedger
+         * @description Every structure known for a protein, grouped by origin. The groups are never merged.
+         */
+        StructureLedger: {
+            /** Experimental */
+            experimental: components["schemas"]["ExperimentalStructure"][];
+            /**
+             * Isoform Models
+             * @description AlphaFold DB models of other isoforms; not canonical numbering
+             */
+            isoform_models: components["schemas"]["StructureDescriptor"][];
+            /** Other External Models */
+            other_external_models: components["schemas"]["ExternalModel"][];
+            /**
+             * Predicted External
+             * @description The AlphaFold DB model of the canonical sequence
+             */
+            predicted_external: components["schemas"]["StructureDescriptor"][];
+            /** Predicted Orphafold */
+            predicted_orphafold: components["schemas"]["StructureDescriptor"][];
+            protein: components["schemas"]["EntityRef"];
+            recommended: components["schemas"]["RecommendedStructure"] | null;
+            /** Sequence Length */
+            sequence_length: number | null;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+        };
+        /** StructureLigands */
+        StructureLigands: {
+            /** Ligands */
+            ligands: components["schemas"]["BoundLigand"][];
+            /** Message */
+            message: string | null;
+            /** Neighbour Definition */
+            neighbour_definition: string | null;
+            origin: components["schemas"]["StructureOrigin"];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Structure Id */
+            structure_id: string;
+            /**
+             * Uniprot Accession
+             * @description Accession the merged binding sites refer to
+             */
+            uniprot_accession: string | null;
+        };
+        /**
          * StructureOrigin
          * @description Three structure classes that are never presented as equivalent.
          * @enum {string}
          */
         StructureOrigin: "experimental" | "predicted_external" | "predicted_orphafold";
+        /** SubcellularLocation */
+        SubcellularLocation: {
+            /** Evidence */
+            evidence: components["schemas"]["Evidence"][];
+            /** Location */
+            location: string;
+            /**
+             * Location Id
+             * @description UniProt subcellular location ID, e.g. SL-0086
+             */
+            location_id: string | null;
+            /** Molecule */
+            molecule: string | null;
+            /** Topology */
+            topology: string | null;
+        };
+        /** SubmissionSummary */
+        SubmissionSummary: {
+            /** By Classification */
+            by_classification: components["schemas"]["CountRow"][];
+            /** Rcv Accessions */
+            rcv_accessions: string[];
+            /** Rcv Count */
+            rcv_count: number;
+            /** Scv Accessions */
+            scv_accessions: string[];
+            /** Scv Count */
+            scv_count: number;
+            /** Submissions */
+            submissions: components["schemas"]["ClinVarSubmission"][];
+            /**
+             * Submissions Loaded
+             * @description False when the submitter-level record could not be read
+             * @default false
+             */
+            submissions_loaded: boolean;
+        };
+        /** Superposition */
+        Superposition: {
+            /**
+             * Atoms
+             * @default C-alpha
+             * @constant
+             */
+            atoms: "C-alpha";
+            /** Method */
+            method: string;
+            /** Residues Used */
+            residues_used: number;
+            /**
+             * Rmsd
+             * @description Angstroms, over the residues the fit used
+             */
+            rmsd: number;
+            /**
+             * Scope
+             * @description Which residues the fit used, in words
+             */
+            scope: string;
+            /**
+             * Scope Rule
+             * @enum {string}
+             */
+            scope_rule: "confident_in_both" | "all_residues";
+            transform: components["schemas"]["RigidTransform"];
+        };
+        /** SupportKindInfo */
+        SupportKindInfo: {
+            /** Description */
+            description: string;
+            /**
+             * Key
+             * @enum {string}
+             */
+            key: "experimental_annotation" | "curated_annotation" | "computational_prediction";
+            /** Label */
+            label: string;
+        };
+        /** TargetCompound */
+        TargetCompound: {
+            binding_prediction: components["schemas"]["BindingPredictionEligibility"];
+            /** Chembl Id */
+            chembl_id: string | null;
+            co_crystal: components["schemas"]["CoCrystalRecord"] | null;
+            /**
+             * Depiction Url
+             * @description API path; add ?theme=dark|light
+             */
+            depiction_url: string | null;
+            /** Evidence */
+            evidence: components["schemas"]["Evidence"][];
+            /** Evidence Kinds */
+            evidence_kinds: ("mechanism" | "bioactivity" | "co_crystal")[];
+            /**
+             * Evidence Tier
+             * @default A_experimental
+             * @constant
+             */
+            evidence_tier: "A_experimental";
+            /**
+             * Field Sources
+             * @description Source adapter ID of each populated field
+             */
+            field_sources: {
+                [key: string]: string;
+            };
+            /** First Approval */
+            first_approval: number | null;
+            /**
+             * Id
+             * @description InChIKey; the ChEMBL ID when the source gives no structure
+             */
+            id: string;
+            /** Inchikey */
+            inchikey: string | null;
+            /**
+             * Max Phase
+             * @description ChEMBL max_phase; null when ChEMBL gives none
+             */
+            max_phase: number | null;
+            measured_affinity: components["schemas"]["MeasuredAffinitySummary"] | null;
+            /** Mechanisms */
+            mechanisms: components["schemas"]["MechanismRecord"][];
+            modality: components["schemas"]["Modality"];
+            /**
+             * Modality Basis
+             * @description The source field the modality was read from
+             */
+            modality_basis: string;
+            /** Molecular Formula */
+            molecular_formula: string | null;
+            /** Molecular Weight */
+            molecular_weight: number | null;
+            /**
+             * Molecule Type
+             * @description ChEMBL molecule_type, verbatim
+             */
+            molecule_type: string | null;
+            /** Name */
+            name: string | null;
+            /** Smiles */
+            smiles: string | null;
+        };
+        /**
+         * TextAnnotation
+         * @description A statement in the source's own words, with the evidence the source attaches to it.
+         */
+        TextAnnotation: {
+            /** Evidence */
+            evidence: components["schemas"]["Evidence"][];
+            /**
+             * Molecule
+             * @description Isoform or chain the statement applies to
+             */
+            molecule: string | null;
+            /** Text */
+            text: string;
+        };
+        /** TrailEdge */
+        TrailEdge: {
+            /**
+             * Relation
+             * @description led_to (trail step) or supports (item cited by a hypothesis)
+             */
+            relation: string;
+            /** Source */
+            source: string;
+            /** Target */
+            target: string;
+        };
+        /** TrailNode */
+        TrailNode: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Depth */
+            depth: number;
+            /** Href */
+            href: string | null;
+            /** Item Id */
+            item_id: string;
+            kind: components["schemas"]["ItemKind"];
+            /** Label */
+            label: string;
+            /**
+             * Order
+             * @description Depth-first order of the trail
+             */
+            order: number;
+            /** Parent Item Id */
+            parent_item_id: string | null;
+            /** Ref */
+            ref: string | null;
+        };
+        /** TrailOut */
+        TrailOut: {
+            /** Active Item Id */
+            active_item_id: string | null;
+            /** Edges */
+            edges: components["schemas"]["TrailEdge"][];
+            /** Nodes */
+            nodes: components["schemas"]["TrailNode"][];
+            /** Roots */
+            roots: string[];
+        };
+        /** Transcript */
+        Transcript: {
+            /** Biotype */
+            biotype: string | null;
+            /** Display Name */
+            display_name: string | null;
+            /** End */
+            end: number | null;
+            evidence: components["schemas"]["Evidence"] | null;
+            /** Exon Count */
+            exon_count: number | null;
+            /**
+             * Id
+             * @description Unversioned Ensembl transcript ID
+             */
+            id: string;
+            /**
+             * Is Canonical
+             * @default false
+             */
+            is_canonical: boolean;
+            /**
+             * Is Mane Plus Clinical
+             * @default false
+             */
+            is_mane_plus_clinical: boolean;
+            /**
+             * Is Mane Select
+             * @default false
+             */
+            is_mane_select: boolean;
+            /**
+             * Length
+             * @description Spliced transcript length in bases
+             */
+            length: number | null;
+            /**
+             * Protein Id
+             * @description Unversioned Ensembl protein ID
+             */
+            protein_id: string | null;
+            /** Protein Length */
+            protein_length: number | null;
+            /** Protein Version */
+            protein_version: number | null;
+            /** Refseq Protein */
+            refseq_protein: string | null;
+            /**
+             * Refseq Transcript
+             * @description RefSeq match of the MANE annotation
+             */
+            refseq_transcript: string | null;
+            /** Start */
+            start: number | null;
+            /** Url */
+            url: string | null;
+            /** Version */
+            version: number | null;
+        };
+        /**
+         * Treatment
+         * @description A drug or clinical candidate as Open Targets records it. No ranking is implied.
+         */
+        Treatment: {
+            /**
+             * Clinical Stage
+             * @description Open Targets maxClinicalStage for this pairing, verbatim
+             */
+            clinical_stage: string | null;
+            /** Clinical Stage Label */
+            clinical_stage_label: string | null;
+            drug: components["schemas"]["EntityRef"];
+            /**
+             * Drug Id
+             * @description ChEMBL ID
+             */
+            drug_id: string;
+            /**
+             * Drug Max Clinical Stage
+             * @description Highest stage for any indication
+             */
+            drug_max_clinical_stage: string | null;
+            evidence: components["schemas"]["Evidence"] | null;
+            /**
+             * Indications
+             * @description Indications of the target-level record; empty on a disease record
+             */
+            indications: components["schemas"]["TreatmentIndication"][];
+            /**
+             * Is Small Molecule
+             * @default false
+             */
+            is_small_molecule: boolean;
+            /** Mechanisms */
+            mechanisms: components["schemas"]["TreatmentMechanism"][];
+            /**
+             * Modality
+             * @description Open Targets drugType, verbatim
+             */
+            modality: string | null;
+            /** Name */
+            name: string | null;
+            /**
+             * Report Total
+             * @default 0
+             */
+            report_total: number;
+            /** Reports */
+            reports: components["schemas"]["ClinicalReport"][];
+            /**
+             * Scope
+             * @enum {string}
+             */
+            scope: "disease_indication" | "target";
+            /**
+             * Source Url
+             * @description Open Targets page of the drug
+             */
+            source_url: string;
+        };
+        /** TreatmentIndication */
+        TreatmentIndication: {
+            /**
+             * From Source
+             * @description Indication as the source report words it
+             */
+            from_source: string | null;
+            /** Id */
+            id: string | null;
+            /** Name */
+            name: string | null;
+        };
+        /** TreatmentMechanism */
+        TreatmentMechanism: {
+            /** Action Type */
+            action_type: string | null;
+            /** Mechanism */
+            mechanism: string | null;
+            /** Reference Urls */
+            reference_urls: string[];
+            /** Target Name */
+            target_name: string | null;
+        };
+        /** TreatmentsResponse */
+        TreatmentsResponse: {
+            gene: components["schemas"]["EntityRef"];
+            /**
+             * Scope Note
+             * @default Drugs and clinical candidates whose recorded mechanism acts on this gene product. Their indications are those in the source record and are usually not the inborn error of immunity.
+             */
+            scope_note: string;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Stage Counts */
+            stage_counts: components["schemas"]["StageCount"][];
+            /**
+             * Target Id
+             * @description Ensembl gene ID used as the Open Targets target
+             */
+            target_id: string | null;
+            /**
+             * Total
+             * @description Null when Open Targets did not answer
+             */
+            total: number | null;
+            /** Treatments */
+            treatments: components["schemas"]["Treatment"][];
+        };
+        /** UniProtAssociation */
+        UniProtAssociation: {
+            /**
+             * Is Disease
+             * @default false
+             */
+            is_disease: boolean;
+            /** Name */
+            name: string;
+            /** Pmids */
+            pmids: string[];
+            /** Xrefs */
+            xrefs: components["schemas"]["orphafold__schemas__variants__CrossReference"][];
+        };
+        /** UniProtVariantAnnotation */
+        UniProtVariantAnnotation: {
+            /** Accession */
+            accession: string;
+            /** Associations */
+            associations: components["schemas"]["UniProtAssociation"][];
+            /** Consequence */
+            consequence: string | null;
+            /** Descriptions */
+            descriptions: string[];
+            /** Eco Codes */
+            eco_codes: string[];
+            evidence: components["schemas"]["Evidence"] | null;
+            /** Feature Id */
+            feature_id: string | null;
+            /** Hgvs G */
+            hgvs_g: string[];
+            /** Mutated Type */
+            mutated_type: string | null;
+            /** Pmids */
+            pmids: string[];
+            /** Position */
+            position: number | null;
+            /**
+             * Source Type
+             * @description uniprot (curated) or mixed
+             */
+            source_type: string | null;
+            /** Url */
+            url: string | null;
+            /** Wild Type */
+            wild_type: string | null;
+        };
+        /** UnsupportedCategory */
+        UnsupportedCategory: {
+            /**
+             * Category
+             * @enum {string}
+             */
+            category: "stability" | "folding" | "catalytic_site" | "ligand_binding" | "protein_interaction" | "localisation" | "signalling" | "domain_interface";
+            /**
+             * Checked
+             * @description What the rules looked for
+             */
+            checked: string[];
+            /** Label */
+            label: string;
+            /**
+             * Message
+             * @default No supporting data found
+             */
+            message: string;
+            /**
+             * Not Checked
+             * @description Data the rules need that no source answered with
+             */
+            not_checked: string[];
+            /**
+             * Observations
+             * @description Records that were read but do not raise the candidate
+             */
+            observations: components["schemas"]["MechanismObservation"][];
+        };
+        /** VariantCondition */
+        VariantCondition: {
+            /** Name */
+            name: string;
+            /** Xrefs */
+            xrefs: components["schemas"]["orphafold__schemas__variants__CrossReference"][];
+        };
+        /**
+         * VariantCounts
+         * @description Counts over every loaded variant of the gene, before filters.
+         */
+        VariantCounts: {
+            /** By Consequence */
+            by_consequence: components["schemas"]["CountRow"][];
+            /** By Review Stars */
+            by_review_stars: components["schemas"]["CountRow"][];
+            /** By Significance */
+            by_significance: components["schemas"]["CountRow"][];
+            /**
+             * Clinvar Gene Total
+             * @description Records ClinVar lists for the gene, when more than were loaded
+             */
+            clinvar_gene_total: number | null;
+            /** Clinvar Records */
+            clinvar_records: number;
+            /** Pathogenic Or Likely Pathogenic */
+            pathogenic_or_likely_pathogenic: number;
+            /** Total */
+            total: number;
+            /** Uniprot Curated */
+            uniprot_curated: number;
+            /**
+             * Uniprot Not Listed
+             * @description UniProt variants that are not single-residue changes and are left out
+             * @default 0
+             */
+            uniprot_not_listed: number;
+            /** Uniprot Only */
+            uniprot_only: number;
+            /** With Protein Position */
+            with_protein_position: number;
+        };
+        /** VariantDetail */
+        VariantDetail: {
+            /** Alternate Residue */
+            alternate_residue: string | null;
+            /** Change Kind */
+            change_kind: string | null;
+            clinvar: components["schemas"]["ClinVarRecord"] | null;
+            /**
+             * Clinvar Message
+             * @description Why clinvar is null: no record found, or the source did not answer
+             */
+            clinvar_message: string | null;
+            /** Clinvar Release */
+            clinvar_release: string | null;
+            /** Consequence */
+            consequence: string | null;
+            /** Cross References */
+            cross_references: components["schemas"]["orphafold__schemas__variants__CrossReference"][];
+            /** End Position */
+            end_position: number | null;
+            gene: components["schemas"]["EntityRef"];
+            gnomad: components["schemas"]["GnomadObservation"];
+            hgvs: components["schemas"]["VariantHgvs"];
+            /** Id */
+            id: string;
+            /** Name */
+            name: string | null;
+            /**
+             * Other Clinvar Records
+             * @description Other ClinVar records with the same protein change (different nucleotide change)
+             */
+            other_clinvar_records: components["schemas"]["ClinVarRecord"][];
+            /** Position */
+            position: number | null;
+            protein: components["schemas"]["EntityRef"] | null;
+            /** Protein Change */
+            protein_change: string | null;
+            /** Protein Change Short */
+            protein_change_short: string | null;
+            /** Query */
+            query: string;
+            reference_check: components["schemas"]["ReferenceCheckResult"];
+            /** Reference Residue */
+            reference_residue: string | null;
+            /**
+             * Resolved From
+             * @enum {string}
+             */
+            resolved_from: "vcv" | "rsid" | "variation_id" | "protein";
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            uniprot: components["schemas"]["UniProtVariantAnnotation"] | null;
+            vep: components["schemas"]["VepConsequence"] | null;
+            vrs: components["schemas"]["VrsIdentifier"];
+        };
+        /** VariantFilters */
+        VariantFilters: {
+            /** Consequence */
+            consequence: string[];
+            /** Min Stars */
+            min_stars: number | null;
+            /** Q */
+            q: string | null;
+            /** Residue End */
+            residue_end: number | null;
+            /** Residue Start */
+            residue_start: number | null;
+            /** Significance */
+            significance: string[];
+            /** Sort */
+            sort: string;
+        };
+        /**
+         * VariantHgvs
+         * @description HGVS expressions as the sources wrote them. Versioned references only.
+         */
+        VariantHgvs: {
+            /**
+             * C
+             * @description Transcript level, e.g. NM_000061.3:c.1574G>A
+             */
+            c: string | null;
+            /**
+             * G
+             * @description Genomic, GRCh38, when a source provides it
+             */
+            g: string | null;
+            /**
+             * P
+             * @description Protein level, three-letter, e.g. p.Arg525Gln
+             */
+            p: string | null;
+            /**
+             * Spdi
+             * @description ClinVar canonical SPDI (0-based)
+             */
+            spdi: string | null;
+            /** Transcript */
+            transcript: string | null;
+        };
         /**
          * VariantMetric
          * @enum {string}
          */
         VariantMetric: "pathogenic" | "total";
+        /**
+         * VariantSummary
+         * @description One row of a gene's variant table: a ClinVar record, a UniProt natural variant, or both.
+         */
+        VariantSummary: {
+            /**
+             * Alternate Residue
+             * @description One-letter code, * for stop
+             */
+            alternate_residue: string | null;
+            /** Change Kind */
+            change_kind: string | null;
+            /**
+             * Clinical Significance
+             * @description ClinVar germline classification, in ClinVar's words
+             */
+            clinical_significance: string | null;
+            /** Conditions */
+            conditions: components["schemas"]["VariantCondition"][];
+            /**
+             * Consequence
+             * @description Primary molecular consequence term
+             */
+            consequence: string | null;
+            /** Consequences */
+            consequences: string[];
+            /** End Position */
+            end_position: number | null;
+            /** Evidence */
+            evidence: components["schemas"]["Evidence"][];
+            /** Gene Symbol */
+            gene_symbol: string;
+            hgvs: components["schemas"]["VariantHgvs"];
+            /** Href */
+            href: string | null;
+            /**
+             * Id
+             * @description GENE-p.Ref3PosAlt3 for single-residue changes, ClinVar VCV otherwise
+             */
+            id: string;
+            /**
+             * In Clinvar
+             * @default false
+             */
+            in_clinvar: boolean;
+            /**
+             * In Uniprot
+             * @default false
+             */
+            in_uniprot: boolean;
+            /** Last Evaluated */
+            last_evaluated: string | null;
+            /**
+             * Name
+             * @description ClinVar title, or the UniProt feature ID
+             */
+            name: string | null;
+            /**
+             * Position
+             * @description UniProt canonical residue number
+             */
+            position: number | null;
+            /**
+             * Protein Change
+             * @description Three-letter, e.g. p.Arg28His
+             */
+            protein_change: string | null;
+            /**
+             * Protein Change Short
+             * @description One-letter, e.g. R28H
+             */
+            protein_change_short: string | null;
+            /**
+             * Reference Matches Uniprot
+             * @description Reference residue confirmed on the UniProt canonical sequence. False: the residue differs or the record is numbered on another isoform, so no position is given. Null: not checked
+             */
+            reference_matches_uniprot: boolean | null;
+            /**
+             * Reference Residue
+             * @description One-letter code
+             */
+            reference_residue: string | null;
+            /** Review Stars */
+            review_stars: number | null;
+            /** Review Status */
+            review_status: string | null;
+            /**
+             * Row Key
+             * @description Unique per row. Two ClinVar records can share one protein change
+             */
+            row_key: string;
+            /** Rsid */
+            rsid: string | null;
+            /** Significance Keys */
+            significance_keys: ("pathogenic" | "likely_pathogenic" | "uncertain_significance" | "likely_benign" | "benign" | "conflicting" | "other" | "not_classified")[];
+            /** Uniprot Feature Id */
+            uniprot_feature_id: string | null;
+            /** Variant Type */
+            variant_type: string | null;
+            /** Variation Id */
+            variation_id: string | null;
+            /** Vcv */
+            vcv: string | null;
+            /** Vcv Version */
+            vcv_version: string | null;
+        };
+        /**
+         * VepConsequence
+         * @description Ensembl VEP prediction for the transcript-level HGVS of the ClinVar record.
+         */
+        VepConsequence: {
+            /** Amino Acids */
+            amino_acids: string | null;
+            /** Assembly */
+            assembly: string | null;
+            /** Chromosome */
+            chromosome: string | null;
+            /** Codons */
+            codons: string | null;
+            /** Consequence Terms */
+            consequence_terms: string[];
+            /** End */
+            end: number | null;
+            evidence: components["schemas"]["Evidence"] | null;
+            /** Exon */
+            exon: string | null;
+            /** Hgvsc */
+            hgvsc: string | null;
+            /** Hgvsp */
+            hgvsp: string | null;
+            /** Impact */
+            impact: string | null;
+            /** Input */
+            input: string | null;
+            /** Intron */
+            intron: string | null;
+            /**
+             * Is Mane Select
+             * @default false
+             */
+            is_mane_select: boolean;
+            /** Mane Select */
+            mane_select: string | null;
+            /** Most Severe Consequence */
+            most_severe_consequence: string | null;
+            /** Protein Start */
+            protein_start: number | null;
+            /** Start */
+            start: number | null;
+            /** Transcript Id */
+            transcript_id: string | null;
+            /** Variant Class */
+            variant_class: string | null;
+        };
+        /** VrsIdentifier */
+        VrsIdentifier: {
+            /**
+             * Id
+             * @description GA4GH VRS 2.x Allele ID, ga4gh:VA.*
+             */
+            id: string | null;
+            /**
+             * Level
+             * @default protein
+             * @constant
+             */
+            level: "protein";
+            /** Message */
+            message: string | null;
+            /** Method */
+            method: string | null;
+            /**
+             * Reference
+             * @description Sequence the digest was computed on
+             */
+            reference: string | null;
+            /**
+             * Sequence Accession
+             * @description refget accession of the sequence
+             */
+            sequence_accession: string | null;
+        };
+        /** CrossReference */
+        orphafold__schemas__compounds__CrossReference: {
+            /** Database */
+            database: string;
+            /** Database Name */
+            database_name: string | null;
+            /** Id */
+            id: string;
+            /**
+             * Source
+             * @default unichem
+             * @constant
+             */
+            source: "unichem";
+            /** Url */
+            url: string | null;
+        };
+        /** CrossReference */
+        orphafold__schemas__diseases__CrossReference: {
+            /** Database */
+            database: string;
+            /** Id */
+            id: string;
+            /** Url */
+            url: string | null;
+        };
+        /** CrossReference */
+        orphafold__schemas__proteins__CrossReference: {
+            /** Id */
+            id: string;
+            /** Isoform Id */
+            isoform_id: string | null;
+            /** Properties */
+            properties: {
+                [key: string]: string;
+            };
+        };
+        /** CrossReference */
+        orphafold__schemas__variants__CrossReference: {
+            /** Db */
+            db: string;
+            /** Id */
+            id: string;
+            /** Url */
+            url: string | null;
+        };
     };
     responses: never;
     parameters: never;
@@ -2152,6 +9016,481 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    chat_api_v1_assistant_chat_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatRequest"];
+            };
+        };
+        responses: {
+            /** @description Server-sent events */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                    "text/event-stream": unknown;
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_digest_api_v1_assistant_digest_get: {
+        parameters: {
+            query?: {
+                disease?: string | null;
+                gene?: string | null;
+                accession?: string | null;
+                variant?: string | null;
+                residue?: number | null;
+                structure?: string | null;
+                compound?: string | null;
+                comparison?: string | null;
+            };
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantAnswer"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_status_api_v1_assistant_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantStatus"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_example_file_api_v1_compare_examples__job_id__files__name__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The stored file */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                    "application/octet-stream": unknown;
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_comparison_result_api_v1_compare_results__job_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompareResultResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_comparison_plan_api_v1_compare__gene___change__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                gene: string;
+                change: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ComparePlanResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_compound_api_v1_compounds__compound_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                compound_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompoundDetailResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_compound_analogs_api_v1_compounds__compound_id__analogs_get: {
+        parameters: {
+            query?: {
+                /** @description Minimum similarity, percent */
+                threshold?: number;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                compound_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompoundAnalogsResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_compound_depiction_api_v1_compounds__compound_id__depiction_svg_get: {
+        parameters: {
+            query?: {
+                theme?: "dark" | "light";
+                width?: number;
+                height?: number;
+            };
+            header?: never;
+            path: {
+                compound_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/svg+xml": unknown;
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    browse_diseases_api_v1_diseases_get: {
+        parameters: {
+            query?: {
+                /** @description IUIS category or subcategory ID, e.g. iuis-t3 or iuis-t3-a */
+                category?: string | null;
+                /** @description Text in the name, an alias, the gene symbol or a cross-reference */
+                q?: string | null;
+                /** @description Page number, from 1 */
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DiseaseListResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    read_disease_api_v1_diseases__disease_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Catalog slug, or an exact cross-reference such as MONDO:0010421 */
+                disease_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DiseaseResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
     list_facets_api_v1_explore_facets_get: {
         parameters: {
             query?: {
@@ -2166,7 +9505,7 @@ export interface operations {
                 /** @description Protein family, exact. 'unknown' selects genes with none. Repeatable */
                 protein_family?: string[] | null;
                 /** @description Structure availability: experimental, predicted, none, unknown. Repeatable */
-                structure?: components["schemas"]["StructureAvailability"][] | null;
+                structure?: components["schemas"]["StructureAvailability-Input"][] | null;
                 /** @description Which ClinVar count the variant range applies to */
                 variant_metric?: components["schemas"]["VariantMetric"];
                 /** @description Minimum number of reported variants */
@@ -2231,7 +9570,7 @@ export interface operations {
                 /** @description Protein family, exact. 'unknown' selects genes with none. Repeatable */
                 protein_family?: string[] | null;
                 /** @description Structure availability: experimental, predicted, none, unknown. Repeatable */
-                structure?: components["schemas"]["StructureAvailability"][] | null;
+                structure?: components["schemas"]["StructureAvailability-Input"][] | null;
                 /** @description Which ClinVar count the variant range applies to */
                 variant_metric?: components["schemas"]["VariantMetric"];
                 /** @description Minimum number of reported variants */
@@ -2260,6 +9599,282 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ExploreGenesResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    read_gene_api_v1_genes__symbol__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description HGNC symbol, e.g. BTK */
+                symbol: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GeneResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_axis_variants_api_v1_genes__symbol__axis_variants_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                symbol: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AxisVariantsResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_population_variants_api_v1_genes__symbol__population_variants_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                symbol: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PopulationVariantsResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    read_treatments_api_v1_genes__symbol__treatments_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description HGNC symbol, e.g. BTK */
+                symbol: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TreatmentsResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_gene_variants_api_v1_genes__symbol__variants_get: {
+        parameters: {
+            query?: {
+                /** @description Clinical significance keys: pathogenic, likely_pathogenic, uncertain_significance, likely_benign, benign, conflicting, other, not_classified, or all. Repeatable. Default: pathogenic and likely_pathogenic */
+                significance?: string[] | null;
+                /** @description Molecular consequence, e.g. missense_variant. Repeatable */
+                consequence?: string[] | null;
+                /** @description Minimum ClinVar review stars */
+                min_stars?: number | null;
+                /** @description First residue, UniProt numbering */
+                residue_start?: number | null;
+                /** @description Last residue, UniProt numbering */
+                residue_end?: number | null;
+                /** @description Text in the name, protein change, condition, VCV or rsID */
+                q?: string | null;
+                /** @description position, stars or last_evaluated */
+                sort?: string;
+                /** @description Page size */
+                limit?: number;
+                /** @description Items to skip */
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                symbol: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GeneVariantsResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_gene_variants_csv_api_v1_genes__symbol__variants_csv_get: {
+        parameters: {
+            query?: {
+                /** @description Clinical significance keys: pathogenic, likely_pathogenic, uncertain_significance, likely_benign, benign, conflicting, other, not_classified, or all. Repeatable. Default: pathogenic and likely_pathogenic */
+                significance?: string[] | null;
+                /** @description Molecular consequence, e.g. missense_variant. Repeatable */
+                consequence?: string[] | null;
+                /** @description Minimum ClinVar review stars */
+                min_stars?: number | null;
+                /** @description First residue, UniProt numbering */
+                residue_start?: number | null;
+                /** @description Last residue, UniProt numbering */
+                residue_end?: number | null;
+                /** @description Text in the name, protein change, condition, VCV or rsID */
+                q?: string | null;
+                /** @description position, stars or last_evaluated */
+                sort?: string;
+            };
+            header?: never;
+            path: {
+                symbol: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv": unknown;
                 };
             };
             /** @description Problem JSON */
@@ -2720,6 +10335,391 @@ export interface operations {
             };
         };
     };
+    get_lab_agents_api_v1_lab_agents_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabAgentsResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_lab_benchmark_api_v1_lab_benchmark_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabBenchmark"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    list_lab_runs_api_v1_lab_runs_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabRunList"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    start_lab_run_api_v1_lab_runs_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LabRunCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabRunStarted"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_lab_run_api_v1_lab_runs__run_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabRunDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    decide_lab_approval_api_v1_lab_runs__run_id__approvals__approval_id__post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                run_id: string;
+                approval_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LabApprovalInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabApprovalResult"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_lab_run_events_api_v1_lab_runs__run_id__events_get: {
+        parameters: {
+            query?: {
+                /** @description Return events with a seq above this value */
+                after?: number;
+            };
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabEventsPage"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    list_literature_api_v1_literature_get: {
+        parameters: {
+            query?: {
+                /** @description HGNC symbol, e.g. BTK */
+                gene?: string | null;
+                /** @description Catalog disease ID */
+                disease?: string | null;
+                /** @description Variant ID or protein change, e.g. BTK-p.Arg28His */
+                variant?: string | null;
+                /** @description UniProt accession */
+                accession?: string | null;
+                /** @description UniProt canonical position, optionally with the residue: 28, R28 */
+                residue?: string | null;
+                /** @description Free text added to the search */
+                q?: string | null;
+                /** @description all, review or primary research */
+                kind?: "all" | "review" | "primary";
+                /** @description relevance (Europe PMC), cited or date */
+                sort?: "relevance" | "cited" | "date";
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiteratureResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    read_publication_api_v1_literature__pmid__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description PubMed ID */
+                pmid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiteratureRecordResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
     meta_api_v1_meta_get: {
         parameters: {
             query?: never;
@@ -2814,6 +10814,2018 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProviderInfo"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    list_projects_api_v1_projects_get: {
+        parameters: {
+            query?: {
+                /** @description mine: owned by this workspace; public: listed publicly */
+                scope?: components["schemas"]["ProjectScope"];
+                /** @description Text in the title or description */
+                q?: string | null;
+                /** @description Page size */
+                limit?: number;
+                /** @description Items to skip */
+                offset?: number;
+            };
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_ProjectOut_"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    create_project_api_v1_projects_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_project_api_v1_projects__project_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    delete_project_api_v1_projects__project_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    update_project_api_v1_projects__project_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    export_json_api_v1_projects__project_id__export_json_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    export_markdown_api_v1_projects__project_id__export_md_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Research report */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                    "text/markdown": unknown;
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    export_zip_api_v1_projects__project_id__export_zip_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Export archive */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                    "application/zip": unknown;
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    fork_project_api_v1_projects__project_id__fork_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ForkRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    list_forks_api_v1_projects__project_id__forks_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectOut"][];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    list_hypotheses_api_v1_projects__project_id__hypotheses_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectItemOut"][];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    add_hypothesis_api_v1_projects__project_id__hypotheses_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HypothesisCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectItemOut"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    list_items_api_v1_projects__project_id__items_get: {
+        parameters: {
+            query?: {
+                /** @description Repeatable */
+                kind?: components["schemas"]["ItemKind"][] | null;
+            };
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectItemOut"][];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    add_item_api_v1_projects__project_id__items_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectItemCreate"];
+            };
+        };
+        responses: {
+            /** @description The entity already is the active trail node */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectItemOut"];
+                };
+            };
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectItemOut"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_item_api_v1_projects__project_id__items__item_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectItemOut"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    delete_item_api_v1_projects__project_id__items__item_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    update_item_api_v1_projects__project_id__items__item_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectItemUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectItemOut"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    publish_project_api_v1_projects__project_id__publish_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PublishRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Nothing changed since the head snapshot */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SnapshotSummary"];
+                };
+            };
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SnapshotSummary"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    list_snapshots_api_v1_projects__project_id__snapshots_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SnapshotSummary"][];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_trail_api_v1_projects__project_id__trail_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrailOut"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    read_protein_api_v1_proteins__accession__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description UniProt accession, e.g. Q06187 */
+                accession: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProteinResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_protein_compounds_api_v1_proteins__accession__compounds_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                accession: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProteinCompoundsResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_effect_map_api_v1_proteins__accession__effect_map_get: {
+        parameters: {
+            query?: {
+                /** @description Include the full residue x substitution matrix */
+                matrix?: boolean;
+            };
+            header?: never;
+            path: {
+                accession: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EffectMapResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    read_fasta_api_v1_proteins__accession__fasta_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description UniProt accession, e.g. Q06187 */
+                accession: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                    "text/x-fasta": unknown;
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    read_interactions_api_v1_proteins__accession__interactions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description UniProt accession, e.g. Q06187 */
+                accession: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InteractionsResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    read_pathways_api_v1_proteins__accession__pathways_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description UniProt accession, e.g. Q06187 */
+                accession: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PathwaysResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_protein_pockets_api_v1_proteins__accession__pockets_get: {
+        parameters: {
+            query?: {
+                /** @description pdb:<ID> or afdb:<entryId>; the AlphaFold DB model of the protein when omitted */
+                structure_id?: string | null;
+                /** @description UniProt position to test against every pocket */
+                residue?: number | null;
+            };
+            header?: never;
+            path: {
+                accession: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PocketsResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    read_residue_api_v1_proteins__accession__residues__position__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description UniProt accession, e.g. Q06187 */
+                accession: string;
+                /** @description UniProt canonical residue number */
+                position: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResidueResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_residue_effects_api_v1_proteins__accession__residues__position__effects_get: {
+        parameters: {
+            query?: {
+                /** @description Alternate residue, one-letter code */
+                alt?: string | null;
+                /** @description Reference residue the caller expects; a mismatch is flagged */
+                ref?: string | null;
+            };
+            header?: never;
+            path: {
+                accession: string;
+                /** @description UniProt canonical residue number */
+                position: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResidueEffectsResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_protein_structures_api_v1_proteins__accession__structures_get: {
+        parameters: {
+            query?: {
+                /** @description Also list models of other providers from 3D-Beacons */
+                external_models?: boolean;
+            };
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                accession: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StructureLedger"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_search_api_v1_search_get: {
+        parameters: {
+            query?: {
+                /** @description Name, alias, identifier or variant notation */
+                q?: string;
+                /** @description Result types, repeatable or comma-separated. Compound and paper text search calls a live source and runs only when the type is named here. */
+                types?: string[] | null;
+                /** @description Rows per group */
+                limit?: number;
+            };
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SearchResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_snapshot_api_v1_snapshots__snapshot_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SnapshotOut"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    export_json_api_v1_snapshots__snapshot_id__export_json_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    export_markdown_api_v1_snapshots__snapshot_id__export_md_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Research report */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                    "text/markdown": unknown;
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    export_zip_api_v1_snapshots__snapshot_id__export_zip_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Export archive */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                    "application/zip": unknown;
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    fork_snapshot_api_v1_snapshots__snapshot_id__fork_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ForkRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    restore_snapshot_api_v1_snapshots__snapshot_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SnapshotSummary"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    withdraw_snapshot_api_v1_snapshots__snapshot_id__withdraw_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SnapshotSummary"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_structure_api_v1_structures__structure_id__get: {
+        parameters: {
+            query?: {
+                /** @description UniProt accession to report on when the entry contains several proteins */
+                accession?: string | null;
+            };
+            header?: never;
+            path: {
+                structure_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StructureDescriptor"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_structure_confidence_api_v1_structures__structure_id__confidence_get: {
+        parameters: {
+            query?: {
+                /** @description Include the PAE matrix */
+                pae?: boolean;
+            };
+            header?: never;
+            path: {
+                structure_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StructureConfidence"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_structure_file_api_v1_structures__structure_id__file_get: {
+        parameters: {
+            query?: {
+                format?: "bcif" | "cif" | "pdb";
+                /** @description Send as an attachment */
+                download?: boolean;
+            };
+            header?: never;
+            path: {
+                structure_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The file, cached by OrphaFold */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                    "application/octet-stream": unknown;
+                    "chemical/x-mmcif": unknown;
+                    "chemical/x-pdb": unknown;
+                };
+            };
+            /** @description Not modified */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_structure_ligands_api_v1_structures__structure_id__ligands_get: {
+        parameters: {
+            query?: {
+                /** @description UniProt accession to report on when the entry contains several proteins */
+                accession?: string | null;
+            };
+            header?: never;
+            path: {
+                structure_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StructureLigands"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_structure_residue_map_api_v1_structures__structure_id__residue_map_get: {
+        parameters: {
+            query?: {
+                /** @description UniProt accession to report on when the entry contains several proteins */
+                accession?: string | null;
+            };
+            header?: never;
+            path: {
+                structure_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResidueMap"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_variant_api_v1_variants__variant_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                variant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VariantDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_variant_mechanisms_api_v1_variants__variant_id__mechanisms_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Anonymous workspace ID generated by the client: 16-128 characters of A-Z a-z 0-9 _ - */
+                "X-OrphaFold-Workspace"?: string | null;
+            };
+            path: {
+                variant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MechanismsResponse"];
                 };
             };
             /** @description Problem JSON */

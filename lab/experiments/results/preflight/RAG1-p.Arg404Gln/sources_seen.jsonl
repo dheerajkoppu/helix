@@ -1,0 +1,20 @@
+{"database": "IUIS 2024 classification", "record_id": "Table 1.2 row 11 (rag-deficiency-rag1)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12829761/table/tbl1/", "tool": "get_gene", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "UniProtKB", "record_id": "P15918", "url": "https://www.uniprot.org/uniprotkb/P15918/entry", "tool": "get_protein", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "ClinVar", "record_id": "VCV001072413.23", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/1072413/", "tool": "get_variant", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "gnomAD", "record_id": "11-36574515-G-A", "url": "https://gnomad.broadinstitute.org/variant/11-36574515-G-A?dataset=gnomad_r4", "tool": "get_variant", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "Ensembl VEP", "record_id": "NM_000448.3:c.1211G>A", "url": "https://rest.ensembl.org/documentation/info/vep_hgvs_get", "tool": "get_variant", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "ClinVar", "record_id": "VCV000636824.16", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/636824/", "tool": "list_variants_near", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "InterPro", "record_id": "IPR024627", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR024627/", "tool": "get_residue_annotations", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "InterPro", "record_id": "IPR023336", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR023336/", "tool": "get_residue_annotations", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "AlphaMissense", "record_id": "AF-P15918-F1:R404Q", "url": "https://alphafold.ebi.ac.uk/entry/AF-P15918-F1", "tool": "get_variant_effect_values", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "EBI ProtVar", "record_id": "P15918:404", "url": "https://www.ebi.ac.uk/ProtVar/query?search=P15918:404:Q", "tool": "get_variant_effect_values", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "EBI ProtVar", "record_id": "P15918:404:Q", "url": "https://www.ebi.ac.uk/ProtVar/query?search=P15918:404:Q", "tool": "get_variant_effect_values", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "PDBe SIFTS", "record_id": "P15918", "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P15918", "tool": "get_structure_ledger", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "AlphaFold DB", "record_id": "AF-P15918-F1", "url": "https://alphafold.ebi.ac.uk/entry/AF-P15918-F1", "tool": "get_structure_ledger", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "IntAct", "record_id": "EBI-1966285", "url": "https://www.ebi.ac.uk/intact/search?query=id:P15918%20AND%20id:P16333", "tool": "get_interactions", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "IntAct", "record_id": "EBI-9363913", "url": "https://www.ebi.ac.uk/intact/search?query=id:P15918%20AND%20id:B4DYC6", "tool": "get_interactions", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "IntAct", "record_id": "EBI-6426848", "url": "https://www.ebi.ac.uk/intact/search?query=id:P15918%20AND%20id:P08238", "tool": "get_interactions", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "Europe PMC", "record_id": "PMID:31388879", "url": "https://europepmc.org/article/MED/31388879", "tool": "search_literature", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "Europe PMC", "record_id": "PMID:24985406", "url": "https://europepmc.org/article/MED/24985406", "tool": "search_literature", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "Europe PMC", "record_id": "PMID:24290284", "url": "https://europepmc.org/article/MED/24290284", "tool": "search_literature", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}
+{"database": "Europe PMC", "record_id": "PMID:29051008", "url": "https://europepmc.org/article/MED/29051008", "tool": "search_literature", "agent": "orchestrator", "at": "2026-10-03T22:03:52Z"}

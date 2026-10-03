@@ -1,7 +1,6 @@
 /**
- * Contract for the persistent sequence axis dock. The sequence specialist replaces the
- * implementation in this directory and keeps every exported name. All positions are UniProt
- * canonical, 1-based, inclusive.
+ * Contract for the persistent sequence axis dock. All positions are UniProt canonical, 1-based,
+ * inclusive.
  */
 import type { SourceStatus } from "@/lib/api/types";
 import type { EvidenceClass } from "@/lib/evidence";
@@ -12,7 +11,17 @@ import type { StructureOrigin } from "@/lib/structure-origin";
 export type { ResidueRange };
 
 export type SequenceTrackKind =
-  "domain" | "site" | "coverage" | "confidence" | "custom";
+  | "domain"
+  | "region"
+  | "site"
+  | "secondary_structure"
+  | "coverage"
+  | "confidence"
+  | "pathogenicity"
+  | "conservation"
+  | "custom";
+
+export type SecondaryStructureType = "helix" | "strand" | "turn";
 
 export interface SequenceFeature {
   id: string;
@@ -25,6 +34,8 @@ export interface SequenceFeature {
   sourceId?: string | null;
   /** coverage rows: which structure class covers this stretch */
   origin?: StructureOrigin;
+  /** secondary structure rows: the element type, drawn as a distinct shape */
+  secondaryStructure?: SecondaryStructureType;
 }
 
 export interface SequenceTrack {
@@ -34,9 +45,18 @@ export interface SequenceTrack {
   kind: SequenceTrackKind;
   /** source and release for the row, e.g. "UniProt 2026_03" */
   source?: string | null;
+  /** evidence class of the whole row; a feature's own class wins */
+  evidenceClass?: EvidenceClass;
   features?: SequenceFeature[];
-  /** per-residue values, index 0 is residue 1. For kind "confidence": pLDDT on the 0 to 100 scale. */
+  /**
+   * per-residue values, index 0 is residue 1. "confidence": pLDDT on the 0 to 100 scale.
+   * "pathogenicity": AlphaMissense score 0 to 1. "conservation": 0 to 1.
+   */
   values?: Array<number | null>;
+  /** what one value is, for tooltips and the table: "mean over 19 substitutions" */
+  valueLabel?: string;
+  /** false keeps the row out of the default set; the track picker can turn it on */
+  defaultVisible?: boolean;
   /** when the source had no data or failed, the row stays and says so */
   status?: SourceStatus;
 }
@@ -67,6 +87,11 @@ export interface SequenceVariant {
   /** clinical variants sit above the axis, population variants below */
   group: "clinical" | "population";
   sourceId?: string | null;
+  /** database the record came from: "ClinVar", "UniProt", "gnomAD v4.1.0" */
+  source?: string | null;
+  evidenceClass?: EvidenceClass;
+  /** the source's own wording, e.g. a disease name or a consequence term */
+  description?: string | null;
 }
 
 export interface SequenceAxisDockProps {
@@ -76,6 +101,8 @@ export interface SequenceAxisDockProps {
   sequence: string;
   tracks: SequenceTrack[];
   variants: SequenceVariant[];
+  /** state of the variant source, so an empty variant list can say whether nothing exists or the source failed */
+  variantStatus?: SourceStatus | null;
   /** selected residue ranges from the workspace selection */
   selection: ResidueRange[];
   selectedVariantId?: string | null;
@@ -89,5 +116,9 @@ export interface SequenceAxisDockProps {
   /** null when the pointer leaves the axis */
   onHover: (position: number | null) => void;
   onWindowChange?: (window: ResidueRange | null) => void;
+  /** "strip" draws one slim row of domains and variant marks; default is the full axis */
+  mode?: "full" | "strip";
+  /** strip mode: shows the Expand control */
+  onExpand?: () => void;
   className?: string;
 }

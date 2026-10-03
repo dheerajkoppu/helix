@@ -14,6 +14,7 @@ import json
 import random
 import time
 import zlib
+from collections import OrderedDict
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta
@@ -39,6 +40,13 @@ ParseMode = Literal["json", "text", "bytes"]
 MAX_CACHED_BODY_BYTES = 32 * 1024 * 1024
 MAX_RETRY_AFTER_SECONDS = 10.0
 STALE_RETENTION = timedelta(days=30)
+
+# A source that keeps failing is skipped for a short while, so a page does not wait for it again
+BREAKER_FAILURES = 2
+BREAKER_COOLDOWN_SECONDS = 45.0
+# A timed-out request is retried only while the call has used less than this
+TIMEOUT_RETRY_BUDGET_SECONDS = 8.0
+MEMORY_CACHE_BYTES = 192 * 1024 * 1024
 
 
 @dataclass(slots=True)
@@ -157,6 +165,27 @@ class _Throttle:
             await asyncio.sleep(delay)
 
 
+class _Breaker:
+    def __init__(self) -> None:
+        self.failures = 0
+        self.open_until = 0.0
+
+    @property
+    def is_open(self) -> bool:
+        return time.monotonic() < self.open_until
+
+    def failed(self) -> None:
+        self.failures += 1
+        if self.failures >= BREAKER_FAILURES:
+            # Each failed probe after the pause doubles it, up to five minutes
+            pause = BREAKER_COOLDOWN_SECONDS * 2 ** min(self.failures - BREAKER_FAILURES, 3)
+            self.open_until = time.monotonic() + min(pause, 300.0)
+
+    def answered(self) -> None:
+        self.failures = 0
+        self.open_until = 0.0
+
+
 class _LoopState:
     """HTTP client, throttles and in-flight requests bound to one event loop."""
 
@@ -171,6 +200,7 @@ class _LoopState:
         )
         self.throttles: dict[str, _Throttle] = {}
         self.inflight: dict[str, asyncio.Task[_Fetched]] = {}
+        self.breakers: dict[str, _Breaker] = {}
 
 
 _loop_states: dict[int, _LoopState] = {}
@@ -188,6 +218,13 @@ def _loop_state() -> _LoopState:
 def get_http_client() -> httpx.AsyncClient:
     """Shared client for code that must stream or post outside the adapter helpers."""
     return _loop_state().client
+
+
+async def drain_inflight(timeout: float = 120.0) -> None:
+    """Wait for upstream calls still running in the background (refreshes of expired entries)."""
+    tasks = list(_loop_state().inflight.values())
+    if tasks:
+        await asyncio.wait(tasks, timeout=timeout)
 
 
 async def close_http_clients() -> None:
@@ -485,6 +522,16 @@ class SourceAdapter:
         cached = await _cache_read(cache_key) if caching else None
         if cached is not None and not cached.stale:
             fetched = cached
+        elif cached is not None and not settings.http_cache_refresh_blocking:
+            # Expired copy: answer with it now and refresh it in the background
+            self._start_flight(cache_key, fetch_and_store)
+            fetched = cached
+            if self._breaker().is_open:
+                fetched = replace(
+                    cached,
+                    message=f"{self.name} is temporarily unavailable; showing data retrieved "
+                    f"{cached.fetched_at:%Y-%m-%d}.",
+                )
         else:
             fetched = await self._single_flight(cache_key, fetch_and_store)
             if fetched.state is SourceState.UNAVAILABLE and cached is not None:
@@ -575,6 +622,9 @@ class SourceAdapter:
     async def _single_flight(self, key: str, fetch: Callable[[], Awaitable[_Fetched]]) -> _Fetched:
         """Concurrent identical requests share one upstream call. The call runs as its own task, so
         a caller that times out does not cancel it and the response still reaches the cache."""
+        return await asyncio.shield(self._start_flight(key, fetch))
+
+    def _start_flight(self, key: str, fetch: Callable[[], Awaitable[_Fetched]]) -> asyncio.Task[_Fetched]:
         inflight = _loop_state().inflight
         task = inflight.get(key)
         if task is None:
@@ -587,7 +637,14 @@ class SourceAdapter:
                     done.exception()
 
             task.add_done_callback(finished)
-        return await asyncio.shield(task)
+        return task
+
+    def _breaker(self) -> _Breaker:
+        breakers = _loop_state().breakers
+        breaker = breakers.get(self.id)
+        if breaker is None:
+            breaker = breakers[self.id] = _Breaker()
+        return breaker
 
     def _throttle(self) -> _Throttle:
         throttles = _loop_state().throttles
@@ -619,13 +676,18 @@ class SourceAdapter:
         retries = self.max_retries if self.max_retries is not None else settings.source_max_retries
         request_headers = {**self.default_headers, **(headers or {})}
         throttle = self._throttle()
+        breaker = self._breaker()
         client = get_http_client()
         started = time.perf_counter()
         message = f"{self.name} is temporarily unavailable."
         status_code: int | None = None
 
         for attempt in range(retries + 1):
+            if breaker.is_open:
+                message = f"{self.name} is not answering; OrphaFold will try it again shortly."
+                break
             retry_after: float | None = None
+            timed_out = False
             try:
                 async with throttle.semaphore:
                     await throttle.wait_turn()
@@ -641,10 +703,17 @@ class SourceAdapter:
                     )
             except httpx.TimeoutException:
                 message = f"{self.name} did not answer within {timeout:g} s."
+                timed_out = True
+                breaker.failed()
             except httpx.HTTPError as error:
                 message = f"{self.name} could not be reached ({type(error).__name__})."
+                breaker.failed()
             else:
                 status_code = response.status_code
+                if status_code >= 500:
+                    breaker.failed()
+                else:
+                    breaker.answered()
                 elapsed_ms = (time.perf_counter() - started) * 1000
                 logger.debug("%s %s %s -> %s in %.0f ms", self.id, method, url, status_code, elapsed_ms)
                 if status_code in empty_statuses:
@@ -664,7 +733,9 @@ class SourceAdapter:
                 else:
                     return self._interpret(response, parse, release, empty_if, select, graphql, elapsed_ms)
 
-            if attempt < retries:
+            if timed_out and time.perf_counter() - started > TIMEOUT_RETRY_BUDGET_SECONDS:
+                break
+            if attempt < retries and not breaker.is_open:
                 backoff = min(8.0, 0.5 * (2**attempt)) + random.uniform(0, 0.25)
                 await asyncio.sleep(max(backoff, retry_after or 0.0))
 
@@ -757,15 +828,55 @@ def _error_hint(response: httpx.Response) -> str:
     return ""
 
 
+class _MemoryCache:
+    """Unexpired cache rows kept in the process, so a warm page does not go to the database."""
+
+    def __init__(self, max_bytes: int) -> None:
+        self.max_bytes = max_bytes
+        self.size = 0
+        self.entries: OrderedDict[str, tuple[_Fetched, datetime]] = OrderedDict()
+
+    def get(self, key: str) -> _Fetched | None:
+        item = self.entries.get(key)
+        if item is None:
+            return None
+        if item[1] <= utcnow():
+            self.discard(key)
+            return None
+        self.entries.move_to_end(key)
+        return item[0]
+
+    def put(self, key: str, fetched: _Fetched, expires_at: datetime) -> None:
+        self.discard(key)
+        if expires_at <= utcnow() or len(fetched.body) > self.max_bytes // 8:
+            return
+        self.entries[key] = (replace(fetched, from_cache=True, stale=False), expires_at)
+        self.size += len(fetched.body)
+        while self.size > self.max_bytes and self.entries:
+            _, (evicted, _) = self.entries.popitem(last=False)
+            self.size -= len(evicted.body)
+
+    def discard(self, key: str) -> None:
+        item = self.entries.pop(key, None)
+        if item is not None:
+            self.size -= len(item[0].body)
+
+
+_memory_cache = _MemoryCache(MEMORY_CACHE_BYTES)
+
+
 async def _cache_read(key: str) -> _Fetched | None:
     """Cached response, flagged stale when past its TTL. Never raises: the cache is optional."""
+    remembered = _memory_cache.get(key)
+    if remembered is not None:
+        return remembered
     try:
         async with session_scope() as session:
             entry = await session.get(HttpCacheEntry, key)
             if entry is None:
                 return None
             body = zlib.decompress(entry.body) if entry.body_encoding == "zlib" else entry.body
-            return _Fetched(
+            fetched = _Fetched(
                 state=SourceState(entry.state),
                 body=body,
                 status_code=entry.status_code,
@@ -775,6 +886,8 @@ async def _cache_read(key: str) -> _Fetched | None:
                 from_cache=True,
                 stale=entry.expires_at <= utcnow(),
             )
+            _memory_cache.put(key, fetched, entry.expires_at)
+            return fetched
     except Exception:
         logger.warning("HTTP cache read failed", exc_info=True)
         return None
@@ -783,6 +896,7 @@ async def _cache_read(key: str) -> _Fetched | None:
 async def _cache_write(key: str, source: str, method: str, url: str, fetched: _Fetched, ttl: int) -> None:
     if len(fetched.body) > MAX_CACHED_BODY_BYTES:
         return
+    _memory_cache.put(key, fetched, fetched.fetched_at + timedelta(seconds=ttl))
     try:
         async with session_scope() as session:
             await session.merge(

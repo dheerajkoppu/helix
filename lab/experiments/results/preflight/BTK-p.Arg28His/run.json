@@ -1,0 +1,14 @@
+{
+  "run_id": "preflight-BTK-p.Arg28His",
+  "subject": {
+    "variant_id": "BTK-p.Arg28His",
+    "gene": "BTK",
+    "accession": "Q06187",
+    "position": 28,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "clinvar_vcv": "VCV000011348",
+    "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+    "protein_change": "p.Arg28His"
+  }
+}

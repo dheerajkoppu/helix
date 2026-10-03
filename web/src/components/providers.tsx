@@ -3,6 +3,7 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
+import { JobWatcher } from "@/components/jobs/run-job";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -27,6 +28,7 @@ export function Providers({
         <TooltipProvider delay={500} closeDelay={0} timeout={400}>
           {children}
         </TooltipProvider>
+        <JobWatcher />
         <Toaster position="bottom-right" />
       </QueryClientProvider>
     </ThemeProvider>

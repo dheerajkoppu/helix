@@ -59,6 +59,8 @@ class Settings(BaseSettings):
     source_timeouts: Annotated[dict[str, float], NoDecode] = {}
     source_max_retries: int = 2
     http_cache_enabled: bool = True
+    # False: an expired cache entry is served at once and refreshed in the background
+    http_cache_refresh_blocking: bool = False
     gather_timeout_default: float = 20.0
 
     # Assistant

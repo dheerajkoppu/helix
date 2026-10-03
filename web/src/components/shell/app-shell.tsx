@@ -2,12 +2,14 @@
 
 import { useRouter } from "next/navigation";
 
+import { AssistantDock, AssistantTrigger } from "@/components/assistant";
 import { CommandPalette } from "@/components/shell/command-palette";
 import { ShortcutSheet } from "@/components/shell/shortcut-sheet";
 import { StatusLine } from "@/components/shell/status-line";
 import { TopBar } from "@/components/shell/top-bar";
 import { useHotkeys } from "@/hooks/use-hotkeys";
 import { routes } from "@/lib/ids";
+import { useAdvancedMode } from "@/lib/state/preferences";
 import { useShell } from "@/lib/state/shell";
 
 function GlobalHotkeys() {
@@ -35,12 +37,14 @@ function GlobalHotkeys() {
 }
 
 /**
- * Application frame: top bar, one scrollable or fixed main region, status line. The viewport never
- * scrolls as a whole; pages scroll inside `main`, and the workspace frame fills it exactly.
+ * Application frame: top bar, one scrollable or fixed main region, and in Advanced the status line.
+ * The viewport never scrolls as a whole; pages scroll inside `main`, and the workspace frame fills
+ * it exactly.
  */
 export function AppShell({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const advanced = useAdvancedMode();
   return (
     <div className="isolate flex h-dvh min-h-0 flex-col bg-background">
       <a
@@ -49,14 +53,26 @@ export function AppShell({
       >
         Skip to content
       </a>
-      <TopBar />
-      <main
-        id="main"
-        tabIndex={-1}
-        className="scroll-thin relative min-h-0 flex-1 overflow-auto outline-none"
-      >
-        {children}
-      </main>
+      <div className="z-40 flex shrink-0 items-stretch bg-sunken">
+        <div className="min-w-0 flex-1">
+          <TopBar />
+        </div>
+        {advanced ? (
+          <div className="flex h-10 shrink-0 items-center border-b border-border pr-2">
+            <AssistantTrigger />
+          </div>
+        ) : null}
+      </div>
+      <div className="relative flex min-h-0 flex-1">
+        <main
+          id="main"
+          tabIndex={-1}
+          className="scroll-thin relative min-h-0 min-w-0 flex-1 overflow-auto outline-none"
+        >
+          {children}
+        </main>
+        <AssistantDock />
+      </div>
       <StatusLine />
       <CommandPalette />
       <ShortcutSheet />

@@ -1,0 +1,76 @@
+{
+  "run_id": "reference-BTK-p.Arg28His",
+  "objective": "Find the molecular mechanism that best explains the loss of function of BTK-p.Arg28His (BTK, UniProt Q06187) and test it with one targeted computational test.",
+  "subject": {
+    "gene": "BTK",
+    "variant_id": "BTK-p.Arg28His",
+    "accession": "Q06187",
+    "position": 28,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "protein_change": "p.Arg28His"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T21:30:31Z",
+  "finished_at": "2026-10-03T21:35:28Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "05e64000a7b94fd0be12a30c0f38298c",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 13,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "47c4e219692a316b90aeb9d22b7df46084ea164b62ac2251891aa41d5715f8bc",
+  "metrics": {
+    "wall_seconds": 297.0,
+    "tool_calls": 121,
+    "distinct_sources": 11,
+    "evidence_items": 23,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 2,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 18,
+      "literature": 14,
+      "knowledge_graph": 38,
+      "insight": 5,
+      "planner": 17,
+      "safety": 8,
+      "runner": 8,
+      "analysis": 13
+    },
+    "policy_denials": 0,
+    "reopenings": 1
+  },
+  "outcome": {
+    "favoured_before": "protein_interaction",
+    "favoured_after": "ligand_binding",
+    "decision_changed": true,
+    "next_experiment": "R28H-specific ligand-binding check on the 1B55 PH domain with IP4 bound: model the R28H substitution in the IP4-bound structure, then compare the contacts and MM/PBSA binding free energy against the wild-type. Also count partner-protomer contacts in a PH-TH dimer model built from 1B55 and the E41K dimer to test H1. H2 is refuted if residue 28 has no phosphate-oxygen contact within 4 Å and R28H binding energy matches wild-type within MM/PBSA error. H1 is refuted if no atom of residue 28 lies within 5 Å of the partner protomer and the interface contacts are unchanged by R28H.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H2",
+    "decisions": 2
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

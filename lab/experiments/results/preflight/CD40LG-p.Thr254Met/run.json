@@ -1,0 +1,14 @@
+{
+  "run_id": "preflight-CD40LG-p.Thr254Met",
+  "subject": {
+    "variant_id": "CD40LG-p.Thr254Met",
+    "gene": "CD40LG",
+    "accession": "P29965",
+    "position": 254,
+    "reference_residue": "T",
+    "alternate_residue": "M",
+    "clinvar_vcv": "VCV000035814",
+    "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+    "protein_change": "p.Thr254Met"
+  }
+}

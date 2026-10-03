@@ -1,0 +1,2 @@
+{"database": "ClinVar", "record_id": "VCV000011348", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/11348/", "tool": "probe", "agent": "probe", "at": "2026-10-03T21:43:19Z"}
+{"database": "OrphaFold", "record_id": "job_01M41VJERNTZP2MXHJ0SEYFW61", "url": "http://localhost:8000/api/v1/jobs/job_01M41VJERNTZP2MXHJ0SEYFW61/manifest", "tool": "run_structure_comparison", "agent": "runner", "at": "2026-10-03T21:43:56Z"}

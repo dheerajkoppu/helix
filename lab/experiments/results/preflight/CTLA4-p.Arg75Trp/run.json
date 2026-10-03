@@ -1,0 +1,14 @@
+{
+  "run_id": "preflight-CTLA4-p.Arg75Trp",
+  "subject": {
+    "variant_id": "CTLA4-p.Arg75Trp",
+    "gene": "CTLA4",
+    "accession": "P16410",
+    "position": 75,
+    "reference_residue": "R",
+    "alternate_residue": "W",
+    "clinvar_vcv": "VCV000945024",
+    "clinvar_review_status": "reviewed by expert panel",
+    "protein_change": "p.Arg75Trp"
+  }
+}

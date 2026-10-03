@@ -1,0 +1,76 @@
+{
+  "run_id": "approval-gate-demo-BTK-p.Arg28His",
+  "objective": "Demonstration of the approval gate, objective set by the build agent: find the molecular mechanism that best explains the loss of function of BTK-p.Arg28His, and use the reference-versus-variant structure prediction of the PH domain (structure_comparison) as the targeted test, to see whether the substitution changes the predicted local structure.",
+  "subject": {
+    "gene": "BTK",
+    "variant_id": "BTK-p.Arg28His",
+    "accession": "Q06187",
+    "position": 28,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "protein_change": "p.Arg28His"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 160,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-03T21:37:15Z",
+  "finished_at": "2026-10-03T21:42:25Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "08679215074a41a6971f7348107aceae",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/orphafold_lab",
+    "sub_agent_sessions": 10,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "47c4e219692a316b90aeb9d22b7df46084ea164b62ac2251891aa41d5715f8bc",
+  "metrics": {
+    "wall_seconds": 310.4,
+    "tool_calls": 109,
+    "distinct_sources": 11,
+    "evidence_items": 22,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 1,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 19,
+      "literature": 12,
+      "knowledge_graph": 35,
+      "insight": 5,
+      "planner": 19,
+      "safety": 9,
+      "runner": 4,
+      "analysis": 6
+    },
+    "policy_denials": 0,
+    "reopenings": 0
+  },
+  "outcome": {
+    "favoured_before": "ligand_binding",
+    "favoured_after": "ligand_binding",
+    "decision_changed": false,
+    "next_experiment": "Laboratory binding measurement: express and purify the BTK PH domain (residues 1-143) in wild-type and R28H forms, then measure binding to Ins(1,3,4,5)P4 by isothermal titration calorimetry or SPR, with the R28C variant and a non-binding PH-domain mutant as controls. Confirms H1 if the R28H Kd is clearly weaker than wild type. Overturns H1 if the affinities are within assay error.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?",
+  "approval_mode": "waits for a human decision through the API",
+  "error": null
+}

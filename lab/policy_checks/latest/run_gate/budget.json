@@ -1,0 +1,9 @@
+{
+  "max_tool_calls": 40,
+  "max_compute_seconds": 300.0,
+  "tool_calls_used": 1,
+  "compute_seconds_used": 3.0,
+  "tool_calls_by_agent": {
+    "runner": 1
+  }
+}

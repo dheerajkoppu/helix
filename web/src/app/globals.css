@@ -288,7 +288,7 @@
     color-scheme: dark;
   }
   body {
-    @apply bg-background text-foreground text-sm;
+    @apply bg-background text-foreground text-base;
     font-variant-ligatures: none;
     position: relative;
   }

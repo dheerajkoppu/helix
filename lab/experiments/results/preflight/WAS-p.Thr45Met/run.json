@@ -1,0 +1,14 @@
+{
+  "run_id": "preflight-WAS-p.Thr45Met",
+  "subject": {
+    "variant_id": "WAS-p.Thr45Met",
+    "gene": "WAS",
+    "accession": "P42768",
+    "position": 45,
+    "reference_residue": "T",
+    "alternate_residue": "M",
+    "clinvar_vcv": "VCV000011123",
+    "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+    "protein_change": "p.Thr45Met"
+  }
+}

@@ -1,0 +1,1046 @@
+{
+  "derived_at": "2026-10-03T22:02:04Z",
+  "rule_source": "lab/experiments/reference_labels.py",
+  "rule_sha256": "04d68308cf2f0c9ab7c2e2595515d98eb8ef8967eae4413016655f6d638e2fce",
+  "selection_rule": "First-listed flagship variant of every gene in data/seed/catalog.json.",
+  "n_variants": 13,
+  "n_with_reference": 6,
+  "n_residue_specific": 3,
+  "n_region_level": 3,
+  "labels": [
+    {
+      "variant_id": "ADA-p.Arg211His",
+      "gene": "ADA",
+      "accession": "P00813",
+      "position": 211,
+      "reference_residue": "R",
+      "alternate_residue": "H",
+      "clinvar_vcv": "VCV000001957",
+      "clinvar_review_status": "reviewed by expert panel",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "premise_mismatch": null,
+      "uniprot": {
+        "entry_version": 257,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/P00813/entry",
+        "features_at_residue": [
+          {
+            "type": "Natural variant",
+            "residues": "211",
+            "description": "in ADASCID; dbSNP:rs121908716",
+            "ligand": null,
+            "substitution": "R>H",
+            "feature_id": "VAR_002232",
+            "rule": null,
+            "mechanism": null
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P00813",
+        "nucleic_acid": [],
+        "protein_partner": [],
+        "same_protein": [],
+        "ligands": [],
+        "interface_data_available": false,
+        "ligand_data_available": true
+      },
+      "structural_corroboration": "not applicable",
+      "annotation_reachable_by_agents": null
+    },
+    {
+      "variant_id": "IL2RG-p.Arg226Cys",
+      "gene": "IL2RG",
+      "accession": "P31785",
+      "position": 226,
+      "reference_residue": "R",
+      "alternate_residue": "C",
+      "clinvar_vcv": "VCV000225195",
+      "clinvar_review_status": "reviewed by expert panel",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "premise_mismatch": null,
+      "uniprot": {
+        "entry_version": 252,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/P31785/entry",
+        "features_at_residue": [
+          {
+            "type": "Topological domain",
+            "residues": "23-262",
+            "description": "Extracellular",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Domain",
+            "residues": "156-253",
+            "description": "Fibronectin type-III",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Disulfide bond",
+            "residues": "182-231",
+            "description": "",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Natural variant",
+            "residues": "226",
+            "description": "in XSCID; dbSNP:rs869320659",
+            "ligand": null,
+            "substitution": "R>C",
+            "feature_id": "VAR_002690",
+            "rule": null,
+            "mechanism": null
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P31785",
+        "nucleic_acid": [],
+        "protein_partner": [],
+        "same_protein": [],
+        "ligands": [],
+        "interface_data_available": true,
+        "ligand_data_available": true
+      },
+      "structural_corroboration": "not applicable",
+      "annotation_reachable_by_agents": null
+    },
+    {
+      "variant_id": "BTK-p.Arg28His",
+      "gene": "BTK",
+      "accession": "Q06187",
+      "position": 28,
+      "reference_residue": "R",
+      "alternate_residue": "H",
+      "clinvar_vcv": "VCV000011348",
+      "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+      "reference_mechanism": "ligand_binding",
+      "reference_tier": "residue_specific",
+      "derivation": "R2 binding-site feature at the residue (ligand: 1D-myo-inositol 1,3,4,5-tetrakisphosphate) [UniProtKB Q06187 Binding site 28]",
+      "premise_mismatch": null,
+      "uniprot": {
+        "entry_version": 276,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/Q06187/entry",
+        "features_at_residue": [
+          {
+            "type": "Domain",
+            "residues": "3-133",
+            "description": "PH",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Binding site",
+            "residues": "28",
+            "description": "",
+            "ligand": "1D-myo-inositol 1,3,4,5-tetrakisphosphate",
+            "substitution": null,
+            "feature_id": null,
+            "rule": "R2 binding-site feature at the residue (ligand: 1D-myo-inositol 1,3,4,5-tetrakisphosphate)",
+            "mechanism": "ligand_binding"
+          },
+          {
+            "type": "Natural variant",
+            "residues": "28",
+            "description": "in XLA; moderate; dbSNP:rs128620185",
+            "ligand": null,
+            "substitution": "R>H",
+            "feature_id": "VAR_006220",
+            "rule": null,
+            "mechanism": null
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/Q06187",
+        "nucleic_acid": [],
+        "protein_partner": [],
+        "same_protein": [
+          {
+            "partner": "Tyrosine-protein kinase BTK",
+            "partner_accession": "Q06187",
+            "pdb_entries": [
+              "1b55",
+              "1bwn",
+              "7i90"
+            ]
+          }
+        ],
+        "ligands": [
+          {
+            "ligand": "A1JR3",
+            "name": "(6S)-6-(4-bromanylthiophen-2-yl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "9rn5"
+            ]
+          },
+          {
+            "ligand": "A1JS7",
+            "name": "(6~{S})-6-thiophen-2-yl-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "9t21"
+            ]
+          },
+          {
+            "ligand": "A1B6L",
+            "name": "(6R)-6-(3-bromothiophen-2-yl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i9c"
+            ]
+          },
+          {
+            "ligand": "A1B6K",
+            "name": "(6R)-6-(5-chlorothiophen-2-yl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i9b"
+            ]
+          },
+          {
+            "ligand": "A1JTA",
+            "name": "(6~{S})-6-pyridin-2-yl-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "9t3g"
+            ]
+          },
+          {
+            "ligand": "A1B6I",
+            "name": "(6S)-6-(2,5-dimethoxyphenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i9h"
+            ]
+          },
+          {
+            "ligand": "A1B6J",
+            "name": "(6S)-6-phenyl-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i9i"
+            ]
+          },
+          {
+            "ligand": "A1B6H",
+            "name": "(6S)-6-(4-chloro-3-methoxyphenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i9g"
+            ]
+          },
+          {
+            "ligand": "A1B6O",
+            "name": "(6S)-6-(3-methoxyphenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i96"
+            ]
+          },
+          {
+            "ligand": "A1B6N",
+            "name": "(6S)-6-(2,6-dimethoxyphenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i9e"
+            ]
+          },
+          {
+            "ligand": "A1B6F",
+            "name": "(6S)-6-(2-bromophenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i90"
+            ]
+          },
+          {
+            "ligand": "A1B6V",
+            "name": "(6S)-6-(2-chloro-3-methoxyphenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i95"
+            ]
+          },
+          {
+            "ligand": "A1B6R",
+            "name": "(6S)-6-(4-chlorophenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i9a",
+              "9rl9"
+            ]
+          },
+          {
+            "ligand": "A1JTB",
+            "name": "(6~{S})-6-(2-methoxyphenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "9t3m"
+            ]
+          },
+          {
+            "ligand": "A1B6Q",
+            "name": "(6S)-6-{2-[(propan-2-yl)oxy]phenyl}-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i98"
+            ]
+          },
+          {
+            "ligand": "A1B6W",
+            "name": "(6S)-6-(2,3-dichlorophenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i99"
+            ]
+          },
+          {
+            "ligand": "A1B6M",
+            "name": "[(3S,3aS,6S,7aR)-6-(2-hydroxyphenyl)octahydro-1-benzofuran-3-yl]methanediol",
+            "pdb_entries": [
+              "7i9d"
+            ]
+          },
+          {
+            "ligand": "A1JS6",
+            "name": "(6~{R})-6-[3-(trifluoromethyl)phenyl]-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "9t23"
+            ]
+          },
+          {
+            "ligand": "A1JS4",
+            "name": "(6~{R})-6-(2-chloranyl-6-fluoranyl-phenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "9t1v"
+            ]
+          },
+          {
+            "ligand": "A1B6G",
+            "name": "(6R)-6-(2-bromo-6-methoxyphenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i9f"
+            ]
+          },
+          {
+            "ligand": "A1B6P",
+            "name": "(6R)-6-(2-fluorophenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i97"
+            ]
+          },
+          {
+            "ligand": "A1B6U",
+            "name": "(6R)-6-(4-chloro-2-methoxyphenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i93"
+            ]
+          },
+          {
+            "ligand": "A1JS0",
+            "name": "(6~{R})-6-(2-bromanyl-6-chloranyl-phenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "9t0t"
+            ]
+          },
+          {
+            "ligand": "A1B6T",
+            "name": "(6S)-6-(2-phenoxyphenyl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i92"
+            ]
+          },
+          {
+            "ligand": "A1B6X",
+            "name": "(6S)-6-[(2S,4S)-4-bromothiolan-2-yl]-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i94"
+            ]
+          },
+          {
+            "ligand": "NXT",
+            "name": "4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "6tuh"
+            ]
+          },
+          {
+            "ligand": "4PT",
+            "name": "(2R)-3-{[(S)-{[(2S,3R,5S,6S)-2,6-DIHYDROXY-3,4,5-TRIS(PHOSPHONOOXY)CYCLOHEXYL]OXY}(HYDROXY)PHOSPHORYL]OXY}-2-(1-HYDROXY\nBUTOXY)PROPYL BUTYRATE",
+            "pdb_entries": [
+              "2z0p"
+            ]
+          },
+          {
+            "ligand": "A1JIA",
+            "name": "(6~{S})-6-(5-bromanylthiophen-2-yl)-6,7-dihydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "9rmo"
+            ]
+          },
+          {
+            "ligand": "A1B6S",
+            "name": "(6~{R})-6-(1-oxidanylpyridin-2-yl)-4,5,6,7-tetrahydro-1-benzofuran-3-carboxylic acid",
+            "pdb_entries": [
+              "7i91"
+            ]
+          },
+          {
+            "ligand": "4IP",
+            "name": "INOSITOL-(1,3,4,5)-TETRAKISPHOSPHATE",
+            "pdb_entries": [
+              "1b55",
+              "1bwn"
+            ]
+          }
+        ],
+        "interface_data_available": true,
+        "ligand_data_available": true
+      },
+      "structural_corroboration": "corroborated",
+      "annotation_reachable_by_agents": "The label is not given to any agent. The UniProtKB feature it rests on is returned by the lab tools get_residue_annotations and get_variant in both arms."
+    },
+    {
+      "variant_id": "WAS-p.Thr45Met",
+      "gene": "WAS",
+      "accession": "P42768",
+      "position": 45,
+      "reference_residue": "T",
+      "alternate_residue": "M",
+      "clinvar_vcv": "VCV000011123",
+      "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "premise_mismatch": null,
+      "uniprot": {
+        "entry_version": 260,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/P42768/entry",
+        "features_at_residue": [
+          {
+            "type": "Domain",
+            "residues": "39-148",
+            "description": "WH1",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Natural variant",
+            "residues": "45",
+            "description": "in WAS and THC1; dbSNP:rs132630273",
+            "ligand": null,
+            "substitution": "T>M",
+            "feature_id": "VAR_008106",
+            "rule": null,
+            "mechanism": null
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P42768",
+        "nucleic_acid": [],
+        "protein_partner": [],
+        "same_protein": [],
+        "ligands": [],
+        "interface_data_available": true,
+        "ligand_data_available": true
+      },
+      "structural_corroboration": "not applicable",
+      "annotation_reachable_by_agents": null
+    },
+    {
+      "variant_id": "RAG1-p.Arg404Gln",
+      "gene": "RAG1",
+      "accession": "P15918",
+      "position": 404,
+      "reference_residue": "R",
+      "alternate_residue": "Q",
+      "clinvar_vcv": "VCV001072413",
+      "clinvar_review_status": "reviewed by expert panel",
+      "reference_mechanism": "nucleic_acid_binding",
+      "reference_tier": "region_level",
+      "derivation": "R5 inside a DNA-binding region [UniProtKB P15918 DNA binding 392-459]",
+      "premise_mismatch": null,
+      "uniprot": {
+        "entry_version": 243,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/P15918/entry",
+        "features_at_residue": [
+          {
+            "type": "DNA binding",
+            "residues": "392-459",
+            "description": "NBD",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": "R5 inside a DNA-binding region",
+            "mechanism": "nucleic_acid_binding"
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P15918",
+        "nucleic_acid": [],
+        "protein_partner": [],
+        "same_protein": [],
+        "ligands": [],
+        "interface_data_available": false,
+        "ligand_data_available": false
+      },
+      "structural_corroboration": "not observed",
+      "annotation_reachable_by_agents": "The label is not given to any agent. The UniProtKB feature it rests on is returned by the lab tools get_residue_annotations and get_variant in both arms."
+    },
+    {
+      "variant_id": "JAK3-p.Arg103His",
+      "gene": "JAK3",
+      "accession": "P52333",
+      "position": 103,
+      "reference_residue": "R",
+      "alternate_residue": "H",
+      "clinvar_vcv": "VCV000191102",
+      "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+      "reference_mechanism": "protein_interaction",
+      "reference_tier": "region_level",
+      "derivation": "R6 inside an interaction region [UniProtKB P52333 Region 1-223]",
+      "premise_mismatch": null,
+      "uniprot": {
+        "entry_version": 247,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/P52333/entry",
+        "features_at_residue": [
+          {
+            "type": "Domain",
+            "residues": "24-356",
+            "description": "FERM",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Region",
+            "residues": "1-223",
+            "description": "Interaction with cytokine/interferon/growth hormone receptors",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": "R6 inside an interaction region",
+            "mechanism": "protein_interaction"
+          },
+          {
+            "type": "Sequence conflict",
+            "residues": "103",
+            "description": "in Ref. 3; AAC50950",
+            "ligand": null,
+            "substitution": "R>RS",
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P52333",
+        "nucleic_acid": [],
+        "protein_partner": [],
+        "same_protein": [],
+        "ligands": [],
+        "interface_data_available": true,
+        "ligand_data_available": true
+      },
+      "structural_corroboration": "not observed",
+      "annotation_reachable_by_agents": "The label is not given to any agent. The UniProtKB feature it rests on is returned by the lab tools get_residue_annotations and get_variant in both arms."
+    },
+    {
+      "variant_id": "CYBB-p.His101Arg",
+      "gene": "CYBB",
+      "accession": "P04839",
+      "position": 101,
+      "reference_residue": "H",
+      "alternate_residue": "R",
+      "clinvar_vcv": "VCV000010926",
+      "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+      "reference_mechanism": "ligand_binding",
+      "reference_tier": "residue_specific",
+      "derivation": "R2 binding-site feature at the residue (ligand: heme b) [UniProtKB P04839 Binding site 101]",
+      "premise_mismatch": null,
+      "uniprot": {
+        "entry_version": 248,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/P04839/entry",
+        "features_at_residue": [
+          {
+            "type": "Transmembrane",
+            "residues": "96-130",
+            "description": "Helical",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Domain",
+            "residues": "54-286",
+            "description": "Ferric oxidoreductase",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Binding site",
+            "residues": "101",
+            "description": "axial binding residue",
+            "ligand": "heme b",
+            "substitution": null,
+            "feature_id": null,
+            "rule": "R2 binding-site feature at the residue (ligand: heme b)",
+            "mechanism": "ligand_binding"
+          },
+          {
+            "type": "Natural variant",
+            "residues": "101",
+            "description": "in CGDX; dbSNP:rs137854591",
+            "ligand": null,
+            "substitution": "H>R",
+            "feature_id": "VAR_002432",
+            "rule": null,
+            "mechanism": null
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P04839",
+        "nucleic_acid": [],
+        "protein_partner": [],
+        "same_protein": [],
+        "ligands": [
+          {
+            "ligand": "HEM",
+            "name": "PROTOPORPHYRIN IX CONTAINING FE",
+            "pdb_entries": [
+              "7u8g",
+              "8gz3",
+              "8kei",
+              "8wej",
+              "8x2l"
+            ]
+          }
+        ],
+        "interface_data_available": true,
+        "ligand_data_available": true
+      },
+      "structural_corroboration": "corroborated",
+      "annotation_reachable_by_agents": "The label is not given to any agent. The UniProtKB feature it rests on is returned by the lab tools get_residue_annotations and get_variant in both arms."
+    },
+    {
+      "variant_id": "STAT3-p.Arg382Trp",
+      "gene": "STAT3",
+      "accession": "P40763",
+      "position": 382,
+      "reference_residue": "R",
+      "alternate_residue": "W",
+      "clinvar_vcv": "VCV000018304",
+      "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+      "reference_mechanism": "nucleic_acid_binding",
+      "reference_tier": "residue_specific",
+      "derivation": "R4 description of this substitution: 'reduced DNA-binding ability' [UniProtKB P40763 Natural variant 382 VAR_037367]",
+      "premise_mismatch": null,
+      "uniprot": {
+        "entry_version": 253,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/P40763/entry",
+        "features_at_residue": [
+          {
+            "type": "Natural variant",
+            "residues": "382",
+            "description": "in HIES1; loss of function; reduced DNA-binding ability; dbSNP:rs113994135",
+            "ligand": null,
+            "substitution": "R>W",
+            "feature_id": "VAR_037367",
+            "rule": "R4 description of this substitution: 'reduced DNA-binding ability'",
+            "mechanism": "nucleic_acid_binding"
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P40763",
+        "nucleic_acid": [
+          {
+            "partner": "DNA",
+            "partner_accession": "DNA",
+            "pdb_entries": [
+              "6qhd"
+            ]
+          }
+        ],
+        "protein_partner": [],
+        "same_protein": [],
+        "ligands": [],
+        "interface_data_available": true,
+        "ligand_data_available": true
+      },
+      "structural_corroboration": "corroborated",
+      "annotation_reachable_by_agents": "The label is not given to any agent. The UniProtKB feature it rests on is returned by the lab tools get_residue_annotations and get_variant in both arms."
+    },
+    {
+      "variant_id": "STAT1-p.Arg274Trp",
+      "gene": "STAT1",
+      "accession": "P42224",
+      "position": 274,
+      "reference_residue": "R",
+      "alternate_residue": "W",
+      "clinvar_vcv": "VCV000030083",
+      "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB describes this substitution as a gain of function ('in IMD31C; gain of function; increases phosphorylation in response to IFNG, IFNA and IL27 due to a loss of dephosphorylation; dbSNP:rs387906758'), which the lab's loss-of-function classes do not cover.",
+      "premise_mismatch": "gain_of_function",
+      "uniprot": {
+        "entry_version": 268,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/P42224/entry",
+        "features_at_residue": [
+          {
+            "type": "Coiled coil",
+            "residues": "136-317",
+            "description": "",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Natural variant",
+            "residues": "274",
+            "description": "in IMD31C; gain of function; increases phosphorylation in response to IFNG, IFNA and IL27 due to a loss of dephosphorylation; dbSNP:rs387906758",
+            "ligand": null,
+            "substitution": "R>W",
+            "feature_id": "VAR_065943",
+            "rule": null,
+            "mechanism": null
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P42224",
+        "nucleic_acid": [],
+        "protein_partner": [],
+        "same_protein": [],
+        "ligands": [],
+        "interface_data_available": true,
+        "ligand_data_available": true
+      },
+      "structural_corroboration": "not applicable",
+      "annotation_reachable_by_agents": null
+    },
+    {
+      "variant_id": "FOXP3-p.Ala384Thr",
+      "gene": "FOXP3",
+      "accession": "Q9BZS1",
+      "position": 384,
+      "reference_residue": "A",
+      "alternate_residue": "T",
+      "clinvar_vcv": "VCV000011410",
+      "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+      "reference_mechanism": "nucleic_acid_binding",
+      "reference_tier": "region_level",
+      "derivation": "R5 inside a DNA-binding region [UniProtKB Q9BZS1 DNA binding 337-423]",
+      "premise_mismatch": null,
+      "uniprot": {
+        "entry_version": 228,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/Q9BZS1/entry",
+        "features_at_residue": [
+          {
+            "type": "DNA binding",
+            "residues": "337-423",
+            "description": "Fork-head",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": "R5 inside a DNA-binding region",
+            "mechanism": "nucleic_acid_binding"
+          },
+          {
+            "type": "Natural variant",
+            "residues": "384",
+            "description": "in IPEX; no loss of protein expression; dbSNP:rs122467170",
+            "ligand": null,
+            "substitution": "A>T",
+            "feature_id": "VAR_011332",
+            "rule": null,
+            "mechanism": null
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/Q9BZS1",
+        "nucleic_acid": [
+          {
+            "partner": "DNA",
+            "partner_accession": "DNA",
+            "pdb_entries": [
+              "3qrf"
+            ]
+          }
+        ],
+        "protein_partner": [],
+        "same_protein": [
+          {
+            "partner": "Forkhead box protein P3",
+            "partner_accession": "Q9BZS1",
+            "pdb_entries": [
+              "3qrf",
+              "4wk8"
+            ]
+          }
+        ],
+        "ligands": [],
+        "interface_data_available": true,
+        "ligand_data_available": true
+      },
+      "structural_corroboration": "corroborated",
+      "annotation_reachable_by_agents": "The label is not given to any agent. The UniProtKB feature it rests on is returned by the lab tools get_residue_annotations and get_variant in both arms."
+    },
+    {
+      "variant_id": "CD40LG-p.Thr254Met",
+      "gene": "CD40LG",
+      "accession": "P29965",
+      "position": 254,
+      "reference_residue": "T",
+      "alternate_residue": "M",
+      "clinvar_vcv": "VCV000035814",
+      "clinvar_review_status": "criteria provided, multiple submitters, no conflicts",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "premise_mismatch": null,
+      "uniprot": {
+        "entry_version": 245,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/P29965/entry",
+        "features_at_residue": [
+          {
+            "type": "Topological domain",
+            "residues": "47-261",
+            "description": "Extracellular",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Domain",
+            "residues": "122-261",
+            "description": "THD",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Natural variant",
+            "residues": "254",
+            "description": "in HIGM1; dbSNP:rs193922136",
+            "ligand": null,
+            "substitution": "T>M",
+            "feature_id": "VAR_007528",
+            "rule": null,
+            "mechanism": null
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P29965",
+        "nucleic_acid": [],
+        "protein_partner": [],
+        "same_protein": [],
+        "ligands": [],
+        "interface_data_available": true,
+        "ligand_data_available": true
+      },
+      "structural_corroboration": "not applicable",
+      "annotation_reachable_by_agents": null
+    },
+    {
+      "variant_id": "PIK3CD-p.Glu1021Lys",
+      "gene": "PIK3CD",
+      "accession": "O00329",
+      "position": 1021,
+      "reference_residue": "E",
+      "alternate_residue": "K",
+      "clinvar_vcv": "VCV000088675",
+      "clinvar_review_status": "reviewed by expert panel",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB describes this substitution as a gain of function ('in IMD14A; results in gain of function causing enhanced membrane association and kinase activity; dbSNP:rs397518423'), which the lab's loss-of-function classes do not cover.",
+      "premise_mismatch": "gain_of_function",
+      "uniprot": {
+        "entry_version": 223,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/O00329/entry",
+        "features_at_residue": [
+          {
+            "type": "Domain",
+            "residues": "745-1027",
+            "description": "PI3K/PI4K catalytic",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Alternative sequence",
+            "residues": "302-1044",
+            "description": "in isoform 2",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": "VSP_044410",
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Natural variant",
+            "residues": "721-1044",
+            "description": "in ROCHIS; no protein can be detected by Western blot in patient cells",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": "VAR_085590",
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Natural variant",
+            "residues": "1021",
+            "description": "in IMD14A; results in gain of function causing enhanced membrane association and kinase activity; dbSNP:rs397518423",
+            "ligand": null,
+            "substitution": "E>K",
+            "feature_id": "VAR_070918",
+            "rule": null,
+            "mechanism": null
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/O00329",
+        "nucleic_acid": [],
+        "protein_partner": [],
+        "same_protein": [],
+        "ligands": [],
+        "interface_data_available": true,
+        "ligand_data_available": true
+      },
+      "structural_corroboration": "not applicable",
+      "annotation_reachable_by_agents": null
+    },
+    {
+      "variant_id": "CTLA4-p.Arg75Trp",
+      "gene": "CTLA4",
+      "accession": "P16410",
+      "position": 75,
+      "reference_residue": "R",
+      "alternate_residue": "W",
+      "clinvar_vcv": "VCV000945024",
+      "clinvar_review_status": "reviewed by expert panel",
+      "reference_mechanism": null,
+      "reference_tier": null,
+      "derivation": "No label: UniProtKB holds no active-site, binding-site, site, DNA-binding or interaction-region feature at the residue and no description of a molecular effect of this substitution.",
+      "premise_mismatch": null,
+      "uniprot": {
+        "entry_version": 246,
+        "last_annotation_update": "2026-09-02",
+        "url": "https://www.uniprot.org/uniprotkb/P16410/entry",
+        "features_at_residue": [
+          {
+            "type": "Topological domain",
+            "residues": "36-161",
+            "description": "Extracellular",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Domain",
+            "residues": "39-140",
+            "description": "Ig-like V-type",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Disulfide bond",
+            "residues": "58-129",
+            "description": "",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": null,
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Alternative sequence",
+            "residues": "38-204",
+            "description": "in isoform 2 and isoform 3",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": "VSP_041284",
+            "rule": null,
+            "mechanism": null
+          },
+          {
+            "type": "Alternative sequence",
+            "residues": "59-204",
+            "description": "in isoform 4",
+            "ligand": null,
+            "substitution": null,
+            "feature_id": "VSP_041286",
+            "rule": null,
+            "mechanism": null
+          }
+        ]
+      },
+      "pdbe_kb": {
+        "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P16410",
+        "nucleic_acid": [],
+        "protein_partner": [
+          {
+            "partner": "4003-1(VH)",
+            "partner_accession": "IG-heavy chain",
+            "pdb_entries": [
+              "6rpj"
+            ]
+          }
+        ],
+        "same_protein": [],
+        "ligands": [],
+        "interface_data_available": true,
+        "ligand_data_available": true
+      },
+      "structural_corroboration": "not applicable",
+      "annotation_reachable_by_agents": null
+    }
+  ]
+}

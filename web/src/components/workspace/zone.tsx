@@ -1,4 +1,8 @@
+"use client";
+
 import { cn } from "cn";
+
+import { useAdvancedMode } from "@/lib/state/preferences";
 
 export type ZoneName = "ledger" | "instrument" | "inspector";
 
@@ -45,6 +49,7 @@ export function Zone({
   className,
   children,
 }: ZoneProps) {
+  const advanced = useAdvancedMode();
   return (
     <section
       data-zone={zone}
@@ -54,11 +59,23 @@ export function Zone({
         className,
       )}
     >
-      <header className="flex h-9 shrink-0 items-center gap-2 border-b border-border px-3">
-        <span className="text-[0.625rem] font-medium tracking-[0.08em] text-subtle-foreground uppercase">
-          {ZONE_LABEL[zone]}
-        </span>
-        <h2 className="max-w-[60%] shrink-0 truncate text-xs font-medium text-foreground">
+      <header
+        className={cn(
+          "flex shrink-0 items-center gap-2 border-b px-3",
+          advanced ? "h-9 border-border" : "h-10 border-border-subtle",
+        )}
+      >
+        {advanced ? (
+          <span className="text-[0.625rem] font-medium tracking-[0.08em] text-subtle-foreground uppercase">
+            {ZONE_LABEL[zone]}
+          </span>
+        ) : null}
+        <h2
+          className={cn(
+            "max-w-[60%] shrink-0 truncate font-medium text-foreground",
+            advanced ? "text-xs" : "text-sm",
+          )}
+        >
           {title}
         </h2>
         {count !== undefined && count !== null ? (

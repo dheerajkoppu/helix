@@ -1,0 +1,21 @@
+{"database": "IUIS 2024 classification", "record_id": "Table 5.3 row 37 (x-linked-chronic-granulomatous-disease-gp91phox)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12829761/table/tbl5/", "tool": "get_gene", "agent": "orchestrator", "at": "2026-10-03T22:03:55Z"}
+{"database": "IUIS 2024 classification", "record_id": "Table 6.1 row 9 (macrophage-gp91phox-deficiency-q231p-and-t178p)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12829761/table/tbl6/", "tool": "get_gene", "agent": "orchestrator", "at": "2026-10-03T22:03:55Z"}
+{"database": "UniProtKB", "record_id": "P04839", "url": "https://www.uniprot.org/uniprotkb/P04839/entry", "tool": "get_protein", "agent": "orchestrator", "at": "2026-10-03T22:03:55Z"}
+{"database": "ClinVar", "record_id": "VCV000010926.3", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/10926/", "tool": "get_variant", "agent": "orchestrator", "at": "2026-10-03T22:03:55Z"}
+{"database": "UniProtKB", "record_id": "VAR_002432", "url": "https://web.expasy.org/variant_pages/VAR_002432.html", "tool": "get_variant", "agent": "orchestrator", "at": "2026-10-03T22:03:55Z"}
+{"database": "Ensembl VEP", "record_id": "NM_000397.4:c.302A>G", "url": "https://rest.ensembl.org/documentation/info/vep_hgvs_get", "tool": "get_variant", "agent": "orchestrator", "at": "2026-10-03T22:03:55Z"}
+{"database": "ClinVar", "record_id": "VCV000010932.7", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/10932/", "tool": "list_variants_near", "agent": "orchestrator", "at": "2026-10-03T22:03:56Z"}
+{"database": "InterPro", "record_id": "IPR013130", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR013130/", "tool": "get_residue_annotations", "agent": "orchestrator", "at": "2026-10-03T22:03:56Z"}
+{"database": "AlphaMissense", "record_id": "AF-P04839-F1:H101R", "url": "https://alphafold.ebi.ac.uk/entry/AF-P04839-F1", "tool": "get_variant_effect_values", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}
+{"database": "EBI ProtVar", "record_id": "P04839:101", "url": "https://www.ebi.ac.uk/ProtVar/query?search=P04839:101:R", "tool": "get_variant_effect_values", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}
+{"database": "EBI ProtVar", "record_id": "P04839:101:R", "url": "https://www.ebi.ac.uk/ProtVar/query?search=P04839:101:R", "tool": "get_variant_effect_values", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}
+{"database": "PDBe SIFTS", "record_id": "P04839", "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/P04839", "tool": "get_structure_ledger", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}
+{"database": "RCSB PDB", "record_id": "8WEJ", "url": "https://www.rcsb.org/structure/8WEJ", "tool": "get_structure_ledger", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}
+{"database": "RCSB PDB", "record_id": "8X2L", "url": "https://www.rcsb.org/structure/8X2L", "tool": "get_structure_ledger", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}
+{"database": "RCSB PDB", "record_id": "7U8G", "url": "https://www.rcsb.org/structure/7U8G", "tool": "get_structure_ledger", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}
+{"database": "RCSB PDB", "record_id": "8GZ3", "url": "https://www.rcsb.org/structure/8GZ3", "tool": "get_structure_ledger", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}
+{"database": "RCSB PDB", "record_id": "8KEI", "url": "https://www.rcsb.org/structure/8KEI", "tool": "get_structure_ledger", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}
+{"database": "AlphaFold DB", "record_id": "AF-P04839-F1", "url": "https://alphafold.ebi.ac.uk/entry/AF-P04839-F1", "tool": "get_structure_ledger", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}
+{"database": "IntAct", "record_id": "EBI-63730786", "url": "https://www.ebi.ac.uk/intact/search?query=id:P04839%20AND%20id:O43791", "tool": "get_interactions", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}
+{"database": "IntAct", "record_id": "EBI-24715952", "url": "https://www.ebi.ac.uk/intact/search?query=id:P04839%20AND%20id:Q9BQA9", "tool": "get_interactions", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}
+{"database": "IntAct", "record_id": "EBI-63693498", "url": "https://www.ebi.ac.uk/intact/search?query=id:P04839%20AND%20id:Q969H0", "tool": "get_interactions", "agent": "orchestrator", "at": "2026-10-03T22:03:57Z"}

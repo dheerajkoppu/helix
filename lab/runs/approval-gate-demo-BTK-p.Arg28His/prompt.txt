@@ -1,0 +1,4 @@
+Objective: Demonstration of the approval gate, objective set by the build agent: find the molecular mechanism that best explains the loss of function of BTK-p.Arg28His, and use the reference-versus-variant structure prediction of the PH domain (structure_comparison) as the targeted test, to see whether the substitution changes the predicted local structure.
+Subject line: variant_id=BTK-p.Arg28His gene=BTK accession=Q06187 position=28 reference=R alternate=H
+Budget for the whole run: 160 lab tool calls and 300 compute seconds.
+Run the discovery loop to the final report.
