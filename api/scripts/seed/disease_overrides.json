@@ -1,0 +1,53 @@
+{
+  "description": "IUIS entries that the automatic routes leave unmapped although Mondo holds the same disease under different wording. Each override is applied only when the entry is still unmapped, and the build fails unless the Mondo term exists, is current, carries evidence_name as a label or synonym, and (when Mondo lists germline genes) names the entry's gene.",
+  "overrides": [
+    {
+      "label": "Common variable immune deficiency with no gene defect specified (CVID)",
+      "gene_symbol": null,
+      "mondo_id": "MONDO:0015517",
+      "evidence_name": "Common Variable Immune Deficiency"
+    },
+    {
+      "label": "Selective IgA deficiency",
+      "gene_symbol": null,
+      "mondo_id": "MONDO:0001341",
+      "evidence_name": "selective IgA deficiency disease"
+    },
+    {
+      "label": "Thymoma with hypogammaglobulinemia (Good’s syndrome)",
+      "gene_symbol": null,
+      "mondo_id": "MONDO:0015696",
+      "evidence_name": "Good syndrome"
+    },
+    {
+      "label": "Elastase deficiency (severe congenital neutropenia [SCN] 1)",
+      "gene_symbol": "ELANE",
+      "mondo_id": "MONDO:0042490",
+      "evidence_name": "neutropenia, severe congenital, 1, autosomal dominant"
+    },
+    {
+      "label": "PMS2 deficiency",
+      "gene_symbol": "PMS2",
+      "mondo_id": "MONDO:0030843",
+      "evidence_name": "mismatch repair cancer syndrome 4"
+    },
+    {
+      "label": "MSH6 deficiency",
+      "gene_symbol": "MSH6",
+      "mondo_id": "MONDO:0030841",
+      "evidence_name": "mismatch repair cancer syndrome 3"
+    },
+    {
+      "label": "Osteopetrosis",
+      "gene_symbol": "TCIRG1",
+      "mondo_id": "MONDO:0009815",
+      "evidence_name": "autosomal recessive osteopetrosis 1"
+    },
+    {
+      "label": "Hidradenitis suppurativa",
+      "gene_symbol": "NCSTN",
+      "mondo_id": "MONDO:0007728",
+      "evidence_name": "acne inversa, familial, 1"
+    }
+  ]
+}

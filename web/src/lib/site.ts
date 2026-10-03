@@ -1,0 +1,42 @@
+const repositoryUrl = process.env.NEXT_PUBLIC_REPOSITORY_URL?.trim() || null;
+
+export const site = {
+  name: "OrphaFold",
+  tagline: "Open protein research for rare disease.",
+  description:
+    "An open research workspace for rare genetic disease: follow a disease to its gene, variant, protein structure and candidate mechanisms, with the source of every statement shown.",
+  license: "Apache-2.0",
+  /** Set NEXT_PUBLIC_REPOSITORY_URL to link the source repository. Null renders the in-app open-source page. */
+  repositoryUrl,
+  researchUseNotice: "Research use only. Not for clinical decisions.",
+} as const;
+
+export interface NavItem {
+  label: string;
+  href: string;
+  /** path prefixes that mark the item as current */
+  match: string[];
+}
+
+export const PRIMARY_NAV: NavItem[] = [
+  {
+    label: "Explore",
+    href: "/explore",
+    match: [
+      "/explore",
+      "/disease",
+      "/gene",
+      "/protein",
+      "/variant",
+      "/compare",
+    ],
+  },
+  {
+    label: "Projects",
+    href: "/projects",
+    match: ["/projects", "/project", "/s/"],
+  },
+  { label: "Jobs", href: "/jobs", match: ["/jobs"] },
+  { label: "Models", href: "/models", match: ["/models"] },
+  { label: "Docs", href: "/docs", match: ["/docs"] },
+];

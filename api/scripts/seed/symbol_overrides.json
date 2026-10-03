@@ -1,0 +1,14 @@
+{
+  "description": "IUIS 2024 gene cells that HGNC cannot resolve by approved, previous or alias symbol. Each override was checked against the OMIM number printed in the same IUIS row (docs/research/iei-dataset.md section 4.1).",
+  "cell_overrides": {
+    "ATG4": ["ATG4A"],
+    "HMOX": ["HMOX1"],
+    "PSEN": ["PSEN1"],
+    "IL-1R1": ["IL1R1"],
+    "PI4K4": ["PI4KA"],
+    "NCKAPIL": ["NCKAP1L"],
+    "MAP3K9/MKL1": ["MRTFA"]
+  },
+  "embedded_symbols": ["PLCG2", "PSMB10"],
+  "no_gene_cell_pattern": "^(unknown|unknown / environment|del10p13-p14|11q23del)$|deletion"
+}

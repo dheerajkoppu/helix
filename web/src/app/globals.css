@@ -1,0 +1,333 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* `.theme-light` forces the light palette inside a dark page (used by /dev/kit specimens). */
+@custom-variant dark (&:is(.dark *):not(.theme-light, .theme-light *));
+
+@theme inline {
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-heading: var(--font-sans);
+
+  /* shadcn contract: registry components read these names */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* OrphaFold neutral extensions */
+  --color-sunken: var(--surface-sunken);
+  --color-active: var(--surface-active);
+  --color-subtle-foreground: var(--fg-subtle);
+  --color-disabled-foreground: var(--fg-disabled);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-warning: var(--warning);
+  --color-canvas: var(--viewer-canvas);
+
+  /* Scientific meaning: the only saturated colour in the product. */
+  --color-plddt-very-high: var(--sci-plddt-very-high);
+  --color-plddt-high: var(--sci-plddt-high);
+  --color-plddt-low: var(--sci-plddt-low);
+  --color-plddt-very-low: var(--sci-plddt-very-low);
+  --color-plddt-none: var(--sci-plddt-none);
+
+  --color-am-benign: var(--sci-am-benign);
+  --color-am-ambiguous: var(--sci-am-ambiguous);
+  --color-am-pathogenic: var(--sci-am-pathogenic);
+
+  --color-clin-pathogenic: var(--sci-clin-pathogenic);
+  --color-clin-uncertain: var(--sci-clin-uncertain);
+  --color-clin-benign: var(--sci-clin-benign);
+  --color-clin-other: var(--sci-clin-other);
+
+  --color-reference: var(--sci-reference);
+  --color-variant: var(--sci-variant);
+
+  --color-chain-1: var(--sci-chain-1);
+  --color-chain-2: var(--sci-chain-2);
+  --color-chain-3: var(--sci-chain-3);
+
+  /* Evidence classes: hue is the redundant channel, form carries the class. */
+  --color-ev-experimental: var(--ev-experimental);
+  --color-ev-clinical: var(--ev-clinical);
+  --color-ev-literature: var(--ev-literature);
+  --color-ev-curated: var(--ev-curated);
+  --color-ev-prediction: var(--ev-prediction);
+  --color-ev-hypothesis: var(--ev-hypothesis);
+
+  /* Structure origin */
+  --color-origin-experimental: var(--origin-experimental);
+  --color-origin-predicted-external: var(--origin-predicted-external);
+  --color-origin-predicted-orphafold: var(--origin-predicted-orphafold);
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.8125rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 0.875rem;
+  --text-base--line-height: 1.25rem;
+  --text-lg: 1rem;
+  --text-lg--line-height: 1.5rem;
+  --text-xl: 1.125rem;
+  --text-xl--line-height: 1.5rem;
+  --text-2xl: 1.375rem;
+  --text-2xl--line-height: 1.75rem;
+  --text-3xl: 1.75rem;
+  --text-3xl--line-height: 2rem;
+  --text-4xl: 2.5rem;
+  --text-4xl--line-height: 2.75rem;
+
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
+  --radius-2xl: 8px;
+  --radius-3xl: 10px;
+  --radius-4xl: 12px;
+
+  --shadow-popover: var(--elevation-popover);
+  --shadow-dialog: var(--elevation-dialog);
+
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+:root,
+.theme-light {
+  --radius: 0.25rem;
+
+  --background: oklch(1 0 0);
+  --surface-sunken: oklch(0.98 0.002 250);
+  --muted: oklch(0.97 0.003 250);
+  --accent: oklch(0.95 0.004 250);
+  --surface-active: oklch(0.925 0.005 250);
+  --card: oklch(1 0 0);
+  --popover: oklch(1 0 0);
+
+  --foreground: oklch(0.205 0.006 250);
+  --muted-foreground: oklch(0.445 0.008 250);
+  --fg-subtle: oklch(0.53 0.008 250);
+  --fg-disabled: oklch(0.7 0.006 250);
+
+  --primary: oklch(0.205 0.006 250);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.97 0.003 250);
+
+  --border-subtle: oklch(0.93 0.004 250);
+  --border: oklch(0.885 0.005 250);
+  --border-strong: oklch(0.64 0.008 250);
+  --input: oklch(0.64 0.008 250);
+  --ring: oklch(0.205 0.006 250);
+
+  --destructive: oklch(0.53 0.2 27);
+  --warning: oklch(0.55 0.11 70);
+
+  --sidebar: oklch(0.98 0.002 250);
+  --sidebar-accent: oklch(0.95 0.004 250);
+  --sidebar-border: oklch(0.885 0.005 250);
+
+  --elevation-popover:
+    0 0 0 1px oklch(0 0 0 / 0.08), 0 4px 12px -2px oklch(0 0 0 / 0.1),
+    0 2px 4px -2px oklch(0 0 0 / 0.06);
+  --elevation-dialog:
+    0 0 0 1px oklch(0 0 0 / 0.08), 0 16px 40px -8px oklch(0 0 0 / 0.18),
+    0 4px 12px -4px oklch(0 0 0 / 0.08);
+  --overlay: oklch(0.205 0.006 250 / 0.28);
+
+  --dur-instant: 0ms;
+  --dur-fast: 100ms;
+  --dur-base: 150ms;
+  --dur-moderate: 200ms;
+  --dur-slow: 250ms;
+
+  /* Canonical scales, identical in light and dark. Do not theme. */
+  --sci-plddt-very-high: #0053d6;
+  --sci-plddt-high: #65cbf3;
+  --sci-plddt-low: #ffdb13;
+  --sci-plddt-very-low: #ff7d45;
+  --sci-plddt-none: #aaaaaa;
+  --sci-am-benign: #2166ac;
+  --sci-am-ambiguous: #a8a9ac;
+  --sci-am-pathogenic: #b2182b;
+  --sci-clin-pathogenic: #e6573d;
+  --sci-clin-uncertain: #fab470;
+  --sci-clin-benign: #5e6f9e;
+  --sci-clin-other: #bababa;
+
+  /* OrphaFold-defined, stepped per mode. */
+  --sci-reference: oklch(0.74 0.008 250);
+  --sci-variant: oklch(0.46 0.19 345);
+  --sci-chain-1: #2a78d6;
+  --sci-chain-2: #eb6834;
+  --sci-chain-3: #1baf7a;
+
+  --ev-experimental: oklch(0.5 0.12 155);
+  --ev-clinical: #0f6e6e;
+  --ev-literature: #7a4b12;
+  --ev-curated: oklch(0.445 0.008 250);
+  --ev-prediction: oklch(0.52 0.2 295);
+  --ev-hypothesis: #5a6068;
+
+
+  /* 3D canvas ground. Dark canvas is pure black so the very-high pLDDT blue keeps 3:1. */
+  --viewer-canvas: #ffffff;
+}
+
+.dark {
+  --background: oklch(0.18 0.004 250);
+  --surface-sunken: oklch(0.145 0.004 250);
+  --muted: oklch(0.21 0.005 250);
+  --accent: oklch(0.245 0.006 250);
+  --surface-active: oklch(0.285 0.007 250);
+  --card: oklch(0.18 0.004 250);
+  --popover: oklch(0.225 0.005 250);
+
+  --foreground: oklch(0.95 0.003 250);
+  --muted-foreground: oklch(0.74 0.006 250);
+  --fg-subtle: oklch(0.64 0.006 250);
+  --fg-disabled: oklch(0.45 0.006 250);
+
+  --primary: oklch(0.95 0.003 250);
+  --primary-foreground: oklch(0.18 0.004 250);
+  --secondary: oklch(0.21 0.005 250);
+
+  --border-subtle: oklch(0.25 0.005 250);
+  --border: oklch(0.3 0.006 250);
+  --border-strong: oklch(0.52 0.008 250);
+  --input: oklch(0.52 0.008 250);
+  --ring: oklch(0.95 0.003 250);
+
+  --destructive: oklch(0.7 0.17 25);
+  --warning: oklch(0.78 0.14 80);
+
+  --sidebar: oklch(0.145 0.004 250);
+  --sidebar-accent: oklch(0.245 0.006 250);
+  --sidebar-border: oklch(0.3 0.006 250);
+
+  --elevation-popover:
+    0 0 0 1px oklch(1 0 0 / 0.1), 0 8px 24px -4px oklch(0 0 0 / 0.6);
+  --elevation-dialog:
+    0 0 0 1px oklch(1 0 0 / 0.1), 0 24px 56px -12px oklch(0 0 0 / 0.7);
+  --overlay: oklch(0 0 0 / 0.55);
+
+  --sci-reference: oklch(0.5 0.008 250);
+  --sci-variant: oklch(0.66 0.22 345);
+  --sci-chain-1: #3987e5;
+  --sci-chain-2: #d95926;
+  --sci-chain-3: #199e70;
+
+  --ev-experimental: oklch(0.72 0.15 155);
+  --ev-clinical: #5cc8c8;
+  --ev-literature: #d9a566;
+  --ev-curated: oklch(0.74 0.006 250);
+  --ev-prediction: oklch(0.7 0.15 295);
+  --ev-hypothesis: #a2a9b1;
+
+  --viewer-canvas: #000000;
+}
+
+/*
+ * Aliases are declared on every theming element so they resolve against that element's palette.
+ * Declared once on :root they would freeze to the light values inside a nested .dark container.
+ */
+:root,
+.theme-light,
+.dark {
+  --card-foreground: var(--foreground);
+  --popover-foreground: var(--foreground);
+  --accent-foreground: var(--foreground);
+  --secondary-foreground: var(--foreground);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-ring: var(--ring);
+
+  --origin-experimental: var(--ev-experimental);
+  --origin-predicted-external: var(--ev-prediction);
+  --origin-predicted-orphafold: var(--ev-prediction);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground text-sm;
+    font-variant-ligatures: none;
+    position: relative;
+  }
+  td,
+  th,
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  ::selection {
+    background: color-mix(in oklch, var(--foreground) 16%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid color-mix(in oklch, var(--ring) 55%, transparent);
+    outline-offset: 1px;
+  }
+}
+
+/* Diagonal hatch in the current text colour: computed values, predicted coverage, masked cells. */
+@utility hatch {
+  background-image: repeating-linear-gradient(
+    135deg,
+    currentColor 0,
+    currentColor 1px,
+    transparent 1px,
+    transparent 4px
+  );
+}
+
+@utility scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

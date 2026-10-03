@@ -1,0 +1,192 @@
+{
+ "generated_at": "2026-10-03T18:55:05Z",
+ "counts": {
+  "entries": 603,
+  "diseases": 604,
+  "genes": 511,
+  "genes_with_uniprot": 506,
+  "categories": 10,
+  "phenocopies": 17,
+  "diseases_without_gene": 21,
+  "genes_in_tables_1_to_9": 508,
+  "genes_in_tables_1_to_9_with_uniprot": 503,
+  "genes_only_in_table_10": [
+   "KRAS",
+   "NRAS",
+   "UBA1"
+  ],
+  "rows_per_table": {
+   "1": 73,
+   "2": 87,
+   "3": 57,
+   "4": 73,
+   "5": 45,
+   "6": 90,
+   "7": 78,
+   "8": 36,
+   "9": 47,
+   "10": 17
+  }
+ },
+ "mapping": {
+  "routes": {
+   "clingen_panel": 33,
+   "curated": 8,
+   "gene_label": 133,
+   "gene_specific": 50,
+   "iuis_omim": 274,
+   "label_exact": 12,
+   "orphanet_label": 9,
+   "orphanet_mechanism": 3,
+   "unmapped": 82
+  },
+  "with_mondo": 516,
+  "with_orphanet": 291,
+  "with_omim": 469,
+  "with_definition": 394,
+  "with_phenotypes": 483,
+  "with_aliases": 536,
+  "unmapped": [
+   "nudcd3-deficiency",
+   "itpkb-deficiency",
+   "ikk-alpha-deficiency",
+   "foxi3-haploinsufficiency",
+   "pole2-deficiency",
+   "ercc6l2",
+   "gins4-deficiency",
+   "digeorge-velocardiofacial-syndrome",
+   "tbx1-deficiency",
+   "charge-syndrome-sema3e",
+   "cracr2a-deficiency",
+   "itpr3",
+   "bob1-deficiency",
+   "ig-heavy-chain-mutations-and-deletions",
+   "isolated-igg-subclass-deficiency",
+   "igg-subclass-deficiency-with-iga-deficiency",
+   "specific-antibody-deficiency-with-normal-ig-levels-and-normal-b",
+   "faap24-deficiency",
+   "ikaros-gof",
+   "pd-l1-deficiency",
+   "unc93b1-monogenic-lupus",
+   "sh2b3-deficiency",
+   "ire1-alpha-deficiency",
+   "gimap6-deficiency",
+   "ptpn2",
+   "il-10-deficiency",
+   "nfat5-haploinsufficiency",
+   "irhom-deficiency",
+   "tnfsf9-deficiency",
+   "hyou1-deficiency",
+   "dbf4-deficiency",
+   "srp19-srpra-deficiency-srp19",
+   "srp19-srpra-deficiency-srpra",
+   "beta-actin-deficiency",
+   "neutropenia-with-combined-immune-deficiency-due-to-mkl1",
+   "il-12r-beta-2-deficiency",
+   "il-23r-deficiency",
+   "p1104a-tyk2-homozygosity",
+   "ever1-deficiency",
+   "stat2-deficiency",
+   "nos2-deficiency",
+   "rna-polymerase-iii-deficiency-polr3a",
+   "rna-polymerase-iii-deficiency-polr3c",
+   "rna-polymerase-iii-deficiency-polr3f",
+   "mis-c-oas1",
+   "traf3-deficiency",
+   "atg4a-deficiency",
+   "map1lc3b2-deficiency",
+   "ripk3-deficiency",
+   "gtf3a-deficiency",
+   "ikbke-deficiency",
+   "jnk1-haploinsufficiency",
+   "irak1-deficiency",
+   "md2-deficiency",
+   "tlr4-deficiency",
+   "trypanosomiasis",
+   "acute-liver-failure-due-to-nbas-deficiency",
+   "osteopetrosis-clcn7",
+   "il-18bp-deficiency",
+   "arf1-deficiency",
+   "pmvk-deficiency",
+   "praas-candle-psmg2",
+   "dominant-negative-otulin-related-autoinflammatory-syndrome",
+   "otulin-haploinsufficiency",
+   "ap1s3-deficiency",
+   "alpi-deficiency",
+   "trim22",
+   "c1r-deficiency",
+   "c8-gamma-deficiency",
+   "factor-h-related-protein-deficiencies-cfhr1",
+   "factor-h-related-protein-deficiencies-cfhr2",
+   "factor-h-related-protein-deficiencies-cfhr3",
+   "factor-h-related-protein-deficiencies-cfhr4",
+   "factor-h-related-protein-deficiencies-cfhr5",
+   "membrane-attack-complex-inhibitor-deficiency",
+   "hypereosinophilic-syndrome-due-to-somatic-mutations-in-stat5b-phenocopy",
+   "tlr8-gof-phenocopy",
+   "jak1-gof-phenocopy",
+   "adult-onset-immunodeficiency-with-susceptibility-phenocopy",
+   "recurrent-staphylococcal-skin-infection-phenocopy",
+   "critical-viral-infections-phenocopy",
+   "sporadic-infectious-mononucleosis-and-chronic-ebv-infection-phenocopy"
+  ],
+  "notes": {
+   "ercc6l2": [
+    "gene_specific: MONDO:0014317 fits more than one IUIS row of this gene; left unmapped"
+   ],
+   "isolated-igg-subclass-deficiency": [
+    "label_exact: MONDO:0013576 already belongs to a differently labelled IUIS row; left unmapped"
+   ],
+   "ikaros-gof": [
+    "clingen_panel: MONDO:0014810 already belongs to a differently labelled IUIS row of this gene; left unmapped"
+   ],
+   "tnfsf9-deficiency": [
+    "IUIS OMIM number 620282 (MONDO:0859526) is attributed to TNFRSF9 by GenCC, Mondo or Orphanet and not to this gene; omitted"
+   ],
+   "p1104a-tyk2-homozygosity": [
+    "gene_specific: MONDO:0012682 already belongs to a differently labelled IUIS row of this gene; left unmapped"
+   ],
+   "mis-c-oas1": [
+    "gene_specific: MONDO:0020840 already belongs to a differently labelled IUIS row of this gene; left unmapped"
+   ],
+   "coats-plus-syndrome-ctc1": [
+    "IUIS OMIM number 617053 (MONDO:0014888) is attributed to SAMD9 by GenCC, Mondo or Orphanet and not to this gene; omitted"
+   ]
+  }
+ },
+ "gene_statistics": {
+  "null_counts": {
+   "experimental_structure_count": {
+    "null": 5,
+    "null_with_protein": 0
+   },
+   "has_alphafold_model": {
+    "null": 5,
+    "null_with_protein": 0
+   },
+   "clinvar_pathogenic_count": {
+    "null": 0,
+    "null_with_protein": 0
+   },
+   "clinvar_total_count": {
+    "null": 0,
+    "null_with_protein": 0
+   },
+   "publication_count": {
+    "null": 5,
+    "null_with_protein": 0
+   }
+  },
+  "lookup_failures": {},
+  "definitions": {
+   "experimental_structure_count": "distinct PDB entries in PDBe SIFTS for the accession",
+   "has_alphafold_model": "AlphaFold DB has a model for the canonical UniProt accession",
+   "clinvar_total_count": "ClinVar records for SYMBOL[gene], multi-gene variants included",
+   "clinvar_pathogenic_count": "the same query restricted to pathogenic or likely pathogenic",
+   "publication_count": "Europe PMC records for UNIPROT_PUBS:<accession>",
+   "null": "no protein to query (non-coding gene) or the lookup failed; never means zero"
+  }
+ },
+ "protein_failures": [],
+ "flagship_notes": []
+}

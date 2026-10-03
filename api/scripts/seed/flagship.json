@@ -1,0 +1,389 @@
+{
+  "description": "Flagship genes and pathogenic missense variants verified against ClinVar and the UniProt canonical sequence on 2026-10-03 (docs/research/iei-dataset.md section 11). The build re-checks every variant against ClinVar and UniProt; review status and rsID here are used only when ClinVar cannot be reached.",
+  "genes": [
+    {
+      "gene_symbol": "ADA",
+      "uniprot_accession": "P00813",
+      "variants": [
+        {
+          "protein_change": "p.Arg211His",
+          "clinvar_vcv": "VCV000001957",
+          "rsid": "rs121908716",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Gly216Arg",
+          "clinvar_vcv": "VCV000001968",
+          "rsid": "rs121908723",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Ala329Val",
+          "clinvar_vcv": "VCV000001959",
+          "rsid": "rs121908715",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Leu107Pro",
+          "clinvar_vcv": "VCV000001965",
+          "rsid": "rs121908739",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        }
+      ]
+    },
+    {
+      "gene_symbol": "IL2RG",
+      "uniprot_accession": "P31785",
+      "variants": [
+        {
+          "protein_change": "p.Arg226Cys",
+          "clinvar_vcv": "VCV000225195",
+          "rsid": "rs869320659",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Arg226His",
+          "clinvar_vcv": "VCV000225196",
+          "rsid": "rs869320660",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Arg224Trp",
+          "clinvar_vcv": "VCV000225194",
+          "rsid": "rs869320658",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Arg222Cys",
+          "clinvar_vcv": "VCV000010027",
+          "rsid": "rs111033618",
+          "review_status": "reviewed by expert panel"
+        }
+      ]
+    },
+    {
+      "gene_symbol": "BTK",
+      "uniprot_accession": "Q06187",
+      "variants": [
+        {
+          "protein_change": "p.Arg28His",
+          "clinvar_vcv": "VCV000011348",
+          "rsid": "rs128620185",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Arg288Trp",
+          "clinvar_vcv": "VCV000011366",
+          "rsid": "rs128621194",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Arg525Gln",
+          "clinvar_vcv": "VCV000011342",
+          "rsid": "rs128620183",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Arg562Trp",
+          "clinvar_vcv": "VCV000011383",
+          "rsid": "rs128621204",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        }
+      ]
+    },
+    {
+      "gene_symbol": "WAS",
+      "uniprot_accession": "P42768",
+      "variants": [
+        {
+          "protein_change": "p.Thr45Met",
+          "clinvar_vcv": "VCV000011123",
+          "rsid": "rs132630273",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Arg86His",
+          "clinvar_vcv": "VCV000011115",
+          "rsid": "rs132630268",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Val75Met",
+          "clinvar_vcv": "VCV000265289",
+          "rsid": "rs782290433",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Leu270Pro",
+          "clinvar_vcv": "VCV000011125",
+          "rsid": "rs132630274",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        }
+      ]
+    },
+    {
+      "gene_symbol": "RAG1",
+      "uniprot_accession": "P15918",
+      "variants": [
+        {
+          "protein_change": "p.Arg404Gln",
+          "clinvar_vcv": "VCV001072413",
+          "rsid": "rs750055861",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Arg561Cys",
+          "clinvar_vcv": "VCV000013148",
+          "rsid": "rs104894285",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Arg396His",
+          "clinvar_vcv": "VCV000013146",
+          "rsid": "rs104894291",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Arg737His",
+          "clinvar_vcv": "VCV000013149",
+          "rsid": "rs104894286",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        }
+      ]
+    },
+    {
+      "gene_symbol": "JAK3",
+      "uniprot_accession": "P52333",
+      "variants": [
+        {
+          "protein_change": "p.Arg103His",
+          "clinvar_vcv": "VCV000191102",
+          "rsid": "rs774202259",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Arg103Cys",
+          "clinvar_vcv": "VCV000384359",
+          "rsid": "rs761583890",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Asp784Asn",
+          "clinvar_vcv": "VCV002152312",
+          "rsid": "rs760051760",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Tyr100Cys",
+          "clinvar_vcv": "VCV000009360",
+          "rsid": "rs137852624",
+          "review_status": "no assertion criteria provided"
+        }
+      ]
+    },
+    {
+      "gene_symbol": "CYBB",
+      "uniprot_accession": "P04839",
+      "variants": [
+        {
+          "protein_change": "p.His101Arg",
+          "clinvar_vcv": "VCV000010926",
+          "rsid": "rs137854591",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Pro415His",
+          "clinvar_vcv": "VCV000010920",
+          "rsid": "rs137854585",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Cys537Arg",
+          "clinvar_vcv": "VCV000068386",
+          "rsid": "rs151344454",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Glu309Lys",
+          "clinvar_vcv": "VCV000068412",
+          "rsid": "rs151344466",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        }
+      ]
+    },
+    {
+      "gene_symbol": "STAT3",
+      "uniprot_accession": "P40763",
+      "variants": [
+        {
+          "protein_change": "p.Arg382Trp",
+          "clinvar_vcv": "VCV000018304",
+          "rsid": "rs113994135",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Arg382Gln",
+          "clinvar_vcv": "VCV000018305",
+          "rsid": "rs113994136",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Val637Met",
+          "clinvar_vcv": "VCV000018308",
+          "rsid": "rs113994139",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Thr716Met",
+          "clinvar_vcv": "VCV000224848",
+          "rsid": "rs869312892",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        }
+      ]
+    },
+    {
+      "gene_symbol": "STAT1",
+      "uniprot_accession": "P42224",
+      "variants": [
+        {
+          "protein_change": "p.Arg274Trp",
+          "clinvar_vcv": "VCV000030083",
+          "rsid": "rs387906758",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Arg274Gln",
+          "clinvar_vcv": "VCV000030085",
+          "rsid": "rs387906760",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Ala267Val",
+          "clinvar_vcv": "VCV000030084",
+          "rsid": "rs387906759",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Thr385Met",
+          "clinvar_vcv": "VCV000144006",
+          "rsid": "rs587777630",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        }
+      ]
+    },
+    {
+      "gene_symbol": "FOXP3",
+      "uniprot_accession": "Q9BZS1",
+      "variants": [
+        {
+          "protein_change": "p.Ala384Thr",
+          "clinvar_vcv": "VCV000011410",
+          "rsid": "rs122467170",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Arg397Trp",
+          "clinvar_vcv": "VCV000011407",
+          "rsid": "rs28935477",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Arg397Gln",
+          "clinvar_vcv": "VCV000379222",
+          "rsid": "rs1057520529",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Phe367Leu",
+          "clinvar_vcv": "VCV000011419",
+          "rsid": "rs122467175",
+          "review_status": "criteria provided, single submitter"
+        }
+      ]
+    },
+    {
+      "gene_symbol": "CD40LG",
+      "uniprot_accession": "P29965",
+      "variants": [
+        {
+          "protein_change": "p.Thr254Met",
+          "clinvar_vcv": "VCV000035814",
+          "rsid": "rs193922136",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Met36Arg",
+          "clinvar_vcv": "VCV000011162",
+          "rsid": "rs104894774",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Ala123Glu",
+          "clinvar_vcv": "VCV000011168",
+          "rsid": "rs104894778",
+          "review_status": "criteria provided, single submitter"
+        },
+        {
+          "protein_change": "p.Trp140Arg",
+          "clinvar_vcv": "VCV000976233",
+          "rsid": "rs104894777",
+          "review_status": "criteria provided, single submitter"
+        }
+      ]
+    },
+    {
+      "gene_symbol": "PIK3CD",
+      "uniprot_accession": "O00329",
+      "variants": [
+        {
+          "protein_change": "p.Glu1021Lys",
+          "clinvar_vcv": "VCV000088675",
+          "rsid": "rs397518423",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Glu525Lys",
+          "clinvar_vcv": "VCV000132807",
+          "rsid": "rs587777389",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Glu1025Gly",
+          "clinvar_vcv": "VCV000422410",
+          "rsid": "rs1064795762",
+          "review_status": "reviewed by expert panel"
+        }
+      ]
+    },
+    {
+      "gene_symbol": "CTLA4",
+      "uniprot_accession": "P16410",
+      "variants": [
+        {
+          "protein_change": "p.Arg75Trp",
+          "clinvar_vcv": "VCV000945024",
+          "rsid": "rs1688714312",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Arg70Trp",
+          "clinvar_vcv": "VCV000161114",
+          "rsid": "rs606231422",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        },
+        {
+          "protein_change": "p.Asp153Asn",
+          "clinvar_vcv": "VCV000636389",
+          "rsid": "rs1581573970",
+          "review_status": "reviewed by expert panel"
+        },
+        {
+          "protein_change": "p.Gly146Arg",
+          "clinvar_vcv": "VCV000849622",
+          "rsid": "rs1688718864",
+          "review_status": "criteria provided, multiple submitters, no conflicts"
+        }
+      ]
+    }
+  ]
+}

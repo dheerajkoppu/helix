@@ -1,0 +1,41 @@
+# Web
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+.pnpm-debug.log*
+npm-debug.log*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Local configuration and secrets (.env.example stays tracked)
+.env
+.env.local
+.env.*.local
+
+# API runtime state: SQLite database, stored artifacts, job scratch space
+api/var/
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+
+# Seed build cache and partial outputs. data/seed and data/examples are tracked.
+data/.cache/
+data/seed/*.part
+data/seed/*.tmp
+!data/seed/
+!data/examples/
+
+.DS_Store
+.idea/
+.vscode/
