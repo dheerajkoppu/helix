@@ -78,7 +78,7 @@ function HypothesisRow({ entry }: { entry: HypothesisEntry }) {
         >
           {entry.id}
         </span>
-        <EvidenceBadge evidenceClass="orphafold_hypothesis" detail={label} />
+        <EvidenceBadge evidenceClass="helix_hypothesis" detail={label} />
         {entry.mechanism_class ? (
           <span className="text-xs text-muted-foreground">
             Mechanism class{" "}

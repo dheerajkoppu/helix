@@ -1,4 +1,4 @@
-# Variant effect and stability evidence for OrphaFold
+# Variant effect and stability evidence for Helix
 
 Research date: 2026-10-03. Reference variant used for every live test: BTK p.Arg28His (UniProt Q06187, GRCh38 X-101375202-C-T, NM_000061.3:c.83G>A, rs128620185, ClinGen CA255794).
 
@@ -12,13 +12,13 @@ Method note: five `WebSearch` calls (ProteinGym leaderboard, ThermoMPNN, Stabili
 
 ---
 
-## 1. Recommendation for OrphaFold
+## 1. Recommendation for Helix
 
 1. **Use EBI ProtVar as the primary per-variant aggregator.** One keyless REST API (CC BY 4.0) returns the genomic mapping, AlphaMissense, ESM-1b LLR, EVE, popEVE, ScoreCons conservation, CADD v1.7, FoldX ddG on AlphaFold models, Missense3D, predicted pockets, predicted interfaces, UniProt curated features, co-located variants and gnomAD AF. All verified live for BTK R28H, with BTK R525Q used for the EVE, Missense3D and interface paths that R28H does not populate.
 2. **Take AlphaMissense from the AlphaFold DB per-protein CSV as the authoritative copy** (`amAnnotationsUrl` in `/api/prediction/{accession}`), CC BY 4.0, commercial use allowed. One 240 KB file gives the full 19 x L heatmap.
 3. **Call gnomAD GraphQL directly** for allele counts (CC0, v4.1.2). ProtVar's copy is v4.1.0 and carries fewer fields (no hemizygote count).
 4. **Call MaveDB directly** for experimental functional evidence. This is the only source class in this document that is a measurement. Coverage is sparse for IEI genes (BTK: SH3 domain only; CARD11 present; STAT1, STAT3, JAK3, IL2RG, RAG1, WAS, CYBB, ADA, CTLA4, PIK3CD: none), so the empty state is the common case and must be designed.
-5. **Ship two licence tiers.** Tier A (default, commercial-safe): AlphaMissense, ProtVar-native predictions, EVE, gnomAD, MaveDB, UniProt, locally computed ESM and ThermoMPNN. Tier B (off by default, behind `ORPHAFOLD_ENABLE_NONCOMMERCIAL_SOURCES=true`): CADD, REVEL, PrimateAI-3D, dbNSFP, the precomputed ESM-1b file. Every value carries its own licence in provenance.
+5. **Ship two licence tiers.** Tier A (default, commercial-safe): AlphaMissense, ProtVar-native predictions, EVE, gnomAD, MaveDB, UniProt, locally computed ESM and ThermoMPNN. Tier B (off by default, behind `HELIX_ENABLE_NONCOMMERCIAL_SOURCES=true`): CADD, REVEL, PrimateAI-3D, dbNSFP, the precomputed ESM-1b file. Every value carries its own licence in provenance.
 6. **Do not bundle FoldX.** The binary is closed-source, academic-only, and time-limited. Retrieve the precomputed FoldX v5.0 ddG from ProtVar. For local stability compute use ThermoMPNN (MIT) first, RaSP (Apache-2.0) second.
 7. **Do not present reference-vs-variant structure models as evidence of variant impact.** AlphaFold DB states AlphaFold "has not been validated for predicting the effect of mutations". Section 6 gives the wording and UI rules.
 8. **Label every value with one of four evidence classes**: computational prediction, experimental functional evidence, curated database annotation, population observation. Never merge them into one composite score.
@@ -141,7 +141,7 @@ Bulk files [curl listing] at `https://ftp.ebi.ac.uk/pub/databases/ProtVar/`:
 - Thresholds [doc, Zenodo]: "`likely_benign` if alphamissense_pathogenicity < 0.34; `likely_pathogenic` if alphamissense_pathogenicity > 0.564; and `ambiguous` otherwise". Observed in the BTK file: `LBen` max 0.34, `Amb` 0.3401 to 0.564, `LPath` min 0.5641. Use the class from the file.
 - Coverage: UniProt canonical isoforms from release 2021_02, GENCODE V32 transcripts. Check that the AFDB `sequence` matches the current UniProt sequence before trusting position indexing. Isoform scores differ (dbNSFP lists 0.9966, 0.9962, 0.9969, 0.9978 for four BTK transcripts).
 - Required disclaimer [doc]: "AlphaMissense has not been validated for, and is not approved for, any clinical use."
-- Vocabulary normalisation for OrphaFold: store `likely_benign | ambiguous | likely_pathogenic`; map `LBen/BENIGN/B`, `Amb/AMBIGUOUS/A`, `LPath/PATHOGENIC/P`. Display "likely pathogenic (AlphaMissense class)"; never shorten to "pathogenic".
+- Vocabulary normalisation for Helix: store `likely_benign | ambiguous | likely_pathogenic`; map `LBen/BENIGN/B`, `Amb/AMBIGUOUS/A`, `LPath/PATHOGENIC/P`. Display "likely pathogenic (AlphaMissense class)"; never shorten to "pathogenic".
 - Citation: Cheng et al., Science 2023, doi:10.1126/science.adg7492.
 
 ### 3.3 ESM-1b, ESM-1v, ESM-2
@@ -166,7 +166,7 @@ python3 esm_score_missense_mutations.py --input-fasta-file Q06187.fasta --output
 
 - Score = log-likelihood ratio of alternate vs reference residue; more negative = more damaging. The script takes `--model-name` (default `esm1b_t33_650M_UR50S`), so the same command scores with ESM-1v or ESM-2 checkpoints. Handling of proteins longer than the model's context lives in `esm_variants_utils.py`, which was not inspected; test with a protein above 1,022 residues before relying on it.
 - Thresholds: ProtVar bins above. The widely quoted -7.5 cut-off from Brandes et al. is [unverified] in this session.
-- Scores computed locally from the MIT model are free of the CC BY-NC tag on the precomputed file. Label them "OrphaFold-computed ESM-1b LLR" with model name, weights hash and script version.
+- Scores computed locally from the MIT model are free of the CC BY-NC tag on the precomputed file. Label them "Helix-computed ESM-1b LLR" with model name, weights hash and script version.
 - Citation: Brandes et al., Nat Genet 2023, doi:10.1038/s41588-023-01465-0.
 
 ### 3.4 EVE and popEVE
@@ -186,7 +186,7 @@ Decision: retrieve both through ProtVar. Treat the evemodel.org backend as unrel
 
 ### 3.5 REVEL, CADD, PrimateAI-3D, dbNSFP
 
-| Resource     | Current version                                                                | Licence (quoted)                                                                                                                                                                                                                                                                               | Retrieval                                                                                                                                                                                                                                                                                                                                                              | OrphaFold tier            |
+| Resource     | Current version                                                                | Licence (quoted)                                                                                                                                                                                                                                                                               | Retrieval                                                                                                                                                                                                                                                                                                                                                              | Helix tier            |
 | ------------ | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | CADD         | v1.7 (GRCh37, GRCh38)                                                          | "CADD scores are freely available for all non-commercial applications. If you are planning on using them in a commercial application, please obtain a license." [doc]                                                                                                                          | `GET https://cadd.gs.washington.edu/api/v1.0/GRCh38-v1.7/X:101375202_C_T` -> `[{"Alt":"T","Chrom":"X","PHRED":"28.9","Pos":"101375202","RawScore":"5.160420","Ref":"C"}]` [curl]. Mirror `cadd.kircherlab.bihealth.org`. API is "experimental and not thought to be used for retrieving thousands or millions of variants". Also via ProtVar and Ensembl VEP `CADD=1`. | B                         |
 | REVEL        | v1.3 (May 2021)                                                                | "REVEL scores are freely available for non-commercial use. For other uses, please contact Weiva Sieh." [doc]                                                                                                                                                                                   | Ensembl VEP `REVEL=1` -> `revel: 0.926` [curl]; gnomAD `in_silico_predictors` id `revel_max`; bulk `revel-v1.3_all_chromosomes.zip` (526 MB)                                                                                                                                                                                                                           | B                         |
@@ -259,7 +259,7 @@ Observed: `exome {ac:1, an:1097783, ac_hemi:0, ac_hom:0, af:9.109e-07, filters:[
 | UCSC phyloP 100-way [curl] | `GET https://api.genome.ucsc.edu/getData/track?genome=hg38;track=phyloP100way;chrom=chrX;start=101375201;end=101375202` | 6.504                    | 0-based half-open coordinates. Nucleotide-level.                                                                                                               |
 | Ensembl VEP [curl]         | `Conservation=1`                                                                                                        | 2.98                     | Score from Ensembl Compara.                                                                                                                                    |
 | gnomAD [curl]              | `in_silico_predictors` id `phylop`                                                                                      | 7.76                     | Alignment not named in the response.                                                                                                                           |
-| AlphaFold DB MSA [curl]    | `msaUrl` = `https://alphafold.ebi.ac.uk/files/msa/AF-Q06187-F1-msa_v6.a3m`                                              | compute locally          | CC BY 4.0. Lets OrphaFold compute per-column entropy or Jensen-Shannon divergence and label it "OrphaFold-computed from AFDB MSA v6".                          |
+| AlphaFold DB MSA [curl]    | `msaUrl` = `https://alphafold.ebi.ac.uk/files/msa/AF-Q06187-F1-msa_v6.a3m`                                              | compute locally          | CC BY 4.0. Lets Helix compute per-column entropy or Jensen-Shannon divergence and label it "Helix-computed from AFDB MSA v6".                          |
 | popEVE `gapFreq`           | ProtVar                                                                                                                 | 0.855                    | Fraction of gaps at the column; a coverage indicator for alignment-based scores.                                                                               |
 | ConSurf-DB                 | not checked                                                                                                             |                          | [unverified]                                                                                                                                                   |
 
@@ -365,7 +365,7 @@ What this means for the build:
 | `curated_database_annotation`      | "Curated database annotation"             | UniProt features and variants, ClinVar                                                                                    | Show record ID, evidence code (ECO), PubMed IDs, review status.                                                                                                                                       |
 | `population_observation`           | "Population observation"                  | gnomAD                                                                                                                    | Show AC, AN, AF, hemizygotes, homozygotes, dataset version; "not observed" when null.                                                                                                                 |
 
-Additional provenance flag `structure_basis`: `experimental` (PDB ID), `predicted_existing` (AFDB model ID + version), `orphafold_generated` (run ID). FoldX in ProtVar is `predicted_existing` (`AF-Q06187-F1`).
+Additional provenance flag `structure_basis`: `experimental` (PDB ID), `predicted_existing` (AFDB model ID + version), `helix_generated` (run ID). FoldX in ProtVar is `predicted_existing` (`AF-Q06187-F1`).
 
 ### 5.2 Data model (backend)
 
@@ -384,7 +384,7 @@ class Provenance(BaseModel):
     retrieved_at: datetime
     source_release: str | None       # "ProtVar data 2.1"
     upstream_tool: str | None        # "FoldX v5.0"
-    structure_basis: Literal["experimental", "predicted_existing", "orphafold_generated"] | None
+    structure_basis: Literal["experimental", "predicted_existing", "helix_generated"] | None
     structure_id: str | None         # "AF-Q06187-F1"
     license: str                     # "CC-BY-4.0"
     license_url: str
@@ -456,7 +456,7 @@ class VariantEffectProvider(Protocol):
 | 7   | `MaveDbProvider` (open)                                    | search by accession text, per-set scores CSV, calibrations, ClinGen lookup       | zero or more measurements; explicit `not_covered`                                                         |
 | 8   | `EnsemblVepProvider` (noncommercial for REVEL/CADD fields) | VEP REST call in 3.6                                                             | `revel`, cross-check of AM, SIFT, PolyPhen                                                                |
 | 9   | `CaddProvider` (noncommercial)                             | CADD API                                                                         | `cadd.phred` v1.7                                                                                         |
-| 10  | `LocalEsmProvider` (open, optional)                        | local `fair-esm` run                                                             | `esm1b.llr` with `orphafold_generated` provenance, for sequences outside the human reference proteome     |
+| 10  | `LocalEsmProvider` (open, optional)                        | local `fair-esm` run                                                             | `esm1b.llr` with `helix_generated` provenance, for sequences outside the human reference proteome     |
 | 11  | `LocalThermoMpnnProvider` (open, optional)                 | local run on chosen structure                                                    | `thermompnn.ddg` with structure ID                                                                        |
 
 Implementation rules:
@@ -529,7 +529,7 @@ No Boltz-specific benchmark of missense structural effects was found. Boltz-2 be
 
 ### 6.2 UI rules for the reference-vs-variant comparison
 
-1. Title the panel "Reference and variant models (predicted)". Each model carries a badge: `Experimental (PDB 1BTK)`, `Predicted, AlphaFold DB (AF-Q06187-F1 v6)`, or `OrphaFold-generated (Boltz-2, run ID, seed, MSA settings)`.
+1. Title the panel "Reference and variant models (predicted)". Each model carries a badge: `Experimental (PDB 1BTK)`, `Predicted, AlphaFold DB (AF-Q06187-F1 v6)`, or `Helix-generated (Boltz-2, run ID, seed, MSA settings)`.
 2. Fixed caveat directly under the viewer:
    > Structure predictors are not validated for single-residue substitutions. A variant model that matches the reference carries no information about whether the variant is tolerated. Differences smaller than run-to-run variation are noise. See the evidence panel for functional, curated, population and predictor data.
 3. Show run-to-run variation as the baseline. Generate the reference with the same settings and N seeds; report variant-vs-reference deviation next to the reference-vs-reference spread. When the variant deviation falls inside the spread, the summary line reads: "No difference above run-to-run variation."
@@ -548,7 +548,7 @@ No Boltz-specific benchmark of missense structural effects was found. Boltz-2 be
 2. Implement `AlphaMissenseAfdbProvider` reading `amAnnotationsUrl`; cache the CSV per accession; keep the source class string; normalise to three snake-case classes.
 3. Implement `GnomadProvider` against `gnomad_r4` with the query in 3.8; surface hemizygote and homozygote counts; render `variant: null` as "not observed".
 4. Implement `MaveDbProvider`: search by UniProt accession text, align `targetSequence` to the UniProt sequence, verify the reference residue, read `scoreCalibrations`, record the per-set licence.
-5. Add `license_tier` to every adapter and the `ORPHAFOLD_ENABLE_NONCOMMERCIAL_SOURCES` flag; CADD, REVEL and dbNSFP-derived values are off by default.
+5. Add `license_tier` to every adapter and the `HELIX_ENABLE_NONCOMMERCIAL_SOURCES` flag; CADD, REVEL and dbNSFP-derived values are off by default.
 6. Persist `Provenance` with every value, including `source_release` and `upstream_tool`; show it in a hover card.
 7. Build the evidence panel as four separately headed groups matching `evidence_class`; no composite score.
 8. Add confidence flags: `gap_frequency_above_0.5` (popEVE/EVE), `plddt_below_70` (FoldX and any model-based ddG), `isoform_mismatch`, `reference_residue_mismatch`.

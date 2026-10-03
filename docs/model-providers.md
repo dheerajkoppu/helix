@@ -1,6 +1,6 @@
 # Model providers
 
-A model provider is one module under `api/orphafold/providers/` that either retrieves existing
+A model provider is one module under `api/helix/providers/` that either retrieves existing
 predictions or runs a model. Providers are registered at startup; `GET /api/v1/models` is the
 authority on what is registered in an installation and whether each can run there. The `/models`
 page shows the same list.
@@ -36,7 +36,7 @@ Everything except `boltz2`.
   account and no key. One protein chain of at most 400 residues. A longer protein is predicted as a
   residue window that contains the variant; the rule that chose the window and its range are
   recorded in the run manifest (`parameters.construct`). The
-  result has origin `predicted_orphafold`.
+  result has origin `predicted_internal`.
 - **Cached examples** (`cached_examples`): the stored output of real `variant_comparison` runs,
   each beside its run manifest. It runs no model and refuses any input it has no stored result for.
   It exists so the comparison view works when the remote service is unreachable.
@@ -57,17 +57,17 @@ Two backends exist behind one interface:
 
 | Backend         | How to attach                                                                                                                          |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `remote_worker` | Run the worker in `api/worker/boltz` on a machine with a GPU and set `ORPHAFOLD_BOLTZ_WORKER_URL` (and `ORPHAFOLD_BOLTZ_WORKER_TOKEN`) |
-| `local_cli`     | Install Boltz on the API machine and set `ORPHAFOLD_BOLTZ_BIN` to the executable                                                       |
+| `remote_worker` | Run the worker in `api/worker/boltz` on a machine with a GPU and set `HELIX_BOLTZ_WORKER_URL` (and `HELIX_BOLTZ_WORKER_TOKEN`) |
+| `local_cli`     | Install Boltz on the API machine and set `HELIX_BOLTZ_BIN` to the executable                                                       |
 
-Further settings: `ORPHAFOLD_BOLTZ_BACKEND`, `ORPHAFOLD_BOLTZ_CACHE_DIR`,
-`ORPHAFOLD_BOLTZ_ACCELERATOR`, `ORPHAFOLD_BOLTZ_DEVICES`, `ORPHAFOLD_BOLTZ_MAX_TOKENS`,
-`ORPHAFOLD_BOLTZ_TIMEOUT_SECONDS`, `ORPHAFOLD_MSA_SERVER_URL`. They are defined in
-`api/orphafold/boltz/settings.py`.
+Further settings: `HELIX_BOLTZ_BACKEND`, `HELIX_BOLTZ_CACHE_DIR`,
+`HELIX_BOLTZ_ACCELERATOR`, `HELIX_BOLTZ_DEVICES`, `HELIX_BOLTZ_MAX_TOKENS`,
+`HELIX_BOLTZ_TIMEOUT_SECONDS`, `HELIX_MSA_SERVER_URL`. They are defined in
+`api/helix/boltz/settings.py`.
 
 Status of the integration: the input builder and the output parser were checked against the Boltz
 documentation and a hand-written fixture, and both backends were exercised with a stand-in
-executable. No real Boltz prediction has been made through OrphaFold yet. The full description is
+executable. No real Boltz prediction has been made through Helix yet. The full description is
 in [Boltz-2 provider](providers/boltz2.md).
 
 ## Job kinds
@@ -85,7 +85,7 @@ of its parameters and result.
 ```bash
 curl -X POST http://localhost:8000/api/v1/jobs \
   -H 'Content-Type: application/json' \
-  -H 'X-OrphaFold-Workspace: my-local-workspace-0001' \
+  -H 'X-Helix-Workspace: my-local-workspace-0001' \
   -d '{"kind": "structure_retrieval", "params": {"provider": "afdb", "uniprot_accession": "Q06187"}}'
 ```
 
@@ -94,7 +94,7 @@ Every job writes a run manifest at its terminal status: see
 
 ## Rules every provider follows
 
-- Output of inference started by OrphaFold has origin `predicted_orphafold` and ID `of:<job_id>`.
+- Output of inference started by Helix has origin `predicted_internal` and ID `of:<job_id>`.
   Retrieval of a third party's prediction has origin `predicted_external`.
 - pLDDT is normalised to 0-100 for display and the native scale is recorded.
 - Confidence values are reported as the model wrote them. A ranking score orders samples within one

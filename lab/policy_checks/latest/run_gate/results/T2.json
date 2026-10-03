@@ -44,7 +44,7 @@
   },
   "sources": [
     {
-      "database": "OrphaFold",
+      "database": "Helix",
       "record_id": "job_01M41VJERNTZP2MXHJ0SEYFW61",
       "url": "http://localhost:8000/api/v1/jobs/job_01M41VJERNTZP2MXHJ0SEYFW61/manifest"
     }
@@ -57,7 +57,7 @@
     "Structure predictors are not validated for single-residue substitutions.",
     "Each model is predicted once, so run-to-run variation is not estimated."
   ],
-  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments structure_comparison --accession Q06187 --position 28 --alternate-residue H --reference-residue R --gene BTK --variant-id BTK-p.Arg28His",
+  "reproducible_command": "HELIX_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m helix_lab_tools.experiments structure_comparison --accession Q06187 --position 28 --alternate-residue H --reference-residue R --gene BTK --variant-id BTK-p.Arg28His",
   "elapsed_seconds": 3.0,
   "job_id": "job_01M41VJERNTZP2MXHJ0SEYFW61",
   "manifest_url": "/api/v1/jobs/job_01M41VJERNTZP2MXHJ0SEYFW61/manifest",

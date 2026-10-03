@@ -3,7 +3,7 @@
     lab/.venv/bin/python lab/experiments/preflight.py
 
 Calls the lab's own retrieval tools and its three retrieval-only tests once per variant in a fixed order, twice
-in a row, and times every call. The first pass fills the caches of the OrphaFold API, so that neither arm of
+in a row, and times every call. The first pass fills the caches of the Helix API, so that neither arm of
 the benchmark pays for a cold upstream database; the second pass measures how long the tools themselves take
 when nothing has to decide which one to call. Writes lab/experiments/results/preflight.json.
 """
@@ -54,7 +54,7 @@ def timed(name: str, call: Any) -> tuple[dict[str, Any], Any]:
 
 
 def one_pass(subject: dict[str, Any]) -> dict[str, Any]:
-    from orphafold_lab_tools import api, experiments, openalex
+    from helix_lab_tools import api, experiments, openalex
 
     gene, accession, position = subject["gene"], subject["accession"], subject["position"]
     calls = [
@@ -107,9 +107,9 @@ def one_pass(subject: dict[str, Any]) -> dict[str, Any]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--api-url", default=os.environ.get("ORPHAFOLD_API_URL", "http://localhost:8000"))
+    parser.add_argument("--api-url", default=os.environ.get("HELIX_API_URL", "http://localhost:8000"))
     arguments = parser.parse_args()
-    os.environ["ORPHAFOLD_API_URL"] = arguments.api_url
+    os.environ["HELIX_API_URL"] = arguments.api_url
     rows = []
     for subject in variant_set():
         subject = {
@@ -122,7 +122,7 @@ def main() -> None:
             json.dumps({"run_id": f"preflight-{subject['variant_id']}", "subject": subject}, indent=2) + "\n",
             encoding="utf-8",
         )
-        os.environ["ORPHAFOLD_LAB_RUN_DIR"] = str(directory)
+        os.environ["HELIX_LAB_RUN_DIR"] = str(directory)
         first = one_pass(subject)
         second = one_pass(subject)
         ledger = directory / "sources_seen.jsonl"

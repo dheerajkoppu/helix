@@ -54,7 +54,7 @@ function DesktopZones({
     inspector ? "inspector" : null,
   ].filter((id): id is string => id !== null);
   const { defaultLayout, onLayoutChanged } = useDefaultLayout({
-    id: `orphafold.zones.${layoutId}`,
+    id: `helix.zones.${layoutId}`,
     panelIds,
     storage: typeof window === "undefined" ? noopStorage : window.localStorage,
   });

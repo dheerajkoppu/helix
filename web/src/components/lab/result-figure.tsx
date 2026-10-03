@@ -302,7 +302,7 @@ function structureComparison(
     readText(values.origin) === "cached_example" ||
     provider.performs_inference === false;
   const shown = {
-    origin: "predicted_orphafold" as const,
+    origin: "predicted_internal" as const,
     compareJobId: readText(values.job_id),
     href:
       parsed?.kind === "substitution"

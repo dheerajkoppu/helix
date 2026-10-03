@@ -18,10 +18,10 @@ Before the benchmark, the only timings were single development runs on BTK p.Arg
 
 | Arm                     | Bundle                          | Agents                                                                                           |
 | ----------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `specialist_lab`        | `lab/agents/orphafold_lab`      | Omnigent supervisor plus literature, knowledge graph, insight, planner, safety, runner, analysis |
-| `single_agent_baseline` | `lab/agents/orphafold_baseline` | One generalist agent holding every lab tool                                                      |
+| `specialist_lab`        | `lab/agents/helix_lab`      | Omnigent supervisor plus literature, knowledge graph, insight, planner, safety, runner, analysis |
+| `single_agent_baseline` | `lab/agents/helix_baseline` | One generalist agent holding every lab tool                                                      |
 
-Held equal: the tool implementations (one registry), the model (read from each `run.json`), the four policies (role boundary, approval gate, claims guard, run budget), the budget (160 lab tool calls, 300 compute seconds), the objective text and subject line (built by `lab/run_lab.py`), the approval rule (section 5), the OrphaFold API instance.
+Held equal: the tool implementations (one registry), the model (read from each `run.json`), the four policies (role boundary, approval gate, claims guard, run budget), the budget (160 lab tool calls, 300 compute seconds), the objective text and subject line (built by `lab/run_lab.py`), the approval rule (section 5), the Helix API instance.
 
 Not equal by design: the lab's supervisor may reopen the earlier choice once and run a second test; the control prompt has no reopening step. The lab also has a knowledge-graph update after the test that records the result as evidence. Counts that these steps inflate (evidence items, tests executed, decisions changed) are reported next to counts taken before the first hypothesis, which both arms produce the same way.
 
@@ -62,7 +62,7 @@ Not measured: the correctness of individual evidence statements, the quality of 
 
 ## 5. Approvals
 
-The lab's approval gate guards one action: a `structure_comparison` job, which starts an OrphaFold `variant_comparison` job (120 compute seconds in the catalogue, capped by the run's compute budget) and sends the reference and variant sequence of a domain construct of a public UniProtKB entry to the configured prediction provider.
+The lab's approval gate guards one action: a `structure_comparison` job, which starts an Helix `variant_comparison` job (120 compute seconds in the catalogue, capped by the run's compute budget) and sends the reference and variant sequence of a domain construct of a public UniProtKB entry to the configured prediction provider.
 
 Rule for the benchmark: every run of both arms is launched with `--approve`. Whoever starts `run_benchmark.py` approves that one action in advance for every run of the batch. Nothing else is pre-approved; the role boundary, the claims guard and the budget stay enforced. Each granted approval is written to the run's record as an `approval_decision` with `by` set to the `--operator` text, which names this rule and who started the batch.
 
@@ -119,7 +119,7 @@ Limits of the reference, known in advance:
 6. `spec_hash` (agent bundle, policies, tool package) is recorded per run; if another builder changes the lab during the batch, the number of distinct hashes per arm is reported.
 7. Failed runs stay in `lab/runs/` and are counted. A failed run is retried once under a new run ID ending in `-r2`. Medians use succeeded runs only, and the number of failures is reported next to them.
 8. Each run has a wall-clock limit of 1500 s.
-9. Negative and specificity controls of the tests themselves are in each result (`controls`), as documented in `lab/tools/orphafold_lab_tools/catalogue.py`.
+9. Negative and specificity controls of the tests themselves are in each result (`controls`), as documented in `lab/tools/helix_lab_tools/catalogue.py`.
 
 ## 8. Threats to validity known before the run
 

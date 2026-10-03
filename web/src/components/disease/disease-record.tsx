@@ -85,7 +85,7 @@ function Explanation({ disease }: { disease: DiseaseResponse }) {
         size="inline"
         className="px-0"
         title="No sourced definition"
-        description="No definition is attached to this catalog entry. OrphaFold does not write one in its place."
+        description="No definition is attached to this catalog entry. Helix does not write one in its place."
       />
     );
   }

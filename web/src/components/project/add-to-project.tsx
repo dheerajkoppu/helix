@@ -41,7 +41,7 @@ import {
 export type { ProjectItemDraft } from "@/lib/state/projects";
 
 const NEW_PROJECT = "__new__";
-const HOST_ID = "orphafold-add-to-project";
+const HOST_ID = "helix-add-to-project";
 
 /** The dialog mounts itself on first use, so no layout has to render a host. */
 function ensureHost(): void {

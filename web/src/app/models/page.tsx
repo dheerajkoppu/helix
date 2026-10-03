@@ -32,7 +32,7 @@ export default function ModelsPage() {
             <li>
               Add one new module under{" "}
               <code className="font-mono text-foreground">
-                api/orphafold/providers/
+                api/helix/providers/
               </code>
               . Every module in that package is imported at startup, so no
               registration list has to be edited.
@@ -40,7 +40,7 @@ export default function ModelsPage() {
             <li>
               Implement one of the interfaces in{" "}
               <code className="font-mono text-foreground">
-                orphafold.providers.base
+                helix.providers.base
               </code>{" "}
               (<code className="font-mono">StructurePredictor</code>,{" "}
               <code className="font-mono">BindingPredictor</code>,{" "}

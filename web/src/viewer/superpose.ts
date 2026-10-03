@@ -26,7 +26,7 @@ export interface SuperpositionResult {
   transform: number[];
 }
 
-const SUPERPOSITION_TAG = "orphafold-superposition";
+const SUPERPOSITION_TAG = "helix-superposition";
 
 function caLoci(loaded: LoadedStructure, chain: ChainRef): StructureElement.Loci {
   // untransformed coordinates on purpose, so a new transform replaces the old one instead of stacking

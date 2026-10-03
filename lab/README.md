@@ -1,12 +1,12 @@
-# OrphaFold lab
+# Helix lab
 
-An agentic research lab on top of the OrphaFold API, orchestrated by Omnigent (open source, version 0.16.0). A supervisor and seven specialist agents run one recorded discovery loop per variant:
+An agentic research lab on top of the Helix API, orchestrated by Omnigent (open source, version 0.16.0). A supervisor and seven specialist agents run one recorded discovery loop per variant:
 
 **Question → Evidence → Hypothesis → Experiment → Result → Updated decision**
 
 The question of every run: for a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, and does a targeted computational test change the conclusion that the starting evidence suggested?
 
-The bottleneck it attacks: going from a variant to a cited, ranked mechanism hypothesis normally means visiting many databases and tools by hand. The OrphaFold API is the agents' tool layer; the lab automates the evidence assembly, the choice of test, the test and the updated decision, and keeps a record from which every decision can be reconstructed.
+The bottleneck it attacks: going from a variant to a cited, ranked mechanism hypothesis normally means visiting many databases and tools by hand. The Helix API is the agents' tool layer; the lab automates the evidence assembly, the choice of test, the test and the updated decision, and keeps a record from which every decision can be reconstructed.
 
 This is research and hypothesis generation only. The lab gives no clinical advice and no treatment recommendation. Every recorded fact cites a database record, and every hypothesis is labelled an agent-generated hypothesis.
 
@@ -14,12 +14,12 @@ This is research and hypothesis generation only. The lab gives no clinical advic
 
 | Path                               | Contents                                                                                                                                                                                      |
 | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `agents/orphafold_lab/`            | Omnigent agent bundle: supervisor `config.yaml` and `AGENTS.md`, `skills/discovery-loop/SKILL.md`, seven sub-agents under `agents/<role>/`, one file per permitted tool under `tools/python/` |
-| `agents/orphafold_baseline/`       | The control: one generalist agent with every tool, the same model and the same policies                                                                                                       |
+| `agents/helix_lab/`            | Omnigent agent bundle: supervisor `config.yaml` and `AGENTS.md`, `skills/discovery-loop/SKILL.md`, seven sub-agents under `agents/<role>/`, one file per permitted tool under `tools/python/` |
+| `agents/helix_baseline/`       | The control: one generalist agent with every tool, the same model and the same policies                                                                                                       |
 | `agents/agents.json`               | Agent specifications and policies as data (served by `GET /api/v1/lab/agents`)                                                                                                                |
-| `tools/orphafold_lab_tools/`       | Function tools: OrphaFold API wrappers, OpenAlex search, the tests, the research record, the budget ledger, the registry of who may call what                                                 |
+| `tools/helix_lab_tools/`       | Function tools: Helix API wrappers, OpenAlex search, the tests, the research record, the budget ledger, the registry of who may call what                                                 |
 | `tools/generate_agent_tools.py`    | Generates every `config.yaml`, every tool file and `agents.json` from the registry                                                                                                            |
-| `policies/orphafold_lab_policies/` | Omnigent policies: role boundary, approval gate, claims guard, run budget                                                                                                                     |
+| `policies/helix_lab_policies/` | Omnigent policies: role boundary, approval gate, claims guard, run budget                                                                                                                     |
 | `run_lab.py`                       | Launcher: creates a run, starts Omnigent headlessly, streams the record, finalises `run.json`                                                                                                 |
 | `omnigent_driver.py`               | Runs one bundle on a per-run Omnigent server and exports the session transcripts                                                                                                              |
 | `verify_policies.py`               | Checks with real Omnigent sessions that denied calls are blocked                                                                                                                              |
@@ -43,7 +43,7 @@ Every agent runs on the `claude-sdk` harness with model `claude-sonnet-5`. An ag
 
 Literature and knowledge graph run in parallel (two `sys_session_send` calls in one supervisor turn). Analysis and the knowledge graph update run in parallel after the test.
 
-The table is generated data: `tools/orphafold_lab_tools/registry.py` is the single source for tool permissions, models and descriptions. Prompts are in `AGENTS.md` next to each `config.yaml`.
+The table is generated data: `tools/helix_lab_tools/registry.py` is the single source for tool permissions, models and descriptions. Prompts are in `AGENTS.md` next to each `config.yaml`.
 
 ## The loop
 
@@ -65,15 +65,15 @@ The starting evidence is what a variant page offers: clinical classification, cu
 | `ligand_contact`       | `run_ligand_contact_test`     | In every experimental structure that observes the residue and holds a non-solvent ligand: is the residue among the ligand's neighbours (RCSB), at what distance | 0 compute seconds         | no        |
 | `stability_effect`     | `run_stability_test`          | FoldX ΔΔG of the substitution on the AlphaFold model (EBI ProtVar), residue pLDDT, the same value for other disease substitutions at the residue                | 0 compute seconds         | no        |
 | `structural_context`   | `run_structural_context_test` | Membership of a P2Rank or ProtVar predicted pocket and of a predicted protein interface                                                                         | 0 compute seconds         | no        |
-| `structure_comparison` | `run_structure_comparison`    | OrphaFold `variant_comparison` job: reference and variant construct predicted with the same provider, RMSD, site pLDDT, contact changes                         | about 120 compute seconds | **human** |
+| `structure_comparison` | `run_structure_comparison`    | Helix `variant_comparison` job: reference and variant construct predicted with the same provider, RMSD, site pLDDT, contact changes                         | about 120 compute seconds | **human** |
 
-Each test documents its controls and limitations (`tools/orphafold_lab_tools/catalogue.py`); they are copied into the result. The planner sees live availability: how many structures qualify, whether a prediction provider answers.
+Each test documents its controls and limitations (`tools/helix_lab_tools/catalogue.py`); they are copied into the result. The planner sees live availability: how many structures qualify, whether a prediction provider answers.
 
 Mechanism classes: `stability_folding`, `ligand_binding`, `catalytic_site`, `protein_interaction`, `nucleic_acid_binding`, `domain_interface`, `other`.
 
 ## Policies and approval gates
 
-Four Omnigent policies (`policies/orphafold_lab_policies/policies.py`) are declared under `guardrails.policies` in every agent's `config.yaml`, each with the role of the agent.
+Four Omnigent policies (`policies/helix_lab_policies/policies.py`) are declared under `guardrails.policies` in every agent's `config.yaml`, each with the role of the agent.
 
 | Policy          | Phase               | Enforces                                                                                                                                                                                                                                             |
 | --------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -99,7 +99,7 @@ Omnigent's own `ASK` verdict needs an attached interactive client to answer it. 
 
 ## Run it
 
-Requirements: the OrphaFold API on `http://localhost:8000`, and Omnigent 0.16.0 in `lab/.venv` with a Claude login configured for the `claude-sdk` harness.
+Requirements: the Helix API on `http://localhost:8000`, and Omnigent 0.16.0 in `lab/.venv` with a Claude login configured for the `claude-sdk` harness.
 
 ```bash
 python3 -m venv lab/.venv
@@ -145,7 +145,7 @@ Other commands:
 
 ```bash
 lab/.venv/bin/python lab/verify_policies.py                 # prove the policies block what they must
-PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments \
+PYTHONPATH=lab/tools lab/.venv/bin/python -m helix_lab_tools.experiments \
   ligand_contact --accession Q06187 --position 28          # reproduce a test without any agent
 ```
 
@@ -216,7 +216,7 @@ What the record shows, in order:
 8. **Decision 2.** H1 weakened (a weak negative from a monomer model), H2 weakly supported. `ligand_binding` stays favoured.
 9. **Next experiment.** Computational: model R28H on the inositol-phosphate-bound structure 1B55 and compare contacts and binding free energy with the reference residue, and count partner contacts in a PH-TH dimer model. The record states that laboratory binding data for R28H is still missing.
 
-Reproduce the first test without agents: `PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments ligand_contact --accession Q06187 --position 28`.
+Reproduce the first test without agents: `PYTHONPATH=lab/tools lab/.venv/bin/python -m helix_lab_tools.experiments ligand_contact --accession Q06187 --position 28`.
 
 The reference run's `spec_hash` predates one later edit: the mechanism-class definitions were added to the docstring of `record_hypothesis`.
 
@@ -229,7 +229,7 @@ It was launched without `--approve` and with `--approval-timeout 60`, and no hum
 3. After 60 seconds the request was recorded as `rejected` by `approval timeout (no human decision)`. No compute job was started.
 4. The supervisor sent the rejection back to the planner, which chose `ligand_contact` and wrote that it had not treated the timeout as a grant. Safety cleared the new plan, the runner executed it, and the run finished with `ligand_binding` favoured before and after (310.4 s, 109 tool calls, 22 evidence items from 11 databases).
 
-The approved path is covered by `verify_policies.py` (denied without a decision, allowed after an approved one). During development it was also exercised end to end through the API: a run waited in `awaiting_approval`, `POST .../approvals/A1` wrote the decision, and the comparison job then ran as an OrphaFold job with a manifest. That run is not kept, because its approval was given by the build agent while testing the endpoint.
+The approved path is covered by `verify_policies.py` (denied without a decision, allowed after an approved one). During development it was also exercised end to end through the API: a run waited in `awaiting_approval`, `POST .../approvals/A1` wrote the decision, and the comparison job then ran as an Helix job with a manifest. That run is not kept, because its approval was given by the build agent while testing the endpoint.
 
 One more observation from development: when a run was started with `--approve` and an operator name saying that no human had reviewed the request, the safety agent and the supervisor did not treat the decision as human sign-off. They handed the request to `human` and held the runner. `--approve` is for an operator who has actually decided.
 

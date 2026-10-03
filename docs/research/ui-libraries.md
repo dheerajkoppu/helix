@@ -1,10 +1,10 @@
-# UI libraries and design system for OrphaFold
+# UI libraries and design system for Helix
 
 Research date: 2026-10-03. Scope: the ten sites collected from X, the current React UI foundation landscape, and a build-ready token set.
 
 How facts were checked: npm registry (`npm view`), GitHub API (`gh api`), live HTTP fetch of every listed site, the shadcn CLI 4.21.1 run in two throwaway projects and in a scratch copy of this repository's `web/` app, and production builds (Next 16.3.8 with pnpm 12.8.1 in the `web/` copy, Next 16.3.6 in the template probes; Turbopack, TypeScript 5.9.3) on the exact `globals.css`, `layout.tsx`, `theme-provider.tsx` and dependency set in sections 4 to 7. Nothing inside `web/` was modified. Colour numbers are computed: WCAG 2 contrast, and OKLab ΔE×100 under Machado 2009 protan/deutan simulation (target ≥ 8, floor 6; normal-vision floor 15). Anything that could not be checked is in section 10.
 
-## 0. Recommendation for OrphaFold
+## 0. Recommendation for Helix
 
 1. **Foundation: shadcn/ui on Base UI, style Mira.** Run `pnpm dlx shadcn@latest init -b base -p mira` inside the existing `web/` app. Base UI has been the shadcn default since 2026-07-02. Mira is the densest official style (28px controls, 12px control text). The generated source lives in `components/ui` and is owned by the repo.
 2. **None of the ten listed sites is a foundation.** Seven are motion-first component collections, effect packages or inspiration galleries, one is unreachable to bots, one is a video SaaS. Astryx (Meta) is the only real design system on the list and is still beta. Borrow motion values from transitions.dev and component vocabulary from Astryx and Arc. Install none of them.
@@ -13,11 +13,11 @@ How facts were checked: npm registry (`npm view`), GitHub API (`gh api`), live H
 5. **Data views: TanStack Table 9.2.4 + TanStack Virtual 3.14.13.** Override the shadcn `table` component: every style ships 40px rows.
 6. **Motion: CSS transitions first.** Ceiling 250ms, strong ease-out, closes faster than opens, zero animation on keyboard-triggered actions. `motion` 14 only for layout or gesture work. React `<ViewTransition>` for route continuity.
 7. **Colour: monochrome chrome.** Ink-on-paper primary actions, neutral focus ring. Saturated colour is reserved for pLDDT, AlphaMissense, the variant marker, structure provenance, and destructive/warning states.
-8. **Scientific colours are copied from the AlphaFold DB production front-end** (hex values in section 8) and are identical in light and dark. Every OrphaFold-defined colour carries a second, non-colour channel, because the canonical palettes already use up the colour-blind-safe range.
+8. **Scientific colours are copied from the AlphaFold DB production front-end** (hex values in section 8) and are identical in light and dark. Every Helix-defined colour carries a second, non-colour channel, because the canonical palettes already use up the colour-blind-safe range.
 
 ## 1. The ten listed sites
 
-| Site                                           | What it actually is                                                                                                                                                                                                       | Licence                                                                                                                                                                                | Tech requirements                                                                                                                                            | Maintenance on 2026-10-03                                                                                       | Fit for OrphaFold                                                                                                                                              |
+| Site                                           | What it actually is                                                                                                                                                                                                       | Licence                                                                                                                                                                                | Tech requirements                                                                                                                                            | Maintenance on 2026-10-03                                                                                       | Fit for Helix                                                                                                                                              |
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [uiarc.dev](https://uiarc.dev)                 | "Arc UI": animated React components and blocks, shadcn registry `@uiarc`, free tier plus paid Pro                                                                                                                         | MIT for the free repo ([kuratlielia/arc-library](https://github.com/kuratlielia/arc-library))                                                                                          | React 19, CSS modules on its own tokens, `motion`, some `@radix-ui/*`, `lucide-react`; Tailwind optional                                                     | Repo created 2026-09-24 (9 days old), 241 stars, one contributor, pushed today                                  | Ideas only. Too young, CSS-modules tokens and Radix parts clash with a Tailwind + Base UI stack                                                                |
 | [libraries.dev](https://libraries.dev)         | Effect packages by Jakub Antalik: `border-beam` 1.4.1, `thinking-orbs` 0.3.2, `liquid-gooey` 0.2.2, `metal-fx` 2.0.11, `img-fx` 0.5.1, plus Voice and Bot Avatars                                                         | MIT (npm and repo); paid "Pro" studio                                                                                                                                                  | React 18+; `img-fx` needs `three`                                                                                                                            | 4,046 stars, pushed 2026-10-02                                                                                  | None. Purely decorative                                                                                                                                        |
@@ -38,7 +38,7 @@ Notes:
 
 ## 2. What to borrow and what to avoid
 
-| Borrow                                 | Source                                                                                                                                                                                                                                                           | Values or idea                                                                                                            | OrphaFold adjustment                                             |
+| Borrow                                 | Source                                                                                                                                                                                                                                                           | Values or idea                                                                                                            | Helix adjustment                                             |
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | Menu and popover open/close            | transitions.dev [`05-menu-dropdown.md`](https://github.com/Jakubantalik/transitions.dev/blob/main/skills/transitions-dev/05-menu-dropdown.md)                                                                                                                    | Origin-aware scale 0.97 to 1 plus opacity; open 250ms, close 150ms, `cubic-bezier(0.22, 1, 0.36, 1)`; closing scale 0.99  | Open 200ms, close 150ms; use Base UI's `--transform-origin`      |
 | Dialog                                 | [`06-modal.md`](https://github.com/Jakubantalik/transitions.dev/blob/main/skills/transitions-dev/06-modal.md)                                                                                                                                                    | Scale 0.96, open 250ms, close 150ms, centre origin                                                                        | Keep                                                             |
@@ -60,7 +60,7 @@ Avoid (decorative, or harmful to scientific reading):
 - Chart or heatmap entrance animations, bouncy springs, staggered list entrances on data tables.
 - transitions.dev panel reveal (400ms / 350ms) and toast (350ms) durations as published: over the 250ms ceiling.
 
-Licence note: transitions.dev snippets are under a custom licence with a redistribution restriction. OrphaFold is open source. Re-implement the values in OrphaFold's own CSS instead of copying snippet files into the repository.
+Licence note: transitions.dev snippets are under a custom licence with a redistribution restriction. Helix is open source. Re-implement the values in Helix's own CSS instead of copying snippet files into the repository.
 
 ## 3. React UI foundations in October 2026
 
@@ -73,7 +73,7 @@ Licence note: transitions.dev snippets are under a custom licence with a redistr
 | React Aria Components | `react-aria-components` 1.21.1      | Apache-2.0 | Adobe, published 2026-10-03                                                       | shadcn base since 2026-07-17 (`-b aria`). Widest coverage: Table, GridList, Tree, date and colour pickers, drag and drop, Virtualizer. Larger API                                                                                                |
 | Ark UI                | `@ark-ui/react` 5.39.2              | MIT        | Chakra team, 5.4k stars, 13 open issues                                           | Not a shadcn base                                                                                                                                                                                                                                |
 
-Decision: Base UI. It is the shadcn default, actively released, and one package covers every overlay OrphaFold needs. Add `react-aria-components` only if a later feature needs an ARIA grid, tree or drag and drop that Base UI lacks.
+Decision: Base UI. It is the shadcn default, actively released, and one package covers every overlay Helix needs. Add `react-aria-components` only if a later feature needs an ARIA grid, tree or drag and drop that Base UI lacks.
 
 Base UI setup requirements ([quick start](https://base-ui.com/react/overview/quick-start)): put `isolation: isolate` on the app root so portalled popups stack above the page, and `position: relative` on `body` for iOS 26 Safari backdrops. Both are in section 7.
 
@@ -270,7 +270,7 @@ For a brand-new app the equivalent is `npx shadcn@latest init -t next -b base -p
 
 Component map for the core journey:
 
-| OrphaFold surface                                               | Build from                                                                                   |
+| Helix surface                                               | Build from                                                                                   |
 | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | App frame: navigation, workspace, inspector | `resizable` three-pane workspace with a slim icon rail. Use `sidebar` only for the collapsible rail; the brief rules out the stock sidebar-plus-cards layout |
 | Global search across disease, gene, variant, structure          | `command` in a `dialog`, opened with Cmd/Ctrl+K                                              |
@@ -354,7 +354,7 @@ export function ThemeProvider({
 }
 ```
 
-The `shadcn init -t next` template generates its own theme provider, which also binds the bare `d` key to toggle the theme. Leave that handler out: OrphaFold needs single-key shortcuts for the viewer.
+The `shadcn init -t next` template generates its own theme provider, which also binds the bare `d` key to toggle the theme. Leave that handler out: Helix needs single-key shortcuts for the viewer.
 
 ## 7. Visual direction and tokens
 
@@ -487,7 +487,7 @@ Compiled with Tailwind 4.3.3 in the `web/` copy and in the template probe. Token
   --color-sidebar-accent: var(--sidebar-accent); --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border); --color-sidebar-ring: var(--sidebar-ring);
 
-  /* OrphaFold neutral extensions */
+  /* Helix neutral extensions */
   --color-sunken: var(--surface-sunken); --color-active: var(--surface-active);
   --color-subtle-foreground: var(--fg-subtle); --color-disabled-foreground: var(--fg-disabled);
   --color-border-subtle: var(--border-subtle); --color-border-strong: var(--border-strong);
@@ -584,7 +584,7 @@ Compiled with Tailwind 4.3.3 in the `web/` copy and in the template probe. Token
   --sci-am-ambiguous: #a8a9ac;
   --sci-am-pathogenic: #b2182b;
 
-  /* OrphaFold-defined: stepped per mode */
+  /* Helix-defined: stepped per mode */
   --sci-reference: oklch(0.74 0.008 250);
   --sci-variant: oklch(0.46 0.19 345);
   --ev-experimental: oklch(0.5 0.12 155);
@@ -694,7 +694,7 @@ Continuous heatmap ramp (score to colour, linear interpolation between stops):
 
 AlphaFold DB renders PAE with `ColorScale.continuous("Greens", [0, 32], [1, 0])`: the ColorBrewer/d3 Greens scheme, reversed, over 0 to 32 Å. With d3's `interpolateGreens` endpoints that puts 0 Å at `#00441b` and 32 Å at `#f7fcf5`. Dark green is 1.65:1 on the dark surface, so the matrix keeps a frame and a labelled colour bar in both modes.
 
-### 8.4 Reference vs variant (OrphaFold-defined)
+### 8.4 Reference vs variant (Helix-defined)
 
 | Role                  | Light                             | Dark                             | Utility                      |
 | --------------------- | --------------------------------- | -------------------------------- | ---------------------------- |
@@ -716,7 +716,7 @@ Rules that follow:
 - In `reference-variant` mode the reference chain is also drawn thinner or translucent.
 - Mol\* renderer parameter defaults (`src/mol-gl/renderer.ts`) clash with these tokens: `highlightColor` is RGB (1.0, 0.4, 0.6) = `#FF6699`, `selectColor` is (0.2, 1.0, 0.1) = `#33FF19`, both at strength 0.3, and `backgroundColor` is `0x000000`. The default hover pink sits ΔE 8.9 (normal vision, floor 15) from the dark-mode variant magenta, so a hovered residue reads as a variant. Set the canvas background to the surface token and make hover and selection neutral (ink in light, near-white in dark).
 
-### 8.5 Evidence classes (OrphaFold-defined)
+### 8.5 Evidence classes (Helix-defined)
 
 Structure provenance is always shown. Form carries the class; hue is an accent.
 
@@ -724,14 +724,14 @@ Structure provenance is always shown. Form carries the class; hue is an accent.
 | --------------------------------------------- | --------------------------------- | ------------------------------ | ------------------------------- | -------------------------------- | ---------------------- |
 | Experimental structure (PDB)                  | Solid 1px border, filled dot      | `EXP` + method and resolution  | `oklch(0.5 0.12 155)` `#0b7643` | `oklch(0.72 0.15 155)` `#43c07a` | `text-ev-experimental` |
 | Existing prediction (AlphaFold DB and others) | Solid 1px border, hollow dot      | `PRED` + source and version    | secondary ink                   | secondary ink                    | `text-ev-predicted`    |
-| OrphaFold-generated prediction                | Dashed 1px border, hatched dot    | `GEN` + model, version, run ID | `oklch(0.52 0.2 295)` `#7544cd` | `oklch(0.7 0.15 295)` `#a689f1`  | `text-ev-generated`    |
+| Helix-generated prediction                | Dashed 1px border, hatched dot    | `GEN` + model, version, run ID | `oklch(0.52 0.2 295)` `#7544cd` | `oklch(0.7 0.15 295)` `#a689f1`  | `text-ev-generated`    |
 | Hypothesis text (LLM-written)                 | Dotted inline-start rule, no fill | `HYPOTHESIS`                   | secondary ink                   | secondary ink                    | none                   |
 
 Measured: badge text contrast on the working surface, in the order experimental / predicted / generated, is 5.70 / 7.61 / 6.06 (light) and 8.10 / 8.14 / 6.68 (dark). On the light table-header surface `#f4f5f7` experimental is 5.22 and generated 5.56. Experimental vs generated ΔE is 22.4 under deutan simulation (light) and 19.2 (dark). Generated violet collapses against pLDDT very-high blue for protan viewers (ΔE 1.6, light) and experimental green against AlphaMissense red for deutan viewers (4.2, light).
 
-Rules: these two hues appear only on chrome badges and never as fills in the viewer, tracks or plots. The badge text and border style are mandatory. In 3D, an OrphaFold-generated model is marked by a persistent "GEN" tag in the viewer corner and the panel title.
+Rules: these two hues appear only on chrome badges and never as fills in the viewer, tracks or plots. The badge text and border style are mandatory. In 3D, an Helix-generated model is marked by a persistent "GEN" tag in the viewer corner and the panel title.
 
-Proposal for curated clinical significance (ClinVar): reuse the AlphaMissense stops so red means pathogenic and blue means benign everywhere: P `#b2182b`, LP `#d15e4b`, VUS `#a8a9ac`, LB `#4290bf`, B `#2166ac`. Adjacent classes differ by only 12.6 to 14.9 ΔE in normal vision, so the abbreviation is always printed in the chip. Curated chips are filled rectangles with text; predicted scores are a gradient bar with a number. This scheme is an OrphaFold convention with no external standard behind it.
+Proposal for curated clinical significance (ClinVar): reuse the AlphaMissense stops so red means pathogenic and blue means benign everywhere: P `#b2182b`, LP `#d15e4b`, VUS `#a8a9ac`, LB `#4290bf`, B `#2166ac`. Adjacent classes differ by only 12.6 to 14.9 ΔE in normal vision, so the abbreviation is always printed in the chip. Curated chips are filled rectangles with text; predicted scores are a gradient bar with a number. This scheme is an Helix convention with no external standard behind it.
 
 ### 8.6 Chain, pocket and selection colours (constraints only)
 
@@ -772,7 +772,7 @@ From the [Vercel Web Interface Guidelines](https://vercel.com/design/guidelines)
 - AlphaFold DB colours were read from a minified production bundle and can change without notice. Re-check before release. The threshold-scale reading of its pLDDT track and the Greens endpoints for PAE are inferred from that minified code.
 - Font measurements used Fontsource 5.3.0 files on the assumption that they equal what `next/font/google` downloads. Inter's full feature set in the upstream rsms distribution was not checked. Commit Mono's licence is reported as OFL-1.1 by Fontsource and MIT by the GitHub repository metadata.
 - The Mol* marker colour change (section 8.4) and the ClinVar chip scheme (section 8.5) are proposals and untested.
-- Whether transitions.dev's licence is compatible with copying its snippets into OrphaFold's repository needs the project owner's decision. This document recommends re-implementing the values.
+- Whether transitions.dev's licence is compatible with copying its snippets into Helix's repository needs the project owner's decision. This document recommends re-implementing the values.
 - Sonner against Base UI Toast, and cmdk against Base UI Autocomplete, were compared on maintenance data only.
 
 ## 11. Sources

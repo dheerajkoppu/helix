@@ -3,7 +3,7 @@ import type { EvidenceBorder } from "@/lib/evidence";
 export const STRUCTURE_ORIGINS = [
   "experimental",
   "predicted_external",
-  "predicted_orphafold",
+  "predicted_internal",
 ] as const;
 
 export type StructureOrigin = (typeof STRUCTURE_ORIGINS)[number];
@@ -41,14 +41,14 @@ export const STRUCTURE_ORIGIN_META: Record<
     textClass: "text-origin-predicted-external",
     borderClass: "border-origin-predicted-external/70",
   },
-  predicted_orphafold: {
-    id: "predicted_orphafold",
+  predicted_internal: {
+    id: "predicted_internal",
     tag: "OF",
-    label: "OrphaFold-generated prediction",
+    label: "Helix-generated prediction",
     caption: "generated here, not validated",
     border: "dotted",
-    textClass: "text-origin-predicted-orphafold",
-    borderClass: "border-origin-predicted-orphafold",
+    textClass: "text-origin-predicted-internal",
+    borderClass: "border-origin-predicted-internal",
   },
 };
 
@@ -56,7 +56,7 @@ export const STRUCTURE_ORIGIN_META: Record<
 export const STRUCTURE_ORIGIN_ORDER: StructureOrigin[] = [
   "experimental",
   "predicted_external",
-  "predicted_orphafold",
+  "predicted_internal",
 ];
 
 export function isStructureOrigin(value: unknown): value is StructureOrigin {
@@ -77,7 +77,7 @@ export interface ParsedStructureId {
 const ORIGIN_BY_KIND: Record<StructureIdKind, StructureOrigin> = {
   pdb: "experimental",
   afdb: "predicted_external",
-  of: "predicted_orphafold",
+  of: "predicted_internal",
 };
 
 /** Parses `pdb:1BF5`, `afdb:AF-P42224-F1` and `of:<job_id>`. */

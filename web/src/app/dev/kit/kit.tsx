@@ -914,7 +914,7 @@ export function Kit() {
             <ClaimLabel evidenceClass="experimental" />
             <ClaimLabel evidenceClass="curated_database" />
             <ClaimLabel evidenceClass="computational_prediction" />
-            <ClaimLabel evidenceClass="orphafold_hypothesis" />
+            <ClaimLabel evidenceClass="helix_hypothesis" />
           </div>
         </Specimen>
         <Specimen
@@ -933,7 +933,7 @@ export function Kit() {
               caption
             />
             <StructureOriginTag
-              origin="predicted_orphafold"
+              origin="predicted_internal"
               detail="Boltz-2"
               caption
             />
@@ -1001,7 +1001,7 @@ export function Kit() {
               frame="box"
               model="ESMFold v1"
               version="esmfold_v1"
-              origin="predicted_orphafold"
+              origin="predicted_internal"
               metrics={[
                 { label: "Cα RMSD", value: "0.069", unit: "Å" },
                 { label: "pLDDT at Arg28", value: 88, explainer: "plddt" },
@@ -1331,7 +1331,7 @@ export function Kit() {
           name="SequenceAxisDock"
           path="@/components/sequence"
           wide
-          note="Reserved contract with a working lightweight axis. This specimen loads BTK from UniProt and AlphaFold DB in your browser; product pages use the OrphaFold API."
+          note="Reserved contract with a working lightweight axis. This specimen loads BTK from UniProt and AlphaFold DB in your browser; product pages use the Helix API."
         >
           <AxisSpecimen />
         </Specimen>

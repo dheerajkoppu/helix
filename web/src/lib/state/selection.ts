@@ -184,7 +184,7 @@ export function describeRanges(
 }
 
 export type StructureOriginLike =
-  "experimental" | "predicted_external" | "predicted_orphafold";
+  "experimental" | "predicted_external" | "predicted_internal";
 
 /** Predicted structures default to confidence colouring, experimental ones to chain colouring. */
 export function resolveColorMode(

@@ -4,7 +4,7 @@ Research date: **2026-10-03**. Every HTTP call below was executed with `curl` fr
 
 ---
 
-## Recommendation for OrphaFold
+## Recommendation for Helix
 
 **Stage 6 is a provenance-ranked evidence board, not a docking app.** Order the UI by evidence strength, top to bottom:
 
@@ -172,12 +172,12 @@ This is the single highest-value call for the variant→pocket link: **pocket lo
 | **Protenix** [bytedance/Protenix](https://github.com/bytedance/Protenix)                      | **v2.0.0** (2026-04-07)                                        | **Apache-2.0**                                        | **Apache-2.0** — "free for both academic research and commercial use"                                                                                                                                                                         | not stated in README                                                                                                                | confidence only; web server `protenix-server.com`                                                               |
 | **NeuralPLexer** [zrqiao/NeuralPLexer](https://github.com/zrqiao/NeuralPLexer)                | last push 2025-10-06                                           | **BSD-3-Clause-Clear**                                | in-repo                                                                                                                                                                                                                                       | GPU                                                                                                                                 | confidence only                                                                                                 |
 
-**Choices for OrphaFold:**
+**Choices for Helix:**
 
 - **Primary:** Boltz-2. One job yields pose + confidence + affinity, MIT end-to-end, no weight-access paperwork.
 - **Second provider (optional):** Protenix v2 or Chai-1 — both Apache-2.0 including weights, so a second co-folding opinion carries no licence cost. Neither predicts affinity.
-- **Exclude AlphaFold 3 from the default adapter set.** The parameters cannot be redistributed with OrphaFold and must be requested per-deployment from Google; its own README disclaims clinical use. Support it as a bring-your-own-weights adapter only.
-- **GNINA's GPL half is a packaging hazard.** If you bundle GNINA in an OrphaFold container, that container inherits GPL obligations. Prefer Vina (Apache-2.0) or Uni-Dock (Apache-2.0) if you need a physics score.
+- **Exclude AlphaFold 3 from the default adapter set.** The parameters cannot be redistributed with Helix and must be requested per-deployment from Google; its own README disclaims clinical use. Support it as a bring-your-own-weights adapter only.
+- **GNINA's GPL half is a packaging hazard.** If you bundle GNINA in an Helix container, that container inherits GPL obligations. Prefer Vina (Apache-2.0) or Uni-Dock (Apache-2.0) if you need a physics score.
 - **Pose preparation is the real cost of a Vina/GNINA path**: receptor and ligand must be PDBQT. The usual open stack is [forlilab/Meeko](https://github.com/forlilab/Meeko) (**LGPL-2.1**) + [forlilab/scrubber](https://github.com/forlilab/scrubber) (**GPL-3.0**) or [durrantlab/gypsum_dl](https://github.com/durrantlab/gypsum_dl) (Apache-2.0). Note the GPL again.
 
 Vina invocation shape (from the official docs):
@@ -324,7 +324,7 @@ OSS backend at 200 residues: 11.07 s (≈6.4× slower than TRT). **These exclude
 - **The compound universe is make-on-demand, not in-stock.** Enamine states REAL Space "comprises 94.5B make-on-demand molecules". ZINC-22 / CartBlanche (`https://cartblanche.docking.org`, HTTP 200) is the open front door to tranches of that scale.
 - **Nobody docks 10¹⁰ molecules naively.** The practised pattern is a funnel: cheap ligand-based or synthon-level filter → fast rigid docking on 10⁶–10⁷ → GPU docking (Uni-Dock) on 10⁵ → ML co-folding + affinity (Boltz-2) on 10²–10³ → FEP or assay on 10¹.
 - **Boltz-2's documented place in that funnel is the last two ML rungs**, not the first: `affinity_probability_binary` for binder-vs-decoy triage, `affinity_pred_value` only across actives.
-- **For OrphaFold this means: do not build a screen.** Build the **export**: given a target + chosen pocket, emit (a) `receptor.cif` with provenance, (b) pocket centre + residue list + a box, (c) a Boltz-2 YAML template with the `pocket` constraint pre-filled, (d) the curated Tier-A compound list as SMILES + ids. A rare-disease researcher with cluster access can take that straight to Uni-Dock; one without it was never going to run a 10⁹ screen inside a web app.
+- **For Helix this means: do not build a screen.** Build the **export**: given a target + chosen pocket, emit (a) `receptor.cif` with provenance, (b) pocket centre + residue list + a box, (c) a Boltz-2 YAML template with the `pocket` constraint pre-filled, (d) the curated Tier-A compound list as SMILES + ids. A rare-disease researcher with cluster access can take that straight to Uni-Dock; one without it was never going to run a 10⁹ screen inside a web app.
 
 ---
 
@@ -375,7 +375,7 @@ The shipped property table (`admet_ai/resources/data/admet.csv`) has **52 rows: 
 | **openFDA**               | `https://api.fda.gov/drug/{label,drugsfda}.json`                                                                            | US public data                                                                                                                                   | label + drugsfda queries 200                                                                                                           |
 | **DrugBank**              | `go.drugbank.com`                                                                                                           | **Most datasets CC BY-NC 4.0**; "Open Data" subsets CC0; **"All Academic DrugBank dataset downloads are temporarily paused"** as of today        | n/a                                                                                                                                    |
 
-**DrugBank decision: do not ingest DrugBank.** CC BY-NC 4.0 is incompatible with an open research platform that may be used commercially, academic downloads are paused, and everything OrphaFold needs is reachable from ChEMBL + DrugCentral + Open Targets + openFDA. Keep DrugBank **IDs** as outbound links only — UniChem gives you the id for free and linking is not redistribution.
+**DrugBank decision: do not ingest DrugBank.** CC BY-NC 4.0 is incompatible with an open research platform that may be used commercially, academic downloads are paused, and everything Helix needs is reachable from ChEMBL + DrugCentral + Open Targets + openFDA. Keep DrugBank **IDs** as outbound links only — UniChem gives you the id for free and linking is not redistribution.
 
 ### 9.1 Tested calls — known drugs and ligands for BTK (`CHEMBL5251` / `Q06187`)
 
@@ -660,7 +660,7 @@ mol?.delete();                                   // MANDATORY — WASM heap is n
 
 Every `Mol` and `MolList` is a `ClassHandle` with `delete()`/`deleteLater()`. A table that creates a `Mol` per row and never deletes leaks the WASM heap until the tab dies.
 
-**Build decision:** FastAPI endpoint `GET /api/v1/compound/{inchikey}/depiction.svg?w=&h=&highlight=` → RDKit `MolDraw2DSVG`, `Cache-Control: public, max-age=31536000, immutable`, keyed on InChIKey + params. Fall back to the ChEMBL/PDBe SVG endpoint only when OrphaFold has no structure for the compound. Reach for RDKit.js only in the pose viewer, lazily.
+**Build decision:** FastAPI endpoint `GET /api/v1/compound/{inchikey}/depiction.svg?w=&h=&highlight=` → RDKit `MolDraw2DSVG`, `Cache-Control: public, max-age=31536000, immutable`, keyed on InChIKey + params. Fall back to the ChEMBL/PDBe SVG endpoint only when Helix has no structure for the compound. Reach for RDKit.js only in the pose viewer, lazily.
 
 ---
 
@@ -842,7 +842,7 @@ interface PredictedAffinity {
 
 /** What we folded against, and how sure we are of it. */
 interface StructureProvenance {
-  kind: "experimental" | "predicted_public" | "predicted_orphafold";
+  kind: "experimental" | "predicted_public" | "predicted_internal";
   // experimental
   pdbId?: string;
   chainId?: string;
@@ -853,7 +853,7 @@ interface StructureProvenance {
   afdbEntryId?: string; // "AF-Q06187-F1"
   afdbModelVersion?: number; // 6 as of today
   meanPlddt?: number; // 84.44 for Q06187
-  // predicted_orphafold
+  // predicted_internal
   jobId?: string;
   engine?: string;
   engineVersion?: string;
@@ -922,7 +922,7 @@ Sorting defaults to **evidence tier, then measured affinity, then predicted affi
 
 Empty-state copy for a gene with no ligand evidence at all — common for IEI genes, and the honest answer:
 
-> No compound has been measured against this protein in ChEMBL, BindingDB or DrugCentral, and no PDB entry contains a bound ligand. Pocket geometry is still available, and the Open Targets tractability buckets below summarise what is known about this protein's druggability. Any affinity OrphaFold predicts here would fall outside the regime the model was validated in.
+> No compound has been measured against this protein in ChEMBL, BindingDB or DrugCentral, and no PDB entry contains a bound ligand. Pocket geometry is still available, and the Open Targets tractability buckets below summarise what is known about this protein's druggability. Any affinity Helix predicts here would fall outside the regime the model was validated in.
 
 ---
 
@@ -936,7 +936,7 @@ Empty-state copy for a gene with no ligand evidence at all — common for IEI ge
 | "best candidate", "top hit", "lead"             | "highest-ranked in this predicted set"                               |
 | "effective", "potent", "works", "will inhibit"  | "predicted to bind", "ranked above", "model-predicted"               |
 | "treatment", "therapy", "drug for X"            | "approved compound targeting X", "research starting point"           |
-| "safe", "well tolerated", "low toxicity"        | nothing — OrphaFold has no safety data; omit the claim entirely      |
+| "safe", "well tolerated", "low toxicity"        | nothing — Helix has no safety data; omit the claim entirely      |
 | "recommended dose", "dosing"                    | nothing — out of scope, never render                                 |
 | "this patient should…", "consider prescribing…" | nothing — forbidden construction                                     |
 | "validated", "confirmed" (of a prediction)      | "predicted; not experimentally tested"                               |
@@ -951,7 +951,7 @@ Empty-state copy for a gene with no ligand evidence at all — common for IEI ge
 6. **Receptor provenance travels with the number.** A prediction made against an AlphaFold model says so in the same block: `receptor: AFDB AF-Q06187-F1 v6, mean pLDDT 84.4 (predicted structure)`.
 7. **Exports carry the caveats.** CSV/JSON export includes `model`, `model_version`, `units`, `evidence_tier`, `applied_caveats` and a `disclaimer` field as real columns. A screenshot of a cell is unavoidable; a CSV that loses the units is not.
 8. **Persistent page-level banner on Stage 6**, not a dismissible toast:
-   > **Research and hypothesis generation only.** OrphaFold is not clinical decision software. Predicted poses and predicted affinities are computational hypotheses, not measurements and not medical advice. Nothing here has been validated for any patient.
+   > **Research and hypothesis generation only.** Helix is not clinical decision software. Predicted poses and predicted affinities are computational hypotheses, not measurements and not medical advice. Nothing here has been validated for any patient.
 9. **No ranking language in headings or any shareable artefact** (page title, export filename, copy-link preview, chart title). `BTK — predicted affinity comparison`, never `BTK — best candidates`.
 10. **Biologics show "Not applicable", not a number.** When `modality !== "small_molecule"`, the predicted-affinity cell renders `Not applicable — Boltz-2 affinity supports small molecules only` and the compute button is disabled with that reason as its tooltip.
 11. **Zero LLM-authored biology.** Every biological statement in Stage 6 renders from a database field with a source id. If no field exists, the UI shows nothing — not generated prose.

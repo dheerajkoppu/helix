@@ -1,4 +1,4 @@
-# OrphaFold design system
+# Helix design system
 
 The single source of visual and structural truth for `web/`. Follow it literally. If you need something that is not here, add it to the shared components and to `/dev/kit` first, then use it.
 
@@ -82,7 +82,7 @@ Never: a left navigation sidebar, card grids, stat tiles, gradients, glows, pill
 
 | Part        | Height | Component              | Rule                                                                                                                                                                                      |
 | ----------- | ------ | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Top bar     | 40px   | `TopBar`               | The only global navigation. Wordmark, Lab, Explore, Projects, search, `ApiDot`, one overflow menu (Jobs, Models, Docs, About, Ask Orpha, Shortcuts, Advanced, Learn mode, theme, source). |
+| Top bar     | 40px   | `TopBar`               | The only global navigation. Wordmark, Lab, Explore, Projects, search, `ApiDot`, one overflow menu (Jobs, Models, Docs, About, Ask Helix, Shortcuts, Advanced, Learn mode, theme, source). |
 | Main        | fills  | `<main>` in `AppShell` | The viewport never scrolls; `main` does. Workspace routes fill it exactly.                                                                                                                |
 | Status line | 24px   | `StatusLine`           | Advanced only. API state, source status, selection, research-use notice, `?` and `⌘K` hints. Simple mode shows `ApiDot` in the top bar, which opens the same detail.                      |
 
@@ -142,7 +142,7 @@ One selection, one hover channel. No panel keeps its own.
 | Hover              | `setWorkspaceHover`, `useWorkspaceHover`, `subscribeWorkspaceHover` from `@/lib/state/hover` | Transient, one update per frame, never in the URL. Use `subscribe…` in canvas code.                                                            |
 | Subject chain      | `useWorkspaceSubject` from `@/components/workspace`                                          | Declare links together; a link tied to a replaced link is dropped.                                                                             |
 | Preferences        | `usePreferences`, `useLearnMode`, `useAdvancedMode` from `@/lib/state/preferences`           | Persisted locally.                                                                                                                             |
-| Workspace identity | `getWorkspaceId` from `@/lib/workspace-identity`                                             | Sent automatically as `X-OrphaFold-Workspace`.                                                                                                 |
+| Workspace identity | `getWorkspaceId` from `@/lib/workspace-identity`                                             | Sent automatically as `X-Helix-Workspace`.                                                                                                 |
 
 URL parameters are written only when they differ from the default. Do not reuse these keys for anything else:
 
@@ -203,7 +203,7 @@ Neutral surfaces: `bg-background` (work), `bg-sunken` (frame, bars, footers), `b
 | Clinical significance (database classification only) | `bg-clin-pathogenic`, `-uncertain`, `-benign`, `-other`                                                   | Printed code P, LP, VUS, CONF, LB, B; hatch on the likely classes; review stars as n/4 | `ClinicalSignificanceChip`   |
 | Reference vs variant                                 | `bg-reference` (grey), `bg-variant` (magenta)                                                             | Variant site: ball-and-stick, outline and a text label                                 | `ReferenceVariantLegend`     |
 | Evidence class                                       | `text-ev-experimental`, `-clinical`, `-literature`, `-curated`, `-prediction`, `-hypothesis`              | Code, glyph shape, border style, glyph fill                                            | `EvidenceBadge`              |
-| Structure origin                                     | `text-origin-experimental`, `-predicted-external`, `-predicted-orphafold`                                 | Tag EXP, PRD, OF; glyph; border style; caption                                         | `StructureOriginTag`         |
+| Structure origin                                     | `text-origin-experimental`, `-predicted-external`, `-predicted-internal`                                 | Tag EXP, PRD, OF; glyph; border style; caption                                         | `StructureOriginTag`         |
 | Chains                                               | `bg-chain-1..3`                                                                                           | Chain letter always printed                                                            | `Swatch`                     |
 | Destructive, warning                                 | `text-destructive`, `text-warning`                                                                        | Icon and text                                                                          |                              |
 
@@ -216,9 +216,9 @@ Evidence classes:
 | `literature`               | LIT  | page            | solid  | Database annotation      |
 | `curated_database`         | CUR  | circle          | solid  | Database annotation      |
 | `computational_prediction` | PRED | hatched diamond | dashed | Computational prediction |
-| `orphafold_hypothesis`     | HYP  | dotted hexagon  | dotted | OrphaFold hypothesis     |
+| `helix_hypothesis`     | HYP  | dotted hexagon  | dotted | Helix hypothesis     |
 
-Solid means asserted by an external source, dashed means computed by a tool, dotted means authored in OrphaFold. Only wet-lab observation has a filled glyph. Display order EXP, CLIN, CUR, LIT, PRED, HYP is a reading convention and implies no weight.
+Solid means asserted by an external source, dashed means computed by a tool, dotted means authored in Helix. Only wet-lab observation has a filled glyph. Display order EXP, CLIN, CUR, LIT, PRED, HYP is a reading convention and implies no weight.
 
 Rules:
 
@@ -240,7 +240,7 @@ Rules:
 | `SourceStatusList`                                                                           | `@/components/evidence/source-status-list`   | `<SourceStatusList sources={result.sources} />`: which sources answered, were empty or are down.                                                                                                                                                                                                                                                                                        |
 | `StructureOriginTag`                                                                         | `@/components/evidence/structure-origin-tag` | `<StructureOriginTag origin="predicted_external" detail="AlphaFold DB v6" caption />` on every structure.                                                                                                                                                                                                                                                                               |
 | `MetricReadout`                                                                              | `@/components/science/metric-readout`        | `<MetricReadout metric="plddt" value={93} producedBy="AlphaFold DB v6" />` for pLDDT, PAE, pTM, ipTM, AlphaMissense, ΔΔG, affinity.                                                                                                                                                                                                                                                     |
-| `ModelResultStrip`                                                                           | `@/components/science/model-result-strip`    | `<ModelResultStrip model="ESMFold v1" version="esmfold_v1" origin="predicted_orphafold" metrics={[{ label: "Cα RMSD", value: "0.069", unit: "Å" }, { label: "pLDDT at Arg28", value: 88, explainer: "plddt" }]} runtime={42} href="/jobs/…" />`. `frame`: `rule` (zone footer), `box` (page), `none`. A number is formatted, a string is printed as given, null prints `missingReason`. |
+| `ModelResultStrip`                                                                           | `@/components/science/model-result-strip`    | `<ModelResultStrip model="ESMFold v1" version="esmfold_v1" origin="predicted_internal" metrics={[{ label: "Cα RMSD", value: "0.069", unit: "Å" }, { label: "pLDDT at Arg28", value: 88, explainer: "plddt" }]} runtime={42} href="/jobs/…" />`. `frame`: `rule` (zone footer), `box` (page), `none`. A number is formatted, a string is printed as given, null prints `missingReason`. |
 | `Explainer`                                                                                  | `@/components/science/explainer`             | `<Explainer term="plddt" />`: the `?` beside a number or term. Takes a metric id or a glossary term id.                                                                                                                                                                                                                                                                                 |
 | `LearnTerm`                                                                                  | `@/components/science/learn-term`            | `<LearnTerm term="plddt">pLDDT</LearnTerm>`; add terms in `@/lib/glossary`.                                                                                                                                                                                                                                                                                                             |
 | `PlddtLegend`, `AlphaMissenseLegend`, `ClinicalSignificanceLegend`, `ReferenceVariantLegend` | `@/components/science/legends`               | Required beside any coloured view; `wrap={false}` in footers.                                                                                                                                                                                                                                                                                                                           |
@@ -305,7 +305,7 @@ Reserved: `⌘K` palette, `?` shortcuts, `Esc` clear, `g` + `d g p c m i` stages
 8. Treating "no record" as an error, or blanking a page because one source failed.
 9. Silent fallback to another isoform, structure, model version or cached copy.
 10. A residue number without its reference (always UniProt canonical).
-11. Clinical vocabulary for OrphaFold output: "diagnosis", "recommended treatment", "will treat".
+11. Clinical vocabulary for Helix output: "diagnosis", "recommended treatment", "will treat".
 12. Marketing copy: "revolutionize", "unlock", "AI-powered". Do not keep saying something is AI.
 13. A raw hex value, a new font size, a new radius, or a component that duplicates one in section 6.
 14. A second `TooltipProvider`, a second theme provider, or a bare single-key shortcut outside `useHotkeys`.

@@ -1,4 +1,4 @@
-"""Launch one recorded discovery run of the OrphaFold lab.
+"""Launch one recorded discovery run of the Helix lab.
 
     lab/.venv/bin/python lab/run_lab.py --variant BTK-p.Arg28His
     lab/.venv/bin/python lab/run_lab.py --variant BTK-p.Arg28His --mode single_agent_baseline --approve
@@ -27,12 +27,12 @@ sys.path.insert(0, str(LAB / "tools"))
 
 import httpx  # noqa: E402
 
-from orphafold_lab_tools import budget, record, registry  # noqa: E402
+from helix_lab_tools import budget, record, registry  # noqa: E402
 
 RUNS = LAB / "runs"
 BUNDLES = {
-    "specialist_lab": LAB / "agents" / "orphafold_lab",
-    "single_agent_baseline": LAB / "agents" / "orphafold_baseline",
+    "specialist_lab": LAB / "agents" / "helix_lab",
+    "single_agent_baseline": LAB / "agents" / "helix_baseline",
 }
 HARNESS = "claude-sdk"
 QUESTION = (
@@ -72,7 +72,7 @@ def resolve_subject(api_url: str, variant_id: str) -> dict[str, Any]:
         try:
             response = httpx.get(f"{api_url}/api/v1/variants/{variant_id}", timeout=90)
             if response.status_code == 404:
-                raise SystemExit(f"Variant {variant_id} is not known to the OrphaFold API at {api_url}.")
+                raise SystemExit(f"Variant {variant_id} is not known to the Helix API at {api_url}.")
             response.raise_for_status()
             payload = response.json()
             if payload.get("change_kind") != "substitution" or not payload.get("position"):
@@ -91,13 +91,13 @@ def resolve_subject(api_url: str, variant_id: str) -> dict[str, Any]:
         except httpx.HTTPError as error:
             last_error = error
             time.sleep(3)
-    raise SystemExit(f"The OrphaFold API at {api_url} did not answer: {last_error}")
+    raise SystemExit(f"The Helix API at {api_url} did not answer: {last_error}")
 
 
 def spec_hash(bundle: Path) -> str:
     """SHA-256 over the agent bundle, the policies and the tool package that define a run."""
     digest = hashlib.sha256()
-    roots = [bundle, LAB / "policies" / "orphafold_lab_policies", LAB / "tools" / "orphafold_lab_tools"]
+    roots = [bundle, LAB / "policies" / "helix_lab_policies", LAB / "tools" / "helix_lab_tools"]
     for root in roots:
         for path in sorted(root.rglob("*")):
             if not path.is_file() or "__pycache__" in path.parts or path.suffix == ".pyc":
@@ -134,9 +134,9 @@ def child_environment(run_directory: Path, api_url: str, approval_timeout: int) 
         paths.append(environment["PYTHONPATH"])
     environment.update(
         {
-            "ORPHAFOLD_LAB_RUN_DIR": str(run_directory),
-            "ORPHAFOLD_API_URL": api_url,
-            "ORPHAFOLD_LAB_APPROVAL_TIMEOUT": str(approval_timeout),
+            "HELIX_LAB_RUN_DIR": str(run_directory),
+            "HELIX_API_URL": api_url,
+            "HELIX_LAB_APPROVAL_TIMEOUT": str(approval_timeout),
             "PYTHONPATH": os.pathsep.join(paths),
             # Connectors of the signed-in account are not tools of the lab
             "ENABLE_CLAUDEAI_MCP_SERVERS": "false",
@@ -220,8 +220,8 @@ def measure(run_directory: Path, events: list[dict[str, Any]]) -> tuple[dict[str
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Launch one recorded discovery run of the OrphaFold lab.")
-    parser.add_argument("--variant", required=True, help="OrphaFold variant ID, for example BTK-p.Arg28His")
+    parser = argparse.ArgumentParser(description="Launch one recorded discovery run of the Helix lab.")
+    parser.add_argument("--variant", required=True, help="Helix variant ID, for example BTK-p.Arg28His")
     parser.add_argument("--mode", choices=sorted(BUNDLES), default="specialist_lab")
     parser.add_argument(
         "--objective",
@@ -241,7 +241,7 @@ def main() -> None:
     parser.add_argument("--max-tool-calls", type=int, default=budget.DEFAULT_MAX_TOOL_CALLS)
     parser.add_argument("--max-compute-seconds", type=int, default=budget.DEFAULT_MAX_COMPUTE_SECONDS)
     parser.add_argument("--run-id", default=None)
-    parser.add_argument("--api-url", default=os.environ.get("ORPHAFOLD_API_URL", "http://localhost:8000"))
+    parser.add_argument("--api-url", default=os.environ.get("HELIX_API_URL", "http://localhost:8000"))
     parser.add_argument("--timeout", type=int, default=2700, help="Wall-clock limit of the run in seconds")
     parser.add_argument(
         "--approval-timeout", type=int, default=900, help="Seconds an approval request waits for a human"

@@ -1,6 +1,6 @@
 # Evidence classes
 
-Every statement OrphaFold shows is an `Evidence` record. The record names the class of the
+Every statement Helix shows is an `Evidence` record. The record names the class of the
 statement, the source record behind it, and the source's own measure of strength. A language model
 is never the source of a biological fact.
 
@@ -14,18 +14,18 @@ The class answers one question: what kind of thing can the reader go and check?
 | `CLIN` | `clinical_database`        | A classification in a clinical database: ClinVar, ClinGen, Orphanet, HPO                                                  |
 | `LIT`  | `literature`               | A published article identified by PMID, PMCID or DOI                                                                      |
 | `CUR`  | `curated_database`         | An annotation from a curated database record: UniProt, Reactome, Mondo, Ensembl, ChEMBL mechanisms                        |
-| `PRED` | `computational_prediction` | Output of a model or tool, external or run by OrphaFold                                                                   |
-| `HYP`  | `orphafold_hypothesis`     | A statement authored inside OrphaFold by a person or the assistant                                                        |
+| `PRED` | `computational_prediction` | Output of a model or tool, external or run by Helix                                                                   |
+| `HYP`  | `helix_hypothesis`     | A statement authored inside Helix by a person or the assistant                                                        |
 
 In the interface each class has its own code, shape and border, so the classes can be told apart
 without colour. A solid border marks a statement asserted by an external source, a dashed border
-one computed by a model or tool, a dotted border one authored inside OrphaFold.
+one computed by a model or tool, a dotted border one authored inside Helix.
 
 `GET /api/v1/meta` returns the classes with their codes and labels.
 
 ## How a record gets its class
 
-`orphafold.evidence.classify_evidence(database, record_type, eco)` in `api/orphafold/evidence.py`
+`helix.evidence.classify_evidence(database, record_type, eco)` in `api/helix/evidence.py`
 is a pure function over a fixed table. It fails closed: a source record the table does not cover
 raises `UnmappedEvidence`, and the claim is left out of the response instead of being guessed.
 
@@ -43,8 +43,8 @@ Examples from the table:
 | Reactome pathway, Mondo term, Ensembl transcript   | `curated_database`         | none                     |
 | AlphaFold DB model, AlphaMissense score            | `computational_prediction` | `plddt`, `alphamissense` |
 | Ensembl VEP consequence                            | `computational_prediction` | `vep_impact`             |
-| Output of an OrphaFold job                         | `computational_prediction` | the provider's own       |
-| Statement written in a project                     | `orphafold_hypothesis`     | none                     |
+| Output of an Helix job                         | `computational_prediction` | the provider's own       |
+| Statement written in a project                     | `helix_hypothesis`     | none                     |
 
 A source is never mapped to `experimental` unless a person can go and check an experiment behind
 it.
@@ -56,7 +56,7 @@ UniProt ECO code, pLDDT, an Open Targets score. Ordering exists only inside one 
 (`clinvar_review_status`, `clingen_gene_validity`, `uniprot_eco`). Numeric schemes are shown as the
 number with its unit and source.
 
-There is no cross-source score anywhere in OrphaFold. Two sources that disagree are shown as two
+There is no cross-source score anywhere in Helix. Two sources that disagree are shown as two
 records.
 
 ## Hypotheses
@@ -73,7 +73,7 @@ Structures carry a second, closed label.
 | ----- | --------------------- | ------------------------------------------------------------ | ---------------- |
 | `EXP` | `experimental`        | Determined in a laboratory and deposited in the PDB          | `pdb:<ID>`       |
 | `PRD` | `predicted_external`  | A prediction published by someone else, such as AlphaFold DB | `afdb:<entryId>` |
-| `OF`  | `predicted_orphafold` | A prediction produced by a job run through this installation | `of:<job_id>`    |
+| `OF`  | `predicted_internal` | A prediction produced by a job run through this installation | `of:<job_id>`    |
 
 The three are never presented as equivalent. The API rejects a structure descriptor whose ID prefix
 does not match its origin.

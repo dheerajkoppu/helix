@@ -1,6 +1,6 @@
 # Scientific limitations
 
-OrphaFold is a research and hypothesis-generation tool. It is not clinical decision software. It
+Helix is a research and hypothesis-generation tool. It is not clinical decision software. It
 does not diagnose, and it does not recommend treatment.
 
 This page lists what the outputs do not show. The same statements travel with the results in the
@@ -40,7 +40,7 @@ matches the reference carries no information about whether the variant is tolera
 
 The AlphaFold DB FAQ states: "AlphaFold has not been validated for predicting the effect of
 mutations. In particular, AlphaFold is not expected to produce an unfolded protein structure given
-a sequence containing a destabilising point mutation." OrphaFold applies the same caveat to every
+a sequence containing a destabilising point mutation." Helix applies the same caveat to every
 structure predictor.
 
 Published findings behind that caveat:
@@ -52,10 +52,10 @@ Published findings behind that caveat:
 | Feldman, Brogi and Skolnick, Comput Struct Biotechnol J 2026, doi:10.34133/csbj.0142 | AlphaFold 3 on 200 proteins: "predicted structures remain invariant to mutations of up to 40% of residues - including deliberately destabilizing substitutions" |
 | Counterpoint: McBride et al., Phys Rev Lett 2023, doi:10.1103/PhysRevLett.131.218401 | Local deformation between AlphaFold 2 models of near-identical sequences correlates with experimental structure pairs "on average"                              |
 
-No Boltz-specific benchmark of missense structural effects was found. OrphaFold applies the caveat
+No Boltz-specific benchmark of missense structural effects was found. Helix applies the caveat
 to Boltz-2 as well; that is an inference from its model family, not a published result.
 
-What follows for a comparison in OrphaFold:
+What follows for a comparison in Helix:
 
 - A similar fold for the variant sequence is expected for most single substitutions and is
   uninformative about stability.
@@ -99,7 +99,7 @@ shown beside the comparison because they bear on the question the structure mode
 ## Pockets and binding
 
 - A predicted pocket is a computational prediction, not a measured binding site. Pockets can be
-  computed for PDB entries and AlphaFold DB models only, not for OrphaFold-generated structures.
+  computed for PDB entries and AlphaFold DB models only, not for Helix-generated structures.
 - A predicted affinity is a model output for comparing candidate molecules. It is never a clinical
   recommendation and says nothing about whether a molecule would be tolerated or would work in a
   person.
@@ -111,7 +111,7 @@ shown beside the comparison because they bear on the question the structure mode
   ipTM makes the affinity uninterpretable.
 - The Boltz-2 affinity module was evaluated on the FEP+ benchmark, CASP16 and the authors' MF-PCBA
   test set. A target without a studied series of active compounds is outside that evaluation.
-- No real Boltz-2 prediction has been made through OrphaFold yet.
+- No real Boltz-2 prediction has been made through Helix yet.
 
 ## Interactions, pathways and known drugs
 
@@ -144,7 +144,7 @@ shown beside the comparison because they bear on the question the structure mode
 ## The assistant
 
 The research assistant drafts text from evidence records that already exist. It is not a source of
-facts. A statement it writes is an OrphaFold hypothesis and must list the records it rests on.
+facts. A statement it writes is an Helix hypothesis and must list the records it rests on.
 
 ## Reporting a problem
 

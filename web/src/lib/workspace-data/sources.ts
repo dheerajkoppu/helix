@@ -47,6 +47,6 @@ export function failedSource(
       ? error.message
       : error instanceof Error
         ? error.message
-        : "The OrphaFold API did not answer.",
+        : "The Helix API did not answer.",
   };
 }

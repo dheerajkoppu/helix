@@ -1,7 +1,7 @@
 const repositoryUrl = process.env.NEXT_PUBLIC_REPOSITORY_URL?.trim() || null;
 
 export const site = {
-  name: "OrphaFold",
+  name: "Helix",
   tagline: "Open protein research for rare disease.",
   description:
     "An open research workspace for rare genetic disease: follow a disease to its gene, variant, protein structure and candidate mechanisms, with the source of every statement shown.",

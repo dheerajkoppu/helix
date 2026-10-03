@@ -1,5 +1,5 @@
 {
-  "_orphafold_parser_fixture": "Hand-written parser fixture. Not model output. Values are the example numbers of the Boltz documentation.",
+  "_helix_parser_fixture": "Hand-written parser fixture. Not model output. Values are the example numbers of the Boltz documentation.",
   "confidence_score": 0.8367,
   "ptm": 0.8425,
   "iptm": 0.8225,

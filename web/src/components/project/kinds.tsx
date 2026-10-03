@@ -47,7 +47,7 @@ export function structureOriginOf(ref: string | null): StructureOrigin | null {
   if (!ref) return null;
   if (ref.startsWith("pdb:")) return "experimental";
   if (ref.startsWith("afdb:")) return "predicted_external";
-  if (ref.startsWith("of:")) return "predicted_orphafold";
+  if (ref.startsWith("of:")) return "predicted_internal";
   return null;
 }
 
@@ -65,7 +65,7 @@ export function KindMark({
   if (item.kind === "hypothesis")
     return (
       <EvidenceBadge
-        evidenceClass="orphafold_hypothesis"
+        evidenceClass="helix_hypothesis"
         size="compact"
         className={className}
       />

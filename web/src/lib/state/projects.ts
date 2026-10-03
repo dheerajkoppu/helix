@@ -6,7 +6,7 @@ import { ApiError, apiFetch, apiUrl, type QueryParams } from "@/lib/api/client";
 import type { EvidenceClass } from "@/lib/evidence";
 import { WORKSPACE_HEADER, getWorkspaceId } from "@/lib/workspace-identity";
 
-/** Mirrors api/orphafold/schemas/projects.py. Replace with Schema<"..."> once `make types` has run. */
+/** Mirrors api/helix/schemas/projects.py. Replace with Schema<"..."> once `make types` has run. */
 export const ITEM_KINDS = [
   "disease",
   "gene",
@@ -314,7 +314,7 @@ export async function downloadExport(
     throw new ApiError({
       status: 0,
       code: "api_unreachable",
-      message: "The OrphaFold API did not answer.",
+      message: "The Helix API did not answer.",
     });
   }
   if (!response.ok) {
@@ -341,7 +341,7 @@ export async function downloadExport(
   return filename;
 }
 
-const LAST_PROJECT_KEY = "orphafold.project.last";
+const LAST_PROJECT_KEY = "helix.project.last";
 
 export function getLastProjectId(): string | null {
   try {

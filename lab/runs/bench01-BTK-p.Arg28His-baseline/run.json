@@ -26,7 +26,7 @@
     "models": {
       "generalist": "claude-sonnet-5"
     },
-    "bundle": "lab/agents/orphafold_baseline",
+    "bundle": "lab/agents/helix_baseline",
     "sub_agent_sessions": 0,
     "loop_ended": "finished"
   },

@@ -1,7 +1,7 @@
 /**
  * Dev-only data loader for /dev/kit and /dev/frame. It reads one protein straight from UniProt and
  * AlphaFold DB in the browser so the shared components can be seen with real data before the
- * OrphaFold API exists. Product pages never do this: they call the API through `@/lib/api`.
+ * Helix API exists. Product pages never do this: they call the API through `@/lib/api`.
  */
 import type { SequenceTrack } from "@/components/sequence";
 

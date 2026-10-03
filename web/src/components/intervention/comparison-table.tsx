@@ -451,7 +451,7 @@ function SimpleRow({
             />
           ))}
           {pose?.result ? (
-            <StructureOriginTag origin="predicted_orphafold" size="compact" />
+            <StructureOriginTag origin="predicted_internal" size="compact" />
           ) : null}
           {distinct.length === 0 && !pose?.result ? (
             <Quiet>{OPTIONS_WORDS.none}</Quiet>
@@ -611,7 +611,7 @@ function Row({
             }}
             className="flex flex-col items-start gap-0.5 rounded-xs text-left hover:underline"
           >
-            <StructureOriginTag origin="predicted_orphafold" size="compact" />
+            <StructureOriginTag origin="predicted_internal" size="compact" />
             <span className="text-2xs text-muted-foreground">Show in 3D</span>
           </button>
         ) : (
@@ -741,7 +741,7 @@ function Row({
           ) : null}
           {pose ? (
             <SourceChip
-              source="OrphaFold job"
+              source="Helix job"
               id={pose.jobId.slice(0, 8)}
               href={null}
             />

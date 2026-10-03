@@ -140,7 +140,7 @@ export const TIER_META: Record<
     label: "Prediction only",
     rank: 2,
     description:
-      "Only an OrphaFold binding prediction links this compound to this target. No source record was found.",
+      "Only an Helix binding prediction links this compound to this target. No source record was found.",
   },
 };
 

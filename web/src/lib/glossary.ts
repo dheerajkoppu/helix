@@ -57,7 +57,7 @@ export const GLOSSARY = {
     plainTerm: "Amino acid",
     plain: "One amino acid at a numbered spot in the protein.",
     definition:
-      "One amino acid at a numbered position in a protein chain. OrphaFold numbers residues by the UniProt canonical sequence, so residue 28 means the same thing in every view.",
+      "One amino acid at a numbered position in a protein chain. Helix numbers residues by the UniProt canonical sequence, so residue 28 means the same thing in every view.",
   },
   "protein-domain": {
     term: "Protein domain",
@@ -246,7 +246,7 @@ export const GLOSSARY = {
     plainTerm: "Source type",
     plain: "Where a fact comes from.",
     definition:
-      "Where a statement comes from: an experiment, a clinical database, a paper, a curated database, a computational prediction or an OrphaFold hypothesis. Every statement in OrphaFold carries one.",
+      "Where a statement comes from: an experiment, a clinical database, a paper, a curated database, a computational prediction or an Helix hypothesis. Every statement in Helix carries one.",
   },
 } as const satisfies Record<string, GlossaryEntry>;
 

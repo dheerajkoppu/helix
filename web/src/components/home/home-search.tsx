@@ -249,7 +249,7 @@ export function HomeSearch({
                   {!advanced
                     ? SEARCH_WORDS.offline
                     : isApiError(failed) && failed.isUnreachable
-                      ? "The OrphaFold API did not answer, so names and aliases cannot be resolved."
+                      ? "The Helix API did not answer, so names and aliases cannot be resolved."
                       : `Search failed: ${failed.message}`}
                 </p>
                 <button

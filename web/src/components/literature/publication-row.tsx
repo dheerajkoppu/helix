@@ -7,7 +7,7 @@ import { cn } from "cn";
 import { ExternalLink } from "@/components/data/external-link";
 import { AddToProjectButton } from "@/components/project/add-to-project";
 import { Button } from "@/components/ui/button";
-import { askOrpha } from "@/lib/state/assistant";
+import { askHelix } from "@/lib/state/assistant";
 import { formatCount } from "@/lib/format";
 
 import type {
@@ -71,7 +71,7 @@ export function PublicationRow({ publication, context }: PublicationRowProps) {
     const identifier = publication.pmid
       ? `PMID ${publication.pmid}`
       : (publication.doi ?? "");
-    askOrpha(
+    askHelix(
       `What does this paper report${about ? ` about ${about}` : ""}? "${publication.title}" (${identifier})`,
       {
         route: currentRoute(),
@@ -200,7 +200,7 @@ export function PublicationRow({ publication, context }: PublicationRowProps) {
             />
             <Button variant="outline" size="sm" onClick={ask}>
               <MessageSquareTextIcon data-icon="inline-start" aria-hidden />
-              Ask Orpha about this paper
+              Ask Helix about this paper
             </Button>
             <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-2xs">
               <span className="text-subtle-foreground">View source</span>

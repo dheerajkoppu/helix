@@ -33,7 +33,7 @@ export const SEGMENT_KIND_META: Record<SegmentKind, SegmentKindMeta> = {
     code: "COMP",
     label: "Computational result",
     description:
-      "Output of a prediction tool or an OrphaFold run. A prediction, not an observation.",
+      "Output of a prediction tool or an Helix run. A prediction, not an observation.",
     ruleClass: "border-l-2 border-dashed border-ev-prediction",
     textClass: "text-ev-prediction",
   },

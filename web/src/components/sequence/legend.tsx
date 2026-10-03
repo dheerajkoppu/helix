@@ -297,7 +297,7 @@ export function AxisLegend({
                 className="h-2 w-4 border border-dotted border-foreground"
                 aria-hidden
               />
-              <span className="font-mono">OF</span> OrphaFold-generated, dotted
+              <span className="font-mono">OF</span> Helix-generated, dotted
             </span>
           </span>
           <span className={RULE} />

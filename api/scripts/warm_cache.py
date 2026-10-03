@@ -21,9 +21,9 @@ import httpx
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from orphafold.config import API_PREFIX  # noqa: E402
-from orphafold.identifiers import parse_variant_id  # noqa: E402
-from orphafold.knowledge.catalog import get_catalog, load_catalog  # noqa: E402
+from helix.config import API_PREFIX  # noqa: E402
+from helix.identifiers import parse_variant_id  # noqa: E402
+from helix.knowledge.catalog import get_catalog, load_catalog  # noqa: E402
 
 REQUEST_TIMEOUT = 180.0
 GENE_CONCURRENCY = 3
@@ -204,8 +204,8 @@ async def main() -> int:
         async with httpx.AsyncClient(base_url=base_url + API_PREFIX, timeout=REQUEST_TIMEOUT) as client:
             return await run(client, symbols, args.passes)
 
-    from orphafold.main import app
-    from orphafold.sources.base import drain_inflight
+    from helix.main import app
+    from helix.sources.base import drain_inflight
 
     print("No API is listening: warming in this process against the configured database")
     transport = httpx.ASGITransport(app=app)

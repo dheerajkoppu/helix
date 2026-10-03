@@ -62,6 +62,6 @@
   "limitations": [
     "Predicted pockets and interfaces are computational predictions, not measured binding sites."
   ],
-  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments structural_context --accession Q06187 --position 28 --alternate-residue H --reference-residue R --gene BTK --variant-id BTK-p.Arg28His",
+  "reproducible_command": "HELIX_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m helix_lab_tools.experiments structural_context --accession Q06187 --position 28 --alternate-residue H --reference-residue R --gene BTK --variant-id BTK-p.Arg28His",
   "elapsed_seconds": 0.6
 }

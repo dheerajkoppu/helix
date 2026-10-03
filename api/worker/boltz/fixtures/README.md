@@ -12,14 +12,14 @@ It is **not model output**:
 
 Guards that keep it out of every result:
 
-- Both JSON files carry the key `_orphafold_parser_fixture`. `orphafold.boltz.parser.parse_results`
+- Both JSON files carry the key `_helix_parser_fixture`. `helix.boltz.parser.parse_results`
   refuses any file with that key unless called with `allow_fixture=True`, and only
-  `python -m orphafold.boltz.selfcheck` does that.
-- The directory is outside the `orphafold` package and no provider, job handler or route reads it.
+  `python -m helix.boltz.selfcheck` does that.
+- The directory is outside the `helix` package and no provider, job handler or route reads it.
 - The worker service serves files only from its own job directories.
 
 Run the check from `api/`:
 
 ```bash
-.venv/bin/python -m orphafold.boltz.selfcheck
+.venv/bin/python -m helix.boltz.selfcheck
 ```

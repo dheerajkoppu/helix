@@ -10,7 +10,7 @@ export interface ExternalLinkProps extends Omit<
   bare?: boolean;
 }
 
-/** The only treatment for links that leave OrphaFold: underlined on hover, arrow, new tab. */
+/** The only treatment for links that leave Helix: underlined on hover, arrow, new tab. */
 export function ExternalLink({
   href,
   bare = false,

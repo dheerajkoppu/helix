@@ -58,7 +58,7 @@ export const usePreferences = create<Preferences & PreferenceActions>()(
         set((state) => ({ dockHeight: NEXT_DOCK_HEIGHT[state.dockHeight] })),
     }),
     {
-      name: "orphafold.preferences",
+      name: "helix.preferences",
       version: 1,
       storage: createJSONStorage(() => (typeof window === "undefined" ? serverStorage : window.localStorage)),
       skipHydration: true,

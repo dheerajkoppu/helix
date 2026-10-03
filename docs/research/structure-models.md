@@ -1,6 +1,6 @@
 # Structure models: provider research and adapter specs
 
-Research date: 2026-10-03. Topic: `structure-models`. Audience: engineers building the OrphaFold provider layer.
+Research date: 2026-10-03. Topic: `structure-models`. Audience: engineers building the Helix provider layer.
 
 Evidence legend used throughout:
 
@@ -12,13 +12,13 @@ Evidence legend used throughout:
 
 ---
 
-## 1. Recommendation for OrphaFold
+## 1. Recommendation for Helix
 
 | Priority | Provider                                                                                          | Role                                                                  | Why                                                                                    |
 | -------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | P0       | **AlphaFold DB** (retrieval)                                                                      | Default predicted structure for every wild-type UniProt accession     | Free, no key, CC-BY-4.0, v6 files, pLDDT + PAE JSON ready to plot. API verified live.  |
 | P0       | **ESM Atlas fold API** (remote, ESMFold v1)                                                       | The only zero-configuration real inference path                       | Live today, no key, no GPU. Hard limit 400 residues, monomer only, pLDDT only, no SLA. |
-| P1       | **Boltz-2** (local CLI / GPU worker)                                                              | Primary OrphaFold-generated model: monomer, complex, ligand, affinity | MIT code and weights, commercial use allowed, one CLI, stable output layout.           |
+| P1       | **Boltz-2** (local CLI / GPU worker)                                                              | Primary Helix-generated model: monomer, complex, ligand, affinity | MIT code and weights, commercial use allowed, one CLI, stable output layout.           |
 | P2       | Keyed remote adapters, off by default: **Boltz API**, **Biohub ESMFold2**, **NVIDIA NIM Boltz-2** | Hosted GPU inference when the user supplies their own key             | All three endpoints exist and answer 401 without a key. Each has cost or trial terms.  |
 | P2       | **Foldseek web API**                                                                              | Structure similarity search                                           | Live, no key, strict rate limit (1 submission per ~50 s per IP).                       |
 | Excluded | AlphaFold Server, bundled AlphaFold 3 weights, Protenix-v2 weights, SimpleFold weights            | -                                                                     | Terms forbid automation, redistribution or non-research use. See section 4.            |
@@ -29,7 +29,7 @@ Core decisions:
 2. Treat Boltz-2 as the primary generated model. Run it on a CUDA GPU worker. On the current dev machine (Apple M4 Pro, 24 GB unified memory, no NVIDIA GPU, system Python 3.14.8, checked locally) upstream `boltz` 2.2.1 will not install on the system Python (`requires-python >=3.10,<3.13`) and its CPU path produces distorted structures (issue #653). Use `boltz-community` 2.10.12 in a Python 3.12 virtualenv with `--accelerator mps`, and mark that backend experimental until a real run is checked.
 3. Never call the public ColabFold MSA server from a multi-user hosted deployment. Make `msa_server_url` configurable, cache MSAs by sequence hash, run serially, and send a distinctive User-Agent.
 4. Store every confidence value in its native units alongside a normalised copy. pLDDT arrives on a 0-1 scale from some providers and 0-100 from others.
-5. Every structure record carries `origin` in {`experimental`, `predicted_external`, `predicted_orphafold`} plus provider, model version, source URL or job id, timestamps and license. The UI never shows a structure without that label.
+5. Every structure record carries `origin` in {`experimental`, `predicted_external`, `predicted_internal`} plus provider, model version, source URL or job id, timestamps and license. The UI never shows a structure without that label.
 6. Structure models have not been validated for predicting the structural effect of missense variants. A mutant-sequence prediction is shown as a hypothesis aid with an explicit caveat (section 5.7).
 
 ---
@@ -198,7 +198,7 @@ NVIDIA NIM Boltz-2 **[doc + curl]**: hosted `POST https://health.api.nvidia.com/
 - Requirements **[src docs]**: Linux only; NVIDIA GPU with compute capability ≥ 8.0; verified on A100 80 GB and H100 80 GB; up to 1 TB for genetic databases; ≥ 64 GB RAM. Timings on A100 80 GB: 1,024 tokens 62 s, 2,048 tokens 275 s, 5,120 tokens 2,547 s.
 - AlphaFold Server (`alphafoldserver.com`) **[src PDFs]**: non-commercial only. Prohibited: use "In connection with any automated system that predicts the binding or interaction of the protein with ligands or peptides"; training similar models; to "grant or permit access to AlphaFold Server". There is no public API. Quota of 30 jobs per day **[search]**.
 
-OrphaFold decision: no AlphaFold Server integration of any kind. AlphaFold 3 is supportable only as a bring-your-own-weights adapter on an institution's own Linux GPU, disabled by default, with outputs labelled as subject to the AlphaFold 3 Output Terms of Use.
+Helix decision: no AlphaFold Server integration of any kind. AlphaFold 3 is supportable only as a bring-your-own-weights adapter on an institution's own Linux GPU, disabled by default, with outputs labelled as subject to the AlphaFold 3 Output Terms of Use.
 
 ### 4.5 Chai-1
 
@@ -206,7 +206,7 @@ OrphaFold decision: no AlphaFold Server integration of any kind. AlphaFold 3 is 
 - Requirements, quoted **[src README]**: "requires Linux, Python 3.10 or later, and a GPU with CUDA and bfloat16 support. We recommend using an A100 80GB or H100 80GB or L40S 48GB chip, but A10 and A30 will work for smaller complexes."
 - CLI: `chai-lab fold input.fasta output_folder`; with MSAs: `chai-lab fold --use-msa-server --use-templates-server input.fasta output_folder`. Defaults: 5 samples, 3 trunk recycles, 200 diffusion steps, ESM embeddings without MSA.
 - Outputs **[src]**: `pred.model_idx_{i}.cif`, `scores.model_idx_{i}.npz` with keys `aggregate_score`, `ptm`, `iptm`, `per_chain_ptm`, `per_chain_pair_iptm`, clash fields. `aggregate_score = 0.2*pTM + 0.8*ipTM - 100*has_inter_chain_clashes`.
-- No affinity head. Role in OrphaFold: optional second opinion on a GPU worker.
+- No affinity head. Role in Helix: optional second opinion on a GPU worker.
 
 ### 4.6 ESMFold2, ESM C, ESM3 (Biohub)
 
@@ -234,7 +234,7 @@ OrphaFold decision: no AlphaFold Server integration of any kind. AlphaFold 3 is 
 
 ### 4.9 Foldseek web API
 
-Verified end to end today **[curl]**. Foldseek code is GPL-3.0; OrphaFold calls the hosted service over HTTP and bundles no Foldseek code.
+Verified end to end today **[curl]**. Foldseek code is GPL-3.0; Helix calls the hosted service over HTTP and bundles no Foldseek code.
 
 ```bash
 curl -X POST https://search.foldseek.com/api/ticket \
@@ -281,7 +281,7 @@ curl https://search.foldseek.com/api/result/<ticket>/0     # entry 0 = first cha
 | Low              | 50 < pLDDT ≤ 70 | "Low (70 > pLDDT > 50)"  | `#FFDB13` | `L`                            |
 | Very low         | pLDDT ≤ 50      | "Very low (pLDDT < 50)"  | `#FF7D45` | `D`                            |
 
-Observed category ranges in the BTK confidence JSON: H 90.0-98.88, M 70.19-89.94, L 51.44-69.62, D 28.69-49.56. A residue at exactly 90.0 was labelled `H`, while the site's own level function uses strict `> 90`. For AFDB models use the supplied `confidenceCategory`. For OrphaFold-generated models bin with lower-inclusive cut-offs at 90, 70 and 50 so both sources agree at 90.0.
+Observed category ranges in the BTK confidence JSON: H 90.0-98.88, M 70.19-89.94, L 51.44-69.62, D 28.69-49.56. A residue at exactly 90.0 was labelled `H`, while the site's own level function uses strict `> 90`. For AFDB models use the supplied `confidenceCategory`. For Helix-generated models bin with lower-inclusive cut-offs at 90, 70 and 50 so both sources agree at 90.0.
 
 - AFDB wording to reuse: above 90 "expected to be modelled to high accuracy"; 70-90 "modelled well (a generally good backbone prediction)"; 50-70 "low confidence and should be treated with caution"; below 50 coordinates "often have a ribbon-like appearance and should not be interpreted" and are "a reasonably strong predictor of disorder".
 - Rules: reserve these four colours for pLDDT and nothing else. Always show a legend. Normalise to 0-100 for display. pLDDT says nothing about relative domain or chain placement ("in complexes it does not by itself indicate whether the relative placement of chains or the predicted interface is correct"). Low pLDDT means either disorder or insufficient information, never "misfolded by the variant".
@@ -348,7 +348,7 @@ AFDB FAQ **[curl]**: "AlphaFold has not been validated for predicting the effect
 class StructureOrigin(str, Enum):
     EXPERIMENTAL = "experimental"
     PREDICTED_EXTERNAL = "predicted_external"      # precomputed by a third party (AFDB)
-    PREDICTED_ORPHAFOLD = "predicted_orphafold"    # inference triggered by OrphaFold
+    PREDICTED_INTERNAL = "predicted_internal"    # inference triggered by Helix
 
 class ProviderCapabilities(BaseModel):
     monomer: bool
@@ -494,7 +494,7 @@ Body: raw amino-acid sequence, uppercase, no header, no whitespace
 Pre-flight validation in the adapter (reject before calling):
 
 - Length 1-400. Longer: `unavailable` with reason `sequence_exceeds_400_residues`. Offer a user-chosen window and store `uniprot_offset`.
-- Alphabet: 20 standard residues. The server also accepts B, Z, X, J; reject them in OrphaFold to keep inputs unambiguous.
+- Alphabet: 20 standard residues. The server also accepts B, Z, X, J; reject them in Helix to keep inputs unambiguous.
 - Single chain only.
 
 Client behaviour: timeout 120 s; concurrency 1 per deployment; minimum 1 s spacing; on 5xx or timeout retry twice with exponential backoff; on 403, 404 or DNS failure mark the provider `unavailable` for the session.
@@ -515,11 +515,11 @@ Parsing:
 3. Convert to mmCIF with `gemmi` for uniform storage; keep the original PDB.
 4. `ConfidenceBundle`: `pae_matrix_path = None`, `ptm = None`, `iptm = None`, `ranking_score = None`.
 
-Output mapping: `origin = predicted_orphafold`, `provider_id = "esm_atlas"`, `model_name = "ESMFold v1"`, `model_version = "esmfold_v1"` (store the response `TITLE` line in `parameters`), `source_url = "https://api.esmatlas.com/foldSequence/v1/pdb/"`, `license` = verbatim REMARK text from the response, `parameters = {"msa": "none (single-sequence language model)"}`. Add fixed warning: "Single-sequence language-model prediction; generally less accurate than MSA-based models."
+Output mapping: `origin = predicted_internal`, `provider_id = "esm_atlas"`, `model_name = "ESMFold v1"`, `model_version = "esmfold_v1"` (store the response `TITLE` line in `parameters`), `source_url = "https://api.esmatlas.com/foldSequence/v1/pdb/"`, `license` = verbatim REMARK text from the response, `parameters = {"msa": "none (single-sequence language model)"}`. Add fixed warning: "Single-sequence language-model prediction; generally less accurate than MSA-based models."
 
 ### 6.4 Adapter (c): Boltz-2 local CLI / GPU worker
 
-Input (OrphaFold job spec) to YAML. One YAML per job; the file stem becomes the record id and appears in every output filename.
+Input (Helix job spec) to YAML. One YAML per job; the file stem becomes the record id and appears in every output filename.
 
 Monomer (first 60 residues of BTK, UniProt Q06187; with no `msa:` key the run needs `--use_msa_server`):
 
@@ -678,13 +678,13 @@ Execution backends behind the same adapter:
 
 Resource guard: estimate tokens as residues plus ligand heavy atoms. Start with a conservative cap of 1,000 tokens on 24 GB and tune from measurements.
 
-Output mapping: `origin = predicted_orphafold`, `provider_id = "boltz2"`, `model_name = "Boltz-2"`, `license = "MIT (code and weights)"`.
+Output mapping: `origin = predicted_internal`, `provider_id = "boltz2"`, `model_name = "Boltz-2"`, `license = "MIT (code and weights)"`.
 
 ---
 
 ## 7. Provenance and labelling rules
 
-- Three origins, three visual treatments. Experimental: neutral with method and resolution. Predicted external: AFDB badge, version, link. Predicted by OrphaFold: distinct badge, model, version, timestamp, parameter drawer.
+- Three origins, three visual treatments. Experimental: neutral with method and resolution. Predicted external: AFDB badge, version, link. Predicted by Helix: distinct badge, model, version, timestamp, parameter drawer.
 - A structure viewer panel always shows: origin, provider, model version, source id or job id, date, license, and the confidence legend.
 - Biological identifiers (UniProt accession, gene, organism) come from the AFDB or UniProt response fields, never from generated text.
 - Store raw provider responses unchanged next to normalised values so any displayed number can be traced.

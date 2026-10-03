@@ -57,7 +57,7 @@ type AxisClinicalVariant = Schema<"AxisClinicalVariant">;
 export type ActiveSelection =
   | {
       kind: "variant";
-      /** OrphaFold variant ID, or a ClinVar VCV for a non-substitution */
+      /** Helix variant ID, or a ClinVar VCV for a non-substitution */
       id: string;
       label: string;
       position: number | null;

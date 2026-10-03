@@ -14,7 +14,7 @@ import { VIEWER_THEMES } from "./theme";
 import type { StructureSource } from "./types";
 
 export const RESEARCH_USE_LINE =
-  "OrphaFold research software. For research use only, not for clinical decisions.";
+  "Helix research software. For research use only, not for clinical decisions.";
 
 export interface FigureStructure {
   /** "A" or "B" in a comparison */
@@ -39,7 +39,7 @@ export interface FigureAnnotation {
 const DASH: Record<StructureOrigin, number[]> = {
   experimental: [],
   predicted_external: [4, 2],
-  predicted_orphafold: [1, 2],
+  predicted_internal: [1, 2],
 };
 
 function fontFamilies(): { sans: string; mono: string } {
@@ -277,4 +277,4 @@ export async function downloadStructure(
 }
 
 export const figureFilename = (ids: string[]) =>
-  `orphafold_${ids.map(safeName).join("_vs_")}_${new Date().toISOString().slice(0, 10)}.png`;
+  `helix_${ids.map(safeName).join("_vs_")}_${new Date().toISOString().slice(0, 10)}.png`;

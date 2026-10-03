@@ -27,7 +27,7 @@ export function QueryErrorState({
   if (isApiError(error) && error.isUnreachable) {
     return (
       <SourceUnavailable
-        source="The OrphaFold API"
+        source="The Helix API"
         message={`no answer from ${API_BASE_URL}`}
         onRetry={onRetry}
         retrying={retrying}
@@ -48,7 +48,7 @@ export function QueryErrorState({
     ? `HTTP ${error.status} while loading ${subject}: ${error.message}`
     : `unexpected error while loading ${subject}`;
   return (
-    <SourceUnavailable source="The OrphaFold API" message={message} onRetry={onRetry} retrying={retrying} size={size} />
+    <SourceUnavailable source="The Helix API" message={message} onRetry={onRetry} retrying={retrying} size={size} />
   );
 }
 

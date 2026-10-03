@@ -115,7 +115,7 @@ function Segment({
           {segment.note ? (
             <span
               className="text-2xs text-subtle-foreground"
-              title={`Checked by OrphaFold: ${segment.note}`}
+              title={`Checked by Helix: ${segment.note}`}
             >
               relabelled
             </span>
@@ -150,7 +150,7 @@ function Segment({
       ) : null}
       {segment.note ? (
         <p className="text-2xs text-muted-foreground">
-          Checked by OrphaFold: {segment.note}
+          Checked by Helix: {segment.note}
         </p>
       ) : null}
       {save}
@@ -277,8 +277,8 @@ export function AnswerView({
       kind: "note",
       ref: `orpha:${turn.id}`,
       label: digest
-        ? "Orpha source digest"
-        : `Orpha: ${shorten(turn.question, 90)}`,
+        ? "Helix source digest"
+        : `Helix: ${shorten(turn.question, 90)}`,
       origin: route ? { route, note: "Saved from the assistant" } : undefined,
       evidence: answer.evidence.map((row) => row.evidence),
       data: {
@@ -299,7 +299,7 @@ export function AnswerView({
       origin: route
         ? {
             route,
-            note: `Reasoning by Orpha on "${shorten(turn.question, 80)}"`,
+            note: `Reasoning by Helix on "${shorten(turn.question, 80)}"`,
           }
         : undefined,
       evidence: segment.citations

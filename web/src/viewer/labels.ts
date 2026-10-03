@@ -18,7 +18,7 @@ export async function addResidueLabel(
   if (StructureElement.Loci.isEmpty(loci)) return undefined;
 
   const label = await plugin.managers.structure.measurement.addLabel(loci, {
-    reprTags: "orphafold-label",
+    reprTags: "helix-label",
     visualParams: {
       customText: text,
       textColor: Color(options.textColor ?? 0x111111),

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cn } from "cn";
 
-/** Inline link to another OrphaFold route. Links that leave the app use ExternalLink. */
+/** Inline link to another Helix route. Links that leave the app use ExternalLink. */
 export function TextLink({ className, ...props }: React.ComponentProps<typeof Link>) {
   return (
     <Link

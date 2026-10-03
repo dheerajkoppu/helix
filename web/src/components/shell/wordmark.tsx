@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cn } from "cn";
 
-import { OrphaFoldMark } from "@/components/evidence/glyphs";
+import { HelixMark } from "@/components/evidence/glyphs";
 import { site } from "@/lib/site";
 
 export function Wordmark({
@@ -21,7 +21,7 @@ export function Wordmark({
         className,
       )}
     >
-      <OrphaFoldMark className={size === "lg" ? "size-9" : "size-4"} />
+      <HelixMark className={size === "lg" ? "size-9" : "size-4"} />
       <span
         className={cn(
           "font-semibold",
@@ -30,7 +30,7 @@ export function Wordmark({
             : "text-[0.9375rem] leading-none tracking-[-0.02em]",
         )}
       >
-        Orpha<span className="font-normal">Fold</span>
+        Helix
       </span>
     </Link>
   );

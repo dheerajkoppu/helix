@@ -18,7 +18,7 @@ from urllib.parse import urlsplit
 
 import httpx
 
-USER_AGENT = "OrphaFold-seed-builder/0.1 (open-source rare-disease research platform; httpx)"
+USER_AGENT = "Helix-seed-builder/0.1 (open-source rare-disease research platform; httpx)"
 
 # Minimum seconds between requests to one host. NCBI allows 3 requests per second without a key.
 HOST_INTERVALS = {

@@ -157,7 +157,7 @@ function describeFieldProblems(problem: ApiProblem): string | null {
 
 /**
  * Understands the API's problem JSON (RFC 9457 with `code`), and falls back to an `error` envelope
- * or FastAPI's plain `detail` for answers that did not come from an OrphaFold handler.
+ * or FastAPI's plain `detail` for answers that did not come from an Helix handler.
  */
 function parseErrorBody(status: number, body: unknown): ApiErrorBody {
   const fallback: ApiErrorBody = {
@@ -239,7 +239,7 @@ export async function apiRequest<Data>(
     throw new ApiError({
       status: 0,
       code: "api_unreachable",
-      message: `The OrphaFold API at ${API_BASE_URL} did not answer.`,
+      message: `The Helix API at ${API_BASE_URL} did not answer.`,
       detail: cause instanceof Error ? cause.message : String(cause),
     });
   }

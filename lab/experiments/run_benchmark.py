@@ -33,7 +33,7 @@ EXPERIMENTS = Path(__file__).resolve().parent
 LAB = EXPERIMENTS.parent
 sys.path.insert(0, str(LAB / "tools"))
 
-from orphafold_lab_tools.registry import EXPERIMENT_TOOLS, RETRIEVAL_TOOLS  # noqa: E402
+from helix_lab_tools.registry import EXPERIMENT_TOOLS, RETRIEVAL_TOOLS  # noqa: E402
 
 RUNS = LAB / "runs"
 RESULTS = EXPERIMENTS / "results"
@@ -957,7 +957,7 @@ def main() -> None:
         default=None,
         help="Who pre-approves consequential actions for the batch, as written to every record",
     )
-    parser.add_argument("--api-url", default=os.environ.get("ORPHAFOLD_API_URL", "http://localhost:8000"))
+    parser.add_argument("--api-url", default=os.environ.get("HELIX_API_URL", "http://localhost:8000"))
     parser.add_argument("--aggregate-only", action="store_true")
     parser.add_argument(
         "--secondary",

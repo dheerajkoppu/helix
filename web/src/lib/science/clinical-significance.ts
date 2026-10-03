@@ -1,6 +1,6 @@
 /**
  * Clinical significance as classified by a clinical database (ClinVar). Colours follow the gnomAD
- * browser constants. Reserved for database classifications, never for OrphaFold predictions.
+ * browser constants. Reserved for database classifications, never for Helix predictions.
  * The abbreviation is always printed: colour alone never carries the class.
  */
 export type ClinicalSignificance =

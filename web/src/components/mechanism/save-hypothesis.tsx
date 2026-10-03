@@ -43,7 +43,7 @@ export interface SaveHypothesisProps {
 }
 
 /**
- * Saves a candidate as an OrphaFold hypothesis. The variant is added to the project with the
+ * Saves a candidate as an Helix hypothesis. The variant is added to the project with the
  * records that raise the candidate, and the hypothesis rests on that item, so its `derived_from`
  * lists the item and every evidence ID.
  */
@@ -151,7 +151,7 @@ export function SaveHypothesis({
         <DialogHeader>
           <DialogTitle>Save as hypothesis</DialogTitle>
           <DialogDescription>
-            Stored as an OrphaFold hypothesis, apart from the evidence it rests
+            Stored as an Helix hypothesis, apart from the evidence it rests
             on. It starts as a draft.
           </DialogDescription>
         </DialogHeader>
@@ -160,7 +160,7 @@ export function SaveHypothesis({
           <span className="flex items-center gap-2 text-2xs font-medium tracking-[0.04em] text-muted-foreground uppercase">
             Statement
             <EvidenceBadge
-              evidenceClass="orphafold_hypothesis"
+              evidenceClass="helix_hypothesis"
               size="compact"
             />
           </span>

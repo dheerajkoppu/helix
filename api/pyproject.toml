@@ -3,9 +3,9 @@ requires = ["setuptools>=75"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "orphafold"
+name = "helix"
 version = "0.1.0"
-description = "OrphaFold API: open computational rare-disease research platform"
+description = "Helix API: open computational rare-disease research platform"
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.14"
@@ -35,11 +35,11 @@ s3 = ["boto3>=1.40"]
 dev = ["ruff>=0.16"]
 
 [project.scripts]
-orphafold-worker = "orphafold.worker:main"
-orphafold-openapi = "orphafold.openapi:main"
+helix-worker = "helix.worker:main"
+helix-openapi = "helix.openapi:main"
 
 [tool.setuptools.packages.find]
-include = ["orphafold*"]
+include = ["helix*"]
 
 [tool.ruff]
 line-length = 110

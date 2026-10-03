@@ -32,6 +32,6 @@
     "FoldX on a predicted model is a computational prediction with errors near 1 kcal/mol.",
     "A neutral stability prediction does not show the variant is tolerated."
   ],
-  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments stability_effect --accession P16410 --position 75 --alternate-residue W --reference-residue R --gene CTLA4 --variant-id CTLA4-p.Arg75Trp",
+  "reproducible_command": "HELIX_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m helix_lab_tools.experiments stability_effect --accession P16410 --position 75 --alternate-residue W --reference-residue R --gene CTLA4 --variant-id CTLA4-p.Arg75Trp",
   "elapsed_seconds": 0.0
 }

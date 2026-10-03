@@ -35,7 +35,7 @@
         "reference": "e5469c7097cea9e09fed7796329c7e8ba7c2bb1da1ffc8160f067c67d551fbf4",
         "variant": "661cf266ea34d27f9c44c00b21548de708349453cbb5426a907a7add6a8925cb"
       },
-      "manifest_sha256": "ee5b9ff78557eabb707ddf269e2a1b0f7aec1901b0c0f551effa6ca75c1490b8",
+      "manifest_sha256": "a74e7269df0208eeec1c506fc4fb788c5db87f686d8d1f3ddea29a229bbfad59",
       "files": [
         "difference.json",
         "manifest.json",
@@ -81,7 +81,7 @@
         "reference": "d11fa06e22ee0b9e1db5468f3c59efbbddd4d5cbda0812adc8e2d7a883e5d0b5",
         "variant": "775b7529a79d979523c8bb8f5562d1ab15b4dcce285f90d63dd28a3ee0f47981"
       },
-      "manifest_sha256": "93a5a9ed51102602af12736fee2eed931bcf46685f1f3723c1fda57fafc82122",
+      "manifest_sha256": "ba500fc96ded33304e9f1a33b157814d099410ced4051fb8ce526885dc8af9c6",
       "files": [
         "difference.json",
         "manifest.json",
@@ -127,7 +127,7 @@
         "reference": "c6611e6339997a9506e6f14c368ec83c7f5bd821fdfd6fcf6fa9ebb90969e1c3",
         "variant": "6ce835ce12f7732df435c935ff0b3fb2c89241c640a6a966f8b7eeff101a8496"
       },
-      "manifest_sha256": "148a7bebebdc86723f3a439344284f0171f8eff1cfc7dde8c545f8a621591186",
+      "manifest_sha256": "057df436b350a5337a7c73601386be07d88468d93cee571741b96ed121b2b65e",
       "files": [
         "difference.json",
         "manifest.json",

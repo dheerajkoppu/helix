@@ -1,6 +1,6 @@
-# Contributing to OrphaFold
+# Contributing to Helix
 
-OrphaFold is research software for rare-disease work. A contribution is useful when it makes a
+Helix is research software for rare-disease work. A contribution is useful when it makes a
 statement more traceable, a prediction more honestly labelled, or a source or model available that
 was not. This file covers setup, the checks to run and the rules every change keeps.
 
@@ -29,10 +29,10 @@ both themes and at a narrow width.
 
 | Contribution         | Where                                                 | Guide                                                                                                    |
 | -------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| A data source        | one new file in `api/orphafold/sources/`              | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) section 8, [`docs/data-sources.md`](docs/data-sources.md) |
-| A model provider     | one new file in `api/orphafold/providers/`            | [`docs/adding-a-model.md`](docs/adding-a-model.md)                                                       |
-| A job kind           | one new file in `api/orphafold/jobs/handlers/`        | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) section 8                                                 |
-| A route              | new files in `api/orphafold/services/` and `routers/` | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) section 8                                                 |
+| A data source        | one new file in `api/helix/sources/`              | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) section 8, [`docs/data-sources.md`](docs/data-sources.md) |
+| A model provider     | one new file in `api/helix/providers/`            | [`docs/adding-a-model.md`](docs/adding-a-model.md)                                                       |
+| A job kind           | one new file in `api/helix/jobs/handlers/`        | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) section 8                                                 |
+| A route              | new files in `api/helix/services/` and `routers/` | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) section 8                                                 |
 | An interface change  | `web/src/`                                            | [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md)                                                         |
 | A glossary term      | `web/src/lib/glossary.ts`                             | Hand-written, short, literal                                                                             |
 | A mapping correction | `api/scripts/seed/`, then `make seed`                 | [`data/seed/README.md`](data/seed/README.md)                                                             |
@@ -55,7 +55,7 @@ by hand.
 
 **Predictions**
 
-- Experimental, existing predicted and OrphaFold-generated structures are never presented as
+- Experimental, existing predicted and Helix-generated structures are never presented as
   equivalent. Every structure carries its origin.
 - A provider never returns output the model did not produce.
 - Predictions are worded as predictions. No clinical recommendations, and none of these words about
@@ -95,7 +95,7 @@ shown and what the source record says. A link to the source record settles most 
 
 ## Security and personal data
 
-OrphaFold is not built to hold patient data. Do not put patient identifiers, clinical notes or
+Helix is not built to hold patient data. Do not put patient identifiers, clinical notes or
 unpublished patient variants into an issue, a project or a test fixture.
 
 ## Licence of contributions

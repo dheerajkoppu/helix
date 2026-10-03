@@ -195,7 +195,7 @@ export function comparisonTracks(
       status:
         moved.length === 0
           ? {
-              source: "orphafold_compare",
+              source: "helix_compare",
               name: `these models at or above 0.5 Å (largest ${formatAngstrom(largestDisplacement(difference))} among ${compared} compared residues)`,
               state: "empty",
             }

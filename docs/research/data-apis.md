@@ -1,4 +1,4 @@
-# OrphaFold data-source endpoint cookbook
+# Helix data-source endpoint cookbook
 
 Verified 2026-10-03 with `curl 8.7.1` from a US university network. Every request marked [V] was executed that day and the response inspected with `jq`.
 
@@ -10,7 +10,7 @@ Latency figures are single observations from one client, useful for ordering sou
 
 ---
 
-## 1. Recommendation for OrphaFold
+## 1. Recommendation for Helix
 
 1. **Anchor every record on three IDs**: UniProt accession (protein), HGNC ID (gene), MONDO ID (disease). Every source below resolves from one of them. Orphanet and OMIM IDs map to MONDO through Monarch `/mappings` or Orphadata cross-references [V].
 2. **Use protein-level sources first, fan out second.** One UniProt entry call returns function, features, PDB/AlphaFold/HGNC/Ensembl/MANE/Orphanet/Reactome/ChEMBL/STRING cross-references. Fan out in parallel from those IDs.
@@ -23,11 +23,11 @@ Latency figures are single observations from one client, useful for ordering sou
 9. **Record provenance on every fetch**: source name, source release (header or version endpoint, table in section 5), request URL, retrieval timestamp, source record ID, license.
 10. **Register an NCBI API key and send `tool` + `email`.** Unauthenticated E-utilities throttle at 3 requests/second and returned 429 on a burst of 6 [V].
 11. **Cache aggressively.** All sources release on a weekly-to-quarterly cadence. UniProt itself sends `cache-control: public, max-age=43200` [V]. Cache key = (source, release, request).
-12. **Structure provenance classes** for the UI: `experimental` (PDBe/RCSB), `predicted-existing` (AlphaFold DB, SWISS-MODEL via 3D-Beacons), `predicted-orphafold` (own runs). 3D-Beacons `model_category` gives `EXPERIMENTALLY DETERMINED` / `TEMPLATE-BASED` / `AB-INITIO` directly [V].
+12. **Structure provenance classes** for the UI: `experimental` (PDBe/RCSB), `predicted-existing` (AlphaFold DB, SWISS-MODEL via 3D-Beacons), `predicted-internal` (own runs). 3D-Beacons `model_category` gives `EXPERIMENTALLY DETERMINED` / `TEMPLATE-BASED` / `AB-INITIO` directly [V].
 
 ### 1.1 Field → primary source and fallback
 
-| OrphaFold field          | Primary source (endpoint)                                                                                                                       | Fallback                                                                                                          | Notes                                                                                           |
+| Helix field          | Primary source (endpoint)                                                                                                                       | Fallback                                                                                                          | Notes                                                                                           |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | Disease description      | Orphadata `/rd-cross-referencing/orphacodes/{code}?lang=en` → `SummaryInformation[].Definition`                                                 | Monarch `/entity/MONDO:…` → `description`; OLS4 MONDO term                                                        | Orphanet text is CC BY 4.0, attribution required                                                |
 | Inheritance              | Orphadata `/rd-natural_history/orphacodes/{code}` → `TypeOfInheritance[]`                                                                       | Monarch entity → `inheritance{id,name}` (HPO term); JAX HPO `network/annotation/{disease}` category `Inheritance` | BTK/XLA: "X-linked recessive" / `HP:0001419` [V]                                                |
@@ -160,7 +160,7 @@ curl -s -H 'Accept: application/json' 'https://www.ebi.ac.uk/proteins/api/featur
 ```bash
 E=https://eutils.ncbi.nlm.nih.gov/entrez/eutils
 # 1. pathogenic + likely pathogenic missense in BTK → count 122, with history server
-curl -s "$E/esearch.fcgi?db=clinvar&term=BTK%5Bgene%5D+AND+(%22clinsig+pathogenic%22%5BProperties%5D+OR+%22clinsig+likely+pathogenic%22%5BProperties%5D)+AND+%22missense+variant%22%5BMolecular+consequence%5D&retmode=json&retmax=500&usehistory=y&tool=orphafold&email=YOU%40DOMAIN"
+curl -s "$E/esearch.fcgi?db=clinvar&term=BTK%5Bgene%5D+AND+(%22clinsig+pathogenic%22%5BProperties%5D+OR+%22clinsig+likely+pathogenic%22%5BProperties%5D)+AND+%22missense+variant%22%5BMolecular+consequence%5D&retmode=json&retmax=500&usehistory=y&tool=helix&email=YOU%40DOMAIN"
 # 2. summaries for the whole result set (122 records, 296 KB, 0.82 s)
 curl -s "$E/esummary.fcgi?db=clinvar&query_key=1&WebEnv={webenv}&retmode=json&retstart=0&retmax=500"
 # 3. full record incl. per-isoform protein HGVS (XML only)
@@ -423,10 +423,10 @@ curl -s "$E/efetch.fcgi?db=pubmed&id=9218782&rettype=abstract&retmode=xml"
 ```bash
 S=https://string-db.org/api
 curl -s "$S/json/version"                                                              # 12.5
-curl -s "$S/json/get_string_ids?identifiers=Q06187&species=9606&limit=1&echo_query=1&caller_identity=orphafold"   # 9606.ENSP00000483570
-curl -s "$S/json/interaction_partners?identifiers=9606.ENSP00000483570&species=9606&limit=10&required_score=700&network_type=physical&caller_identity=orphafold"
-curl -s -X POST -d 'identifiers=BTK%0dWAS%0dJAK3&species=9606&limit=2&caller_identity=orphafold' "$S/json/interaction_partners"
-curl -s "$S/json/network?identifiers=BTK%0dPLCG2%0dBLNK%0dSYK%0dLYN&species=9606&caller_identity=orphafold"
+curl -s "$S/json/get_string_ids?identifiers=Q06187&species=9606&limit=1&echo_query=1&caller_identity=helix"   # 9606.ENSP00000483570
+curl -s "$S/json/interaction_partners?identifiers=9606.ENSP00000483570&species=9606&limit=10&required_score=700&network_type=physical&caller_identity=helix"
+curl -s -X POST -d 'identifiers=BTK%0dWAS%0dJAK3&species=9606&limit=2&caller_identity=helix' "$S/json/interaction_partners"
+curl -s "$S/json/network?identifiers=BTK%0dPLCG2%0dBLNK%0dSYK%0dLYN&species=9606&caller_identity=helix"
 curl -s "$S/image/network?identifiers=9606.ENSP00000483570&species=9606&add_white_nodes=10" -o net.png
 ```
 

@@ -1,10 +1,10 @@
-# OrphaFold product brief
+# Helix product brief
 
-The requirements every part of OrphaFold is built against.
+The requirements every part of Helix is built against.
 
 ## What it is
 
-OrphaFold is an open-source research platform that makes computational rare-disease drug discovery accessible to far more people. A motivated researcher, college student, or advanced high-school student should be able to choose a rare disease or gene, understand how a pathogenic variant changes a protein, inspect the structure in 3D, investigate interactions and possible binding sites, explore compounds or therapeutic hypotheses, run computational models, and share the resulting research.
+Helix is an open-source research platform that makes computational rare-disease drug discovery accessible to far more people. A motivated researcher, college student, or advanced high-school student should be able to choose a rare disease or gene, understand how a pathogenic variant changes a protein, inspect the structure in 3D, investigate interactions and possible binding sites, explore compounds or therapeutic hypotheses, run computational models, and share the resulting research.
 
 Initial focus: **inborn errors of immunity / primary immunodeficiencies**. The architecture must generalise to rare genetic disease overall.
 
@@ -38,7 +38,7 @@ Six exceptionally integrated workflows beat thirty shallow screens.
 
 - Biological facts come from real databases with source links, IDs and provenance. An LLM is never the source of truth.
 - Never fabricate unavailable fields. Show "Unknown" or "No source found".
-- Three structure classes are always distinguished and never presented as equivalent: (1) experimentally determined, (2) existing predicted (for example AlphaFold DB), (3) OrphaFold-generated predictions.
+- Three structure classes are always distinguished and never presented as equivalent: (1) experimentally determined, (2) existing predicted (for example AlphaFold DB), (3) Helix-generated predictions.
 - Every prediction exposes confidence: pLDDT or equivalent, PAE where supported, interface confidence for complexes, model/provider, model version, inference date, inputs, limitations.
 - Never present randomly generated or placeholder coordinates as model output. Never fake job progress.
 - A predicted structural difference is never implied to be experimentally established. A predicted affinity is never a clinical recommendation.
@@ -54,9 +54,9 @@ Every meaningful scientific statement is attributable to one or more evidence cl
 3. Published literature
 4. Curated database
 5. Computational prediction
-6. OrphaFold hypothesis
+6. Helix hypothesis
 
-Comparison and mechanism views additionally label claims as: Known experimentally / Database annotation / Computational prediction / OrphaFold hypothesis.
+Comparison and mechanism views additionally label claims as: Known experimentally / Database annotation / Computational prediction / Helix hypothesis.
 
 ## Knowledge model
 
@@ -86,7 +86,7 @@ If a heavyweight model cannot run in the development environment, there is a rea
 
 ### Home
 
-Extraordinarily simple. Logo "OrphaFold". Tagline direction: "Open protein research for rare disease." One obvious action: a large universal search, "Search a disease, gene, protein, or variant", with examples ADA, IL2RG, BTK, WAS, RAG1. A mission entry such as "N immune-disease genes. One open research workspace." using only a number the data supports. A compact explanation: "Understand the mutation. See the structure. Explore what might restore function." A short open-source mission section without marketing fluff, and a prominent GitHub / open source entry point.
+Extraordinarily simple. Logo "Helix". Tagline direction: "Open protein research for rare disease." One obvious action: a large universal search, "Search a disease, gene, protein, or variant", with examples ADA, IL2RG, BTK, WAS, RAG1. A mission entry such as "N immune-disease genes. One open research workspace." using only a number the data supports. A compact explanation: "Understand the mutation. See the structure. Explore what might restore function." A short open-source mission section without marketing fluff, and a prominent GitHub / open source entry point.
 
 ### Workspace stages
 
@@ -116,7 +116,7 @@ Collaboration foundations: a public project can expose its trail, inputs, model 
 
 No account is required to explore. Accounts become useful to save projects, run expensive computation, keep history, publish, and fork.
 
-## Assistant ("Orpha")
+## Assistant ("Helix")
 
 A research copilot in the workspace that knows the current disease, gene, mutation, residue, structure, compound and project. Example questions: why is this residue important; what changed between these two models; what proteins interact with BTK; what evidence connects this mutation to disease; explain this for a high-school biology student; explain it for a structural biologist; what experiments could distinguish these hypotheses.
 
@@ -136,11 +136,11 @@ Every run produces a downloadable machine-readable manifest: job ID, creation ti
 
 Federated search with entity resolution rather than exact string matching. "BTK" resolves to gene, protein, diseases, variants, structures; results visually distinguish entity types. Must handle "XLA", "Bruton agammaglobulinemia", "P00519", "RAG1 R396H".
 
-Command palette on Cmd/Ctrl+K searching diseases, genes, proteins, variants, residues, compounds, papers, projects and actions: Search IL2RG, Open residue R226, Compare variant, Run structure prediction, Find binding pockets, Add to project, Export structure, Ask Orpha. Keyboard interaction must be excellent.
+Command palette on Cmd/Ctrl+K searching diseases, genes, proteins, variants, residues, compounds, papers, projects and actions: Search IL2RG, Open residue R226, Compare variant, Run structure prediction, Find binding pockets, Add to project, Export structure, Ask Helix. Keyboard interaction must be excellent.
 
 ## Literature
 
-Every disease / gene / variant has a literature panel from a legitimate source: title, journal, year, authors, a short relevance indicator. Actions: save to project, ask Orpha about paper, view source, find papers related to the selected residue / mutation. Use abstracts where permissible to improve relevance.
+Every disease / gene / variant has a literature panel from a legitimate source: title, journal, year, authors, a short relevance indicator. Actions: save to project, ask Helix about paper, view source, find papers related to the selected residue / mutation. Use abstracts where permissible to improve relevance.
 
 ## Export
 
@@ -150,13 +150,13 @@ mmCIF/PDB structures, FASTA, variant table CSV, figures, prediction metadata JSO
 
 `/` home + universal search · `/explore` browse immune disorders and genes · `/disease/[id]` · `/gene/[id]` · `/protein/[id]` · `/variant/[id]` · `/compare/[...]` · `/compound/[id]` · `/project/[id]` · `/jobs` · `/models` · `/about` (mission, methodology, openness, limitations) · `/docs` (developer and scientific documentation).
 
-**Explore** makes the IEI gene set explorable with filters: IUIS category, inheritance, gene, protein family, known structure availability, number of reported variants, research coverage. No fake "cure probability". Users can discover understudied proteins or diseases without OrphaFold pretending to know which leads to a cure.
+**Explore** makes the IEI gene set explorable with filters: IUIS category, inheritance, gene, protein family, known structure availability, number of reported variants, research coverage. No fake "cure probability". Users can discover understudied proteins or diseases without Helix pretending to know which leads to a cure.
 
 ## Design
 
 Product design is as important as engineering. Not a generic AI-generated SaaS dashboard. Avoid: endless rounded cards, giant gradient heroes, glowing purple blobs, excessive pills, meaningless analytics charts, generic sidebar + cards everywhere, huge amounts of text.
 
-Inspiration for interaction quality: AlphaFold DB, RCSB PDB, Mol*, Linear, Raycast, Arc, GitHub, Vercel, modern scientific visualisation software. OrphaFold must still be visually distinct: a serious scientific instrument that happens to be remarkably easy to use. Precision, density, clarity, speed, hierarchy, confidence.
+Inspiration for interaction quality: AlphaFold DB, RCSB PDB, Mol*, Linear, Raycast, Arc, GitHub, Vercel, modern scientific visualisation software. Helix must still be visually distinct: a serious scientific instrument that happens to be remarkably easy to use. Precision, density, clarity, speed, hierarchy, confidence.
 
 Visual language: restrained; mostly neutral surfaces; colour only where it has scientific meaning (confidence gradient, reference vs variant, protein chains, selected residues, binding sites, evidence strength). Excellent typography: a clean modern sans for UI, monospace for sequences, residue identifiers, gene IDs, model parameters. The protein visualisation is the visual centrepiece whenever structure is relevant. Crisp dividers, strong hierarchy, subtle depth, excellent spacing. Dark mode exceptional; light mode first-class.
 
@@ -172,4 +172,4 @@ Accessibility: keyboard navigation, useful text descriptions of structure-depend
 
 ## Open-source identity
 
-Prominent GitHub / open source entry point. A very good README: what OrphaFold is, why it exists, architecture, how to run it, data sources, model providers, how to add a model, how to contribute, scientific limitations, license. The repository must be clean enough for another developer to understand and extend.
+Prominent GitHub / open source entry point. A very good README: what Helix is, why it exists, architecture, how to run it, data sources, model providers, how to add a model, how to contribute, scientific limitations, license. The repository must be clean enough for another developer to understand and extend.

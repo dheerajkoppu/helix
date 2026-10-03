@@ -31,7 +31,7 @@ import {
   type RunJobRequest,
 } from "@/lib/state/jobs";
 
-const HOST_ID = "orphafold-jobs-host";
+const HOST_ID = "helix-jobs-host";
 
 /** The dialog and the job watcher mount themselves on first use, so no layout has to render a host. */
 function ensureHost(): void {

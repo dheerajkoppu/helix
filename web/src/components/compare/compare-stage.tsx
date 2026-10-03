@@ -566,7 +566,7 @@ export function CompareStage({ gene, change }: CompareStageProps) {
     setCompareMode(next);
     if (next === "difference" && shown === "both") setShown("reference");
   };
-  const splitColor = resolveColorMode(colorMode, "predicted_orphafold");
+  const splitColor = resolveColorMode(colorMode, "predicted_internal");
 
   if (plan.isPending)
     return (

@@ -1,4 +1,4 @@
-# OrphaFold: API (FastAPI, Python 3.14) in api/, web (Next.js 16, pnpm) in web/.
+# Helix: API (FastAPI, Python 3.14) in api/, web (Next.js 16, pnpm) in web/.
 #
 #   make setup    install both halves
 #   make dev      API on :8000 and web on :3000, stopped together with Ctrl-C
@@ -18,7 +18,7 @@ WARM_ARGS ?=
 
 UVICORN_FLAGS := --port $(API_PORT)
 ifdef RELOAD
-UVICORN_FLAGS += --reload --reload-dir orphafold
+UVICORN_FLAGS += --reload --reload-dir helix
 endif
 
 # Set API_URL only when the web app should call an API that is not http://localhost:8000
@@ -31,7 +31,7 @@ help:
 	@echo "make setup    create api/.venv, install the API (EXTRAS=$(EXTRAS)) and the web dependencies"
 	@echo "make seed     rebuild data/seed/catalog.json from its sources (SEED_ARGS=\"--refresh all\")"
 	@echo "make warm     preload the upstream cache for the flagship genes (WARM_ARGS=\"BTK ADA\")"
-	@echo "make api      run the API on port $(API_PORT) (RELOAD=1 restarts it when api/orphafold changes)"
+	@echo "make api      run the API on port $(API_PORT) (RELOAD=1 restarts it when api/helix changes)"
 	@echo "make web      run the web dev server on port $(WEB_PORT) (API_URL=http://host:port for another API)"
 	@echo "make dev      run API and web together"
 	@echo "make types    regenerate api/openapi.json and web/src/lib/api/schema.ts"
@@ -59,10 +59,10 @@ warm:
 	cd api && .venv/bin/python scripts/warm_cache.py --api http://localhost:$(API_PORT) $(WARM_ARGS)
 
 api:
-	cd api && exec .venv/bin/uvicorn orphafold.main:app $(UVICORN_FLAGS)
+	cd api && exec .venv/bin/uvicorn helix.main:app $(UVICORN_FLAGS)
 
 worker:
-	cd api && exec .venv/bin/python -m orphafold.worker
+	cd api && exec .venv/bin/python -m helix.worker
 
 # scripts/dev.mjs restarts next dev when it exits abnormally
 web:
@@ -70,7 +70,7 @@ web:
 
 # Both servers in one terminal. Ctrl-C, or the exit of either one, stops the other.
 dev:
-	@(cd api && exec .venv/bin/uvicorn orphafold.main:app $(UVICORN_FLAGS)) & api_pid=$$!; \
+	@(cd api && exec .venv/bin/uvicorn helix.main:app $(UVICORN_FLAGS)) & api_pid=$$!; \
 	(cd web && $(WEB_ENV) exec node scripts/dev.mjs --port $(WEB_PORT)) & web_pid=$$!; \
 	trap 'kill $$api_pid $$web_pid 2>/dev/null; wait; exit 0' INT TERM; \
 	while kill -0 $$api_pid 2>/dev/null && kill -0 $$web_pid 2>/dev/null; do sleep 1; done; \
@@ -78,7 +78,7 @@ dev:
 
 # The OpenAPI document is the contract: regenerate both files after adding or changing a route or schema.
 types:
-	cd api && .venv/bin/python -m orphafold.openapi --strict
+	cd api && .venv/bin/python -m helix.openapi --strict
 	cd web && pnpm exec openapi-typescript ../api/openapi.json -o src/lib/api/schema.ts
 
 build:
@@ -86,7 +86,7 @@ build:
 
 check:
 	mkdir -p api/var
-	cd api && .venv/bin/python -m orphafold.openapi --strict --output var/openapi.check.json
+	cd api && .venv/bin/python -m helix.openapi --strict --output var/openapi.check.json
 	cmp api/openapi.json api/var/openapi.check.json || (echo "api/openapi.json is out of date: run make types" && exit 1)
 	cd web && pnpm exec openapi-typescript ../api/openapi.json -o src/lib/api/schema.ts --check
 	cd web && pnpm exec tsc --noEmit

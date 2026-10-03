@@ -1,4 +1,4 @@
-# OrphaFold Boltz worker for a Linux host with an NVIDIA GPU. Run with `--gpus all`.
+# Helix Boltz worker for a Linux host with an NVIDIA GPU. Run with `--gpus all`.
 FROM python:3.12.7-slim-bookworm
 
 ENV PIP_NO_CACHE_DIR=1 \

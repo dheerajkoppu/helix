@@ -1,6 +1,6 @@
-"""OrphaFold Boltz worker: runs `boltz predict` on a machine with a GPU and serves the result files.
+"""Helix Boltz worker: runs `boltz predict` on a machine with a GPU and serves the result files.
 
-Protocol (version 1), used by orphafold.boltz.backends.RemoteWorkerBackend:
+Protocol (version 1), used by helix.boltz.backends.RemoteWorkerBackend:
 
     GET    /health                      installation, accelerator, weights, readiness
     POST   /jobs                        submit {record_id, input_yaml, options, msa_files}
@@ -13,7 +13,7 @@ Protocol (version 1), used by orphafold.boltz.backends.RemoteWorkerBackend:
 The worker runs one prediction at a time and decides nothing about the science: it executes the
 options it is given, from an allow-list of documented Boltz flags, and adds the options that belong
 to its machine (--cache, --accelerator, --devices, --no_kernels). It never writes a result file
-itself. Python 3.12; no dependency on the orphafold package.
+itself. Python 3.12; no dependency on the helix package.
 """
 
 import asyncio
@@ -313,14 +313,14 @@ async def lifespan(app: FastAPI):
     consumer.cancel()
 
 
-app = FastAPI(title="OrphaFold Boltz worker", version=str(PROTOCOL_VERSION), lifespan=lifespan)
+app = FastAPI(title="Helix Boltz worker", version=str(PROTOCOL_VERSION), lifespan=lifespan)
 
 
 @app.get("/health", dependencies=[Depends(authorised)])
 async def health() -> dict[str, Any]:
     ready, reason = readiness()
     return {
-        "service": "orphafold-boltz-worker",
+        "service": "helix-boltz-worker",
         "protocol_version": PROTOCOL_VERSION,
         "ready": ready,
         "reason": reason,

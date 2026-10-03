@@ -1,6 +1,6 @@
-# OrphaFold web
+# Helix web
 
-The OrphaFold front end: Next.js 16 (App Router), TypeScript, Tailwind CSS 4, shadcn/ui on Base UI (Mira preset), IBM Plex Sans and Mono.
+The Helix front end: Next.js 16 (App Router), TypeScript, Tailwind CSS 4, shadcn/ui on Base UI (Mira preset), IBM Plex Sans and Mono.
 
 ## Run
 
@@ -11,11 +11,11 @@ pnpm dev          # http://localhost:3000
 
 From the repository root, `make dev` runs the API and this app together and `make web` runs this app alone. Both start `next dev` through `scripts/dev.mjs`, which starts it again if it exits abnormally. Next.js allows one dev server and one build per project at a time: a second `next dev` in this directory reports the running server instead of starting.
 
-The app calls the OrphaFold API at `NEXT_PUBLIC_API_URL` (default `http://localhost:8000`), under `/api/v1`. It runs without the API: pages show which data is not loaded and the status line reads "API not reachable". Both variables can be set in the repository `.env` (read by `next.config.ts`) or in `web/.env.local`, which wins.
+The app calls the Helix API at `NEXT_PUBLIC_API_URL` (default `http://localhost:8000`), under `/api/v1`. It runs without the API: pages show which data is not loaded and the status line reads "API not reachable". Both variables can be set in the repository `.env` (read by `next.config.ts`) or in `web/.env.local`, which wins.
 
 | Variable                     | Default                 | Purpose                                                      |
 | ---------------------------- | ----------------------- | ------------------------------------------------------------ |
-| `NEXT_PUBLIC_API_URL`        | `http://localhost:8000` | Base URL of the OrphaFold API                                |
+| `NEXT_PUBLIC_API_URL`        | `http://localhost:8000` | Base URL of the Helix API                                |
 | `NEXT_PUBLIC_REPOSITORY_URL` | unset                   | Source repository linked from the top bar and the About page |
 
 ## Check

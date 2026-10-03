@@ -4,7 +4,7 @@ import { DataDemo } from "./data-demo";
 
 export const metadata: Metadata = { title: "Workspace data layer" };
 
-/** One protein through `@/lib/workspace-data` and the OrphaFold API only. `acc` and `s` set the protein and the structure. */
+/** One protein through `@/lib/workspace-data` and the Helix API only. `acc` and `s` set the protein and the structure. */
 export default async function DataPage({
   searchParams,
 }: {

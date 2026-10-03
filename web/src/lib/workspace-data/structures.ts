@@ -150,7 +150,7 @@ export interface ViewportStructureOptions {
 
 /**
  * An API StructureDescriptor as the input `StructureViewport` takes. Residue numbering by origin:
- * AlphaFold DB models carry the UniProt position in label_seq_id; OrphaFold-generated files carry
+ * AlphaFold DB models carry the UniProt position in label_seq_id; Helix-generated files carry
  * it in auth_seq_id (their label_seq_id restarts at 1 for a construct); experimental entries need
  * the SIFTS map and fall back to author numbering without it. Null when the descriptor has no file.
  */
@@ -166,7 +166,7 @@ export function toViewportStructure(
       : null;
   const residueMap: ResidueMap | undefined =
     mapped?.residueMap ??
-    (descriptor.origin === "predicted_orphafold"
+    (descriptor.origin === "predicted_internal"
       ? { numbering: "auth" }
       : undefined);
   return {
@@ -183,7 +183,7 @@ export function toViewportStructure(
   };
 }
 
-/** Every descriptor of a ledger in display order: experimental, AlphaFold DB, isoforms, OrphaFold. */
+/** Every descriptor of a ledger in display order: experimental, AlphaFold DB, isoforms, Helix. */
 export function ledgerDescriptors(
   ledger: StructureLedger,
 ): ApiStructureDescriptor[] {
@@ -191,7 +191,7 @@ export function ledgerDescriptors(
     ...ledger.experimental.map((row) => row.structure),
     ...ledger.predicted_external,
     ...ledger.isoform_models,
-    ...ledger.predicted_orphafold,
+    ...ledger.predicted_internal,
   ];
 }
 

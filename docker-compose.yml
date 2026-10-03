@@ -1,41 +1,41 @@
-# OrphaFold with its production services: PostgreSQL, Redis job queue with a separate worker, and
-# S3-compatible artifact storage (MinIO). The ORPHAFOLD_* values are documented in .env.example; the
-# Boltz worker values are defined in api/orphafold/boltz/settings.py and docs/providers/boltz2.md.
+# Helix with its production services: PostgreSQL, Redis job queue with a separate worker, and
+# S3-compatible artifact storage (MinIO). The HELIX_* values are documented in .env.example; the
+# Boltz worker values are defined in api/helix/boltz/settings.py and docs/providers/boltz2.md.
 #
 #   docker compose up --build
 #
 # Web: http://localhost:3000   API: http://localhost:8000/api/v1/docs   MinIO console: http://localhost:9001
 # The credentials are development defaults. Replace them before exposing any port.
 
-x-orphafold-environment: &orphafold-environment
-  ORPHAFOLD_ENVIRONMENT: production
-  ORPHAFOLD_LOG_FORMAT: json
-  ORPHAFOLD_DATABASE_URL: postgresql://orphafold:orphafold@postgres:5432/orphafold
-  ORPHAFOLD_REDIS_URL: redis://redis:6379/0
-  ORPHAFOLD_S3_BUCKET: orphafold-artifacts
-  ORPHAFOLD_S3_ENDPOINT_URL: http://minio:9000
-  ORPHAFOLD_S3_REGION: us-east-1
-  ORPHAFOLD_S3_ACCESS_KEY_ID: orphafold
-  ORPHAFOLD_S3_SECRET_ACCESS_KEY: orphafold-development-secret
-  ORPHAFOLD_CORS_ORIGINS: ${ORPHAFOLD_CORS_ORIGINS:-http://localhost:3000}
-  ORPHAFOLD_CONTACT_EMAIL: ${ORPHAFOLD_CONTACT_EMAIL:-}
-  ORPHAFOLD_NCBI_API_KEY: ${ORPHAFOLD_NCBI_API_KEY:-}
-  ORPHAFOLD_ENABLE_NONCOMMERCIAL_SOURCES: ${ORPHAFOLD_ENABLE_NONCOMMERCIAL_SOURCES:-false}
-  ORPHAFOLD_BOLTZ_WORKER_URL: ${ORPHAFOLD_BOLTZ_WORKER_URL:-}
-  ORPHAFOLD_BOLTZ_WORKER_TOKEN: ${ORPHAFOLD_BOLTZ_WORKER_TOKEN:-}
+x-helix-environment: &helix-environment
+  HELIX_ENVIRONMENT: production
+  HELIX_LOG_FORMAT: json
+  HELIX_DATABASE_URL: postgresql://helix:helix@postgres:5432/helix
+  HELIX_REDIS_URL: redis://redis:6379/0
+  HELIX_S3_BUCKET: helix-artifacts
+  HELIX_S3_ENDPOINT_URL: http://minio:9000
+  HELIX_S3_REGION: us-east-1
+  HELIX_S3_ACCESS_KEY_ID: helix
+  HELIX_S3_SECRET_ACCESS_KEY: helix-development-secret
+  HELIX_CORS_ORIGINS: ${HELIX_CORS_ORIGINS:-http://localhost:3000}
+  HELIX_CONTACT_EMAIL: ${HELIX_CONTACT_EMAIL:-}
+  HELIX_NCBI_API_KEY: ${HELIX_NCBI_API_KEY:-}
+  HELIX_ENABLE_NONCOMMERCIAL_SOURCES: ${HELIX_ENABLE_NONCOMMERCIAL_SOURCES:-false}
+  HELIX_BOLTZ_WORKER_URL: ${HELIX_BOLTZ_WORKER_URL:-}
+  HELIX_BOLTZ_WORKER_TOKEN: ${HELIX_BOLTZ_WORKER_TOKEN:-}
   ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
 
 services:
   postgres:
     image: postgres:17
     environment:
-      POSTGRES_USER: orphafold
-      POSTGRES_PASSWORD: orphafold
-      POSTGRES_DB: orphafold
+      POSTGRES_USER: helix
+      POSTGRES_PASSWORD: helix
+      POSTGRES_DB: helix
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U orphafold -d orphafold"]
+      test: ["CMD-SHELL", "pg_isready -U helix -d helix"]
       interval: 5s
       timeout: 3s
       retries: 12
@@ -55,8 +55,8 @@ services:
     image: minio/minio
     command: ["server", "/data", "--console-address", ":9001"]
     environment:
-      MINIO_ROOT_USER: orphafold
-      MINIO_ROOT_PASSWORD: orphafold-development-secret
+      MINIO_ROOT_USER: helix
+      MINIO_ROOT_PASSWORD: helix-development-secret
     ports:
       - "9001:9001"
     volumes:
@@ -76,14 +76,14 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - >-
-        mc alias set orphafold http://minio:9000 orphafold orphafold-development-secret
-        && mc mb --ignore-existing orphafold/orphafold-artifacts
+        mc alias set helix http://minio:9000 helix helix-development-secret
+        && mc mb --ignore-existing helix/helix-artifacts
 
   api:
     build:
       context: .
       dockerfile: api/Dockerfile
-    environment: *orphafold-environment
+    environment: *helix-environment
     ports:
       - "8000:8000"
     depends_on:
@@ -109,8 +109,8 @@ services:
     build:
       context: .
       dockerfile: api/Dockerfile
-    command: ["python", "-m", "orphafold.worker"]
-    environment: *orphafold-environment
+    command: ["python", "-m", "helix.worker"]
+    environment: *helix-environment
     depends_on:
       # the API creates the tables first
       api:

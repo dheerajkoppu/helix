@@ -7,7 +7,7 @@ import { API_BASE_URL, apiFetch } from "@/lib/api/client";
 import { useShell } from "@/lib/state/shell";
 import type { StructureOrigin } from "@/lib/structure-origin";
 
-/** Mirrors api/orphafold/schemas/jobs.py and providers/base.py. */
+/** Mirrors api/helix/schemas/jobs.py and providers/base.py. */
 export type JobStatus =
   "queued" | "running" | "succeeded" | "failed" | "cancelled";
 export type StageStatus = string;

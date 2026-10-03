@@ -153,7 +153,7 @@ export function EvidenceDetail({
         </dl>
       ) : (
         <p className="border-t border-border-subtle px-3 py-2 text-muted-foreground">
-          No external source record. This statement was authored in OrphaFold
+          No external source record. This statement was authored in Helix
           from the evidence it cites.
         </p>
       )}

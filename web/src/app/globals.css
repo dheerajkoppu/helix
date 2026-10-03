@@ -38,7 +38,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* OrphaFold neutral extensions */
+  /* Helix neutral extensions */
   --color-sunken: var(--surface-sunken);
   --color-active: var(--surface-active);
   --color-subtle-foreground: var(--fg-subtle);
@@ -82,7 +82,7 @@
   /* Structure origin */
   --color-origin-experimental: var(--origin-experimental);
   --color-origin-predicted-external: var(--origin-predicted-external);
-  --color-origin-predicted-orphafold: var(--origin-predicted-orphafold);
+  --color-origin-predicted-internal: var(--origin-predicted-internal);
 
   --text-2xs: 0.6875rem;
   --text-2xs--line-height: 1rem;
@@ -182,7 +182,7 @@
   --sci-clin-benign: #5e6f9e;
   --sci-clin-other: #bababa;
 
-  /* OrphaFold-defined, stepped per mode. */
+  /* Helix-defined, stepped per mode. */
   --sci-reference: oklch(0.74 0.008 250);
   --sci-variant: oklch(0.46 0.19 345);
   --sci-chain-1: #2a78d6;
@@ -273,7 +273,7 @@
 
   --origin-experimental: var(--ev-experimental);
   --origin-predicted-external: var(--ev-prediction);
-  --origin-predicted-orphafold: var(--ev-prediction);
+  --origin-predicted-internal: var(--ev-prediction);
 }
 
 @layer base {

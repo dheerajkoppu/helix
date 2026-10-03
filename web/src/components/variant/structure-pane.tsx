@@ -67,7 +67,7 @@ interface StructureChoice {
   note: string | null;
 }
 
-/** The recommended structure, the AlphaFold DB model, OrphaFold models and the best-ranked experimental entries. */
+/** The recommended structure, the AlphaFold DB model, Helix models and the best-ranked experimental entries. */
 function structureChoices(
   ledger: StructureLedger,
   position: number | null,
@@ -85,7 +85,7 @@ function structureChoices(
     "recommended",
   );
   add(canonicalModel(ledger), null);
-  ledger.predicted_orphafold.slice(0, 3).forEach((entry) => add(entry, null));
+  ledger.predicted_internal.slice(0, 3).forEach((entry) => add(entry, null));
   const ranked = [...ledger.experimental].sort(
     (left, right) => (left.sifts_rank ?? 1e9) - (right.sifts_rank ?? 1e9),
   );

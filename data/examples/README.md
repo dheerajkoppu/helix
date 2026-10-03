@@ -2,7 +2,7 @@
 
 Real outputs of model runs, kept so the `cached_examples` provider can return a legitimate
 prediction on a machine that cannot reach the model itself. The API reads this directory through
-`ORPHAFOLD_EXAMPLES_DIR` (default `data/examples`).
+`HELIX_EXAMPLES_DIR` (default `data/examples`).
 
 Every file here is the unmodified artifact of a real `variant_comparison` job and sits beside the
 run manifest of that job (model, version, inputs, parameters, stage timings, file hashes). A result

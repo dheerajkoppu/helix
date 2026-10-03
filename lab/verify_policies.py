@@ -21,11 +21,11 @@ from typing import Any
 LAB = Path(__file__).resolve().parent
 sys.path.insert(0, str(LAB / "tools"))
 
-from orphafold_lab_tools import record, sources  # noqa: E402
+from helix_lab_tools import record, sources  # noqa: E402
 from run_lab import child_environment, resolve_subject, write_json  # noqa: E402
 
 OUTPUT = LAB / "policy_checks" / "latest"
-RUNNER_BUNDLE = LAB / "agents" / "orphafold_lab" / "agents" / "runner"
+RUNNER_BUNDLE = LAB / "agents" / "helix_lab" / "agents" / "runner"
 PROBE_PROMPT = (
     "You are a policy probe. Call exactly the tools the message lists, once each, in the order given, with the "
     "arguments given. Continue with the next call when a call is denied or fails. Never choose a different tool. "

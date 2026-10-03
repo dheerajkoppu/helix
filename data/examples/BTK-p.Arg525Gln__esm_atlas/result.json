@@ -136,7 +136,7 @@
     },
     "reference_model": {
       "id": "of:job_01M41NZW2NMC0VTKBZ7BG31B5H-reference",
-      "origin": "predicted_orphafold",
+      "origin": "predicted_internal",
       "title": "Reference model · ESMFold v1 prediction of Q06187 residues 392-659",
       "provider": "esm_atlas",
       "provider_name": "ESM Atlas (ESMFold v1)",
@@ -222,11 +222,11 @@
         "stale": false
       },
       "tag": "OF",
-      "origin_label": "OrphaFold-generated prediction"
+      "origin_label": "Helix-generated prediction"
     },
     "variant_model": {
       "id": "of:job_01M41NZW2NMC0VTKBZ7BG31B5H-variant",
-      "origin": "predicted_orphafold",
+      "origin": "predicted_internal",
       "title": "Variant p.Arg525Gln model · ESMFold v1 prediction of Q06187 residues 392-659 with BTK-p.Arg525Gln",
       "provider": "esm_atlas",
       "provider_name": "ESM Atlas (ESMFold v1)",
@@ -312,7 +312,7 @@
         "stale": false
       },
       "tag": "OF",
-      "origin_label": "OrphaFold-generated prediction"
+      "origin_label": "Helix-generated prediction"
     },
     "difference_url": "/api/v1/jobs/job_01M41NZW2NMC0VTKBZ7BG31B5H/artifacts/difference.json",
     "summary": {
@@ -383,7 +383,7 @@
       {
         "id": "alphafold_db_statement",
         "text": "AlphaFold has not been validated for predicting the effect of mutations. In particular, AlphaFold is not expected to produce an unfolded protein structure given a sequence containing a destabilising point mutation.",
-        "quoted_from": "AlphaFold DB FAQ. OrphaFold applies the same caveat to every structure predictor.",
+        "quoted_from": "AlphaFold DB FAQ. Helix applies the same caveat to every structure predictor.",
         "citations": [
           {
             "text": "AlphaFold Protein Structure Database, FAQ",
@@ -438,7 +438,7 @@
       "size_bytes": 149451,
       "sha256": "1bae340193f6793a7cf5de87c8f521606067285e32954c1873ef88be6a0b166b",
       "url": "/api/v1/jobs/job_01M41NZW2NMC0VTKBZ7BG31B5H/artifacts/reference.cif",
-      "structure_origin": "predicted_orphafold",
+      "structure_origin": "predicted_internal",
       "sample_index": 0,
       "created_at": "2026-10-03T20:08:45.487683Z"
     },
@@ -474,7 +474,7 @@
       "size_bytes": 149337,
       "sha256": "ce35bcc3b460eb7111411377fe2a0156741831fd2826f9f604700d4486b64ece",
       "url": "/api/v1/jobs/job_01M41NZW2NMC0VTKBZ7BG31B5H/artifacts/variant.cif",
-      "structure_origin": "predicted_orphafold",
+      "structure_origin": "predicted_internal",
       "sample_index": 1,
       "created_at": "2026-10-03T20:08:45.496815Z"
     },
@@ -520,7 +520,7 @@
   "actor_id": "act_01M41NWP2056MJ78EZYTPS3Y69",
   "project_id": null,
   "parent_job_id": null,
-  "manifest_sha256": "93a5a9ed51102602af12736fee2eed931bcf46685f1f3723c1fda57fafc82122",
+  "manifest_sha256": "ba500fc96ded33304e9f1a33b157814d099410ced4051fb8ce526885dc8af9c6",
   "manifest_url": "/api/v1/jobs/job_01M41NZW2NMC0VTKBZ7BG31B5H/manifest",
   "events_url": "/api/v1/jobs/job_01M41NZW2NMC0VTKBZ7BG31B5H/events",
   "created_at": "2026-10-03T20:06:21.525276Z",

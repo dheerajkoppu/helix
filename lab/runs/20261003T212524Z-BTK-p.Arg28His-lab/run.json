@@ -33,7 +33,7 @@
       "runner": "claude-sonnet-5",
       "analysis": "claude-sonnet-5"
     },
-    "bundle": "lab/agents/orphafold_lab",
+    "bundle": "lab/agents/helix_lab",
     "sub_agent_sessions": 0,
     "loop_ended": null
   },

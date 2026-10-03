@@ -1,6 +1,6 @@
 # Reproducibility and manifests
 
-A conclusion in OrphaFold should be traceable in two directions: from a displayed value back to the
+A conclusion in Helix should be traceable in two directions: from a displayed value back to the
 source record it came from, and from a computed result back to the exact inputs, model and
 parameters that produced it. This page describes the records that make that possible.
 
@@ -60,7 +60,7 @@ artifact `manifest.json` of the job and is offered for download on the job page.
 | `parameters`               | Resolved parameters: the seed, the provider's options, the construct, the analysis settings       |
 | `msa`                      | Whether an alignment was used and where it came from                                              |
 | `source_datasets`          | The dataset releases the run read                                                                 |
-| `software`                 | OrphaFold version and git commit, package versions, hardware and container when known             |
+| `software`                 | Helix version and git commit, package versions, hardware and container when known             |
 | `outputs`                  | Every artifact with its SHA-256, and the confidence values of each sample                         |
 | `execution`                | Worker, attempts, command line and exit code when there is one, measured stage timings, any error |
 | `integrity`                | `canonicalization: RFC8785` and `manifest_sha256`                                                 |
@@ -72,12 +72,12 @@ the manifest of the cached reference-versus-variant comparison for BTK p.Arg28Hi
 
 The manifest states what happened, including what was not controlled.
 
-- `model.weights` is empty for retrieval and for a remote service, because OrphaFold cannot see the
+- `model.weights` is empty for retrieval and for a remote service, because Helix cannot see the
   weights a third party ran.
 - `parameters.seed` is required only for a handler declared stochastic (`requires_seed=True`).
   ESMFold through ESM Atlas is deterministic, so its seed is `null` and the manifest says
   `deterministic: true`.
-- `software.orphafold.git_commit` is `null` when the installation is not a git checkout.
+- `software.helix.git_commit` is `null` when the installation is not a git checkout.
 - A failed run has a manifest too, with the error and the stages that completed.
 
 ### Verifying a manifest
@@ -87,7 +87,7 @@ without that field.
 
 ```python
 import json
-from orphafold.jobs.manifest import verify_manifest
+from helix.jobs.manifest import verify_manifest
 
 manifest = json.load(open("data/examples/BTK-p.Arg28His__esm_atlas/manifest.json"))
 assert verify_manifest(manifest)
@@ -159,7 +159,11 @@ running code.
 
 - There are no database migrations. Tables are created at startup, and a schema change during
   development means recreating the database.
-- No real Boltz-2 run has been made through OrphaFold, so the weights and alignment fields of the
+- No real Boltz-2 run has been made through Helix, so the weights and alignment fields of the
   manifest have not been exercised with real values.
 - Three of the planned comparison examples (ADA p.Arg211His, IL2RG p.Arg226Cys, RAG1 p.Arg404Gln)
   are not cached; `data/examples/index.json` lists the ones that are.
+
+## Renamed records
+
+The project took the name Helix on 2026-10-03, after the stored example runs and the lab runs in this repository were recorded. The name was replaced mechanically in those records, and the checksums of the three example runs in `data/examples/` were recomputed with `helix.jobs.manifest.manifest_sha256`. No sequence, coordinate, score or other scientific value was changed. The records as first written are in the git history, in the commit before the rename.

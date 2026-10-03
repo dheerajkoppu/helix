@@ -388,6 +388,6 @@
     "A crystal contact with a soluble analogue is not a measurement of binding by the variant protein.",
     "Absence of a ligand-bound structure is not evidence of absence of binding."
   ],
-  "reproducible_command": "ORPHAFOLD_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m orphafold_lab_tools.experiments ligand_contact --accession O00329 --position 1021 --alternate-residue K --reference-residue E --gene PIK3CD --variant-id PIK3CD-p.Glu1021Lys",
+  "reproducible_command": "HELIX_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m helix_lab_tools.experiments ligand_contact --accession O00329 --position 1021 --alternate-residue K --reference-residue E --gene PIK3CD --variant-id PIK3CD-p.Glu1021Lys",
   "elapsed_seconds": 0.0
 }

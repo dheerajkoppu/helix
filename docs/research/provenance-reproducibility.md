@@ -2,9 +2,9 @@
 
 Research date: 2026-10-03. Markers: **(V)** checked today against the live API, file or page; **(S)** secondary source only. Section 8 lists everything unverified. This is engineering research, and the licensing parts are a technical reading of published terms that counsel should confirm before launch.
 
-## 0. Recommendation for OrphaFold
+## 0. Recommendation for Helix
 
-1. **One `Evidence` record type, six classes.** Every fact shown in the UI is an `Evidence` row with `class`, `source` (database, record ID, release, licence, retrieval hash) and an ECO code. An LLM can draft `orphafold_hypothesis` text and nothing else, and a hypothesis must list the evidence IDs it rests on.
+1. **One `Evidence` record type, six classes.** Every fact shown in the UI is an `Evidence` row with `class`, `source` (database, record ID, release, licence, retrieval hash) and an ECO code. An LLM can draft `helix_hypothesis` text and nothing else, and a hypothesis must list the evidence IDs it rests on.
 2. **Keep source-native strength.** Store ClinVar review status, ClinGen classification, UniProt ECO tag, Open Targets score, pLDDT and so on in `strength.scheme` + `strength.value`. Never merge them into one cross-source score.
 3. **Variant key = GA4GH VRS 2.x Allele ID** (`ga4gh:VA.<32 chars>`), with HGVS on the MANE Select transcript as the display string and ClinVar VCV, ClinGen CAid and SPDI as cross-references. Protein substitutions can be digested locally with the standard library (section 3.3, reproduced today).
 4. **Model provenance internally with W3C PROV terms** (`generated_by`, `derived_from`, `used`) and **export as RO-Crate 1.3 + Process Run Crate 0.6**. Write `ro-crate-metadata.json` directly; validate in CI with `rocrate-validator validate -p ro-crate-1.3`.
@@ -13,9 +13,9 @@ Research date: 2026-10-03. Markers: **(V)** checked today against the live API, 
 7. **Store the MSA as an artifact.** The public ColabFold server is a moving target, so a run is only replayable from its stored `.a3m`.
 8. **Projects are mutable pointers; snapshots are immutable and content-addressed; forks point at a parent snapshot.** Share URLs: `/s/{snapshot_id}` never changes, `/p/{project_id}` follows the head.
 9. **Anonymous-first actors.** An `actor_id` is created on first write, owns projects, and survives the upgrade to an account. ORCID is the scholarly identity (OIDC issuer `https://orcid.org`, scope `openid`).
-10. **Licence: Apache-2.0 for code, CC BY 4.0 for documentation, CC0-1.0 for OrphaFold-original data tables, upstream licence per seeded source.** Published user projects default to CC BY 4.0.
+10. **Licence: Apache-2.0 for code, CC BY 4.0 for documentation, CC0-1.0 for Helix-original data tables, upstream licence per seeded source.** Published user projects default to CC BY 4.0.
 11. **Seed in the repository:** ClinVar, UniProt, AlphaFold DB, AlphaMissense, RCSB PDB, Mondo, Orphadata Science, Open Targets, Ensembl, STRING, Reactome, ClinGen, unmodified HPO. **Isolate:** ChEMBL (CC BY-SA 3.0). **Live only:** PubChem annotations, Europe PMC abstracts. **Never store:** OMIM content. **Cite, do not transform:** IUIS 2024 classification (CC BY-ND 4.0).
-12. **Three structure origins as a closed enum** on every structure artifact: `experimental`, `predicted_external`, `orphafold_prediction`.
+12. **Three structure origins as a closed enum** on every structure artifact: `experimental`, `predicted_external`, `internal_prediction`.
 
 ## 1. Current state (all V unless marked)
 
@@ -73,7 +73,7 @@ Research date: 2026-10-03. Markers: **(V)** checked today against the live API, 
 
 Somatic clinical impact uses `criteria provided, multiple submitters` for two stars, with no consensus requirement. Practice-guideline and expert-panel status require ClinGen approval (S). Store the string verbatim and derive stars from this table.
 
-### 2.3 ECO codes OrphaFold uses (labels V via OLS4 `GET /ols4/api/ontologies/eco/terms?obo_id=ECO:0000269`)
+### 2.3 ECO codes Helix uses (labels V via OLS4 `GET /ols4/api/ontologies/eco/terms?obo_id=ECO:0000269`)
 
 | Code                                                | Label                                                                                                                                                                                             | Use                                                                                                    |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -82,15 +82,15 @@ Somatic clinical impact uses `criteria provided, multiple submitters` for two st
 | ECO:0000250 / 0000255 / 0000305 / 0000303 / 0000304 | sequence similarity / match to sequence model / curator inference / author statement without traceable support / author statement supported by traceable reference (all used in manual assertion) | UniProt curated non-experimental tags                                                                  |
 | ECO:0007744 / 0007829                               | combinatorial computational and experimental evidence used in manual / automatic assertion                                                                                                        | UniProt, often with `source: PDB`                                                                      |
 | ECO:0000256 / 0000313                               | match to sequence model / imported information used in automatic assertion                                                                                                                        | UniProt automatic annotation                                                                           |
-| ECO:0008006 (parent ECO:0008001)                    | deep learning neural network method evidence used in automatic assertion                                                                                                                          | UniProt AI-derived annotation; OrphaFold default for AlphaFold DB, AlphaMissense, Boltz-2 output       |
+| ECO:0008006 (parent ECO:0008001)                    | deep learning neural network method evidence used in automatic assertion                                                                                                                          | UniProt AI-derived annotation; Helix default for AlphaFold DB, AlphaMissense, Boltz-2 output       |
 | ECO:0007669 (parent ECO:0007672)                    | computational evidence used in automatic assertion                                                                                                                                                | non-neural computation: VEP consequence, pocket geometry, docking                                      |
 | ECO:0005031; ECO:0001823 / 0006181 / 0006163        | structure determination evidence; x-ray crystallography / cryogenic electron microscopy / nuclear magnetic resonance spectroscopy evidence                                                        | RCSB entries, chosen from `exptl[].method`                                                             |
 | ECO:0000006                                         | experimental evidence                                                                                                                                                                             | generic experimental (assay measurements)                                                              |
 | ECO:0000180                                         | clinical study evidence                                                                                                                                                                           | clinical trial sources                                                                                 |
-| ECO:0000322                                         | imported manually asserted information used in automatic assertion                                                                                                                                | OrphaFold importing a curated assertion that carries no ECO tag (ClinVar, ClinGen, Orphanet, Reactome) |
-| ECO:0000323                                         | imported automatically asserted information used in automatic assertion                                                                                                                           | OrphaFold importing an automatic assertion with no ECO tag                                             |
+| ECO:0000322                                         | imported manually asserted information used in automatic assertion                                                                                                                                | Helix importing a curated assertion that carries no ECO tag (ClinVar, ClinGen, Orphanet, Reactome) |
+| ECO:0000323                                         | imported automatically asserted information used in automatic assertion                                                                                                                           | Helix importing an automatic assertion with no ECO tag                                             |
 
-ECO has no term for a hypothesis (label search returned none), so `orphafold_hypothesis` records carry `eco: null`. Of the sources checked today, only UniProt returns ECO codes in its API payload: record those with `assigned_by: "source"` and every OrphaFold default with `assigned_by: "orphafold_mapping"`.
+ECO has no term for a hypothesis (label search returned none), so `helix_hypothesis` records carry `eco: null`. Of the sources checked today, only UniProt returns ECO codes in its API payload: record those with `assigned_by: "source"` and every Helix default with `assigned_by: "helix_mapping"`.
 
 ### 2.4 Deliverable 1: source type -> evidence class
 
@@ -110,10 +110,10 @@ Class answers "what kind of thing can the reader go and check". The mapping is a
 | UniProt annotation with any other ECO code; Reactome; Mondo / HPO / ORDO terms and cross-references; Ensembl gene, transcript, MANE; ChEMBL mechanism and indication; STRING `dscore`; Open Targets `uniprot_variants`, `uniprot_literature` | `curated_database`                                                                            | source tag, else ECO:0000322                                                                                                   | `uniprot_eco` or none                        |
 | AlphaFold DB model; AlphaMissense score                                                                                                                                                                                                      | `computational_prediction` (`structure_origin: predicted_external` for structures)            | ECO:0008006                                                                                                                    | `plddt`; `alphamissense`                     |
 | Ensembl VEP consequence; STRING `nscore`, `fscore`, `pscore`, `ascore`                                                                                                                                                                       | `computational_prediction`                                                                    | ECO:0007669                                                                                                                    | `vep_impact`; `string_score`                 |
-| OrphaFold run output: Boltz-2 structure, affinity, pocket, docking                                                                                                                                                                           | `computational_prediction` (`structure_origin: orphafold_prediction`, `generated_by: job_id`) | ECO:0008006 or ECO:0007669                                                                                                     | `boltz_confidence`                           |
-| Statement authored in OrphaFold by a person or an assistant                                                                                                                                                                                  | `orphafold_hypothesis`                                                                        | `null`                                                                                                                         | `null`; `derived_from` has at least one item |
+| Helix run output: Boltz-2 structure, affinity, pocket, docking                                                                                                                                                                           | `computational_prediction` (`structure_origin: internal_prediction`, `generated_by: job_id`) | ECO:0008006 or ECO:0007669                                                                                                     | `boltz_confidence`                           |
+| Statement authored in Helix by a person or an assistant                                                                                                                                                                                  | `helix_hypothesis`                                                                        | `null`                                                                                                                         | `null`; `derived_from` has at least one item |
 
-Other Open Targets `datasourceId` values need an explicit row before they are displayed. For the four-label claim view in `docs/PRODUCT_BRIEF.md`: `experimental_evidence` -> Known experimentally; `clinical_database`, `curated_database`, `published_literature` -> Database annotation (literature shown with its citation); `computational_prediction` -> Computational prediction; `orphafold_hypothesis` -> OrphaFold hypothesis.
+Other Open Targets `datasourceId` values need an explicit row before they are displayed. For the four-label claim view in `docs/PRODUCT_BRIEF.md`: `experimental_evidence` -> Known experimentally; `clinical_database`, `curated_database`, `published_literature` -> Database annotation (literature shown with its citation); `computational_prediction` -> Computational prediction; `helix_hypothesis` -> Helix hypothesis.
 
 Ranks for sorting inside one scheme (never compared across schemes):
 
@@ -133,7 +133,7 @@ Ranks for sorting inside one scheme (never compared across schemes):
   "id": "ev_01K6N4A1B2C3D4E5F6G7H8J9KM", "class": "clinical_database",
   "subject": {"type": "variant", "id": "ga4gh:VA.eQUVUFOhITJjK9uITNNPlkc9IMvyiAe_", "label": "NM_000061.3(BTK):c.1574_1575dup (p.Asn526fs)"}, "predicate": "has_germline_classification",
   "object": {"type": "classification", "value": "Pathogenic", "context": [{"type": "condition", "label": "BTK-related disorder"}]}, "direction": "supports",
-  "eco": {"id": "ECO:0000322", "assigned_by": "orphafold_mapping"}, "strength": {"scheme": "clinvar_review_status", "value": "criteria provided, single submitter", "rank": 1, "max_rank": 4},
+  "eco": {"id": "ECO:0000322", "assigned_by": "helix_mapping"}, "strength": {"scheme": "clinvar_review_status", "value": "criteria provided, single submitter", "rank": 1, "max_rank": 4},
   "source": {
     "database": "clinvar", "record_id": "clinvar.variation:4952019", "record_version": "VCV004952019.1", "release": "Build260929-0200.1", "license": "LicenseRef-NCBI-Unrestricted",
     "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/4952019/", "retrieved_at": "2026-10-03T16:40:12Z",
@@ -145,15 +145,15 @@ Ranks for sorting inside one scheme (never compared across schemes):
 
 <!-- prettier-ignore-end -->
 
-Hypothesis variant of the same shape: `"class": "orphafold_hypothesis"`, `"eco": null`, `"strength": null`, `"source": null`, `"derived_from": ["ev_...", "job_..."]`, `"created_by": {"actor_id": "act_...", "kind": "anonymous"}`, `"authoring": {"method": "human" | "llm_assisted", "model": "<model id or null>"}`.
+Hypothesis variant of the same shape: `"class": "helix_hypothesis"`, `"eco": null`, `"strength": null`, `"source": null`, `"derived_from": ["ev_...", "job_..."]`, `"created_by": {"actor_id": "act_...", "kind": "anonymous"}`, `"authoring": {"method": "human" | "llm_assisted", "model": "<model id or null>"}`.
 
 | Field               | Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `class`             | one of `experimental_evidence`, `clinical_database`, `published_literature`, `curated_database`, `computational_prediction`, `orphafold_hypothesis`                                                                                                                                                                                                                                                                                                                                               |
+| `class`             | one of `experimental_evidence`, `clinical_database`, `published_literature`, `curated_database`, `computational_prediction`, `helix_hypothesis`                                                                                                                                                                                                                                                                                                                                               |
 | `subject`, `object` | `{type, id, label}` with Bioregistry-style CURIEs (prefixes V at bioregistry.io): `uniprot:Q06187`, `hgnc:1133`, `ensembl:ENSG00000010671`, `MONDO:0010421`, `HP:0000002`, `ORPHA:47`, `clinvar.variation:4952019`, `clingen.allele:CA2695235398`, `pdb:1BTK`, `chembl.target:CHEMBL5251`, `pubchem.compound:2244`, `pubmed:9218782`, `doi:10.70962/jhi.20250003`, `reactome:R-HSA-...`. `ga4gh:` and AlphaFold DB have no Bioregistry entry: use `ga4gh:VA...` as issued and `afdb:AF-Q06187-F1` |
 | `direction`         | `supports`, `disputes`, `neutral` (same three values as GA4GH VA-Spec `directionOfEvidenceProvided`, S)                                                                                                                                                                                                                                                                                                                                                                                           |
 | `source`            | required for the first five classes; `null` only for hypotheses. `response_sha256` proves what was fetched                                                                                                                                                                                                                                                                                                                                                                                        |
-| `generated_by`      | `job_id` of the run manifest for OrphaFold computations (`prov:wasGeneratedBy`)                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `generated_by`      | `job_id` of the run manifest for Helix computations (`prov:wasGeneratedBy`)                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `derived_from`      | evidence or job IDs (`prov:wasDerivedFrom`); required and non-empty for hypotheses                                                                                                                                                                                                                                                                                                                                                                                                                |
 | `authoring`         | hypotheses only. LLM-assisted text is labelled and can never populate `source`, `object.value` of other classes, or any identifier                                                                                                                                                                                                                                                                                                                                                                |
 
@@ -230,7 +230,7 @@ Substitutions only. Insertions, deletions and duplications need VRS normalisatio
 
 ## 4. Provenance: W3C PROV and RO-Crate
 
-| PROV term                                                | OrphaFold object                                                                       | Stored as                                                        |
+| PROV term                                                | Helix object                                                                       | Stored as                                                        |
 | -------------------------------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | `prov:Entity`                                            | evidence record, fetched source response, input sequence, artifact, manifest, snapshot | row or blob with `sha256`                                        |
 | `prov:Activity`                                          | computational run, source retrieval, snapshot creation, fork                           | `job`, `retrieval`, `snapshot` rows with start and end time      |
@@ -244,8 +244,8 @@ Substitutions only. Insertions, deletions and duplications need VRS normalisatio
 
 - Use PROV names in column and field naming. A full PROV-O/RDF store adds nothing the tables above lack; RO-Crate is the interchange form.
 - RO-Crate 1.3 mapping: run = `CreateAction` (`instrument` -> `SoftwareApplication`, `object` -> inputs, `result` -> outputs, `agent`, `startTime`, `endTime`, `actionStatus`); files = `File` with `contentSize`, `sha256`, `encodingFormat`; fork = root `isBasedOn`; licence = root `license`.
-- 1.3 changed four Bioschemas IRIs (`ComputationalWorkflow`, `FormalParameter`, `input`, `output` now under `https://bioschemas.org/terms/`). OrphaFold's crates use none of them. The validator's `ro-crate-1.3` profile inherits the 1.2 checks, and the test crate passed all 66 REQUIRED checks.
-- Process Run Crate is the right profile level: OrphaFold executes tools from an application, with no workflow language. Move to Provenance Run Crate only if a workflow engine is introduced.
+- 1.3 changed four Bioschemas IRIs (`ComputationalWorkflow`, `FormalParameter`, `input`, `output` now under `https://bioschemas.org/terms/`). Helix's crates use none of them. The validator's `ro-crate-1.3` profile inherits the 1.2 checks, and the test crate passed all 66 REQUIRED checks.
+- Process Run Crate is the right profile level: Helix executes tools from an application, with no workflow language. Move to Provenance Run Crate only if a workflow engine is introduced.
 - Validator findings from today's test crate (section 6.4): root `conformsTo` targets must be typed `["CreativeWork", "Profile"]`; a `Dataset`-typed contextual entity is treated as a data entity and must be in `hasPart`, so type the parent-snapshot reference `CreativeWork`; single values are preferred over one-element arrays.
 
 ## 5. Deliverable 2: computational run manifest
@@ -263,7 +263,7 @@ Substitutions only. Insertions, deletions and duplications need VRS normalisatio
 | `parameters` (all resolved values, `seed` required)                                     | sampling is stochastic                   | merge user input over adapter defaults, then record the merged object                                 |
 | `msa.{mode, server_url, databases[], search_tool, artifact_ids}`                        | MSA content drives accuracy              | store the `.a3m`; record database names and versions                                                  |
 | `source_datasets[]`                                                                     | versions of every database consulted     | release headers and version endpoints from section 1                                                  |
-| `software.{orphafold.git_commit, container.digest, python, cuda, hardware, packages[]}` | environment                              | image digest from the runtime; `pip freeze` subset                                                    |
+| `software.{helix.git_commit, container.digest, python, cuda, hardware, packages[]}` | environment                              | image digest from the runtime; `pip freeze` subset                                                    |
 | `outputs.confidence.samples[].metrics`                                                  | model-reported confidence, verbatim      | parse the model's confidence file                                                                     |
 | `outputs.artifacts[].{path, media_type, size_bytes, sha256, structure_origin}`          | integrity and origin labelling           | hash on upload to object storage                                                                      |
 | `integrity.manifest_sha256`                                                             | tamper evidence, share-URL stability     | section 5.5                                                                                           |
@@ -295,7 +295,7 @@ Substitutions only. Insertions, deletions and duplications need VRS normalisatio
 
 ```json
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "urn:orphafold:schema:run-manifest:1.0.0", "title": "OrphaFold computational run manifest", "type": "object", "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "urn:helix:schema:run-manifest:1.0.0", "title": "Helix computational run manifest", "type": "object", "additionalProperties": false,
   "required": ["manifest_version", "job_id", "created_at", "kind", "status", "research_use_only", "actor", "inputs", "model", "parameters", "source_datasets", "software", "outputs", "integrity"],
   "properties": {
     "manifest_version": {"const": "1.0.0"}, "job_id": {"type": "string", "pattern": "^job_[0-9A-HJKMNP-TV-Z]{26}$", "description": "ULID with job_ prefix"}, "created_at": {"$ref": "#/$defs/timestamp"},
@@ -327,7 +327,7 @@ Substitutions only. Insertions, deletions and duplications need VRS normalisatio
           "items": {
             "type": "object", "additionalProperties": false, "required": ["variant_id", "hgvs"],
             "properties": {
-              "variant_id": {"type": "string", "description": "OrphaFold-local id referenced by applied_variant_ids"}, "vrs_id": {"type": "string", "pattern": "^ga4gh:VA\\.[A-Za-z0-9_-]{32}$"}, "vrs_version": {"type": "string"},
+              "variant_id": {"type": "string", "description": "Helix-local id referenced by applied_variant_ids"}, "vrs_id": {"type": "string", "pattern": "^ga4gh:VA\\.[A-Za-z0-9_-]{32}$"}, "vrs_version": {"type": "string"},
               "hgvs": {"type": "object", "additionalProperties": false, "minProperties": 1, "properties": {"g": {"type": "string"}, "c": {"type": "string"}, "p": {"type": "string"}}}, "transcript": {"type": "string"},
               "transcript_status": {"enum": ["MANE_Select", "MANE_Plus_Clinical", "other"]},
               "protein_change": {"type": "object", "additionalProperties": false, "required": ["position", "ref", "alt"], "properties": {"position": {"type": "integer", "minimum": 1}, "ref": {"type": "string"}, "alt": {"type": "string"}}},
@@ -379,9 +379,9 @@ Substitutions only. Insertions, deletions and duplications need VRS normalisatio
     },
     "source_datasets": {"type": "array", "items": {"$ref": "#/$defs/dataset_version"}},
     "software": {
-      "type": "object", "additionalProperties": false, "required": ["orphafold", "packages"],
+      "type": "object", "additionalProperties": false, "required": ["helix", "packages"],
       "properties": {
-        "orphafold": {"type": "object", "additionalProperties": false, "required": ["version", "git_commit"], "properties": {"version": {"type": "string"}, "git_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}}},
+        "helix": {"type": "object", "additionalProperties": false, "required": ["version", "git_commit"], "properties": {"version": {"type": "string"}, "git_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}}},
         "container": {"type": "object", "additionalProperties": false, "properties": {"image": {"type": "string"}, "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}}}, "python": {"type": "string"},
         "os": {"type": "string"}, "cuda": {"type": "string"},
         "hardware": {"type": "object", "additionalProperties": false, "properties": {"accelerator": {"enum": ["gpu", "cpu"]}, "gpu_model": {"type": "string"}, "gpu_count": {"type": "integer", "minimum": 0}}},
@@ -428,7 +428,7 @@ Substitutions only. Insertions, deletions and duplications need VRS normalisatio
   },
   "$defs": {
     "timestamp": {"type": "string", "format": "date-time"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "curie": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.]*:[^\\s]+$"},
-    "structure_origin": {"enum": ["experimental", "predicted_external", "orphafold_prediction"]},
+    "structure_origin": {"enum": ["experimental", "predicted_external", "internal_prediction"]},
     "record_ref": {
       "type": "object", "additionalProperties": false, "required": ["database", "record_id"],
       "properties": {"database": {"type": "string"}, "record_id": {"type": "string"}, "record_version": {"type": "string"}, "release": {"type": "string"}, "url": {"type": "string", "format": "uri"}}
@@ -482,15 +482,15 @@ Validates against 5.3 with the full sequence. Input identifiers, digests, model 
   },
   "source_datasets": [{"name": "UniProtKB", "version": "2026_03", "retrieved_at": "2026-10-03T16:49:58Z", "license": "CC-BY-4.0", "url": "https://rest.uniprot.org"}],
   "software": {
-    "orphafold": {"version": "0.1.0", "git_commit": "0000000000000000000000000000000000000000"},
-    "container": {"image": "ghcr.io/orphafold/worker-boltz", "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"}, "python": "3.12.7", "os": "linux", "cuda": "12.4",
+    "helix": {"version": "0.1.0", "git_commit": "0000000000000000000000000000000000000000"},
+    "container": {"image": "ghcr.io/helix/worker-boltz", "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"}, "python": "3.12.7", "os": "linux", "cuda": "12.4",
     "hardware": {"accelerator": "gpu", "gpu_model": "NVIDIA A10G", "gpu_count": 1}, "packages": [{"name": "boltz", "version": "2.2.1"}, {"name": "torch", "version": "2.5.1"}]
   },
   "outputs": {
     "artifacts": [
       {
         "artifact_id": "art_model_0", "role": "structure", "path": "predictions/input/input_model_0.cif", "media_type": "chemical/x-mmcif", "size_bytes": 512345,
-        "sha256": "0000000000000000000000000000000000000000000000000000000000000000", "structure_origin": "orphafold_prediction", "sample_index": 0
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000", "structure_origin": "internal_prediction", "sample_index": 0
       },
       {
         "artifact_id": "art_conf_0", "role": "confidence_summary", "path": "predictions/input/confidence_input_model_0.json", "media_type": "application/json", "size_bytes": 412,
@@ -529,7 +529,7 @@ def manifest_sha256(manifest: dict) -> str:
 - Write the manifest once, at terminal status. Corrections create a new job with `execution.parent_job_id`.
 - Replay contract: manifest + stored MSA artifact + weights matched by SHA-256 + container digest. A rerun through the MSA server is a new run, never a replay.
 - Expose `GET /api/runs/{job_id}/manifest.json` with `ETag: "<manifest_sha256>"` and long-lived caching.
-- For predicted structures that leave OrphaFold as mmCIF, the `modelcif` package (1.8, MIT) writes ModelCIF metadata; the manifest remains the authoritative record.
+- For predicted structures that leave Helix as mmCIF, the `modelcif` package (1.8, MIT) writes ModelCIF metadata; the manifest remains the authoritative record.
 
 ## 6. Deliverable 3: project export and fork lineage
 
@@ -561,14 +561,14 @@ def manifest_sha256(manifest: dict) -> str:
 | `/r/{job_id}` and `/r/{job_id}/manifest.json` | run view and manifest               | immutable after terminal status |
 | `/e/{evidence_id}`                            | one evidence record with provenance | immutable                       |
 
-### 6.3 Export layout (`<slug>-<snapshot_id>.orphafold.zip`, an RO-Crate 1.3 directory)
+### 6.3 Export layout (`<slug>-<snapshot_id>.helix.zip`, an RO-Crate 1.3 directory)
 
 ```
 ro-crate-metadata.json          RO-Crate 1.3 + Process Run Crate 0.6 (section 6.4)
-project.json                    OrphaFold project document (section 6.5)
+project.json                    Helix project document (section 6.5)
 ATTRIBUTION.md                  generated from the distinct source.database + source.license values in evidence.jsonl
 evidence/evidence.jsonl         one Evidence record per line (section 2.5)
-hypotheses/hypotheses.jsonl     Evidence records with class orphafold_hypothesis
+hypotheses/hypotheses.jsonl     Evidence records with class helix_hypothesis
 runs/<job_id>/manifest.json     run manifest (section 5.3)
 runs/<job_id>/artifacts/...     structures, confidence files, MSA, model input
 sources/<database>/<sha256>.json  raw upstream responses, only where the licence permits redistribution (section 7.2)
@@ -587,24 +587,24 @@ Import verifies every `sha256`, re-validates manifests against the schema, and r
   "@graph": [
     {"@id": "ro-crate-metadata.json", "@type": "CreativeWork", "conformsTo": {"@id": "https://w3id.org/ro/crate/1.3"}, "about": {"@id": "./"}},
     {
-      "@id": "./", "@type": "Dataset", "name": "BTK p.Arg525Gln structural hypothesis", "description": "OrphaFold research project export. Research use only; not for clinical decision-making.",
+      "@id": "./", "@type": "Dataset", "name": "BTK p.Arg525Gln structural hypothesis", "description": "Helix research project export. Research use only; not for clinical decision-making.",
       "datePublished": "2026-10-03T17:00:00Z", "license": {"@id": "https://creativecommons.org/licenses/by/4.0/"}, "identifier": {"@id": "#snapshot-id"}, "conformsTo": {"@id": "https://w3id.org/ro/wfrun/process/0.6"},
-      "author": {"@id": "#actor-act_01K6N3Y0000000000000000000"}, "isBasedOn": {"@id": "urn:orphafold:snapshot:ofs_parent_placeholder"},
+      "author": {"@id": "#actor-act_01K6N3Y0000000000000000000"}, "isBasedOn": {"@id": "urn:helix:snapshot:ofs_parent_placeholder"},
       "hasPart": [{"@id": "project.json"}, {"@id": "evidence/evidence.jsonl"}, {"@id": "runs/job_01K6N3Z8Q2W7X5T4N6B8M0R1CD/manifest.json"}, {"@id": "runs/job_01K6N3Z8Q2W7X5T4N6B8M0R1CD/artifacts/input_model_0.cif"}],
-      "mentions": {"@id": "#job_01K6N3Z8Q2W7X5T4N6B8M0R1CD"}, "publisher": {"@id": "#orphafold"}
+      "mentions": {"@id": "#job_01K6N3Z8Q2W7X5T4N6B8M0R1CD"}, "publisher": {"@id": "#helix"}
     },
     {"@id": "https://creativecommons.org/licenses/by/4.0/", "@type": "CreativeWork", "name": "Creative Commons Attribution 4.0 International", "identifier": "CC-BY-4.0"},
     {"@id": "https://w3id.org/ro/wfrun/process/0.6", "@type": ["CreativeWork", "Profile"], "name": "Process Run Crate", "version": "0.6"},
-    {"@id": "urn:orphafold:snapshot:ofs_parent_placeholder", "@type": "CreativeWork", "name": "Parent snapshot this project was forked from"},
+    {"@id": "urn:helix:snapshot:ofs_parent_placeholder", "@type": "CreativeWork", "name": "Parent snapshot this project was forked from"},
     {"@id": "#actor-act_01K6N3Y0000000000000000000", "@type": "Person", "name": "Anonymous researcher"},
     {"@id": "https://github.com/jwohlwend/boltz", "@type": "SoftwareApplication", "name": "Boltz", "version": "2.2.1", "url": "https://github.com/jwohlwend/boltz", "license": {"@id": "https://spdx.org/licenses/MIT"}},
     {
-      "@id": "#job_01K6N3Z8Q2W7X5T4N6B8M0R1CD", "@type": "CreateAction", "name": "Boltz-2 structure prediction of BTK p.Arg525Gln", "description": "Structure prediction run recorded by OrphaFold",
+      "@id": "#job_01K6N3Z8Q2W7X5T4N6B8M0R1CD", "@type": "CreateAction", "name": "Boltz-2 structure prediction of BTK p.Arg525Gln", "description": "Structure prediction run recorded by Helix",
       "instrument": {"@id": "https://github.com/jwohlwend/boltz"}, "agent": {"@id": "#actor-act_01K6N3Y0000000000000000000"}, "startTime": "2026-10-03T16:50:04Z", "endTime": "2026-10-03T16:53:41Z",
       "actionStatus": "http://schema.org/CompletedActionStatus", "object": {"@id": "runs/job_01K6N3Z8Q2W7X5T4N6B8M0R1CD/manifest.json"}, "result": {"@id": "runs/job_01K6N3Z8Q2W7X5T4N6B8M0R1CD/artifacts/input_model_0.cif"}
     },
     {
-      "@id": "project.json", "@type": "File", "name": "OrphaFold project document", "encodingFormat": "application/json", "description": "OrphaFold project document", "contentSize": "27",
+      "@id": "project.json", "@type": "File", "name": "Helix project document", "encodingFormat": "application/json", "description": "Helix project document", "contentSize": "27",
       "sha256": "57bd3811e855786445388d488fb0c0557ded8dcada53de089a6565a143002be9"
     },
     {
@@ -619,14 +619,14 @@ Import verifies every `sha256`, re-validates manifests against the schema, and r
       "@id": "runs/job_01K6N3Z8Q2W7X5T4N6B8M0R1CD/artifacts/input_model_0.cif", "@type": "File", "name": "Predicted structure, sample 0", "encodingFormat": "chemical/x-mmcif", "description": "Predicted structure, sample 0",
       "contentSize": "27", "sha256": "0e43f452b24e6aea3ec31b8e7ea090b1c5d9cbb5bb1f99457426815dc4fbd53e"
     },
-    {"@id": "#snapshot-id", "@type": "PropertyValue", "propertyID": "orphafold-snapshot", "name": "OrphaFold snapshot id", "value": "ofs_placeholder"},
-    {"@id": "#orphafold", "@type": "Organization", "name": "OrphaFold", "url": "https://github.com/orphafold/orphafold"},
+    {"@id": "#snapshot-id", "@type": "PropertyValue", "propertyID": "helix-snapshot", "name": "Helix snapshot id", "value": "ofs_placeholder"},
+    {"@id": "#helix", "@type": "Organization", "name": "Helix", "url": "https://github.com/helix/helix"},
     {"@id": "https://spdx.org/licenses/MIT", "@type": "CreativeWork", "name": "MIT License", "identifier": "MIT"}
   ]
 }
 ```
 
-Remaining RECOMMENDED-level findings are identity-related (ORCID `@id`, affiliation, ROR, contact point) and disappear once the author is an ORCID-linked account. The validator has no Process Run Crate 0.6 profile yet, so that conformance claim is checked by OrphaFold's own tests.
+Remaining RECOMMENDED-level findings are identity-related (ORCID `@id`, affiliation, ROR, contact point) and disappear once the author is an ORCID-linked account. The validator has no Process Run Crate 0.6 profile yet, so that conformance claim is checked by Helix's own tests.
 
 ### 6.5 `project.json`
 
@@ -681,8 +681,8 @@ Lineage queries walk `snapshot.parent_snapshot_id` with a recursive CTE. An inde
 | Peers (licence files read today)                                                                                                                                        | Open Targets `ot-ui-apps`, Ensembl VEP, Nextflow | UniProt website, gnomAD browser, Molstar, Galaxy (MIT from 2026-02-25) | cBioPortal            |
 
 - Code, JSON Schemas, worker images: **Apache-2.0**, with `SPDX-License-Identifier: Apache-2.0` headers.
-- Documentation and OrphaFold-written explanatory content: **CC BY 4.0**.
-- OrphaFold-original data tables (class mappings, enum tables, ECO defaults): **CC0-1.0**.
+- Documentation and Helix-written explanatory content: **CC BY 4.0**.
+- Helix-original data tables (class mappings, enum tables, ECO defaults): **CC0-1.0**.
 - Third-party seed data: `data/seed/<source>/` with that source's `LICENSE` and a `SOURCE.json` (`name`, `release`, `retrieved_at`, `url`, `license`, `sha256`, `modified: true|false`). The repository root licence does not cover these directories; say so in `README` and `NOTICE`.
 - Contributions under the Developer Certificate of Origin (`Signed-off-by`). Add `CITATION.cff` (`cff-version: 1.2.0`).
 - Keep GPL and AGPL code out of the dependency tree: npm `ro-crate` 3.7.2 is GPL-3.0-or-later.
@@ -737,10 +737,10 @@ The manifest's `model.license` field drives export rules: an artifact from a mod
 ### 7.4 `NOTICE` (ship at repository root; mirror in `ATTRIBUTION.md` and the in-app sources page)
 
 ```
-OrphaFold
-Copyright 2026 The OrphaFold Authors
+Helix
+Copyright 2026 The Helix Authors
 Licensed under the Apache License, Version 2.0. Documentation: CC BY 4.0.
-OrphaFold is a research and hypothesis-generation tool. It is not clinical decision software.
+Helix is a research and hypothesis-generation tool. It is not clinical decision software.
 
 Third-party data in data/seed/ is NOT covered by the Apache-2.0 licence. Each directory carries its own LICENSE and SOURCE.json.
 

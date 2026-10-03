@@ -68,7 +68,7 @@ const LEDGER_MAX_HEIGHT = 420;
 function evidenceCell(item: ProjectItem) {
   if (item.kind === "hypothesis")
     return (
-      <EvidenceBadge evidenceClass="orphafold_hypothesis" size="compact" />
+      <EvidenceBadge evidenceClass="helix_hypothesis" size="compact" />
     );
   const counts = new Map<string, number>();
   for (const record of item.evidence)
@@ -298,7 +298,7 @@ export function ProjectBody({
                 <div className="flex flex-wrap items-center gap-2">
                   {advanced ? (
                     <EvidenceBadge
-                      evidenceClass="orphafold_hypothesis"
+                      evidenceClass="helix_hypothesis"
                       detail={hypothesis.record.id}
                     />
                   ) : (

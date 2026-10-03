@@ -241,7 +241,7 @@ function HypothesisColumn({
         ) : null}
       </header>
       <EvidenceBadge
-        evidenceClass="orphafold_hypothesis"
+        evidenceClass="helix_hypothesis"
         detail="agent-generated"
         className="self-start"
       />
@@ -657,7 +657,7 @@ function DecisionStep() {
         </span>
       </div>
       <EvidenceBadge
-        evidenceClass="orphafold_hypothesis"
+        evidenceClass="helix_hypothesis"
         detail="agent-generated, not validated"
         className="self-start"
       />

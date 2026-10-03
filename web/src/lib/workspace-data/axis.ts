@@ -191,7 +191,7 @@ export function coverageTrack(ledger: StructureLedger): SequenceTrack {
   }
   for (const descriptor of [
     ...ledger.predicted_external,
-    ...ledger.predicted_orphafold,
+    ...ledger.predicted_internal,
   ]) {
     (descriptor.coverage?.ranges ?? []).forEach((range, index) =>
       features.push({
@@ -202,8 +202,8 @@ export function coverageTrack(ledger: StructureLedger): SequenceTrack {
         description: structureDetail(descriptor),
         origin: descriptor.origin,
         evidenceClass:
-          descriptor.origin === "predicted_orphafold"
-            ? "orphafold_hypothesis"
+          descriptor.origin === "predicted_internal"
+            ? "helix_hypothesis"
             : "computational_prediction",
         sourceId: descriptor.id,
       }),

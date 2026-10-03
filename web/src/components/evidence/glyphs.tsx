@@ -67,7 +67,7 @@ export function EvidenceGlyph({
           <path d="M4.3 6.9 6.9 4.3M5.3 7.9l2.6-2.6" strokeWidth="0.8" />
         </svg>
       );
-    case "orphafold_hypothesis":
+    case "helix_hypothesis":
       return (
         <svg {...frame} className={classes}>
           <path
@@ -107,7 +107,7 @@ export function StructureOriginGlyph({
           <path d={HATCH} strokeWidth="0.8" />
         </svg>
       );
-    case "predicted_orphafold":
+    case "predicted_internal":
       return (
         <svg {...frame} className={classes}>
           <rect
@@ -126,8 +126,8 @@ export function StructureOriginGlyph({
   }
 }
 
-/** The OrphaFold mark: two variant lollipops on a residue axis. */
-export function OrphaFoldMark({ className }: GlyphProps) {
+/** The Helix mark: two variant lollipops on a residue axis. */
+export function HelixMark({ className }: GlyphProps) {
   return (
     <svg
       viewBox="0 0 16 16"

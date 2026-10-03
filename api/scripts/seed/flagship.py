@@ -46,7 +46,7 @@ def build_flagship(
                 "db": "clinvar",
                 "id": ",".join(identifiers),
                 "retmode": "json",
-                "tool": "orphafold-seed-builder",
+                "tool": "helix-seed-builder",
             },
         )
         summaries = cached.json().get("result", {})

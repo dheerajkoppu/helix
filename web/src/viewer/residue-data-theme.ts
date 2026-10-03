@@ -6,7 +6,7 @@ import type { ThemeDataContext } from "molstar/lib/mol-theme/theme";
 import { Color } from "molstar/lib/mol-util/color";
 import { ParamDefinition as PD } from "molstar/lib/mol-util/param-definition";
 
-export const RESIDUE_DATA_THEME = "orphafold-residue-data";
+export const RESIDUE_DATA_THEME = "helix-residue-data";
 
 export interface ResidueColorDataset {
   /** which identifiers the keys use: label_asym_id + label_seq_id, or auth_asym_id + auth_seq_id */
@@ -75,13 +75,13 @@ export function ResidueDataColorTheme(
     preferSmoothing: true,
     color,
     props,
-    description: "Per-residue colours supplied by OrphaFold",
+    description: "Per-residue colours supplied by Helix",
   };
 }
 
 export const ResidueDataColorThemeProvider: ColorTheme.Provider<ResidueDataThemeParams, typeof RESIDUE_DATA_THEME> = {
   name: RESIDUE_DATA_THEME,
-  label: "OrphaFold residue data",
+  label: "Helix residue data",
   category: ColorThemeCategory.Misc,
   factory: ResidueDataColorTheme,
   getParams: () => ResidueDataThemeParams,

@@ -68,7 +68,7 @@ const GROUP_HEX: Record<ClinicalSignificanceGroup, string> = {
 export const COVERAGE_ORIGINS: StructureOrigin[] = [
   "experimental",
   "predicted_external",
-  "predicted_orphafold",
+  "predicted_internal",
 ];
 
 export interface Palette {
@@ -884,7 +884,7 @@ export function drawAxis(input: DrawInput): HitRegion[] {
         (feature.evidenceClass ?? track.evidenceClass) ===
           "computational_prediction" ||
         (feature.evidenceClass ?? track.evidenceClass) ===
-          "orphafold_hypothesis";
+          "helix_hypothesis";
       if (track.kind === "site") {
         const centre = (left + right) / 2;
         const half = Math.max(3, Math.min(5, (right - left) / 2));

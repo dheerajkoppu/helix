@@ -71,7 +71,7 @@ export function structureRows(ledger: StructureLedger): StructureRow[] {
       ),
     ),
     ...ledger.predicted_external.map((entry) => row(entry, 0)),
-    ...ledger.predicted_orphafold.map((entry) => row(entry, 0)),
+    ...ledger.predicted_internal.map((entry) => row(entry, 0)),
   ];
 }
 
@@ -209,9 +209,9 @@ export function StructureTable({
               : "No source found."}
           </li>
         ) : null}
-        {rows.length > 0 && ledger.predicted_orphafold.length === 0 ? (
+        {rows.length > 0 && ledger.predicted_internal.length === 0 ? (
           <li className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <span>No OrphaFold prediction.</span>
+            <span>No Helix prediction.</span>
             <RunJobButton
               kind="structure_prediction"
               params={{ uniprot_accession: accession, gene_symbol: gene }}

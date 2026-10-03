@@ -1,5 +1,5 @@
-# OrphaFold web app. Build from the repository root:
-#   docker build -f web/Dockerfile -t orphafold-web .
+# Helix web app. Build from the repository root:
+#   docker build -f web/Dockerfile -t helix-web .
 FROM node:24-bookworm-slim
 
 ENV NEXT_TELEMETRY_DISABLED=1

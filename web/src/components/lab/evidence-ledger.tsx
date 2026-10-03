@@ -28,8 +28,8 @@ const CLASS_ALIASES: Record<string, EvidenceClass> = {
   pred: "computational_prediction",
   prediction: "computational_prediction",
   computational: "computational_prediction",
-  hyp: "orphafold_hypothesis",
-  hypothesis: "orphafold_hypothesis",
+  hyp: "helix_hypothesis",
+  hypothesis: "helix_hypothesis",
 };
 
 export function toEvidenceClass(raw: string | null): EvidenceClass | null {

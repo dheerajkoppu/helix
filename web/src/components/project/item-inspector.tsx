@@ -215,7 +215,7 @@ function ItemInspectorBody({
           <div className="flex flex-col gap-2 px-3 py-2.5">
             {advanced ? (
               <EvidenceBadge
-                evidenceClass="orphafold_hypothesis"
+                evidenceClass="helix_hypothesis"
                 detail={`status: ${item.hypothesis.status}`}
                 className="self-start"
               />
@@ -225,7 +225,7 @@ function ItemInspectorBody({
             </p>
             {advanced ? (
               <p className="text-2xs text-muted-foreground">
-                Authored in OrphaFold (
+                Authored in Helix (
                 {item.hypothesis.record.authoring?.method === "llm_assisted"
                   ? "assistant-drafted"
                   : "written by a person"}

@@ -127,7 +127,7 @@ function OverflowMenu({ pathname }: { pathname: string }) {
           className={ITEM_CLASS}
           onClick={() => setAssistantOpen(true)}
         >
-          {advanced ? "Ask Orpha" : MENU_WORDS.ask}
+          {advanced ? "Ask Helix" : MENU_WORDS.ask}
           <KeyHint keys="mod+j" className="ml-auto max-md:hidden" />
         </DropdownMenuItem>
         <DropdownMenuItem

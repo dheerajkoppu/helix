@@ -23,7 +23,7 @@ import { useAdvancedMode } from "@/lib/state/preferences";
 import { describeRanges, useWorkspaceSelection } from "@/lib/state/selection";
 import { mergeSourceReports, useShell } from "@/lib/state/shell";
 
-/** Empty when something other than the OrphaFold API answered on that address. */
+/** Empty when something other than the Helix API answered on that address. */
 type HealthBody = Partial<Schema<"HealthResponse">>;
 
 /** Any HTTP answer means the API process is up; only a network failure means it is not. */
@@ -71,7 +71,7 @@ function ApiSegment() {
       : "connected";
   const skippedModules = Object.keys(health.data?.load_errors ?? {});
   return (
-    <Segment title={`OrphaFold API at ${API_BASE_URL}`}>
+    <Segment title={`Helix API at ${API_BASE_URL}`}>
       <SourceStateGlyph state={state} />
       <span className="text-muted-foreground">API</span>
       <span className={cn(health.isError ? "text-warning" : "text-foreground")}>

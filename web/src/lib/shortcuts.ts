@@ -19,7 +19,7 @@ export const SHORTCUTS: ShortcutGroup[] = [
     entries: [
       { keys: "mod+k", label: "Search and commands" },
       { keys: "?", label: "This shortcut sheet" },
-      { keys: "mod+j", label: "Ask Orpha" },
+      { keys: "mod+j", label: "Ask Helix" },
       { keys: "esc", label: "Close the top layer, then clear the selection" },
       { keys: "g j", label: "Jobs" },
       { keys: "g e", label: "Explore" },

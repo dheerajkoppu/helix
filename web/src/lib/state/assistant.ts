@@ -33,7 +33,7 @@ export const AUDIENCE_LEVELS = [
 ] as const;
 export type AudienceLevel = (typeof AUDIENCE_LEVELS)[number];
 
-const AUDIENCE_STORAGE_KEY = "orphafold.assistant.audience";
+const AUDIENCE_STORAGE_KEY = "helix.assistant.audience";
 
 function storedAudience(): AudienceLevel | null {
   try {
@@ -98,6 +98,6 @@ export const useAssistant = create<AssistantState>()((set) => ({
 }));
 
 /** Ask from any event handler, outside React included. */
-export function askOrpha(prompt: string, context?: AssistantContext): void {
+export function askHelix(prompt: string, context?: AssistantContext): void {
   useAssistant.getState().ask(prompt, context);
 }

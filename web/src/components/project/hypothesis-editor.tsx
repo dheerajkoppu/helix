@@ -82,7 +82,7 @@ export interface HypothesisEditorProps {
 }
 
 /**
- * A hypothesis is a statement authored in OrphaFold. It cannot be saved without at least one
+ * A hypothesis is a statement authored in Helix. It cannot be saved without at least one
  * supporting item, and it is always shown with the HYP evidence badge.
  */
 export function HypothesisEditor({
@@ -140,11 +140,11 @@ export function HypothesisEditor({
       <div className="flex min-w-0 flex-col gap-2">
         <div className="flex flex-wrap items-center gap-2">
           {advanced ? (
-            <EvidenceBadge evidenceClass="orphafold_hypothesis" />
+            <EvidenceBadge evidenceClass="helix_hypothesis" />
           ) : null}
           <span className="text-2xs text-muted-foreground">
             {advanced
-              ? "Authored in OrphaFold. It records what the linked items suggest, not an established finding."
+              ? "Authored in Helix. It records what the linked items suggest, not an established finding."
               : PROJECT_WORDS.ideaCaveat}
           </span>
         </div>

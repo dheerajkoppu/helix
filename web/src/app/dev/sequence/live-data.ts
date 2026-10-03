@@ -1,7 +1,7 @@
 /**
  * Dev-only loader for /dev/sequence. It reads one protein straight from UniProt, the EBI Proteins
  * variation API, PDBe and AlphaFold DB in the browser so the axis can be exercised on real data.
- * Product pages never do this: they call the OrphaFold API through `@/lib/api`.
+ * Product pages never do this: they call the Helix API through `@/lib/api`.
  */
 import type {
   SequenceFeature,

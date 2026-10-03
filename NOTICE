@@ -1,11 +1,11 @@
-OrphaFold
-Copyright 2026 The OrphaFold contributors
+Helix
+Copyright 2026 The Helix contributors
 
 This product is licensed under the Apache License, Version 2.0 (see LICENSE).
 
-The Apache-2.0 licence covers the OrphaFold source code only. Data that OrphaFold stores or
+The Apache-2.0 licence covers the Helix source code only. Data that Helix stores or
 retrieves keeps the terms of its source: the seeded dataset in data/seed, and every record and
 model output fetched at run time. The sources, their licences and their required citations are
 listed in ATTRIBUTION.md and, with checksums, in data/seed/SOURCES.json.
 
-OrphaFold is a research and hypothesis-generation tool. It is not clinical decision software.
+Helix is a research and hypothesis-generation tool. It is not clinical decision software.

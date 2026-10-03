@@ -60,7 +60,7 @@ import {
   formatVariantId,
   routes,
 } from "@/lib/ids";
-import { askOrpha, useAssistant } from "@/lib/state/assistant";
+import { askHelix, useAssistant } from "@/lib/state/assistant";
 import { PlainResultRow } from "@/components/shell/plain-result-row";
 import {
   PALETTE_WORDS,
@@ -161,7 +161,7 @@ function structureExport(
   }
   if (kind === "of")
     return {
-      detail: `${structureId} · files of the OrphaFold job`,
+      detail: `${structureId} · files of the Helix job`,
       open: (navigate) => navigate(routes.job(identifier)),
     };
   return null;
@@ -430,16 +430,16 @@ export function CommandPalette() {
     },
     {
       id: "ask-orpha",
-      label: text && mode !== "commands" ? `Ask Orpha “${text}”` : "Ask Orpha",
+      label: text && mode !== "commands" ? `Ask Helix “${text}”` : "Ask Helix",
       detail: subjectLabel ? `about ${subjectLabel}` : "opens the assistant",
-      matchText: "Ask Orpha",
+      matchText: "Ask Helix",
       keywords: "ask orpha assistant explain question chat",
       icon: MessageSquareIcon,
       kind: "action",
       run: () => {
         const prompt = mode === "commands" ? "" : text;
         close();
-        if (prompt) askOrpha(prompt, assistantContext);
+        if (prompt) askHelix(prompt, assistantContext);
         else setAssistantOpen(true);
       },
     },
@@ -827,7 +827,7 @@ export function CommandPalette() {
                   {!advanced
                     ? SEARCH_WORDS.offline
                     : isApiError(searchFailed) && searchFailed.isUnreachable
-                      ? "The OrphaFold API did not answer. Names and aliases cannot be resolved."
+                      ? "The Helix API did not answer. Names and aliases cannot be resolved."
                       : `Search failed: ${searchFailed.message}`}
                 </span>
                 <CommandShortcut className="shrink-0 pl-2 tracking-normal">

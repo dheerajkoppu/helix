@@ -1,5 +1,5 @@
-# OrphaFold API and job worker. Build from the repository root:
-#   docker build -f api/Dockerfile -t orphafold-api .
+# Helix API and job worker. Build from the repository root:
+#   docker build -f api/Dockerfile -t helix-api .
 FROM python:3.14-slim-bookworm
 
 ENV PIP_NO_CACHE_DIR=1 \
@@ -14,7 +14,7 @@ RUN apt-get update \
 # The package finds data/seed and data/examples relative to itself, so the image keeps the repository layout
 WORKDIR /app
 COPY api/pyproject.toml api/README.md api/
-COPY api/orphafold api/orphafold
+COPY api/helix api/helix
 RUN pip install -e "api[postgres,redis,s3]"
 
 COPY data/seed data/seed
@@ -22,4 +22,4 @@ COPY data/examples data/examples
 
 WORKDIR /app/api
 EXPOSE 8000
-CMD ["uvicorn", "orphafold.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "helix.main:app", "--host", "0.0.0.0", "--port", "8000"]

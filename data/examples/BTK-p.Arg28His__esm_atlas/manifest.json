@@ -160,7 +160,7 @@
     }
   ],
   "software": {
-    "orphafold": {
+    "helix": {
       "version": "0.1.0",
       "git_commit": "21513b0e8821158b5ea14162bd42f206d38e2a06"
     },
@@ -193,7 +193,7 @@
         "media_type": "chemical/x-mmcif",
         "size_bytes": 80425,
         "sha256": "4abb21b363d50ac8ff2becff449479bff3f175fa9a9cc07fe5241f1d6d18cfcc",
-        "structure_origin": "predicted_orphafold",
+        "structure_origin": "predicted_internal",
         "sample_index": 0
       },
       {
@@ -223,7 +223,7 @@
         "media_type": "chemical/x-mmcif",
         "size_bytes": 80450,
         "sha256": "ffbf072ee5249b49cae577032291ec6d6303a0f9d9d412ada29e91c365c471f9",
-        "structure_origin": "predicted_orphafold",
+        "structure_origin": "predicted_internal",
         "sample_index": 1
       },
       {
@@ -251,8 +251,8 @@
         "role": "other",
         "path": "difference.json",
         "media_type": "application/json",
-        "size_bytes": 46839,
-        "sha256": "ac64718eef4b8f12f7c4a5d62505bb96351e4c88531ab8684e8667301564ac49",
+        "size_bytes": 46835,
+        "sha256": "f119af63b3e191b527631f4842531b4f54eff2dc5996f268e0676448a0bd00f4",
         "structure_origin": null,
         "sample_index": null
       }
@@ -353,6 +353,6 @@
   },
   "integrity": {
     "canonicalization": "RFC8785",
-    "manifest_sha256": "ee5b9ff78557eabb707ddf269e2a1b0f7aec1901b0c0f551effa6ca75c1490b8"
+    "manifest_sha256": "a74e7269df0208eeec1c506fc4fb788c5db87f686d8d1f3ddea29a229bbfad59"
   }
 }

@@ -660,8 +660,8 @@ export function JobDetail({ jobId }: { jobId: string }) {
   const manifestSoftware = isRecord(manifest.data?.data.software)
     ? manifest.data.data.software
     : null;
-  const orphafold = isRecord(manifestSoftware?.orphafold)
-    ? manifestSoftware.orphafold
+  const helix = isRecord(manifestSoftware?.helix)
+    ? manifestSoftware.helix
     : null;
   const limitations = [
     ...new Set([
@@ -826,9 +826,9 @@ export function JobDetail({ jobId }: { jobId: string }) {
                     {text(result.statement) ??
                       (result.performs_inference !== false
                         ? "Computational prediction, not an experimental structure."
-                        : structure.origin === "predicted_orphafold"
+                        : structure.origin === "predicted_internal"
                           ? "Stored output of an earlier prediction run. This job ran no model."
-                          : "Existing predicted model. OrphaFold ran no inference.")}{" "}
+                          : "Existing predicted model. Helix ran no inference.")}{" "}
                     {limitations.length > 0 ? (
                       <button
                         type="button"
@@ -999,11 +999,11 @@ export function JobDetail({ jobId }: { jobId: string }) {
                         : "not permitted by the license"}
                   </DefinitionRow>
                 ) : null}
-                {orphafold ? (
-                  <DefinitionRow term="OrphaFold" mono>
-                    {text(orphafold.version)}
-                    {text(orphafold.git_commit)
-                      ? ` · ${(orphafold.git_commit as string).slice(0, 12)}`
+                {helix ? (
+                  <DefinitionRow term="Helix" mono>
+                    {text(helix.version)}
+                    {text(helix.git_commit)
+                      ? ` · ${(helix.git_commit as string).slice(0, 12)}`
                       : ""}
                   </DefinitionRow>
                 ) : null}

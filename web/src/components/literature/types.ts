@@ -35,7 +35,7 @@ export interface RelevanceReason {
   detail: string | null;
 }
 
-/** Mirrors LiteraturePublication in api/orphafold/schemas/literature.py. */
+/** Mirrors LiteraturePublication in api/helix/schemas/literature.py. */
 export interface LiteraturePublication {
   pmid: string | null;
   pmcid: string | null;

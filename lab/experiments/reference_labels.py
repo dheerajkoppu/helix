@@ -7,7 +7,7 @@ each UniProtKB entry from rest.uniprot.org and the PDBe-KB residue annotations f
 responses are kept under lab/experiments/reference/snapshots/ and reused unless --refresh is given), applies
 the fixed rules below, and writes lab/experiments/reference/labels.json. When that file exists the script
 only checks that the derivation still gives the same labels; --overwrite replaces it. Nothing here calls the
-OrphaFold API, a lab tool or an agent, and no run record is read. The labels are never passed to an agent.
+Helix API, a lab tool or an agent, and no run record is read. The labels are never passed to an agent.
 """
 
 import argparse

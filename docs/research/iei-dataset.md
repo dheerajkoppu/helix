@@ -2,7 +2,7 @@
 
 Researched and tested 2026-10-03. Every URL, count and field name below was retrieved with `curl` or the Python standard library on that date unless listed in section 13 (Unverified).
 
-## 0. Recommendation for OrphaFold
+## 0. Recommendation for Helix
 
 1. **Authoritative snapshot**: the IUIS "2024 update" genotypic classification (Poli et al., _J Hum Immun_ 2025, doi:10.70962/jhi.20250003, published 2025-04-15). No newer IUIS classification or interim update is indexed in PubMed as of 2026-10-03.
 2. **Primary machine-readable source**: the article's JATS XML from Europe PMC (`PMC12829761/fullTextXML`), which contains all ten tables. The script in section 5 downloads and parses all sources in about 15 seconds with no third-party packages and yields 603 rows and 508 distinct HGNC genes.
@@ -63,7 +63,7 @@ Subtable labels (published wording):
 | Claim                                           | Supported value                                    | Basis                                                                                                               |
 | ----------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | IEI genes (IUIS-stated)                         | 508                                                | Poli et al. 2025 abstract. IUIS counts three somatic-only Table 10 genes inside this figure                         |
-| IEI genes (OrphaFold parse, Tables 1 to 9)      | 508 distinct HGNC-approved symbols                 | Section 5 script. 500 protein-coding, 5 non-coding RNA, 3 immunoglobulin or T-cell receptor loci (IGHM, IGKC, TRAC) |
+| IEI genes (Helix parse, Tables 1 to 9)      | 508 distinct HGNC-approved symbols                 | Section 5 script. 500 protein-coding, 5 non-coding RNA, 3 immunoglobulin or T-cell receptor loci (IGHM, IGKC, TRAC) |
 | IEI genes including Table 10 somatic-only genes | 511                                                | Adds KRAS, NRAS, UBA1                                                                                               |
 | Proteins available for structure work           | 503                                                | All 503 are reviewed Swiss-Prot entries. No protein: RMRP, RNU4ATAC, RNU7-1, SNORA31, TERC                          |
 | IEI conditions                                  | 559 (plus 17 phenocopies)                          | IUIS-stated                                                                                                         |
@@ -207,7 +207,7 @@ Outputs:
 | `iei_manifest.json` | counts plus URL and sha256 per cached source                                                                                                                         |
 
 ```python
-"""Build the OrphaFold IEI seed from the IUIS 2024 classification plus open cross-reference layers.
+"""Build the Helix IEI seed from the IUIS 2024 classification plus open cross-reference layers.
 
 Standard library only. Usage: python iei_import.py <cache_directory> <output_directory>
 """
@@ -264,7 +264,7 @@ def fetch(cache_directory):
     for file_name, url in SOURCES.items():
         path = cache_directory / file_name
         if not path.exists():
-            request = urllib.request.Request(url, headers={"User-Agent": "orphafold-iei-import/0.1"})
+            request = urllib.request.Request(url, headers={"User-Agent": "helix-iei-import/0.1"})
             with urllib.request.urlopen(request, timeout=300) as response:
                 path.write_bytes(response.read())
         manifest[file_name] = {"url": url, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
@@ -588,7 +588,7 @@ PanelApp endpoints: `/api/v1/panels/?page=N` (433 panels), `/api/v1/panels/398/`
 | Guidelines            | 2025 IEI practice parameter (_Ann Allergy Asthma Immunol_); Chinen et al., _J Allergy Clin Immunol_ 2026 (PMID 42208906); Murray et al. scoping review of IEI management guidelines, _J Allergy Clin Immunol_ 2025 (PMID 40902944)                     | Standard of care (immunoglobulin replacement, HSCT, gene therapy, targeted drugs)                                                                                                                                                                                            | Publisher copyright                        | Cite and link; do not reproduce text                                                                                                                                                                                                                                                                     |
 | GeneReviews           | NCBI Bookshelf                                                                                                                                                                                                                                         | Management sections                                                                                                                                                                                                                                                          | Copyright University of Washington         | Link out only                                                                                                                                                                                                                                                                                            |
 
-Treatment summaries shown in OrphaFold are assembled from structured records (drug ID, stage, indication ID, label or trial ID) with the source attached. No free-text summary without a source record.
+Treatment summaries shown in Helix are assembled from structured records (drug ID, stage, indication ID, label or trial ID) with the source attached. No free-text summary without a source record.
 
 ## 11. Flagship examples
 
@@ -700,7 +700,7 @@ https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=clinvar&retmode=js
 - GeneReviews copyright terms and which Orphanet datasets (management text, orphan drugs) sit behind a Data Transfer Agreement: stated from the Orphadata legal notice and general knowledge, the individual dataset list was not opened.
 - openFDA label coverage for IEI drugs beyond the two queries shown.
 - The medRxiv preprint reporting a 557-gene IEI variant-prior database (10.1101/2025.03.25.25324607) and its repository were not inspected.
-- `monarch-initiative/dismech` (BSD-3-Clause, AI-curated disease YAML, has an "IUIS campaign" pull request against the 2022 classification) was seen through search results only. It is AI-curated and therefore outside OrphaFold's fact-source rule.
+- `monarch-initiative/dismech` (BSD-3-Clause, AI-curated disease YAML, has an "IUIS campaign" pull request against the 2022 classification) was seen through search results only. It is AI-curated and therefore outside Helix's fact-source rule.
 - Variant choice reflects ClinVar review status and submission count; "well known" in the literature was not independently assessed.
 
 ## 14. Sources

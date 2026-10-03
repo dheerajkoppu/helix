@@ -4,7 +4,7 @@ export const EVIDENCE_CLASSES = [
   "literature",
   "curated_database",
   "computational_prediction",
-  "orphafold_hypothesis",
+  "helix_hypothesis",
 ] as const;
 
 export type EvidenceClass = (typeof EVIDENCE_CLASSES)[number];
@@ -14,7 +14,7 @@ export type ClaimLabel =
   | "Known experimentally"
   | "Database annotation"
   | "Computational prediction"
-  | "OrphaFold hypothesis";
+  | "Helix hypothesis";
 
 export type EvidenceBorder = "solid" | "dashed" | "dotted";
 
@@ -23,7 +23,7 @@ export interface EvidenceClassMeta {
   code: "EXP" | "CLIN" | "LIT" | "CUR" | "PRED" | "HYP";
   label: string;
   claim: ClaimLabel;
-  /** solid: asserted by an external source; dashed: computed by a tool; dotted: authored in OrphaFold */
+  /** solid: asserted by an external source; dashed: computed by a tool; dotted: authored in Helix */
   border: EvidenceBorder;
   /** one sentence for popovers and screen readers */
   description: string;
@@ -86,14 +86,14 @@ export const EVIDENCE_META: Record<EvidenceClass, EvidenceClassMeta> = {
     textClass: "text-ev-prediction",
     borderClass: "border-ev-prediction/70",
   },
-  orphafold_hypothesis: {
-    id: "orphafold_hypothesis",
+  helix_hypothesis: {
+    id: "helix_hypothesis",
     code: "HYP",
-    label: "OrphaFold hypothesis",
-    claim: "OrphaFold hypothesis",
+    label: "Helix hypothesis",
+    claim: "Helix hypothesis",
     border: "dotted",
     description:
-      "A statement authored inside OrphaFold from the evidence it cites. Not established.",
+      "A statement authored inside Helix from the evidence it cites. Not established.",
     textClass: "text-ev-hypothesis",
     borderClass: "border-ev-hypothesis/80",
   },
@@ -106,7 +106,7 @@ export const EVIDENCE_DISPLAY_ORDER: EvidenceClass[] = [
   "curated_database",
   "literature",
   "computational_prediction",
-  "orphafold_hypothesis",
+  "helix_hypothesis",
 ];
 
 export function isEvidenceClass(value: unknown): value is EvidenceClass {

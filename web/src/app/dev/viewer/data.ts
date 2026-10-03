@@ -1,6 +1,6 @@
 /**
  * Dev-only loader for /dev/viewer. It reads BTK straight from UniProt, AlphaFold DB, RCSB PDB and
- * PDBe in the browser so the viewer can be exercised before the OrphaFold API serves structures.
+ * PDBe in the browser so the viewer can be exercised before the Helix API serves structures.
  * Product pages never do this: they call the API through `@/lib/api`. Each source fails on its own.
  */
 import type { SequenceTrack } from "@/components/sequence";

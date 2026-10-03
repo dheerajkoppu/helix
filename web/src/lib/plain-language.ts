@@ -278,7 +278,7 @@ export function plainNextKind(kind: string | null | undefined): string {
 const ORIGINS: Record<string, string> = {
   experimental: "Experimental",
   predicted_external: "Predicted",
-  predicted_orphafold: "Generated here",
+  predicted_internal: "Generated here",
 };
 
 /** Where a structure came from, in a word. */
@@ -608,7 +608,7 @@ const EVIDENCE_KINDS: Record<string, { name: string; meaning: string }> = {
     name: "Computer prediction",
     meaning: PREDICTION_CAVEAT,
   },
-  orphafold_hypothesis: {
+  helix_hypothesis: {
     name: "Agent idea",
     meaning: HYPOTHESIS_CAVEAT,
   },
@@ -630,7 +630,7 @@ export function plainEvidenceSource(
   database: string | null | undefined,
 ): string {
   const name = plainDatabase(database);
-  if (evidenceClass === "orphafold_hypothesis") return "Agent idea";
+  if (evidenceClass === "helix_hypothesis") return "Agent idea";
   if (evidenceClass === "computational_prediction")
     return name ? `${name} prediction` : "Computer prediction";
   return name || plainEvidenceKind(evidenceClass);
@@ -645,7 +645,7 @@ const ORIGIN_LINES: Record<string, { structure: string; caveat: string }> = {
     structure: "Predicted structure",
     caveat: PREDICTION_CAVEAT,
   },
-  predicted_orphafold: {
+  predicted_internal: {
     structure: "Structure generated here",
     caveat: PREDICTION_CAVEAT,
   },
@@ -1632,7 +1632,7 @@ const DATABASES: Record<string, string> = {
   foldx: "FoldX",
   p2rank: "P2Rank",
   iuis: "IUIS",
-  orphafold: "OrphaFold",
+  helix: "Helix",
 };
 
 /** A database's name as it writes itself: "uniprot" reads "UniProt". */

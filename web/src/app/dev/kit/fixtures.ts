@@ -81,7 +81,7 @@ export const KIT_EVIDENCE: EvidenceItem[] = [
     method: "FoldX v5.0",
   },
   {
-    evidenceClass: "orphafold_hypothesis",
+    evidenceClass: "helix_hypothesis",
     statement:
       "Kit example of the hypothesis form: p.Arg28His may act through the binding site at residue 28 rather than through fold stability.",
     source: null,

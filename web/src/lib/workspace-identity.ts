@@ -1,10 +1,10 @@
 /**
  * Anonymous workspace identity. The client generates the ID once, keeps it in localStorage and sends it
- * as the X-OrphaFold-Workspace header. The server creates an actor row on first write, and an account
+ * as the X-Helix-Workspace header. The server creates an actor row on first write, and an account
  * can later claim that actor.
  */
-export const WORKSPACE_HEADER = "X-OrphaFold-Workspace";
-export const WORKSPACE_STORAGE_KEY = "orphafold.workspace";
+export const WORKSPACE_HEADER = "X-Helix-Workspace";
+export const WORKSPACE_STORAGE_KEY = "helix.workspace";
 
 const WORKSPACE_ID_PATTERN = /^ofw_[0-9a-f]{32}$/;
 

@@ -1,6 +1,6 @@
 # Getting started
 
-OrphaFold has two halves: an API (FastAPI, Python 3.14) in `api/` and a web app (Next.js 16, pnpm)
+Helix has two halves: an API (FastAPI, Python 3.14) in `api/` and a web app (Next.js 16, pnpm)
 in `web/`. With no configuration the API runs on SQLite, an in-process job queue and a local
 artifact directory. No database server, queue, GPU or API key is required.
 
@@ -29,7 +29,7 @@ make dev      # API on http://localhost:8000, web on http://localhost:3000
 The two halves also run on their own:
 
 ```bash
-make api RELOAD=1                 # API only, restarting when a file under api/orphafold changes
+make api RELOAD=1                 # API only, restarting when a file under api/helix changes
 make web API_URL=http://host:8000 # web only, calling another API
 ```
 
@@ -84,9 +84,9 @@ Settings worth knowing on the first day:
 
 | Setting                                  | Effect                                                                      |
 | ---------------------------------------- | --------------------------------------------------------------------------- |
-| `ORPHAFOLD_CONTACT_EMAIL`                | Sent to upstream sources in the User-Agent, and to NCBI as `email`          |
-| `ORPHAFOLD_NCBI_API_KEY`                 | Raises the NCBI limit from 3 to 10 requests per second                      |
-| `ORPHAFOLD_ENABLE_NONCOMMERCIAL_SOURCES` | Turns on sources restricted to non-commercial use. Off by default           |
+| `HELIX_CONTACT_EMAIL`                | Sent to upstream sources in the User-Agent, and to NCBI as `email`          |
+| `HELIX_NCBI_API_KEY`                 | Raises the NCBI limit from 3 to 10 requests per second                      |
+| `HELIX_ENABLE_NONCOMMERCIAL_SOURCES` | Turns on sources restricted to non-commercial use. Off by default           |
 | `ANTHROPIC_API_KEY`                      | Enables the research assistant. Unset: the assistant reports not configured |
 | `NEXT_PUBLIC_REPOSITORY_URL`             | Source repository linked from the top bar and the About page                |
 
@@ -104,9 +104,9 @@ settings; no code changes.
 
 | Concern   | Setting                                                     | Python extra |
 | --------- | ----------------------------------------------------------- | ------------ |
-| Database  | `ORPHAFOLD_DATABASE_URL=postgresql://user@host:5432/name`   | `postgres`   |
-| Job queue | `ORPHAFOLD_REDIS_URL=redis://host:6379/0` and `make worker` | `redis`      |
-| Artifacts | `ORPHAFOLD_S3_BUCKET` and the other `ORPHAFOLD_S3_*` values | `s3`         |
+| Database  | `HELIX_DATABASE_URL=postgresql://user@host:5432/name`   | `postgres`   |
+| Job queue | `HELIX_REDIS_URL=redis://host:6379/0` and `make worker` | `redis`      |
+| Artifacts | `HELIX_S3_BUCKET` and the other `HELIX_S3_*` values | `s3`         |
 
 Install the extras with `make setup EXTRAS=dev,postgres,redis,s3`.
 

@@ -4,7 +4,7 @@
  * paths themselves.
  *
  * Conventions
- * - Every hook is a React Query hook over the OrphaFold API and returns the query as is:
+ * - Every hook is a React Query hook over the Helix API and returns the query as is:
  *   `query.data?.data` is the typed body, `query.data?.sources` the per-source status rows.
  *   Render with `QueryErrorState` / `RowsSkeleton` and publish sources with `useReportSources`.
  * - A hook is idle until its ID is set, so it can be called before the ID is known:
@@ -21,7 +21,7 @@
  *   useVariant(variantId)                   ClinVar, UniProt, gnomAD, VEP, reference check, VRS ID
  *   useResidueEffects(acc, pos, { alt })    predictions, assays, annotation and pockets at a residue
  *   useEffectMap(accession, { matrix })     AlphaMissense per residue; matrix adds the 20-row heatmap
- *   useStructureLedger(accession)           experimental, AlphaFold DB and OrphaFold structures
+ *   useStructureLedger(accession)           experimental, AlphaFold DB and Helix structures
  *   useStructure(structureId, accession?)   one StructureDescriptor
  *   useStructureConfidence(id, { pae })     pLDDT per residue, PAE matrix on request
  *   useStructureResidueMap(id, accession)   SIFTS segments of an experimental entry

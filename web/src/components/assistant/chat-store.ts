@@ -274,7 +274,7 @@ export const useAssistantChat = create<ChatState>()((set, get) => {
             fail(
               turn.id,
               "unreachable",
-              "The OrphaFold API could not be reached.",
+              "The Helix API could not be reached.",
             );
         } finally {
           set({ streaming: false });

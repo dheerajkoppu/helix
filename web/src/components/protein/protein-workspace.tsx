@@ -142,7 +142,7 @@ export function ProteinWorkspace({ accession }: { accession: string }) {
     activeId === null &&
     ledger.experimental.length +
       ledger.predicted_external.length +
-      ledger.predicted_orphafold.length ===
+      ledger.predicted_internal.length ===
       0;
   const label = geneSymbol ?? accession;
   const length = sequence?.length ?? ledger?.sequence_length ?? 0;
@@ -240,7 +240,7 @@ export function ProteinWorkspace({ accession }: { accession: string }) {
                 ? ledger
                   ? ledger.experimental.length +
                     ledger.predicted_external.length +
-                    ledger.predicted_orphafold.length
+                    ledger.predicted_internal.length
                   : null
                 : protein
                   ? featureRows(protein).length

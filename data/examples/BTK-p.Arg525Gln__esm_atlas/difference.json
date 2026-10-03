@@ -2912,7 +2912,7 @@
     {
       "id": "alphafold_db_statement",
       "text": "AlphaFold has not been validated for predicting the effect of mutations. In particular, AlphaFold is not expected to produce an unfolded protein structure given a sequence containing a destabilising point mutation.",
-      "quoted_from": "AlphaFold DB FAQ. OrphaFold applies the same caveat to every structure predictor.",
+      "quoted_from": "AlphaFold DB FAQ. Helix applies the same caveat to every structure predictor.",
       "citations": [
         {
           "text": "AlphaFold Protein Structure Database, FAQ",

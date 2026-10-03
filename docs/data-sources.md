@@ -1,6 +1,6 @@
 # Data sources
 
-OrphaFold holds no biological knowledge of its own. Every value shown comes from a record of an
+Helix holds no biological knowledge of its own. Every value shown comes from a record of an
 external source, with the source name, release, request URL, retrieval time, record ID, licence and
 a SHA-256 of the response. A value no source provides is shown as Unknown.
 
@@ -8,7 +8,7 @@ There are two ways data enters:
 
 1. **The seeded dataset**, `data/seed/catalog.json`, built ahead of time by `make seed` and loaded
    at API startup. It defines which diseases and genes exist.
-2. **Live source adapters**, one module per source under `api/orphafold/sources/`, queried when a
+2. **Live source adapters**, one module per source under `api/helix/sources/`, queried when a
    page asks and cached in the database.
 
 The licence and required citation of every source are in `ATTRIBUTION.md` in the repository root,
@@ -42,7 +42,7 @@ Releases and retrieval dates of the committed build are in `ATTRIBUTION.md`.
 ### IUIS classification: what is and is not stored
 
 The IUIS 2024 update (Journal of Human Immunity, doi:10.70962/jhi.20250003) is published under CC BY-ND 4.0,
-which does not allow sharing adapted material. OrphaFold therefore stores only identifiers, codes
+which does not allow sharing adapted material. Helix therefore stores only identifiers, codes
 and short labels taken from it: table and subtable, disease label, gene, inheritance code and OMIM
 number. The clinical free-text columns of the published tables are never extracted, stored or
 displayed.
@@ -65,7 +65,7 @@ and are used as link-outs.
 
 ## Live source adapters
 
-Each row is one module in `api/orphafold/sources/`. The licence column is the value the adapter
+Each row is one module in `api/helix/sources/`. The licence column is the value the adapter
 declares and stamps on every record it returns.
 
 | Adapter ID        | Source                              | Used for                                            | Licence declared by the adapter      |
@@ -109,7 +109,7 @@ Notes on individual licences:
 ## Non-commercial sources
 
 Sources restricted to non-commercial use are off unless an installation sets
-`ORPHAFOLD_ENABLE_NONCOMMERCIAL_SOURCES=true`. An adapter marked `noncommercial_only = True`
+`HELIX_ENABLE_NONCOMMERCIAL_SOURCES=true`. An adapter marked `noncommercial_only = True`
 answers with the state `disabled_by_license` while the setting is false, and the page says so.
 ProtVar redistributes third-party scores that keep their own licences: the ESM-1b and CADD values
 in a ProtVar response are withheld unless the setting is on.
@@ -118,7 +118,7 @@ Whoever turns the setting on is responsible for meeting those terms.
 
 ## How an adapter behaves
 
-Every adapter subclasses `orphafold.sources.base.SourceAdapter`, which gives it:
+Every adapter subclasses `helix.sources.base.SourceAdapter`, which gives it:
 
 - its own timeout, rate limit and concurrency cap, with retry and backoff on 429, 502, 503, 504
   and transport errors;
@@ -134,7 +134,7 @@ source that did not. The status line at the bottom of the web app shows the same
 
 ## Adding a source
 
-Create one file under `api/orphafold/sources/`. The recipe, the class attributes and the hooks are
+Create one file under `api/helix/sources/`. The recipe, the class attributes and the hooks are
 in [Architecture](ARCHITECTURE.md), section 8, "A source adapter". A source the evidence table does
 not cover also needs an evidence rule, described in the same section under "An evidence mapping".
 Record the licence as an SPDX identifier or a `LicenseRef-*` value, and add the required citation.

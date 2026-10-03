@@ -13,7 +13,7 @@ export function AssistantTrigger({ className }: { className?: string }) {
     <button
       type="button"
       aria-pressed={open}
-      aria-label="Ask Orpha, the research assistant"
+      aria-label="Ask Helix, the research assistant"
       onClick={toggle}
       className={cn(
         "inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 text-xs hover:bg-accent",
@@ -24,7 +24,7 @@ export function AssistantTrigger({ className }: { className?: string }) {
       )}
     >
       <MessageSquareIcon className="size-3.5" aria-hidden />
-      <span className="max-sm:sr-only">Ask Orpha</span>
+      <span className="max-sm:sr-only">Ask Helix</span>
     </button>
   );
 }

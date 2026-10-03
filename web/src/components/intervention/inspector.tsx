@@ -197,7 +197,7 @@ function RunBlock({
           className="gap-x-5 px-3"
           model={result.structure.model_name ?? run.providerId ?? "Unknown model"}
           version={result.structure.model_version}
-          origin="predicted_orphafold"
+          origin="predicted_internal"
           metrics={[
             {
               label: "Predicted affinity",
@@ -259,7 +259,7 @@ function RunBlock({
     <div className="flex flex-col gap-2 border-b border-border-subtle px-3 py-2.5">
       <div className="flex items-center gap-2 text-2xs">
         <StructureOriginTag
-          origin="predicted_orphafold"
+          origin="predicted_internal"
           detail={model}
           size="compact"
         />

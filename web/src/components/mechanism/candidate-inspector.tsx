@@ -343,7 +343,7 @@ export function CandidateInspector({
     <>
       <div className="flex flex-col gap-2.5 border-b border-border-subtle px-3 py-3 text-xs">
         <div className="flex items-center gap-2">
-          <EvidenceBadge evidenceClass="orphafold_hypothesis" size="compact" />
+          <EvidenceBadge evidenceClass="helix_hypothesis" size="compact" />
           <span
             className={
               advanced

@@ -1,8 +1,8 @@
 # Policies and the human approval gate
 
-Built on 2026-10-03T22:39:14Z by a script that reads the files named below. Every quoted block is copied from the file at the line numbers given, so it goes stale when the file changes.
+Built on 2026-10-03T23:34:41Z by a script that reads the files named below. Every quoted block is copied from the file at the line numbers given, so it goes stale when the file changes.
 
-Four Omnigent policies are Python functions in `lab/policies/orphafold_lab_policies/policies.py`. Each agent's `config.yaml` declares all four under `guardrails.policies` with the agent's own role.
+Four Omnigent policies are Python functions in `lab/policies/helix_lab_policies/policies.py`. Each agent's `config.yaml` declares all four under `guardrails.policies` with the agent's own role.
 
 | Policy | Phase | Enforces |
 | --- | --- | --- |
@@ -13,7 +13,7 @@ Four Omnigent policies are Python functions in `lab/policies/orphafold_lab_polic
 
 ## How the policies are declared
 
-`lab/agents/orphafold_lab/config.yaml`, lines 26 to 51:
+`lab/agents/helix_lab/config.yaml`, lines 26 to 51:
 
 ```yaml
 guardrails:
@@ -21,25 +21,25 @@ guardrails:
     role_boundary:
       type: function
       function:
-        path: orphafold_lab_policies.policies.role_boundary
+        path: helix_lab_policies.policies.role_boundary
         arguments:
           role: orchestrator
     approval_gate:
       type: function
       function:
-        path: orphafold_lab_policies.policies.approval_gate
+        path: helix_lab_policies.policies.approval_gate
         arguments:
           role: orchestrator
     claims_guard:
       type: function
       function:
-        path: orphafold_lab_policies.policies.claims_guard
+        path: helix_lab_policies.policies.claims_guard
         arguments:
           role: orchestrator
     run_budget:
       type: function
       function:
-        path: orphafold_lab_policies.policies.run_budget
+        path: helix_lab_policies.policies.run_budget
         arguments:
           role: orchestrator
 ```
@@ -50,7 +50,7 @@ The seven specialist specs and the control spec hold the same block with `role:`
 
 Omnigent 0.16.0 also evaluates a supervisor's policies on its sub-agents' tool calls. The supervisor's instances return no verdict there, so the sub-agent's own instance, which knows its role, decides.
 
-`lab/policies/orphafold_lab_policies/policies.py`, lines 37 to 43:
+`lab/policies/helix_lab_policies/policies.py`, lines 37 to 43:
 
 ```python
 def _is_subagent_event(event: Event) -> bool:
@@ -64,7 +64,7 @@ def _abstains(role: str, event: Event) -> bool:
 
 ## Every denial is logged and written to the research record
 
-`lab/policies/orphafold_lab_policies/policies.py`, lines 72 to 89:
+`lab/policies/helix_lab_policies/policies.py`, lines 72 to 89:
 
 ```python
 def _deny(policy: str, role: str, tool: str, reason: str) -> Verdict:
@@ -91,7 +91,7 @@ def _deny(policy: str, role: str, tool: str, reason: str) -> Verdict:
 
 Denies every tool that is not in the calling agent's role. This includes tools Omnigent registers for every agent by default.
 
-`lab/policies/orphafold_lab_policies/policies.py`, lines 92 to 112:
+`lab/policies/helix_lab_policies/policies.py`, lines 92 to 112:
 
 ```python
 def role_boundary(role: str) -> Evaluator:
@@ -121,7 +121,7 @@ def role_boundary(role: str) -> Evaluator:
 
 A test tool runs only when four conditions hold in the record: a plan exists, the call is the plan's chosen test, the safety agent cleared that test for that plan, and, for a tool that starts a compute job, an `approval_decision` with `decision: approved` exists.
 
-`lab/policies/orphafold_lab_policies/policies.py`, lines 115 to 178:
+`lab/policies/helix_lab_policies/policies.py`, lines 115 to 178:
 
 ```python
 def approval_gate(role: str) -> Evaluator:
@@ -192,7 +192,7 @@ def approval_gate(role: str) -> Evaluator:
 
 Which tools are tests, and which need a human:
 
-`lab/tools/orphafold_lab_tools/catalogue.py`, lines 120 to 123:
+`lab/tools/helix_lab_tools/catalogue.py`, lines 120 to 123:
 
 ```python
 EXPERIMENT_TOOLS: dict[str, str] = {definition["tool"]: kind for kind, definition in TESTS.items()}
@@ -207,7 +207,7 @@ In the catalogue only `structure_comparison` (`run_structure_comparison`) has `r
 
 Refuses record tools and replies that hold clinical or treatment wording, cite a record ID that is not in the run record, or state a measured value or database classification without a record ID.
 
-`lab/policies/orphafold_lab_policies/policies.py`, lines 191 to 236:
+`lab/policies/helix_lab_policies/policies.py`, lines 191 to 236:
 
 ```python
 def claims_guard(role: str) -> Evaluator:
@@ -260,7 +260,7 @@ def claims_guard(role: str) -> Evaluator:
 
 The text checks it calls:
 
-`lab/tools/orphafold_lab_tools/claims.py`, lines 5 to 19:
+`lab/tools/helix_lab_tools/claims.py`, lines 5 to 19:
 
 ```python
 CLINICAL_PATTERNS = [
@@ -280,7 +280,7 @@ CLINICAL_PATTERNS = [
 ]
 ```
 
-`lab/tools/orphafold_lab_tools/claims.py`, lines 30 to 35:
+`lab/tools/helix_lab_tools/claims.py`, lines 30 to 35:
 
 ```python
 FACT_MARKERS = [
@@ -291,7 +291,7 @@ FACT_MARKERS = [
 ]
 ```
 
-`lab/tools/orphafold_lab_tools/claims.py`, lines 78 to 94:
+`lab/tools/helix_lab_tools/claims.py`, lines 78 to 94:
 
 ```python
 def check_text(text: str, known_ids: set[str] | None = None, *, require_citations: bool = False) -> list[str]:
@@ -317,7 +317,7 @@ def check_text(text: str, known_ids: set[str] | None = None, *, require_citation
 
 Caps lab tool calls and compute seconds for the whole run. After the cap, only the tools that close a run stay available.
 
-`lab/policies/orphafold_lab_policies/policies.py`, lines 239 to 275:
+`lab/policies/helix_lab_policies/policies.py`, lines 239 to 275:
 
 ```python
 def run_budget(role: str) -> Evaluator:
@@ -359,7 +359,7 @@ def run_budget(role: str) -> Evaluator:
     return evaluate
 ```
 
-`lab/tools/orphafold_lab_tools/registry.py`, lines 69 to 80:
+`lab/tools/helix_lab_tools/registry.py`, lines 69 to 80:
 
 ```python
 CLOSING_TOOLS = frozenset(
@@ -382,12 +382,12 @@ Default budget of a run: 160 lab tool calls and 300 compute seconds (`budget` in
 
 The safety agent calls `request_approval`. The tool writes an `approval_request` to the record and waits for an `approval_decision`. If none arrives before the timeout it writes a rejection itself.
 
-`lab/tools/orphafold_lab_tools/record.py`, lines 849 to 869:
+`lab/tools/helix_lab_tools/record.py`, lines 849 to 869:
 
 ```python
     request = append_event(current_role(), "approval_request", build, refs=[test_id])
     approval_id = request["payload"]["id"]
-    deadline = time.monotonic() + float(os.environ.get("ORPHAFOLD_LAB_APPROVAL_TIMEOUT", "900"))
+    deadline = time.monotonic() + float(os.environ.get("HELIX_LAB_APPROVAL_TIMEOUT", "900"))
     while time.monotonic() < deadline:
         for event in of_type(load_events(directory), "approval_decision"):
             if event["payload"].get("id") == approval_id:
@@ -410,7 +410,7 @@ The safety agent calls `request_approval`. The tool writes an `approval_request`
 
 A decision reaches the record in one of two ways.
 
-1. A human answers through the API, `POST /api/v1/lab/runs/{run_id}/approvals/{approval_id}` (`api/orphafold/routers/lab.py`). The run page calls this endpoint from its Approve and Reject buttons.
+1. A human answers through the API, `POST /api/v1/lab/runs/{run_id}/approvals/{approval_id}` (`api/helix/routers/lab.py`). The run page calls this endpoint from its Approve and Reject buttons.
 2. The operator starts the launcher with `--approve`. The launcher then writes the decision with the operator's name:
 
 `lab/run_lab.py`, lines 381 to 395:
@@ -447,9 +447,9 @@ def child_environment(run_directory: Path, api_url: str, approval_timeout: int) 
         paths.append(environment["PYTHONPATH"])
     environment.update(
         {
-            "ORPHAFOLD_LAB_RUN_DIR": str(run_directory),
-            "ORPHAFOLD_API_URL": api_url,
-            "ORPHAFOLD_LAB_APPROVAL_TIMEOUT": str(approval_timeout),
+            "HELIX_LAB_RUN_DIR": str(run_directory),
+            "HELIX_API_URL": api_url,
+            "HELIX_LAB_APPROVAL_TIMEOUT": str(approval_timeout),
             "PYTHONPATH": os.pathsep.join(paths),
             # Connectors of the signed-in account are not tools of the lab
             "ENABLE_CLAUDEAI_MCP_SERVERS": "false",

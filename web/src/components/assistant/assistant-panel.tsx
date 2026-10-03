@@ -186,7 +186,7 @@ function Legend() {
         );
       })}
       <p className="text-2xs text-muted-foreground">
-        OrphaFold checks every factual segment against the records it cites. A
+        Helix checks every factual segment against the records it cites. A
         claim without a source record is shown as reasoning.
       </p>
     </section>
@@ -261,7 +261,7 @@ function SetupSteps({ status }: { status: AssistantStatus }) {
       <li>
         Optional:{" "}
         <span className="font-mono text-foreground">
-          ORPHAFOLD_ASSISTANT_MODEL
+          HELIX_ASSISTANT_MODEL
         </span>{" "}
         selects the model (default{" "}
         <span className="font-mono text-foreground">{status.model}</span>).
@@ -297,7 +297,7 @@ function NotConfigured({
     <section className="flex flex-col gap-1.5 border-b border-border px-3 py-3 text-xs">
       <h3 className="font-medium text-foreground">No model is configured</h3>
       <p className="text-muted-foreground">
-        Orpha writes answers with a Claude model that reads OrphaFold&apos;s
+        Helix writes answers with a Claude model that reads Helix&apos;s
         records. This deployment has no API key, so questions cannot be
         answered.
       </p>
@@ -549,12 +549,12 @@ export function AssistantDock() {
 
   return (
     <aside
-      aria-label="Orpha, research assistant"
+      aria-label="Helix, research assistant"
       className="flex min-h-0 flex-col border-border bg-background max-lg:absolute max-lg:inset-0 max-lg:z-30 lg:w-[380px] lg:shrink-0 lg:border-l"
     >
       <header className="flex h-9 shrink-0 items-center gap-2 border-b border-border px-3">
         <h2 className="shrink-0 truncate text-sm font-medium text-foreground">
-          Orpha
+          Helix
         </h2>
         {advanced ? (
           <span className="truncate text-xs text-muted-foreground">
@@ -637,7 +637,7 @@ export function AssistantDock() {
             value={text}
             rows={1}
             disabled={!configured}
-            aria-label="Question for Orpha"
+            aria-label="Question for Helix"
             placeholder={
               configured === false ? "Needs a model key" : "Ask a question"
             }

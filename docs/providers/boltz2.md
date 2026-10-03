@@ -1,12 +1,12 @@
 # Boltz-2 provider
 
 Boltz-2 (MIT, code and weights) predicts the structure of a protein, alone or together with a small
-molecule, and can predict the affinity of one small-molecule ligand in the same run. In OrphaFold it
+molecule, and can predict the affinity of one small-molecule ligand in the same run. In Helix it
 is the provider `boltz2`, registered as a structure predictor and as a binding predictor, and the
 engine behind the job kind `binding_prediction`.
 
 Everything it returns is a computational prediction for hypothesis generation. It is not
-experimental data and not for clinical decisions. Structures carry the origin `predicted_orphafold`
+experimental data and not for clinical decisions. Structures carry the origin `predicted_internal`
 and the ID `of:<job_id>`.
 
 **Status of this integration.** Boltz could not be run in the environment the adapter was written
@@ -28,14 +28,14 @@ job params ──▶ binding_prediction handler ──▶ Boltz2Provider ──�
 
 | Step             | Module                                              | What happens                                                                                                          |
 | ---------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Input validation | `api/orphafold/boltz/spec.py`                       | Standard amino acids only, one ligand for affinity, SMILES parsed with RDKit, atom limits, token cap, pocket residues |
-| Input file       | `api/orphafold/boltz/yaml_builder.py`               | Boltz YAML, schema version 1. Checked against every documented key and read back before it is used                    |
-| Options          | `api/orphafold/boltz/parameters.py`                 | Every option is passed explicitly, the seed always. The resolved values go into the manifest                          |
-| Execution        | `api/orphafold/boltz/backends.py`                   | `local_cli` or `remote_worker` behind one interface                                                                   |
-| Output           | `api/orphafold/boltz/parser.py`                     | Exact file names and JSON keys. Success is decided by file existence                                                  |
-| Provider         | `api/orphafold/providers/boltz2.py`                 | `StructurePredictor` and `BindingPredictor` in one class                                                              |
-| Job              | `api/orphafold/jobs/handlers/binding_prediction.py` | Sequence, window, variant, storage, manifest, typed result                                                            |
-| Settings         | `api/orphafold/boltz/settings.py`                   | `ORPHAFOLD_BOLTZ_*` and `ORPHAFOLD_MSA_SERVER_URL`                                                                    |
+| Input validation | `api/helix/boltz/spec.py`                       | Standard amino acids only, one ligand for affinity, SMILES parsed with RDKit, atom limits, token cap, pocket residues |
+| Input file       | `api/helix/boltz/yaml_builder.py`               | Boltz YAML, schema version 1. Checked against every documented key and read back before it is used                    |
+| Options          | `api/helix/boltz/parameters.py`                 | Every option is passed explicitly, the seed always. The resolved values go into the manifest                          |
+| Execution        | `api/helix/boltz/backends.py`                   | `local_cli` or `remote_worker` behind one interface                                                                   |
+| Output           | `api/helix/boltz/parser.py`                     | Exact file names and JSON keys. Success is decided by file existence                                                  |
+| Provider         | `api/helix/providers/boltz2.py`                 | `StructurePredictor` and `BindingPredictor` in one class                                                              |
+| Job              | `api/helix/jobs/handlers/binding_prediction.py` | Sequence, window, variant, storage, manifest, typed result                                                            |
+| Settings         | `api/helix/boltz/settings.py`                   | `HELIX_BOLTZ_*` and `HELIX_MSA_SERVER_URL`                                                                    |
 
 ### Input YAML
 
@@ -63,7 +63,7 @@ properties:
       binder: L
 ```
 
-Pocket residues are given to OrphaFold in UniProt canonical numbering and translated to 1-indexed
+Pocket residues are given to Helix in UniProt canonical numbering and translated to 1-indexed
 chain positions (`position - residue_start + 1`). The manifest records both.
 
 ### Command line
@@ -94,7 +94,7 @@ stores the resolved parameters and, next to them, the upstream defaults.
 | Ligand above 128 atoms (after RDKit `RemoveHs`) | Rejected for affinity. Proteins, peptides and other large molecules are not applicable |
 | Ligand above 56 atoms                           | Accepted with the caveat `ligand_atoms_above_56`                                       |
 | Ligand given as CCD code                        | Atom count is not checked locally: caveat `ligand_atom_count_not_checked_for_ccd`      |
-| Residues plus ligand heavy atoms above the cap  | Rejected. Cap `ORPHAFOLD_BOLTZ_MAX_TOKENS`, default 1,000. Model a shorter window      |
+| Residues plus ligand heavy atoms above the cap  | Rejected. Cap `HELIX_BOLTZ_MAX_TOKENS`, default 1,000. Model a shorter window      |
 | Pocket distance                                 | 4 to 20 Å, default 6                                                                   |
 
 Ligand problems are reported when the job is submitted (HTTP 422), before anything is queued.
@@ -106,26 +106,26 @@ state and the reason.
 
 | Backend         | Attach with                                                       | When                                                                      |
 | --------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `remote_worker` | `ORPHAFOLD_BOLTZ_WORKER_URL` (and `ORPHAFOLD_BOLTZ_WORKER_TOKEN`) | A GPU machine runs `api/worker/boltz`. Default for production             |
-| `local_cli`     | `ORPHAFOLD_BOLTZ_BIN`, or a `boltz` executable on `PATH`          | The API machine itself has a GPU, or Apple Silicon with `boltz-community` |
+| `remote_worker` | `HELIX_BOLTZ_WORKER_URL` (and `HELIX_BOLTZ_WORKER_TOKEN`) | A GPU machine runs `api/worker/boltz`. Default for production             |
+| `local_cli`     | `HELIX_BOLTZ_BIN`, or a `boltz` executable on `PATH`          | The API machine itself has a GPU, or Apple Silicon with `boltz-community` |
 
-When both are configured the worker is used; `ORPHAFOLD_BOLTZ_BACKEND=local_cli` or
+When both are configured the worker is used; `HELIX_BOLTZ_BACKEND=local_cli` or
 `remote_worker` forces one. Setup instructions for a GPU machine, for running without Docker and for
 Apple Silicon are in [`api/worker/boltz/README.md`](../../api/worker/boltz/README.md).
 
 | Setting                           | Default                             | Meaning                                                            |
 | --------------------------------- | ----------------------------------- | ------------------------------------------------------------------ |
-| `ORPHAFOLD_BOLTZ_WORKER_URL`      | unset                               | Base URL of the worker service                                     |
-| `ORPHAFOLD_BOLTZ_WORKER_TOKEN`    | unset                               | Bearer token of the worker                                         |
-| `ORPHAFOLD_BOLTZ_BIN`             | unset (`boltz` on `PATH`)           | Local executable. `ORPHAFOLD_BOLTZ_EXECUTABLE` is accepted as well |
-| `ORPHAFOLD_BOLTZ_BACKEND`         | `auto`                              | `auto`, `local_cli`, `remote_worker`                               |
-| `ORPHAFOLD_BOLTZ_ACCELERATOR`     | `gpu` (`mps` on Apple Silicon)      | Local runs only; the worker has its own `BOLTZ_ACCELERATOR`        |
-| `ORPHAFOLD_BOLTZ_CACHE_DIR`       | unset (`$BOLTZ_CACHE`, `~/.boltz`)  | Local checkpoint directory                                         |
-| `ORPHAFOLD_BOLTZ_DEVICES`         | `1`                                 | Local runs only                                                    |
-| `ORPHAFOLD_BOLTZ_NO_KERNELS`      | `false`                             | Local runs only; needed on old NVIDIA GPUs                         |
-| `ORPHAFOLD_BOLTZ_MAX_TOKENS`      | `1000`                              | Largest input accepted                                             |
-| `ORPHAFOLD_BOLTZ_TIMEOUT_SECONDS` | `7200`                              | A run is stopped after this time                                   |
-| `ORPHAFOLD_MSA_SERVER_URL`        | unset (`https://api.colabfold.com`) | MSA server Boltz queries in `msa_mode: server`                     |
+| `HELIX_BOLTZ_WORKER_URL`      | unset                               | Base URL of the worker service                                     |
+| `HELIX_BOLTZ_WORKER_TOKEN`    | unset                               | Bearer token of the worker                                         |
+| `HELIX_BOLTZ_BIN`             | unset (`boltz` on `PATH`)           | Local executable. `HELIX_BOLTZ_EXECUTABLE` is accepted as well |
+| `HELIX_BOLTZ_BACKEND`         | `auto`                              | `auto`, `local_cli`, `remote_worker`                               |
+| `HELIX_BOLTZ_ACCELERATOR`     | `gpu` (`mps` on Apple Silicon)      | Local runs only; the worker has its own `BOLTZ_ACCELERATOR`        |
+| `HELIX_BOLTZ_CACHE_DIR`       | unset (`$BOLTZ_CACHE`, `~/.boltz`)  | Local checkpoint directory                                         |
+| `HELIX_BOLTZ_DEVICES`         | `1`                                 | Local runs only                                                    |
+| `HELIX_BOLTZ_NO_KERNELS`      | `false`                             | Local runs only; needed on old NVIDIA GPUs                         |
+| `HELIX_BOLTZ_MAX_TOKENS`      | `1000`                              | Largest input accepted                                             |
+| `HELIX_BOLTZ_TIMEOUT_SECONDS` | `7200`                              | A run is stopped after this time                                   |
+| `HELIX_MSA_SERVER_URL`        | unset (`https://api.colabfold.com`) | MSA server Boltz queries in `msa_mode: server`                     |
 
 Availability is honest in both directions. It is false, with the reason, when nothing is attached,
 when the executable does not exist, when the worker does not answer, refuses the token, speaks
@@ -149,7 +149,7 @@ is a new run, never a replay. To replay a run, download its alignment artifact a
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/jobs \
-  -H 'Content-Type: application/json' -H 'X-OrphaFold-Workspace: <workspace id>' \
+  -H 'Content-Type: application/json' -H 'X-Helix-Workspace: <workspace id>' \
   -d '{"kind": "binding_prediction", "params": {
         "uniprot_accession": "Q06187", "residue_start": 393, "residue_end": 659,
         "ligand_smiles": "C=CC(=O)N1CCC[C@@H](n2nc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)C1",
@@ -175,7 +175,7 @@ curl -X POST http://localhost:8000/api/v1/jobs \
 Stages: `resolve_sequence`, `prepare_input`, `run_model`, `read_outputs`, `store_artifacts`.
 
 Result (`JobOut.result`): `statement`, `structure` (a `StructureDescriptor`, origin
-`predicted_orphafold`), `protein`, `ligand` (with InChIKey and atom count for a SMILES ligand),
+`predicted_internal`), `protein`, `ligand` (with InChIKey and atom count for a SMILES ligand),
 `pocket_constraint`, `pose_confidence`, `affinity`, `affinity_status` (`predicted`, `not_requested`,
 `not_produced`), `caveats`, `limitations`, `warnings`, `seed`, `artifacts` (URL by purpose) and
 `evidence` (two `computational_prediction` rows whose source record is the run manifest).
@@ -217,7 +217,7 @@ larger than the residue count.
 | --------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `confidence_score`                | 0-1                | Boltz ranking score, `0.8 x complex_plddt + 0.2 x iptm` (`ptm` for a single chain). Orders samples of one run. Not a probability of correctness, not comparable across models |
 | `ptm`                             | 0-1                | Predicted TM-score of the whole prediction                                                                                                                                    |
-| `iptm`                            | 0-1                | Predicted TM-score over interfaces. Boltz writes 0 for a single chain; OrphaFold stores `null` there                                                                          |
+| `iptm`                            | 0-1                | Predicted TM-score over interfaces. Boltz writes 0 for a single chain; Helix stores `null` there                                                                          |
 | `ligand_iptm`                     | 0-1                | Interface confidence of the ligand. The value to read for a protein-ligand pose                                                                                               |
 | `protein_iptm`                    | 0-1                | Interface confidence between protein chains                                                                                                                                   |
 | `complex_plddt`, `complex_iplddt` | 0-1                | Mean pLDDT of the complex and of the interface                                                                                                                                |
@@ -319,11 +319,11 @@ residues, nucleic acids.
 ## 6. Checking the adapter without Boltz
 
 ```bash
-cd api && .venv/bin/python -m orphafold.boltz.selfcheck
+cd api && .venv/bin/python -m helix.boltz.selfcheck
 ```
 
 It builds the two example inputs of `docs/research/structure-models.md` section 6.4 and compares
 them with the documented YAML, runs the input rules, and parses the fixture in
 `api/worker/boltz/fixtures/`. That fixture is hand-written, carries the key
-`_orphafold_parser_fixture` in its JSON files and is refused by the parser everywhere except this
+`_helix_parser_fixture` in its JSON files and is refused by the parser everywhere except this
 check, so it can never be returned as a result.

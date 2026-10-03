@@ -1,17 +1,17 @@
-# Mol\* integration cookbook for OrphaFold
+# Mol\* integration cookbook for Helix
 
 Verified on 2026-10-03 against `molstar@5.12.0` (npm `latest`, published 2026-09-28, MIT), the version installed in `web/node_modules`. The code blocks in sections 4 and 5 are copied byte-for-byte from files that were type-checked and executed in a browser (section 1). The file is longer than the 800-line target because it embeds the complete tested implementation (17 files, about 1,450 lines).
 
-## 0. Recommendation for OrphaFold
+## 0. Recommendation for Helix
 
 1. **Pin `molstar` to exactly `5.12.0`.** `web/package.json` currently has `^5.12.0`. All integration code uses deep `molstar/lib/<module>` paths, which carry no semver promise (the 5.12.0 changelog itself moves an extension directory). Upgrade on purpose and re-run the recipe checks.
-2. **Use the plain `PluginContext` with `mountAsync(container)`.** No `mol-plugin-ui`, no Mol\* CSS, no default panels. OrphaFold supplies all chrome.
+2. **Use the plain `PluginContext` with `mountAsync(container)`.** No `mol-plugin-ui`, no Mol\* CSS, no default panels. Helix supplies all chrome.
 3. **Load Mol\* through `import()` inside a client-component effect.** The Mol\* chunk is 3.08 MB minified (855 kB gzip, 668 kB brotli) and stays out of the first page load.
 4. **Put one `ViewerController` behind a `MolecularViewerHandle` ref** (section 5). React state never holds Mol\* objects. All mutating calls go through one promise queue.
 5. **Set `canvas3d.camera.manualReset: true`.** The camera then moves only on explicit commands, which removes a race that made focus and screenshots non-deterministic in testing.
 6. **Fetch BinaryCIF.** AlphaFold DB: resolve `bcifUrl` through the prediction API (model version is now v6, v4 URLs return 404). RCSB: `https://models.rcsb.org/{id}.bcif`.
-7. **Gate pLDDT colouring on OrphaFold's own provenance class.** Mol\*'s `plddt-confidence` theme reports itself applicable to RCSB X-ray entries and paints their B-factors with the pLDDT palette. Experimental structures get chain or B-factor (`uncertainty`) colouring only.
-8. **Use one custom theme, `orphafold-residue-data`, for every OrphaFold-computed per-residue colouring** (domains, variant impact, difference values). Colours are computed in app code from data with source IDs and passed as a `Map`; Mol\* state stores only a dataset id and a version number.
+7. **Gate pLDDT colouring on Helix's own provenance class.** Mol\*'s `plddt-confidence` theme reports itself applicable to RCSB X-ray entries and paints their B-factors with the pLDDT palette. Experimental structures get chain or B-factor (`uncertainty`) colouring only.
+8. **Use one custom theme, `helix-residue-data`, for every Helix-computed per-residue colouring** (domains, variant impact, difference values). Colours are computed in app code from data with source IDs and passed as a `Map`; Mol\* state stores only a dataset id and a version number.
 9. **Address residues with `StructureElement.Loci.fromSchema`.** Use `label_asym_id` + `label_seq_id` for predicted models and `auth_asym_id` + `auth_seq_id` when the UI shows PDB numbering. Pick events return both.
 10. **Superpose with `alignAndSuperpose` (sequence-aligned C-alpha) by default and offer `tmAlign` for low sequence identity.** Always show RMSD together with the aligned pair count and the method.
 11. **Split view is two plugin instances linked through `Camera.changed`** (available since 5.10.0) with a clamp-aware state comparison (recipe 4.11). Overlay is one plugin with a transform node on the mobile structure.
@@ -62,7 +62,7 @@ All code in sections 4 and 5 is [T]. Runtime status is listed per recipe.
 | 4 | Resizing is built in: Mol\* observes the wrapper with a `ResizeObserver` (debounce 50 ms, throttle 100 ms). Canvas pixels = CSS pixels x `devicePixelRatio` x `pixelScale`. | [R] 640x480 to 500x300 and back | Do not add your own observer. The container needs `position: relative` and a real size. |
 | 5 | `plddt-confidence` is not a built-in theme. It lives in `extensions/model-archive`. The `MAQualityAssessment` behaviour that normally registers it imports `mol-plugin-ui`. | [S] [R] | Register `PLDDTConfidenceColorThemeProvider` directly on the theme registry (recipe 4.1). |
 | 6 | `plddt-confidence` is applicable to experimental RCSB entries. `Model.isExperimental` checks `_struct.pdbx_structure_determination_methodology`, which RCSB files for 1BF5 and 1YVL do not contain. 1YVL residue A150 with B = 79.12 is painted "Confident" blue. | [D] [R] | Gate in the controller on provenance origin (section 5). This refines the note in `ux-research.md` section 12. |
-| 7 | pLDDT values come from `ma_qa_metric_local` when present (AlphaFold DB mmCIF and BCIF: 750 values for P42224) and fall back to the B-factor column otherwise (AlphaFold DB `.pdb`). Thresholds assume a 0 to 100 scale: `<= 50` `#ff7d45`, `<= 70` `#ffdb13`, `<= 90` `#65cbf3`, above `#0053d6`. | [S] [D] [R] | Confirm the scale of OrphaFold-generated files before using this theme on them. |
+| 7 | pLDDT values come from `ma_qa_metric_local` when present (AlphaFold DB mmCIF and BCIF: 750 values for P42224) and fall back to the B-factor column otherwise (AlphaFold DB `.pdb`). Thresholds assume a 0 to 100 scale: `<= 50` `#ff7d45`, `<= 70` `#ffdb13`, `<= 90` `#65cbf3`, above `#0053d6`. | [S] [D] [R] | Confirm the scale of Helix-generated files before using this theme on them. |
 | 8 | An unknown colour theme name does not throw. The registry returns an empty provider and the structure renders grey. | [R] | Keep theme names in one typed union (`ColorMode`). |
 | 9 | `colorThemeRegistry.add` throws when the name is already registered. | [S] | Guard with `registry.has(provider)`. |
 | 10 | `plugin.behaviors.interaction.click` and `.hover` are `BehaviorSubject`s. Subscribing fires once immediately with an empty loci and button 0. | [R] | Skip the first click emission (recipe 4.8). |
@@ -71,7 +71,7 @@ All code in sections 4 and 5 is [T]. Runtime status is listed per recipe.
 | 13 | `alignAndSuperpose` and `AlignSequences` read only the first unit (chain) of each loci. | [S] | One chain per structure per call. The recipe throws otherwise. |
 | 14 | `element-symbol` colours carbons by chain by default (`carbonColor: 'chain-id'`). `chain-id` defaults to `auth` asym ids. `secondary-structure` defaults to `saturation: -1`. | [S] | Pass params explicitly, as the recipes do. |
 | 15 | `builders.data.rawData` rejects `Uint8Array<ArrayBufferLike>` under TypeScript 5.7+ typed-array generics. | [T] | Type binary input as `ArrayBuffer | Uint8Array<ArrayBuffer>`. |
-| 16 | Camera key bindings (W A S D and others) listen on `window`, but only fire when the event target is `body` or the canvas and the pointer is over the canvas. | [S] | Typing in OrphaFold inputs does not move the camera. |
+| 16 | Camera key bindings (W A S D and others) listen on `window`, but only fire when the event target is `body` or the canvas and the pointer is over the canvas. | [S] | Typing in Helix inputs does not move the camera. |
 | 17 | Query symbols are registered by a side-effect module. `Loci.fromSchema` with several items fails in a bare Node script with `structure-query.combinator.merge is not implemented`. | [D] | In unit tests that do not create a `PluginContext`, add `import "molstar/lib/mol-script/runtime/query/table"`. |
 | 18 | Two separately loaded copies of the same file are not "equivalent" structures for marking, a structure and its transformed decorator are. | [D] | Highlights stay per structure in an overlay. |
 | 19 | `Camera.changed` fires again on anti-aliasing jitter frames: two events per frame for about three frames after each real change, with an unchanged camera state. | [R] | Compare state before reacting. The controller deduplicates before calling React listeners. |
@@ -573,11 +573,11 @@ export async function setColorMode(
 | `uniform` | `uniform` | `value` | `#336699` as requested |
 | `b-factor` | `uncertainty` | B-factor column, `red-white-blue` scale over `domain`, high values red | `#c22d2d` for 97.44 on 0 to 100. Intended for experimental structures |
 | `element` | `element-symbol` | element colours, carbons included | used for ligands and sticks in 4.9 |
-| `residue-data` | `orphafold-residue-data` (4.6) | OrphaFold data | |
+| `residue-data` | `helix-residue-data` (4.6) | Helix data | |
 
 All 39 built-in names are the keys of `ColorTheme.BuiltIn` in `molstar/lib/mol-theme/color` [S].
 
-### 4.6 Custom per-residue colour theme driven by OrphaFold data
+### 4.6 Custom per-residue colour theme driven by Helix data
 
 Status: [R] domain colours, a single variant residue and the fallback colour read back; updating the dataset and bumping `version` recoloured without recreating the representation; colours survive representation switches; two viewers held different datasets for the same structure id [N].
 
@@ -592,7 +592,7 @@ import type { ThemeDataContext } from "molstar/lib/mol-theme/theme";
 import { Color } from "molstar/lib/mol-util/color";
 import { ParamDefinition as PD } from "molstar/lib/mol-util/param-definition";
 
-export const RESIDUE_DATA_THEME = "orphafold-residue-data";
+export const RESIDUE_DATA_THEME = "helix-residue-data";
 
 export interface ResidueColorDataset {
   /** which identifiers the keys use: label_asym_id + label_seq_id, or auth_asym_id + auth_seq_id */
@@ -661,13 +661,13 @@ export function ResidueDataColorTheme(
     preferSmoothing: true,
     color,
     props,
-    description: "Per-residue colours supplied by OrphaFold",
+    description: "Per-residue colours supplied by Helix",
   };
 }
 
 export const ResidueDataColorThemeProvider: ColorTheme.Provider<ResidueDataThemeParams, typeof RESIDUE_DATA_THEME> = {
   name: RESIDUE_DATA_THEME,
-  label: "OrphaFold residue data",
+  label: "Helix residue data",
   category: ColorThemeCategory.Misc,
   factory: ResidueDataColorTheme,
   getParams: () => ResidueDataThemeParams,
@@ -682,7 +682,7 @@ export function registerResidueDataTheme(plugin: PluginContext): void {
 }
 ```
 
-Usage for the three OrphaFold cases (domains, variant impact, difference values). Same calls as in the browser tests, [T] in this form:
+Usage for the three Helix cases (domains, variant impact, difference values). Same calls as in the browser tests, [T] in this form:
 
 ```ts
 import type { PluginContext } from "molstar/lib/mol-plugin/context";
@@ -1018,7 +1018,7 @@ export async function addResidueLabel(
   if (StructureElement.Loci.isEmpty(loci)) return undefined;
 
   const label = await plugin.managers.structure.measurement.addLabel(loci, {
-    reprTags: "orphafold-label",
+    reprTags: "helix-label",
     visualParams: {
       customText: text,
       textColor: Color(options.textColor ?? 0x111111),
@@ -1286,7 +1286,7 @@ export interface SuperpositionResult {
   transform: number[];
 }
 
-const SUPERPOSITION_TAG = "orphafold-superposition";
+const SUPERPOSITION_TAG = "helix-superposition";
 
 function caLoci(loaded: LoadedStructure, chain: ChainRef): StructureElement.Loci {
   // untransformed coordinates on purpose, so a new transform replaces the old one instead of stacking
@@ -1359,7 +1359,7 @@ Measured on STAT1, AlphaFold DB model chain A as reference:
 
 ### 4.14 Split view
 
-Two `MolecularViewer` instances, one structure each, linked with `handle.syncCameraWith(other)` (component level, [N]) or `syncCameras(pluginA, pluginB)` (plugin level, [R]). Both use `camerasInSync` from 4.11. Wait for `settled()` on both viewers before linking. Hover and selection are shared through OrphaFold state: `onHover` of one viewer calls `highlight` on the other.
+Two `MolecularViewer` instances, one structure each, linked with `handle.syncCameraWith(other)` (component level, [N]) or `syncCameras(pluginA, pluginB)` (plugin level, [R]). Both use `camerasInSync` from 4.11. Wait for `settled()` on both viewers before linking. Hover and selection are shared through Helix state: `onHover` of one viewer calls `highlight` on the other.
 
 ### 4.15 Performance levers
 
@@ -1417,10 +1417,10 @@ import type { CameraState } from "./camera-sync";
 export type { CameraState };
 
 /** Provenance class. Drives the UI badge and which colour modes are legal. */
-export type StructureOrigin = "experimental" | "predicted-external" | "predicted-orphafold";
+export type StructureOrigin = "experimental" | "predicted-external" | "predicted-internal";
 
 export interface StructureDescriptor {
-  /** caller-chosen stable id, e.g. "pdb:1YVL", "afdb:AF-P42224-F1", "orphafold:run_123" */
+  /** caller-chosen stable id, e.g. "pdb:1YVL", "afdb:AF-P42224-F1", "helix:run_123" */
   id: string;
   source: StructureSource;
   origin: StructureOrigin;
@@ -1819,13 +1819,13 @@ Versions and licences from the npm registry and GitHub on 2026-10-03.
 | `molstar` | 5.12.0, 2026-09-28 | MIT | Primary and only 3D engine. Nine releases in 2026 so far, repository pushed 2026-10-03. |
 | `pdbe-molstar` | 3.12.0, 2026-04-24 | Apache-2.0 | PDBe's wrapper with its own helper API. Pins `molstar` 5.8.0 exactly and adds `lit` and `d3-selection`, so it would bundle a second, older Mol\*. Do not use. |
 | `@rcsb/rcsb-molstar` | 2.14.7, 2026-09-22 | MIT | RCSB's application-level viewer on `molstar ^5.9.0` with `react` and `react-dom` as direct dependencies. An application to embed, with its own UI. Do not use. |
-| `ngl` | 2.5.0, 2026-09-03 | MIT | Previous release was 2.4.0 on 2024-09-26. Depends on `molstar ^4.1.0` and `three` itself. Adds nothing OrphaFold needs beyond Mol\*. Do not add. |
+| `ngl` | 2.5.0, 2026-09-03 | MIT | Previous release was 2.4.0 on 2024-09-26. Depends on `molstar ^4.1.0` and `three` itself. Adds nothing Helix needs beyond Mol\*. Do not add. |
 | `3dmol` | 2.5.5, 2026-05-22 | BSD-3-Clause | Actively released (2.5.4 in 2026-01), no runtime dependencies in npm metadata. A second renderer would mean a second selection model, a second colour implementation and a second place to enforce provenance rules. Do not add. |
 | `@rcsb/rcsb-saguaro` | 3.3.0, 2026-07-02 | MIT | 1D feature viewer with peer `react ^19`, built on `d3` and `rxjs`. Not run here. `ux-research.md` prefers Nightingale for the shared-axis sequence dock. |
 | `@rcsb/rcsb-saguaro-3d` | 4.3.1, 2026-08-26 | MIT | Depends on `@rcsb/rcsb-molstar`, `@rcsb/rcsb-saguaro-app` and `molstar ^5.9.0`. Do not use. |
 | `@nightingale-elements/*` | 5.11.0 (2026-09-17), `nightingale-track` 5.11.1 (2026-10-01) | Repository `LICENSE` is MIT; several packages declare ISC in npm metadata | Web components on `lit` 3 and `d3` 7. `nightingale-manager` propagates `display-start`, `display-end`, `highlight`, `length` to its tracks and listens for `change` events. Recommended for sequence tracks next to Mol\*, as `ux-research.md` also concludes. |
 
-Use alongside Mol\*: Nightingale only. Link it through OrphaFold's own store: track `change` events call `viewer.highlight` / `viewer.select`, and `onHover` / `onClick` from the viewer set the track `highlight` attribute. Neither library should talk to the other directly.
+Use alongside Mol\*: Nightingale only. Link it through Helix's own store: track `change` events call `viewer.highlight` / `viewer.select`, and `onHover` / `onClick` from the viewer set the track `highlight` attribute. Neither library should talk to the other directly.
 
 ## 7. Sources
 
@@ -1845,7 +1845,7 @@ Use alongside Mol\*: Nightingale only. Link it through OrphaFold's own store: tr
 - Performance: no frame rates, load times or memory figures. Everything ran on software WebGL2 in headless Chrome. The levers in 4.15 are API-verified; their effect size on real GPUs is unmeasured.
 - Browsers other than Chrome 154 (Safari, Firefox, mobile, WebGL1 fallback), touch gestures and keyboard camera bindings.
 - Structures above roughly 11,000 atoms, biological assemblies (`assemblyId`), multi-model files, nucleic-acid-only and glycan-heavy entries.
-- OrphaFold-generated prediction files (Boltz-2 or others): whether they carry `ma_qa_metric_local`, and whether the B-factor column holds pLDDT on a 0 to 100 scale. Until confirmed, colour those through `orphafold-residue-data` from the model's own confidence output.
+- Helix-generated prediction files (Boltz-2 or others): whether they carry `ma_qa_metric_local`, and whether the B-factor column holds pLDDT on a 0 to 100 scale. Until confirmed, colour those through `helix-residue-data` from the model's own confidence output.
 - Runtime behaviour inside the real `web/` app. Its React is 19.2.8; runtime tests used 19.3.0 in a scratch Next.js 16.3.8 app. Type-checking against `web/node_modules` passed.
 - Nightingale and Saguaro were assessed from metadata and READMEs. Neither was run, and React 19 custom-element integration is untested.
 - Compressed files (`.cif.gz`, `.bcif.gz`) through `builders.data.download`.

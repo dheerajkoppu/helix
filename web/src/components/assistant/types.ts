@@ -1,7 +1,7 @@
 import type { Schema, SourceStatus } from "@/lib/api/types";
 import type { AudienceLevel } from "@/lib/state/assistant";
 
-/** Hand-written from api/orphafold/schemas/assistant.py; replace with Schema<"..."> after make types. */
+/** Hand-written from api/helix/schemas/assistant.py; replace with Schema<"..."> after make types. */
 
 export type ApiEvidence = Schema<"Evidence">;
 

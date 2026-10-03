@@ -2,7 +2,7 @@ import type { SourceStatus } from "@/lib/api/types";
 import type { EvidenceClass } from "@/lib/evidence";
 import type { StructureOrigin } from "@/lib/structure-origin";
 
-/** Mirrors api/orphafold/schemas/search.py (GET /search). */
+/** Mirrors api/helix/schemas/search.py (GET /search). */
 export const SEARCH_RESULT_TYPES = [
   "gene",
   "protein",

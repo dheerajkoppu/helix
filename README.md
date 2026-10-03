@@ -1,14 +1,14 @@
-# OrphaFold
+# Helix
 
 Open protein research for rare disease.
 
-OrphaFold is an open-source platform for computational rare-disease research. It follows one path
+Helix is an open-source platform for computational rare-disease research. It follows one path
 from a disease to a research hypothesis: disease, gene, pathogenic variant, protein, structural
 change, mechanism, candidate interventions, hypothesis. At every step it shows where each statement
 comes from and how far it can be trusted. The first dataset is the IUIS classification of inborn
 errors of immunity: 604 diseases and 511 genes.
 
-OrphaFold is a research and hypothesis-generation tool. It is not clinical decision software.
+Helix is a research and hypothesis-generation tool. It is not clinical decision software.
 
 ## Why it exists
 
@@ -18,12 +18,12 @@ the PDB and AlphaFold DB, predictions in a dozen services, each with its own ide
 and licence. A researcher assembling it by hand loses the provenance on the way, and a predicted
 structure ends up in the same figure as a crystal structure with nothing to tell them apart.
 
-OrphaFold puts those sources on one residue numbering and one page, and keeps three rules:
+Helix puts those sources on one residue numbering and one page, and keeps three rules:
 
 1. **Every value is traceable to a source record**, with its release, retrieval date and licence.
    A value no source provides is shown as Unknown.
 2. **Every statement carries one of six evidence classes**: experimental, clinical database,
-   literature, curated database, computational prediction, OrphaFold hypothesis. Scores from
+   literature, curated database, computational prediction, Helix hypothesis. Scores from
    different sources are never merged into one number.
 3. **Experimental structures, existing predictions and predictions generated here are never
    presented as equivalent.** Every computational run writes a manifest of its inputs, model,
@@ -48,7 +48,7 @@ lists every model provider and whether it can run on this installation.
 
 ## Agentic lab
 
-The Lab (`/lab`) is a team of AI agents on top of the OrphaFold API, orchestrated by Omnigent
+The Lab (`/lab`) is a team of AI agents on top of the Helix API, orchestrated by Omnigent
 0.16.0: a supervisor and seven specialists (literature, knowledge graph, insight, planner, safety,
 runner, analysis). It takes one mutation through a recorded loop: question, evidence, hypothesis,
 experiment, result, updated decision. Four policies bound what each agent may do, and a test that
@@ -80,7 +80,7 @@ API reference: http://localhost:8000/api/v1/docs. Every route is under `/api/v1`
 | ------------- | ---------------------------------------------------------------------------------- |
 | `make setup`  | Creates `api/.venv`, installs the API (`EXTRAS=dev,postgres,redis,s3`) and the web |
 | `make dev`    | Runs API and web together; Ctrl-C stops both                                       |
-| `make api`    | Runs the API (`RELOAD=1` restarts it when a file under `api/orphafold` changes)    |
+| `make api`    | Runs the API (`RELOAD=1` restarts it when a file under `api/helix` changes)    |
 | `make web`    | Runs the web dev server (`API_URL=http://host:port` to call another API)           |
 | `make worker` | Runs a separate job worker (Redis queue only)                                      |
 | `make seed`   | Rebuilds `data/seed/catalog.json` from its sources (`SEED_ARGS="--refresh all"`)   |
@@ -110,12 +110,12 @@ web/  Next.js app  ──HTTP──▶  api/  FastAPI, every route under /api/v1
           ┌─────────────────────┼──────────────────────────┬─────────────────────┐
           ▼                     ▼                          ▼                     ▼
    seeded catalog        source adapters             job queue             database
-   data/seed/            api/orphafold/sources/      in-process asyncio    SQLite (default)
+   data/seed/            api/helix/sources/      in-process asyncio    SQLite (default)
    catalog.json          live upstream APIs          or Redis + worker     or PostgreSQL
                          cached in the database            │
                                                            ▼
                                                   model providers ──▶ artifact store
-                                                  api/orphafold/providers/  local dir or S3
+                                                  api/helix/providers/  local dir or S3
 ```
 
 Interactive requests, upstream calls and long-running compute are kept apart. A page never waits
@@ -124,7 +124,7 @@ of each source it asked.
 
 | Path             | Holds                                                                                        |
 | ---------------- | -------------------------------------------------------------------------------------------- |
-| `api/`           | FastAPI service, package `orphafold`: source adapters, seeded catalog, jobs, model providers |
+| `api/`           | FastAPI service, package `helix`: source adapters, seeded catalog, jobs, model providers |
 | `web/`           | Next.js app: workspace, sequence axis, molecular viewer, explore, projects                   |
 | `data/seed/`     | The seeded dataset the API loads at startup, with its sources and build report               |
 | `data/examples/` | Real cached model outputs, each beside the manifest of the run that produced it              |
@@ -147,13 +147,13 @@ and required citation of each one and is generated by the seed build, with check
 `data/seed/SOURCES.json`. [`docs/data-sources.md`](docs/data-sources.md) describes what is read
 from where.
 
-- The IUIS 2024 classification is published under CC BY-ND 4.0. OrphaFold stores only identifiers,
+- The IUIS 2024 classification is published under CC BY-ND 4.0. Helix stores only identifiers,
   codes and short labels taken from it; the exact note is in
   [`ATTRIBUTION.md`](ATTRIBUTION.md#iuis-classification-what-is-and-is-not-stored).
 - ChEMBL is CC BY-SA 3.0 and is kept apart from other data.
 - No OMIM content is included. MIM numbers are link-outs supplied by other sources.
 - Sources restricted to non-commercial use stay off unless an installation sets
-  `ORPHAFOLD_ENABLE_NONCOMMERCIAL_SOURCES=true`.
+  `HELIX_ENABLE_NONCOMMERCIAL_SOURCES=true`.
 
 ## Model providers
 
@@ -173,14 +173,14 @@ run on this machine.
 **Without a GPU** everything except `boltz2` runs. `boltz2` reports unavailable until a GPU worker
 (`api/worker/boltz`) or a local Boltz installation is attached, and jobs that need it fail with the
 reason. Nothing is substituted for a model that cannot run. No real Boltz-2 prediction has been
-made through OrphaFold yet; see [`docs/providers/boltz2.md`](docs/providers/boltz2.md).
+made through Helix yet; see [`docs/providers/boltz2.md`](docs/providers/boltz2.md).
 
 Details: [`docs/model-providers.md`](docs/model-providers.md).
 
 ### Adding a model
 
-Add one file under `api/orphafold/providers/`: subclass an interface from
-`orphafold.providers.base`, declare the model's version, licence, capabilities and limitations, and
+Add one file under `api/helix/providers/`: subclass an interface from
+`helix.providers.base`, declare the model's version, licence, capabilities and limitations, and
 decorate the class with `@register_provider`. It appears in `/api/v1/models` on the next start. The
 checklist is in [`docs/adding-a-model.md`](docs/adding-a-model.md).
 
@@ -220,7 +220,7 @@ The full list, with sources, is in
 | [`docs/reproducibility.md`](docs/reproducibility.md)               | Provenance, run manifests, snapshots, exports        |
 | [`docs/scientific-limitations.md`](docs/scientific-limitations.md) | What the outputs do not show                         |
 | [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md)                   | Interface components and page rules                  |
-| [`docs/PRODUCT_BRIEF.md`](docs/PRODUCT_BRIEF.md)                   | What OrphaFold is built to do                        |
+| [`docs/PRODUCT_BRIEF.md`](docs/PRODUCT_BRIEF.md)                   | What Helix is built to do                        |
 
 The same documentation is served by the web app at `/docs`.
 
@@ -228,7 +228,7 @@ The same documentation is served by the web app at `/docs`.
 
 Contributions of data sources, model providers, corrections to mappings and limitations, and
 interface work are welcome. [`CONTRIBUTING.md`](CONTRIBUTING.md) has the setup, the checks to run
-and the rules a change must keep. To cite OrphaFold, use [`CITATION.cff`](CITATION.cff).
+and the rules a change must keep. To cite Helix, use [`CITATION.cff`](CITATION.cff).
 
 ## Licence
 

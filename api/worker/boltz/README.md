@@ -1,7 +1,7 @@
-# OrphaFold Boltz worker
+# Helix Boltz worker
 
 A small HTTP service that runs `boltz predict` on a machine with a GPU and hands the result files
-back to the OrphaFold API. The API machine needs no GPU and no Boltz installation: it sends the
+back to the Helix API. The API machine needs no GPU and no Boltz installation: it sends the
 input YAML and the command-line options, polls the worker, downloads the files Boltz wrote, checks
 their SHA-256 and parses them with the same parser it uses for a local run.
 
@@ -11,7 +11,7 @@ and adds the options that belong to its machine (`--cache`, `--accelerator`, `--
 
 | File               | Purpose                                                                      |
 | ------------------ | ---------------------------------------------------------------------------- |
-| `server.py`        | The service (FastAPI, Python 3.12, no dependency on the `orphafold` package) |
+| `server.py`        | The service (FastAPI, Python 3.12, no dependency on the `helix` package) |
 | `Dockerfile`       | Python 3.12 image with `boltz[cuda]==2.2.1` for an NVIDIA host               |
 | `requirements.txt` | Pinned dependencies of the image                                             |
 | `fetch_weights.py` | Downloads the pinned checkpoints and verifies their SHA-256                  |
@@ -29,15 +29,15 @@ for about 1,000 tokens.
 
 ```bash
 cd api/worker/boltz
-docker build -t orphafold-boltz-worker .
+docker build -t helix-boltz-worker .
 
 # Once: fetch the pinned checkpoints (about 6.2 GB) into a volume and verify them
-docker run --rm -v boltz-models:/models/boltz orphafold-boltz-worker python fetch_weights.py
+docker run --rm -v boltz-models:/models/boltz helix-boltz-worker python fetch_weights.py
 
 docker run -d --name boltz-worker --gpus all -p 8200:8200 \
   -v boltz-models:/models/boltz -v boltz-jobs:/data/jobs \
   -e BOLTZ_WORKER_TOKEN="$(openssl rand -hex 24)" \
-  orphafold-boltz-worker
+  helix-boltz-worker
 
 curl -H "Authorization: Bearer <token>" http://localhost:8200/health
 ```
@@ -46,8 +46,8 @@ curl -H "Authorization: Bearer <token>" http://localhost:8200/health
 GPU. Then attach the worker on the API machine (repository `.env`):
 
 ```bash
-ORPHAFOLD_BOLTZ_WORKER_URL=http://<gpu-host>:8200
-ORPHAFOLD_BOLTZ_WORKER_TOKEN=<token>
+HELIX_BOLTZ_WORKER_URL=http://<gpu-host>:8200
+HELIX_BOLTZ_WORKER_TOKEN=<token>
 ```
 
 `GET /api/v1/models/boltz2` now reports `availability.available: true` with the worker's Boltz
@@ -79,19 +79,19 @@ Then either run the worker on the Mac:
 
 ```bash
 BOLTZ_ACCELERATOR=mps BOLTZ_WORKER_DATA=~/boltz-jobs uvicorn server:app --port 8200
-# API .env: ORPHAFOLD_BOLTZ_WORKER_URL=http://localhost:8200
+# API .env: HELIX_BOLTZ_WORKER_URL=http://localhost:8200
 ```
 
 or skip the worker and let the API call the executable directly:
 
 ```bash
 # API .env
-ORPHAFOLD_BOLTZ_BIN=/Users/<you>/boltz-env/bin/boltz
-ORPHAFOLD_BOLTZ_ACCELERATOR=mps
+HELIX_BOLTZ_BIN=/Users/<you>/boltz-env/bin/boltz
+HELIX_BOLTZ_ACCELERATOR=mps
 ```
 
 A 32 GB Mac handles about 1,000 residues plus ligand atoms according to the ChimeraX documentation
-for its bundled Boltz. Keep `ORPHAFOLD_BOLTZ_MAX_TOKENS` at or below what your machine has shown it
+for its bundled Boltz. Keep `HELIX_BOLTZ_MAX_TOKENS` at or below what your machine has shown it
 can do.
 
 ## CPU
@@ -134,7 +134,7 @@ exit 0 without a prediction, so the API decides success from the files it downlo
 
 - The worker has no access control beyond the bearer token. Keep it on a private network.
 - With `msa_mode: server` Boltz sends the protein sequence to the MSA server named by the API
-  setting `ORPHAFOLD_MSA_SERVER_URL` (default `https://api.colabfold.com`). The public ColabFold
+  setting `HELIX_MSA_SERVER_URL` (default `https://api.colabfold.com`). The public ColabFold
   server is a shared academic resource: submit serially from one IP address and host your own for
   volume or for sequences that must not leave your network.
 - Jobs are kept in memory. Restarting the worker forgets running jobs; the API job then fails with

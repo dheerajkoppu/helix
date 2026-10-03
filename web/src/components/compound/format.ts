@@ -18,7 +18,7 @@ const DATABASE_NAME: Record<string, string> = {
   string: "STRING",
   unichem: "UniChem",
   uniprot: "UniProt",
-  orphafold: "OrphaFold",
+  helix: "Helix",
 };
 
 /** Source IDs as the API writes them, printed the way the database names itself. */

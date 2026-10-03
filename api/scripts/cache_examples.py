@@ -1,6 +1,6 @@
 """Run real variant comparisons for the flagship set and store their outputs under data/examples.
 
-Each comparison is a variant_comparison job submitted to a running OrphaFold API, so the stored
+Each comparison is a variant_comparison job submitted to a running Helix API, so the stored
 files are exactly what the job produced, beside the run manifest of that job. Nothing is written
 for a job that did not succeed.
 
@@ -22,7 +22,7 @@ REPO_DIR = Path(__file__).resolve().parents[2]
 CATALOG = REPO_DIR / "data" / "seed" / "catalog.json"
 EXAMPLES_DIR = REPO_DIR / "data" / "examples"
 INDEX_FILE = "index.json"
-WORKSPACE = "orphafold-cache-examples-script"
+WORKSPACE = "helix-cache-examples-script"
 JOB_KIND = "variant_comparison"
 
 # gene, protein change or position of the variant in the flagship list of the seed catalog.
@@ -130,7 +130,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("--api", default="http://127.0.0.1:8000", help="Origin of a running OrphaFold API")
+    parser.add_argument("--api", default="http://127.0.0.1:8000", help="Origin of a running Helix API")
     parser.add_argument("--provider", default="esm_atlas", help="Model provider that runs the comparisons")
     parser.add_argument("--only", action="append", help="Variant ID to run; repeat for several")
     parser.add_argument("--skip-existing", action="store_true", help="Keep examples already in the index")
@@ -144,7 +144,7 @@ def main() -> int:
             rows[f"{row['variant_id']}__{row['provider_id']}"] = row
 
     failed: list[str] = []
-    headers = {"X-OrphaFold-Workspace": WORKSPACE}
+    headers = {"X-Helix-Workspace": WORKSPACE}
     with httpx.Client(base_url=arguments.api, headers=headers, timeout=60) as client:
         for variant_id in arguments.only or flagship_variants():
             key = f"{variant_id}__{arguments.provider}"

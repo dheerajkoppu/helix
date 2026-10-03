@@ -24,7 +24,7 @@ export const metadata: Metadata = { title: "About" };
 const BORDER_MEANING = {
   solid: "Asserted by an external source",
   dashed: "Computed by a model or tool",
-  dotted: "Authored inside OrphaFold",
+  dotted: "Authored inside Helix",
 } as const;
 
 const STEPS = [
@@ -148,7 +148,7 @@ export default function AboutPage() {
   return (
     <Page>
       <PageHeader
-        title="About OrphaFold"
+        title="About Helix"
         description="Open research software for rare genetic disease. Not for clinical use."
       />
       <PageBody>
@@ -257,7 +257,7 @@ export default function AboutPage() {
               licence.
             </p>
             <p>
-              OrphaFold puts those sources on one path and one residue
+              Helix puts those sources on one path and one residue
               numbering: disease, gene, variant, protein, structural change,
               mechanism, candidate interventions, hypothesis. At each step it
               shows where a statement comes from and what kind of statement it

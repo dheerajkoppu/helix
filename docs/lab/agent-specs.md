@@ -1,6 +1,6 @@
 # Agent specifications
 
-Built on 2026-10-03T22:39:14Z by a script that reads the files named below. Every quoted block is copied from the file at the line numbers given, so it goes stale when the file changes. The tables are read from `lab/tools/orphafold_lab_tools/registry.py`, the file the agent bundles are generated from (`lab/tools/generate_agent_tools.py`).
+Built on 2026-10-03T23:34:41Z by a script that reads the files named below. Every quoted block is copied from the file at the line numbers given, so it goes stale when the file changes. The tables are read from `lab/tools/helix_lab_tools/registry.py`, the file the agent bundles are generated from (`lab/tools/generate_agent_tools.py`).
 
 The lab is one Omnigent agent bundle: a supervisor with seven sub-agents. A second bundle holds the control, one generalist agent. Omnigent version 0.16.0, harness `claude-sdk`.
 
@@ -8,17 +8,17 @@ The lab is one Omnigent agent bundle: a supervisor with seven sub-agents. A seco
 
 | Agent | Spec | Prompt | Tool files |
 | --- | --- | --- | --- |
-| Supervisor (`orphafold_lab`) | `lab/agents/orphafold_lab/config.yaml` | `lab/agents/orphafold_lab/AGENTS.md` | `lab/agents/orphafold_lab/tools/python/` (5 files) |
-| Literature agent (`literature`) | `lab/agents/orphafold_lab/agents/literature/config.yaml` | `lab/agents/orphafold_lab/agents/literature/AGENTS.md` | `lab/agents/orphafold_lab/agents/literature/tools/python/` (7 files) |
-| Knowledge graph agent (`knowledge_graph`) | `lab/agents/orphafold_lab/agents/knowledge_graph/config.yaml` | `lab/agents/orphafold_lab/agents/knowledge_graph/AGENTS.md` | `lab/agents/orphafold_lab/agents/knowledge_graph/tools/python/` (15 files) |
-| Insight agent (`insight`) | `lab/agents/orphafold_lab/agents/insight/config.yaml` | `lab/agents/orphafold_lab/agents/insight/AGENTS.md` | `lab/agents/orphafold_lab/agents/insight/tools/python/` (3 files) |
-| Experiment planner (`planner`) | `lab/agents/orphafold_lab/agents/planner/config.yaml` | `lab/agents/orphafold_lab/agents/planner/AGENTS.md` | `lab/agents/orphafold_lab/agents/planner/tools/python/` (6 files) |
-| Safety agent (`safety`) | `lab/agents/orphafold_lab/agents/safety/config.yaml` | `lab/agents/orphafold_lab/agents/safety/AGENTS.md` | `lab/agents/orphafold_lab/agents/safety/tools/python/` (5 files) |
-| Experiment runner (`runner`) | `lab/agents/orphafold_lab/agents/runner/config.yaml` | `lab/agents/orphafold_lab/agents/runner/AGENTS.md` | `lab/agents/orphafold_lab/agents/runner/tools/python/` (9 files) |
-| Analysis agent (`analysis`) | `lab/agents/orphafold_lab/agents/analysis/config.yaml` | `lab/agents/orphafold_lab/agents/analysis/AGENTS.md` | `lab/agents/orphafold_lab/agents/analysis/tools/python/` (6 files) |
-| Control (`orphafold_baseline`) | `lab/agents/orphafold_baseline/config.yaml` | `lab/agents/orphafold_baseline/AGENTS.md` | `lab/agents/orphafold_baseline/tools/python/` (38 files) |
+| Supervisor (`helix_lab`) | `lab/agents/helix_lab/config.yaml` | `lab/agents/helix_lab/AGENTS.md` | `lab/agents/helix_lab/tools/python/` (5 files) |
+| Literature agent (`literature`) | `lab/agents/helix_lab/agents/literature/config.yaml` | `lab/agents/helix_lab/agents/literature/AGENTS.md` | `lab/agents/helix_lab/agents/literature/tools/python/` (7 files) |
+| Knowledge graph agent (`knowledge_graph`) | `lab/agents/helix_lab/agents/knowledge_graph/config.yaml` | `lab/agents/helix_lab/agents/knowledge_graph/AGENTS.md` | `lab/agents/helix_lab/agents/knowledge_graph/tools/python/` (15 files) |
+| Insight agent (`insight`) | `lab/agents/helix_lab/agents/insight/config.yaml` | `lab/agents/helix_lab/agents/insight/AGENTS.md` | `lab/agents/helix_lab/agents/insight/tools/python/` (3 files) |
+| Experiment planner (`planner`) | `lab/agents/helix_lab/agents/planner/config.yaml` | `lab/agents/helix_lab/agents/planner/AGENTS.md` | `lab/agents/helix_lab/agents/planner/tools/python/` (6 files) |
+| Safety agent (`safety`) | `lab/agents/helix_lab/agents/safety/config.yaml` | `lab/agents/helix_lab/agents/safety/AGENTS.md` | `lab/agents/helix_lab/agents/safety/tools/python/` (5 files) |
+| Experiment runner (`runner`) | `lab/agents/helix_lab/agents/runner/config.yaml` | `lab/agents/helix_lab/agents/runner/AGENTS.md` | `lab/agents/helix_lab/agents/runner/tools/python/` (9 files) |
+| Analysis agent (`analysis`) | `lab/agents/helix_lab/agents/analysis/config.yaml` | `lab/agents/helix_lab/agents/analysis/AGENTS.md` | `lab/agents/helix_lab/agents/analysis/tools/python/` (6 files) |
+| Control (`helix_baseline`) | `lab/agents/helix_baseline/config.yaml` | `lab/agents/helix_baseline/AGENTS.md` | `lab/agents/helix_baseline/tools/python/` (38 files) |
 
-Other files: the handoff contract `lab/agents/orphafold_lab/skills/discovery-loop/SKILL.md`; the same specifications as data in `lab/agents/agents.json` (served by `GET /api/v1/lab/agents`).
+Other files: the handoff contract `lab/agents/helix_lab/skills/discovery-loop/SKILL.md`; the same specifications as data in `lab/agents/agents.json` (served by `GET /api/v1/lab/agents`).
 
 ## What each agent owns
 
@@ -40,13 +40,13 @@ The supervisor's first four tools (`sys_session_send`, `sys_read_inbox`, `sys_se
 
 ## Supervisor spec
 
-`lab/agents/orphafold_lab/config.yaml` (whole file, 51 lines):
+`lab/agents/helix_lab/config.yaml` (whole file, 51 lines):
 
 ```yaml
-# Generated by lab/tools/generate_agent_tools.py from orphafold_lab_tools/registry.py.
+# Generated by lab/tools/generate_agent_tools.py from helix_lab_tools/registry.py.
 # Change the registry or AGENTS.md, then run the generator again.
 spec_version: 1
-name: orphafold_lab
+name: helix_lab
 description: >-
   Principal investigator (supervisor). Owns: The order of the loop, when a result reopens an earlier assumption, and when the run is complete.
 executor:
@@ -73,25 +73,25 @@ guardrails:
     role_boundary:
       type: function
       function:
-        path: orphafold_lab_policies.policies.role_boundary
+        path: helix_lab_policies.policies.role_boundary
         arguments:
           role: orchestrator
     approval_gate:
       type: function
       function:
-        path: orphafold_lab_policies.policies.approval_gate
+        path: helix_lab_policies.policies.approval_gate
         arguments:
           role: orchestrator
     claims_guard:
       type: function
       function:
-        path: orphafold_lab_policies.policies.claims_guard
+        path: helix_lab_policies.policies.claims_guard
         arguments:
           role: orchestrator
     run_budget:
       type: function
       function:
-        path: orphafold_lab_policies.policies.run_budget
+        path: helix_lab_policies.policies.run_budget
         arguments:
           role: orchestrator
 ```
@@ -100,10 +100,10 @@ What the lines mean: `executor.type: omnigent` with `harness: claude-sdk` runs t
 
 Supervisor prompt:
 
-`lab/agents/orphafold_lab/AGENTS.md` (whole file, 30 lines):
+`lab/agents/helix_lab/AGENTS.md` (whole file, 30 lines):
 
 ```text
-You are the principal investigator of the OrphaFold lab, an Omnigent supervisor. You own the discovery loop and delegate every scientific step to seven specialist sub-agents: literature, knowledge_graph, insight, planner, safety, runner, analysis. You never retrieve evidence, form hypotheses, plan, run or interpret a test yourself.
+You are the principal investigator of the Helix lab, an Omnigent supervisor. You own the discovery loop and delegate every scientific step to seven specialist sub-agents: literature, knowledge_graph, insight, planner, safety, runner, analysis. You never retrieve evidence, form hypotheses, plan, run or interpret a test yourself.
 
 Scope: research and hypothesis generation only. No clinical advice and no treatment recommendations.
 
@@ -141,7 +141,7 @@ Each specialist `config.yaml` has 43 lines. Lines 1 to 17 are quoted for each ag
 
 ### Literature agent (`literature`)
 
-`lab/agents/orphafold_lab/agents/literature/config.yaml`, lines 3 to 17:
+`lab/agents/helix_lab/agents/literature/config.yaml`, lines 3 to 17:
 
 ```yaml
 spec_version: 1
@@ -167,10 +167,10 @@ Tool files present: `get_publication`, `read_record`, `record_evidence`, `record
 
 Prompt:
 
-`lab/agents/orphafold_lab/agents/literature/AGENTS.md` (whole file, 12 lines):
+`lab/agents/helix_lab/agents/literature/AGENTS.md` (whole file, 12 lines):
 
 ```text
-You are the literature agent of the OrphaFold lab. You decide which published findings count as evidence about how the variant causes loss of function, and what the literature leaves unanswered.
+You are the literature agent of the Helix lab. You decide which published findings count as evidence about how the variant causes loss of function, and what the literature leaves unanswered.
 
 Research only: no clinical advice, no treatment recommendations. Only what a tool returned in this run is a source; your memory is not.
 
@@ -186,7 +186,7 @@ Reply with one line of IDs only, for example `literature done: E1-E6, G1-G2`. Do
 
 ### Knowledge graph agent (`knowledge_graph`)
 
-`lab/agents/orphafold_lab/agents/knowledge_graph/config.yaml`, lines 3 to 17:
+`lab/agents/helix_lab/agents/knowledge_graph/config.yaml`, lines 3 to 17:
 
 ```yaml
 spec_version: 1
@@ -212,10 +212,10 @@ Tool files present: `check_record_consistency`, `get_gene`, `get_interactions`, 
 
 Prompt:
 
-`lab/agents/orphafold_lab/agents/knowledge_graph/AGENTS.md` (whole file, 20 lines):
+`lab/agents/helix_lab/agents/knowledge_graph/AGENTS.md` (whole file, 20 lines):
 
 ```text
-You are the knowledge graph agent of the OrphaFold lab. You decide which database records enter the evidence graph, how each is classed and linked, and whether the graph is consistent.
+You are the knowledge graph agent of the Helix lab. You decide which database records enter the evidence graph, how each is classed and linked, and whether the graph is consistent.
 
 Research only: no clinical advice, no treatment recommendations. Only what a tool returned in this run is a source; your memory is not.
 
@@ -239,7 +239,7 @@ Reply with one line of IDs only, for example `knowledge_graph done: E7-E19, G3`.
 
 ### Insight agent (`insight`)
 
-`lab/agents/orphafold_lab/agents/insight/config.yaml`, lines 3 to 17:
+`lab/agents/helix_lab/agents/insight/config.yaml`, lines 3 to 17:
 
 ```yaml
 spec_version: 1
@@ -265,10 +265,10 @@ Tool files present: `read_record`, `record_handoff`, `record_hypothesis`.
 
 Prompt:
 
-`lab/agents/orphafold_lab/agents/insight/AGENTS.md` (whole file, 15 lines):
+`lab/agents/helix_lab/agents/insight/AGENTS.md` (whole file, 15 lines):
 
 ```text
-You are the insight agent of the OrphaFold lab. You decide which competing mechanisms are worth testing, which one the starting evidence favours, and what would refute each.
+You are the insight agent of the Helix lab. You decide which competing mechanisms are worth testing, which one the starting evidence favours, and what would refute each.
 
 Research only: no clinical advice, no treatment recommendations. A hypothesis is an agent-generated hypothesis, never a fact.
 
@@ -287,7 +287,7 @@ Reply with one line, for example `insight done: H1 (ligand_binding, rank 1), H2 
 
 ### Experiment planner (`planner`)
 
-`lab/agents/orphafold_lab/agents/planner/config.yaml`, lines 3 to 17:
+`lab/agents/helix_lab/agents/planner/config.yaml`, lines 3 to 17:
 
 ```yaml
 spec_version: 1
@@ -313,10 +313,10 @@ Tool files present: `get_budget_status`, `list_available_tests`, `read_record`, 
 
 Prompt:
 
-`lab/agents/orphafold_lab/agents/planner/AGENTS.md` (whole file, 17 lines):
+`lab/agents/helix_lab/agents/planner/AGENTS.md` (whole file, 17 lines):
 
 ```text
-You are the experiment planner of the OrphaFold lab. You decide which single test runs next within the remaining budget.
+You are the experiment planner of the Helix lab. You decide which single test runs next within the remaining budget.
 
 Research only: no clinical advice, no treatment recommendations.
 
@@ -337,7 +337,7 @@ Reply with one line, for example `planner done: chose T1 (ligand_contact); rejec
 
 ### Safety agent (`safety`)
 
-`lab/agents/orphafold_lab/agents/safety/config.yaml`, lines 3 to 17:
+`lab/agents/helix_lab/agents/safety/config.yaml`, lines 3 to 17:
 
 ```yaml
 spec_version: 1
@@ -363,10 +363,10 @@ Tool files present: `read_record`, `record_handoff`, `record_safety_review`, `re
 
 Prompt:
 
-`lab/agents/orphafold_lab/agents/safety/AGENTS.md` (whole file, 16 lines):
+`lab/agents/helix_lab/agents/safety/AGENTS.md` (whole file, 16 lines):
 
 ```text
-You are the safety agent of the OrphaFold lab. You decide whether the plan and the recorded claims may proceed, and whether a human must approve the action.
+You are the safety agent of the Helix lab. You decide whether the plan and the recorded claims may proceed, and whether a human must approve the action.
 
 The lab does research and hypothesis generation only. It gives no clinical advice and no treatment recommendation, cites every fact to a database record, and labels every hypothesis as agent-generated.
 
@@ -386,7 +386,7 @@ Reply with one line, for example `safety done: T1 cleared, no approval needed` o
 
 ### Experiment runner (`runner`)
 
-`lab/agents/orphafold_lab/agents/runner/config.yaml`, lines 3 to 17:
+`lab/agents/helix_lab/agents/runner/config.yaml`, lines 3 to 17:
 
 ```yaml
 spec_version: 1
@@ -412,10 +412,10 @@ Tool files present: `get_comparison_result`, `get_job_status`, `read_record`, `r
 
 Prompt:
 
-`lab/agents/orphafold_lab/agents/runner/AGENTS.md` (whole file, 9 lines):
+`lab/agents/helix_lab/agents/runner/AGENTS.md` (whole file, 9 lines):
 
 ```text
-You are the experiment runner of the OrphaFold lab. You make no scientific decision: you execute exactly the chosen and cleared test and report what was measured.
+You are the experiment runner of the Helix lab. You make no scientific decision: you execute exactly the chosen and cleared test and report what was measured.
 
 Do this, in order:
 1. Call `read_record(["plans","tests","safety"])`. The chosen test is `chosen_test_id` of the last plan; its `tool` is listed under tests.
@@ -428,7 +428,7 @@ Reply with one line, for example `runner done: T1 result recorded` or `runner st
 
 ### Analysis agent (`analysis`)
 
-`lab/agents/orphafold_lab/agents/analysis/config.yaml`, lines 3 to 17:
+`lab/agents/helix_lab/agents/analysis/config.yaml`, lines 3 to 17:
 
 ```yaml
 spec_version: 1
@@ -454,10 +454,10 @@ Tool files present: `get_test_result`, `read_record`, `record_decision`, `record
 
 Prompt:
 
-`lab/agents/orphafold_lab/agents/analysis/AGENTS.md` (whole file, 18 lines):
+`lab/agents/helix_lab/agents/analysis/AGENTS.md` (whole file, 18 lines):
 
 ```text
-You are the analysis agent of the OrphaFold lab. You decide what the result means for each hypothesis, which hypothesis is favoured now, and what to test next.
+You are the analysis agent of the Helix lab. You decide what the result means for each hypothesis, which hypothesis is favoured now, and what to test next.
 
 Research only: no clinical advice, no treatment recommendations. Predictions stay predictions.
 
@@ -479,11 +479,11 @@ Reply with one line, for example `analysis done: favoured H1, changed no, previo
 
 ## Control: single generalist agent
 
-`lab/agents/orphafold_baseline/config.yaml`, lines 3 to 17:
+`lab/agents/helix_baseline/config.yaml`, lines 3 to 17:
 
 ```yaml
 spec_version: 1
-name: orphafold_baseline
+name: helix_baseline
 description: >-
   Single generalist agent (control). Owns: Every decision of the loop, alone.
 executor:
@@ -503,10 +503,10 @@ Policy role in lines 18 to 43: `generalist`. It holds every lab tool (38 tool fi
 
 Prompt:
 
-`lab/agents/orphafold_baseline/AGENTS.md` (whole file, 14 lines):
+`lab/agents/helix_baseline/AGENTS.md` (whole file, 14 lines):
 
 ```text
-You are a single generalist research agent, the control arm of the OrphaFold lab. You work alone, with the same tools, model and budget as the specialist lab, and you write the same research record.
+You are a single generalist research agent, the control arm of the Helix lab. You work alone, with the same tools, model and budget as the specialist lab, and you write the same research record.
 
 Scope: research and hypothesis generation only. No clinical advice and no treatment recommendations. Only what a tool returned in this run is a source; your memory is not.
 
@@ -526,12 +526,12 @@ Final reply, one line: `Run complete. Favoured before: <H id>. Favoured after: <
 
 The supervisor loads this skill once per run. It names what each agent reads and what it must write to the shared record before it hands back.
 
-`lab/agents/orphafold_lab/skills/discovery-loop/SKILL.md` (whole file, 44 lines):
+`lab/agents/helix_lab/skills/discovery-loop/SKILL.md` (whole file, 44 lines):
 
 ```markdown
 ---
 name: discovery-loop
-description: The OrphaFold lab's discovery loop and handoff contract. Question, evidence, hypothesis, experiment, result, updated decision, with the record items each agent must write before it hands over.
+description: The Helix lab's discovery loop and handoff contract. Question, evidence, hypothesis, experiment, result, updated decision, with the record items each agent must write before it hands over.
 ---
 
 # Discovery loop
@@ -577,7 +577,7 @@ A result reopens the earlier choice when the test did not complete, when the hyp
 
 ## Who may call which tool
 
-`lab/tools/orphafold_lab_tools/registry.py`, lines 233 to 237:
+`lab/tools/helix_lab_tools/registry.py`, lines 233 to 237:
 
 ```python
 def allowed_tools(role: str) -> frozenset[str]:
@@ -587,7 +587,7 @@ def allowed_tools(role: str) -> frozenset[str]:
     return frozenset(role_tools(role)) | frozenset(orchestration) | HARNESS_TOOLS
 ```
 
-`lab/tools/orphafold_lab_tools/registry.py`, lines 222 to 222:
+`lab/tools/helix_lab_tools/registry.py`, lines 222 to 222:
 
 ```python
 HARNESS_TOOLS = frozenset({"ToolSearch", "Skill", "sys_agent_start"})

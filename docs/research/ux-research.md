@@ -1,6 +1,6 @@
-# OrphaFold UX research: information architecture and interaction design
+# Helix UX research: information architecture and interaction design
 
-Researched 2026-10-03. Audience: engineers building the OrphaFold workspace (Next.js + TypeScript frontend, FastAPI backend).
+Researched 2026-10-03. Audience: engineers building the Helix workspace (Next.js + TypeScript frontend, FastAPI backend).
 
 Claim status tags used throughout:
 
@@ -13,13 +13,13 @@ Nothing in this document was built or user-tested. Wireframes, key maps and colo
 
 ---
 
-## 0. Recommendation for OrphaFold
+## 0. Recommendation for Helix
 
 1. **Make one residue axis the spine of the product.** A persistent "axis dock" (ruler, sequence, tracks, variant lollipops) sits under every stage from Gene to Intervention. 3D viewport, tables, heatmaps and comparison plots all read and write a single selection store keyed on UniProt canonical numbering.
 2. **Navigate with a stage rail, a subject bar and a command palette.** The six stages run left to right across the top. The subject bar accumulates the chosen disease, gene, variant and structure as chips carrying source IDs. No left navigation sidebar and no card grid.
 3. **Use a three-zone work area over the axis dock:** Ledger (dense table for the stage), Instrument (3D viewport or the stage's primary plot), Inspector (evidence for the current selection), plus an IDE-style status line showing selection, data release versions, job state and the research-use notice.
 4. **Sequence dock: Nightingale 5.11 (MIT) for navigation, sequence, feature tracks, coloured-sequence rows and the 20-row substitution heatmap. Write the lollipop track in-house.** Nightingale ships no lollipop component [V]. `react-mutation-mapper` is AGPL-3.0-or-later and ProteinPaint is academic-use only [V].
-5. _*3D: Mol* 5.12.0 (MIT) with its built-in panels switched off._* OrphaFold supplies the chrome. Link through `plugin.behaviors.interaction.hover/click` and `plugin.managers.interactivity.lociHighlights/lociSelects` [V].
+5. _*3D: Mol* 5.12.0 (MIT) with its built-in panels switched off._* Helix supplies the chrome. Link through `plugin.behaviors.interaction.hover/click` and `plugin.managers.interactivity.lociHighlights/lociSelects` [V].
 6. **Comparison is one stage with a segmented control: Split, Overlay, Difference.** Superpose with Mol* `tmAlign` (in core since 5.5.0) or `alignAndSuperpose` [V]. Draw difference metrics on the shared axis and mask residues where either model is low confidence.
 7. **Evidence badges use four redundant channels: text code, shape, border style, fill.** Colour is a fifth, optional channel. Class assignment is a pure function of source metadata (ECO code, ClinVar review status, Open Targets datasource ID, 3D-Beacons `model_category`), never LLM output.
 8. **Structure provenance is a separate three-class marker (EXP, PRD, OF)** shown in every list row, on axis coverage rows, in a non-removable viewport corner tag and burned into exported images.
@@ -61,7 +61,7 @@ Nothing in this document was built or user-tested. Wireframes, key maps and colo
 | Vercel dashboard                              | Sidebar navigation became default 2026-02-26                                                                                                 |                                                                                                                                                                                                          | [D]                        |
 | Boltz                                         | Latest tag v2.2.1 (2025-09-08), repo pushed 2026-05-29                                                                                       | MIT                                                                                                                                                                                                      | [V]                        |
 
-Licence consequence: Mol*, Nightingale, Saguaro, gnomAD browser, cmdk, kbar and tinykeys are permissive and safe to depend on. cBioPortal's mutation mapper and Auspice are AGPL; study them, do not import them unless OrphaFold itself ships under AGPL. ProteinPaint is out for a general open-source release.
+Licence consequence: Mol*, Nightingale, Saguaro, gnomAD browser, cmdk, kbar and tinykeys are permissive and safe to depend on. cBioPortal's mutation mapper and Auspice are AGPL; study them, do not import them unless Helix itself ships under AGPL. ProteinPaint is out for a general open-source release.
 
 ---
 
@@ -78,7 +78,7 @@ Licence consequence: Mol*, Nightingale, Saguaro, gnomAD browser, cmdk, kbar and 
 | **UniProt** entry                        | Tabs: Entry, Variant viewer, Feature viewer, Genomic coordinates, Publications, External links, History. Feature viewer categories in order: Molecule processing, Sequence information, Topology, Domains, Sites, PTM, Epitopes, Antigenic sequences, Mutagenesis, Variants, RNA Editing, Proteomics, PDBe 3D structure coverage, AlphaFold, AlphaMissense. Variants render as a density line graph at overview; AlphaFold and AlphaMissense render as coloured-sequence rows. Evidence tag text such as "1 Publication" expands to the source list | Manual vs automatic assertion distinguished by colour alone (gold banner vs blue)                                                             | [V] source + REST help            |
 | **ProtVar**                              | Accepts genomic, cDNA, protein and ID inputs. Per-variant annotation grouped as functional, population, structural. API mirrors the grouping: `/function`, `/population`, `/structure`, `/prediction/foldx`, `/prediction/pocket`, `/prediction/interaction`, `/score`. Predictions gated on model confidence (pLDDT 50 window for stability and pockets, 70 for interfaces)                                                                                                                                                                        |                                                                                                                                               | [V] API; inputs, thresholds [S]   |
 | **gnomAD** gene page                     | ClinVar track is binned by default with an "expand to all variants" control. Expanded markers double-encode: shape = consequence (cross for LoF, triangle for missense and in-frame, diamond for splice region, circle for the rest), fill = clinical significance. Variant clicks open details in-page. A strip shows which variants are visible in the table. API returns `gold_stars` and `review_status` per ClinVar variant                                                                                                                    |                                                                                                                                               | [V] source + API; table strip [S] |
-| **DECIPHER** protein browser             | Pfam domains in the centre; DECIPHER and ClinVar variants plotted above and below; separate gnomAD missense and LoF tracks; regional missense constraint; exon structure; secondary structure and 3D coverage at the bottom. Pathogenicity evidence screen: available evidence types left, selected criteria right                                                                                                                                                                                                                                  | Computing ACMG classes inside OrphaFold (clinical decision territory). Source is a 2022 paper; current UI not inspected                       | [D]                               |
+| **DECIPHER** protein browser             | Pfam domains in the centre; DECIPHER and ClinVar variants plotted above and below; separate gnomAD missense and LoF tracks; regional missense constraint; exon structure; secondary structure and 3D coverage at the bottom. Pathogenicity evidence screen: available evidence types left, selected criteria right                                                                                                                                                                                                                                  | Computing ACMG classes inside Helix (clinical decision territory). Source is a 2022 paper; current UI not inspected                       | [D]                               |
 | **Open Targets** Associations on the Fly | Evidence matrix: rows are entities, columns are data sources. A cell button opens a detail widget for that source in place. Source weights are adjustable behind an advanced option and scores recompute. Facets: AND across categories, OR within. Pin rows. Export TSV or JSON. API exposes `datatypeScores` and `datasourceScores` by ID                                                                                                                                                                                                         | A single aggregate score shown without its components                                                                                         | [D] docs, [V] API                 |
 | **ClinVar**                              | Review status always appears as stars plus text. 4 = practice guideline, 3 = expert panel, 2 = criteria provided, multiple submitters, no conflicts, 1 = criteria provided (single submitter or conflicting), 0 = no assertion criteria or no classification. Germline, somatic clinical impact and oncogenicity are separate classification types                                                                                                                                                                                                  |                                                                                                                                               | [D] page dated 2024-04-18         |
 | **cBioPortal** mutation mapper           | Lollipop above a domain bar, annotation tracks underneath (hotspots, OncoKB, PTM, exon, UniProt topology) with a track selector. Y-max slider, legend toggle, percent toggle. Mirrored top and bottom axes for two groups with a same-scale option. Top lollipops are auto-labelled and label anchors shift near the plot edges. 3D view responds to lollipop and table selection [S]                                                                                                                                                               | AGPL dependency. Lollipop height = sample count suits cohorts and misleads for rare-disease variants seen once                                | [V] source props                  |
@@ -146,14 +146,14 @@ Sequence letters, pLDDT codes, IDs, resolutions and release versions are real va
 
 ```
 +----------------------------------------------------------------------------------------------------------------------+
-| OrphaFold   1 Disease > 2 Gene+Variants > [3 PROTEIN] > 4 Compare > 5 Mechanism > 6 Intervention      Cmd+K   Jobs:1 |
+| Helix   1 Disease > 2 Gene+Variants > [3 PROTEIN] > 4 Compare > 5 Mechanism > 6 Intervention      Cmd+K   Jobs:1 |
 +----------------------------------------------------------------------------------------------------------------------+
 | IMD31C > STAT1 ENSG00000115415 > P42224 p.Asp165Gly VAR_065934 > AF-P42224-F1 v6 [PRD]            RESEARCH USE ONLY  |
 +-------------------------------+------------------------------------------------------+-------------------------------+
 | LEDGER  structures (22)     / | INSTRUMENT  3D  AF-P42224-F1 v6  chain A  1-750      | INSPECTOR  Asp165 (D)         |
 | cls id            method      |                                                      | pLDDT 96.81 H [PRED] AFDB v6  |
 | EXP 1BF5          X-ray 2.9A  |                                                      | ----------------------------- |
-| EXP 1YVL          X-ray 3.0A  |          (Mol* canvas, OrphaFold chrome only)        | EVIDENCE  p.Asp165Gly         |
+| EXP 1YVL          X-ray 3.0A  |          (Mol* canvas, Helix chrome only)        | EVIDENCE  p.Asp165Gly         |
 | EXP 8YYU          EM    3.84A |                                                      | [EXP] in IMD31C; gain of      |
 | PRD AF-P42224-F1  pLDDT 87.3  |                                                      |   function  PubMed:21727188   |
 | PRD SWISS-MODEL   QMEANDisCo  |                                                      |   PubMed:23709754  (UniProt)  |
@@ -220,7 +220,7 @@ Mobile rules [P]:
 
 ```
 /w/protein?acc=P42224&sel=165&win=150-180&s=afdb:AF-P42224-F1@6&color=plddt&tracks=dom,ptm,cov,plddt,clin,pop
-/w/compare?acc=P42224&a=pdb:1BF5&b=orphafold:job_41&mode=difference&metric=ca_displacement&sel=165
+/w/compare?acc=P42224&a=pdb:1BF5&b=helix:job_41&mode=difference&metric=ca_displacement&sel=165
 ```
 
 - Path segment names the stage: `disease`, `gene`, `protein`, `compare`, `mechanism`, `intervention`.
@@ -242,7 +242,7 @@ type WorkspaceSelection = {
     alternate: string;
     sourceId: string | null;
   } | null;
-  structureId: string | null; // "pdb:1BF5" | "afdb:AF-P42224-F1@6" | "orphafold:job_41"
+  structureId: string | null; // "pdb:1BF5" | "afdb:AF-P42224-F1@6" | "helix:job_41"
   chain: string | null; // label_asym_id
 };
 
@@ -274,7 +274,7 @@ Hover is ephemeral and never enters the URL. Selection is persistent and does.
 | `axis`  | Tick line with residue numbers                                                    |                                                                                      | custom                                                                        |
 | `pop`   | Population variants, below the axis                                               | Lollipop hanging down: stem depth = log10 allele frequency                           | custom lollipop track                                                         |
 | `sub`   | Substitution effect (AlphaMissense and similar)                                   | Collapsed: one strip of per-position mean. Expanded: 20-row heatmap                  | `nightingale-sequence-heatmap` (`setHeatmapData(xDomain, yDomain, data)`) [V] |
-| `of`    | OrphaFold tracks: pockets, interface residues, difference metrics, user marks     | Dotted outline on every mark + `OF` row label                                        | custom                                                                        |
+| `of`    | Helix tracks: pockets, interface residues, difference metrics, user marks     | Dotted outline on every mark + `OF` row label                                        | custom                                                                        |
 
 Default visible set: `seq`, `dom`, `cov`, `conf`, `clin`, `pop`. The track picker (`t`) lists all tracks grouped like UniProt's 15 categories, each with its source and release.
 
@@ -376,13 +376,13 @@ Default visible set: `seq`, `dom`, `cov`, `conf`, `clin`, `pop`. The track picke
 | Clinical database        | `CLIN` | Shield (square, pointed base)    | Solid  | Hollow         | Database, accession, review status as `n/4` + text, release date                  |
 | Published literature     | `LIT`  | Page (rectangle, clipped corner) | Solid  | Hollow         | PMID or DOI, count, `text-mined` modifier where applicable                        |
 | Curated database         | `CUR`  | Circle                           | Solid  | Hollow         | Database, record ID, `manual` or `auto` modifier                                  |
-| Computational prediction | `PRED` | Diamond                          | Dashed | Diagonal hatch | Tool, version, confidence metric and value, origin (external or OrphaFold job ID) |
-| OrphaFold hypothesis     | `HYP`  | Hexagon                          | Dotted | Hollow         | Hypothesis ID, author, timestamp, list of supporting badges                       |
+| Computational prediction | `PRED` | Diamond                          | Dashed | Diagonal hatch | Tool, version, confidence metric and value, origin (external or Helix job ID) |
+| Helix hypothesis     | `HYP`  | Hexagon                          | Dotted | Hollow         | Hypothesis ID, author, timestamp, list of supporting badges                       |
 
 Reading rules that hold without colour:
 
 - The three-or-four-letter code is always printed. Minimum badge: `[shape] CODE`.
-- Border style: solid = asserted by an external source from observation or curation; dashed = computed by a tool; dotted = authored inside OrphaFold.
+- Border style: solid = asserted by an external source from observation or curation; dashed = computed by a tool; dotted = authored inside Helix.
 - Fill: only wet-lab observation is filled.
 - Shape is unique per class, so the badge survives greyscale printing and 12 px rendering.
 - Screen readers get the full label: "Computational prediction, AlphaFold DB version 6, pLDDT 96.81".
@@ -435,8 +435,8 @@ All clear 4.5:1. Hues avoid the two reserved palettes in section 7.5. Not yet ch
 |                                                           | `TEMPLATE-BASED`, `AB-INITIO`                           | PRED  | provider, `confidence_type`             |
 | AlphaFold DB pLDDT, PAE, AlphaMissense                    |                                                         | PRED  | model version                           |
 | ProtVar `/prediction/foldx`, `/score` (`CONSERV`, `EVE`)  |                                                         | PRED  | tool name                               |
-| OrphaFold job output                                      |                                                         | PRED  | origin `orphafold:job_<id>`             |
-| Mechanism or intervention statement composed in OrphaFold |                                                         | HYP   | supporting badge IDs                    |
+| Helix job output                                      |                                                         | PRED  | origin `helix:job_<id>`             |
+| Mechanism or intervention statement composed in Helix |                                                         | HYP   | supporting badge IDs                    |
 
 Implement as one pure function `classifyEvidence(source)` with a unit test per row. Display order in the Inspector: EXP, CLIN, CUR, LIT, PRED, HYP. The order is a reading convention and implies no numeric weight.
 
@@ -446,7 +446,7 @@ Implement as one pure function `classifyEvidence(source)` with a unit test per r
 | ------------------------------ | ----- | -------------------------------- | -------------- | ------------------------------------------------------------ |
 | Experimental structure         | `EXP` | Flask (RCSB convention [S])      | Solid bar      | `EXP 1BF5 X-ray 2.9 A`                                       |
 | Existing predicted structure   | `PRD` | Chip                             | Hatched bar    | `PRD AlphaFold DB v6: predicted, not experimental`           |
-| OrphaFold-generated prediction | `OF`  | OrphaFold mark in a dotted frame | Dotted outline | `OF job 41 Boltz-2 <version>: generated here, not validated` |
+| Helix-generated prediction | `OF`  | Helix mark in a dotted frame | Dotted outline | `OF job 41 Boltz-2 <version>: generated here, not validated` |
 
 - Ledger groups rows by class with a group header and count. Sorting never interleaves classes unless the user asks.
 - PRD and OF structures default to confidence colouring. EXP structures default to chain colouring.
@@ -457,7 +457,7 @@ Implement as one pure function `classifyEvidence(source)` with a unit test per r
 | Palette                                                       | Values                                                                                                                                | Rule                                                                                         |
 | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | pLDDT [V Mol* source, AFDB file]                              | Very high (> 90) `#0053D6` code H; Confident (70-90) `#65CBF3` code M; Low (50-70) `#FFDB13` code L; Very low (< 50) `#FF7D45` code D | Only for per-residue confidence. Print the code letter in 2D cells                           |
-| Clinical significance [V gnomAD source]                       | `#E6573D`, `#FAB470`, `#5E6F9E`, `#BABABA`                                                                                            | Only for database classifications, never for OrphaFold predictions                           |
+| Clinical significance [V gnomAD source]                       | `#E6573D`, `#FAB470`, `#5E6F9E`, `#BABABA`                                                                                            | Only for database classifications, never for Helix predictions                           |
 | AlphaMissense classes [V thresholds from AFDB CSV for P42224] | `LBen` < 0.34, `Amb` 0.34 to 0.564, `LPath` >= 0.564                                                                                  | Official colours not verified today; use a diverging scale distinct from both palettes above |
 
 ---
@@ -596,7 +596,7 @@ One interface for everyone. No separate novice mode.
 12. Silent fallback to another isoform, structure, model version or cached copy.
 13. Treating HTTP 404 from a source as an error banner when it means "no record".
 14. Modal dialogs for results; spinners with no step name; a job that blocks the workspace.
-15. Clinical vocabulary and visuals: "diagnosis", "recommended treatment", red and green verdict lights on OrphaFold's own predictions, ACMG class calculators.
+15. Clinical vocabulary and visuals: "diagnosis", "recommended treatment", red and green verdict lights on Helix's own predictions, ACMG class calculators.
 16. Reusing the pLDDT palette or the clinical-significance palette for anything else; rainbow chain colouring as a default.
 17. Changing colour semantics between light and dark themes.
 18. Auto-rotating molecules, glossy rendering by default, decorative gradients, animated counters.

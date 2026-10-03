@@ -1,24 +1,24 @@
-# OrphaFold architecture
+# Helix architecture
 
-OrphaFold is an open research platform for computational rare-disease work. This document describes
+Helix is an open research platform for computational rare-disease work. This document describes
 the backend as built and gives the recipes for extending it. Product requirements are in
 [`PRODUCT_BRIEF.md`](PRODUCT_BRIEF.md); verified research is in [`research/`](research/).
 
 ## 1. System
 
 ```
-web/  Next.js app  ──HTTP──▶  api/  FastAPI (orphafold.main:app, port 8000, every route under /api/v1)
+web/  Next.js app  ──HTTP──▶  api/  FastAPI (helix.main:app, port 8000, every route under /api/v1)
                                 │
           ┌─────────────────────┼──────────────────────────┬─────────────────────┐
           ▼                     ▼                          ▼                     ▼
    seeded catalog        source adapters             job queue             database
-   data/seed/            orphafold/sources/          in-process asyncio    SQLite (default)
+   data/seed/            helix/sources/          in-process asyncio    SQLite (default)
    catalog.json          live upstream APIs          or Redis + worker     or PostgreSQL
-   in-memory index       cached in the database      orphafold/jobs/       orphafold/db/
+   in-memory index       cached in the database      helix/jobs/       helix/db/
                                                            │
                                                            ▼
                                                   model providers ──▶ artifact store
-                                                  orphafold/providers/   local dir or S3
+                                                  helix/providers/   local dir or S3
 ```
 
 Three kinds of work are kept apart: interactive requests (catalog, cached metadata), upstream calls
@@ -29,17 +29,17 @@ page never waits for a model.
 
 | Concern        | Default (zero setup)                                         | Production option                                                 |
 | -------------- | ------------------------------------------------------------ | ----------------------------------------------------------------- |
-| Database       | SQLite, `api/var/orphafold.db` (WAL)                         | PostgreSQL via `ORPHAFOLD_DATABASE_URL`                           |
-| Job queue      | in-process asyncio queue, worker embedded in the API process | Redis via `ORPHAFOLD_REDIS_URL` plus `python -m orphafold.worker` |
-| Artifacts      | local directory `api/var/artifacts`                          | S3-compatible bucket via `ORPHAFOLD_S3_BUCKET`                    |
+| Database       | SQLite, `api/var/helix.db` (WAL)                         | PostgreSQL via `HELIX_DATABASE_URL`                           |
+| Job queue      | in-process asyncio queue, worker embedded in the API process | Redis via `HELIX_REDIS_URL` plus `python -m helix.worker` |
+| Artifacts      | local directory `api/var/artifacts`                          | S3-compatible bucket via `HELIX_S3_BUCKET`                    |
 | Upstream cache | `http_cache` table with a TTL per adapter                    | same                                                              |
-| Identity       | anonymous workspace ID in the `X-OrphaFold-Workspace` header | an account claims the actor later                                 |
+| Identity       | anonymous workspace ID in the `X-Helix-Workspace` header | an account claims the actor later                                 |
 
-Settings: `orphafold.config.Settings` (env prefix `ORPHAFOLD_`). Values come from the process
+Settings: `helix.config.Settings` (env prefix `HELIX_`). Values come from the process
 environment, then `api/.env`, then the repository `.env`, which the web app reads as well. Every
 setting is listed with its default in [`.env.example`](../.env.example).
 
-### Layout of `api/orphafold/`
+### Layout of `api/helix/`
 
 | Path                      | Contents                                                                                                                                |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
@@ -61,11 +61,11 @@ setting is listed with its default in [`.env.example`](../.env.example).
 | `providers/`              | `base.py` (interfaces, registry) and one module per model provider                                                                      |
 | `jobs/`                   | State machine, `JobContext`, queue, worker, runner, manifest; `handlers/` holds one module per job kind                                 |
 | `artifacts/store.py`      | `ArtifactStore`, local and S3 implementations                                                                                           |
-| `worker.py`, `openapi.py` | `python -m orphafold.worker`, `python -m orphafold.openapi`                                                                             |
+| `worker.py`, `openapi.py` | `python -m helix.worker`, `python -m helix.openapi`                                                                             |
 
 New files in `sources/`, `providers/`, `jobs/handlers/`, `routers/` and `db/` are picked up at startup
 without editing shared code. A module that fails to import is logged, skipped and listed under
-`load_errors` in `GET /api/v1/health`; set `ORPHAFOLD_STRICT_IMPORTS=true` to make it fatal.
+`load_errors` in `GET /api/v1/health`; set `HELIX_STRICT_IMPORTS=true` to make it fatal.
 
 ## 2. Contracts
 
@@ -79,19 +79,19 @@ without editing shared code. A module that fails to import is logged, skipped an
 | variant                             | `GENE-p.Ref3PosAlt3` (`BTK-p.Arg28His`) for protein substitutions, ClinVar VCV otherwise | ClinVar VCV, rsID                                               |
 | structure                           | `pdb:<ID>`, `afdb:<entryId>`, `of:<job_id>`                                              | same                                                            |
 | compound                            | InChIKey                                                                                 | ChEMBL ID accepted and resolved                                 |
-| job, actor, artifact, project, item | `job_`, `act_`, `art_`, `prj_`, `itm_` + ULID (`orphafold.ids.new_id`)                   | same                                                            |
-| snapshot                            | `ofs_` + first 32 hex of the content hash (`orphafold.hashing.snapshot_id`)              | same                                                            |
+| job, actor, artifact, project, item | `job_`, `act_`, `art_`, `prj_`, `itm_` + ULID (`helix.ids.new_id`)                   | same                                                            |
+| snapshot                            | `ofs_` + first 32 hex of the content hash (`helix.hashing.snapshot_id`)              | same                                                            |
 
-Parsing helpers are in `orphafold.identifiers`: `parse_protein_change("R28H", "BTK")` returns a
+Parsing helpers are in `helix.identifiers`: `parse_protein_change("R28H", "BTK")` returns a
 `ProteinSubstitution` (`.variant_id`, `.hgvs_p`, `.short`, `.apply(sequence)`), `parse_variant_id`,
 `structure_id`, `parse_structure_id`, `is_uniprot_accession`.
 
 ### Enums
 
 - `EvidenceClass`: `experimental`, `clinical_database`, `literature`, `curated_database`,
-  `computational_prediction`, `orphafold_hypothesis`. Display codes `EXP`, `CLIN`, `LIT`, `CUR`,
+  `computational_prediction`, `helix_hypothesis`. Display codes `EXP`, `CLIN`, `LIT`, `CUR`,
   `PRED`, `HYP`. Every `Evidence` carries `evidence_class`, `code`, `label` and `claim_label`.
-- `StructureOrigin`: `experimental`, `predicted_external`, `predicted_orphafold`. Display tags `EXP`,
+- `StructureOrigin`: `experimental`, `predicted_external`, `predicted_internal`. Display tags `EXP`,
   `PRD`, `OF`. `StructureDescriptor` rejects an ID whose prefix does not match its origin.
 - `SourceState`: `ok`, `empty`, `unavailable`, `disabled_by_license`, `not_configured`.
 - `JobStatus`: `queued`, `running`, `succeeded`, `failed`, `cancelled`. `StageStatus`: `pending`,
@@ -100,7 +100,7 @@ Parsing helpers are in `orphafold.identifiers`: `parse_protein_change("R28H", "B
 `GET /api/v1/meta` returns the evidence classes and structure origins with codes and labels.
 
 Names that differ from the research notes: the research uses `experimental_evidence`,
-`published_literature` and `orphafold_prediction`; the code uses the enums above. The JSON field is
+`published_literature` and `internal_prediction`; the code uses the enums above. The JSON field is
 `evidence_class`, not `class`.
 
 ### Errors
@@ -109,7 +109,7 @@ Every non-2xx response is RFC 9457 problem JSON (`application/problem+json`):
 
 ```json
 {
-  "type": "urn:orphafold:problem:job_not_found",
+  "type": "urn:helix:problem:job_not_found",
   "title": "Not found",
   "status": 404,
   "code": "job_not_found",
@@ -118,7 +118,7 @@ Every non-2xx response is RFC 9457 problem JSON (`application/problem+json`):
 }
 ```
 
-Raise the classes in `orphafold.errors`: `BadRequest` 400, `WorkspaceRequired` 400, `Forbidden` 403,
+Raise the classes in `helix.errors`: `BadRequest` 400, `WorkspaceRequired` 400, `Forbidden` 403,
 `DisabledByLicense` 403, `NotFound` 404, `Conflict` 409, `ValidationFailed` 422 (with `errors`),
 `SourceUnavailable(source)` 502, `NotConfigured(feature, setting=...)` 503. Pass `code=` for a specific
 machine-readable code: `raise NotFound("No gene BTK2.", code="gene_not_found")`.
@@ -130,7 +130,7 @@ sources returns 200 with one `SourceStatus` row per source instead.
 
 ### Aggregated responses
 
-A response assembled from upstream sources subclasses `orphafold.schemas.common.Aggregated` (or
+A response assembled from upstream sources subclasses `helix.schemas.common.Aggregated` (or
 `AggregatedPage[T]`) and fills `sources: list[SourceStatus]`. The page then renders with whatever
 answered and can say which source is temporarily unavailable. Unknown values are `null`, never a
 guess.
@@ -138,9 +138,9 @@ guess.
 ### Workspace identity
 
 No accounts. The client generates an ID (16 to 128 characters of `A-Z a-z 0-9 _ -`), keeps it in
-localStorage and sends it as `X-OrphaFold-Workspace`. The server stores only its SHA-256.
+localStorage and sends it as `X-Helix-Workspace`. The server stores only its SHA-256.
 
-- `CurrentActor` (`orphafold.deps`): for writes. Creates the `actor` row on first use; 400
+- `CurrentActor` (`helix.deps`): for writes. Creates the `actor` row on first use; 400
   `workspace_required` without the header.
 - `OptionalActor`: for reads. Never creates a row; `None` without the header.
 
@@ -149,11 +149,11 @@ The actor ID (`act_...`) is separate from the workspace key, so an account can l
 
 ## 3. Sources
 
-`orphafold.sources.base.SourceAdapter` gives every adapter:
+`helix.sources.base.SourceAdapter` gives every adapter:
 
 - one shared async `httpx` client, a per-source rate limiter (`rate_limit_per_second`) and
   concurrency cap (`max_concurrency`);
-- a timeout (`timeout`, overridable per deployment with `ORPHAFOLD_SOURCE_TIMEOUTS`), retry with
+- a timeout (`timeout`, overridable per deployment with `HELIX_SOURCE_TIMEOUTS`), retry with
   backoff on 429, 502, 503, 504 and transport errors, honouring `Retry-After`;
 - a database-backed response cache keyed on method, URL (secrets removed) and body, with `cache_ttl`
   (default 24 h) and a shorter TTL for empty answers. When the source fails and an expired copy
@@ -162,7 +162,7 @@ The actor ID (`act_...`) is separate from the workspace key, so an account can l
   `empty_statuses`, a 200 with `null`/`[]`/`{}`), `unavailable` (timeouts, errors, invalid JSON,
   GraphQL `errors[]`, an error payload reported by the `payload_error` hook),
   `disabled_by_license` (`noncommercial_only = True` while
-  `ORPHAFOLD_ENABLE_NONCOMMERCIAL_SOURCES` is false) and `not_configured` (the `configured` hook
+  `HELIX_ENABLE_NONCOMMERCIAL_SOURCES` is false) and `not_configured` (the `configured` hook
   returns a reason);
 - a `Provenance` envelope on every answered call: source, release, request URL, retrieved time,
   record ID, record URL, license, response SHA-256, cache flags.
@@ -177,7 +177,7 @@ nothing into `empty`.
 
 ## 4. Catalog
 
-`orphafold.knowledge.catalog.get_catalog()` returns the index of `data/seed/catalog.json`. The API
+`helix.knowledge.catalog.get_catalog()` returns the index of `data/seed/catalog.json`. The API
 starts without the file; `catalog.status.state` is `ready`, `missing`, `generating` or `invalid`, and
 the file is loaded as soon as it appears or changes (checked at most every two seconds). Malformed
 records are skipped and counted in `status.skipped_records`.
@@ -187,19 +187,19 @@ Lookups: `gene(symbol)`, `gene_by_hgnc_id`, `gene_by_uniprot`, `disease(slug)`,
 `flagship_for_gene(symbol)`, `lookup(text)` (exact match on any name, alias, symbol or
 cross-reference), `aliases()`, `seed_source(source_id)`, `source_status()`. The raw lists are
 `catalog.genes`, `catalog.diseases`, `catalog.categories`, `catalog.flagship`, `catalog.manifest`.
-Inject it into a route with `CatalogDep` from `orphafold.deps`.
+Inject it into a route with `CatalogDep` from `helix.deps`.
 
 ## 5. Evidence
 
-`orphafold.evidence.classify_evidence(database, record_type, eco)` is a pure function over the mapping
+`helix.evidence.classify_evidence(database, record_type, eco)` is a pure function over the mapping
 tables in `research/provenance-reproducibility.md` section 2.4 and `research/ux-research.md` section
 7.3. It fails closed: an unmapped input raises `UnmappedEvidence`.
 
 - `build_evidence(provenance, record_type=..., ...)` builds an `Evidence` row from the provenance of
   an adapter call. The ID is deterministic for the same record and claim.
 - `try_build_evidence(...)` returns `None` for an unmapped source, so the claim is left out.
-- `build_job_evidence(job_id, job_kind, ...)` for OrphaFold run output; `build_hypothesis(...)` for
-  statements authored in OrphaFold, which must list the evidence or job IDs they rest on.
+- `build_job_evidence(job_id, job_kind, ...)` for Helix run output; `build_hypothesis(...)` for
+  statements authored in Helix, which must list the evidence or job IDs they rest on.
 - `strength_for(scheme, value)` keeps source-native strength. Ranks exist only inside the ordinal
   schemes (`clinvar_review_status`, `clingen_gene_validity`, `uniprot_eco`). There is no
   cross-source score anywhere.
@@ -211,7 +211,7 @@ catch-all, and Open Targets `orphanet` is `clinical_database`.
 
 ### Providers
 
-`orphafold.providers.base` defines five interfaces: `StructurePredictor.predict`,
+`helix.providers.base` defines five interfaces: `StructurePredictor.predict`,
 `BindingPredictor.predict`, `VariantEffectProvider.analyze`, `PocketProvider.find`,
 `LiteratureProvider.search`. A provider declares `ProviderInfo` fields as class attributes (id, name,
 model name and version, license, commercial-use flag, capabilities, execution mode `retrieval`,
@@ -246,7 +246,7 @@ model, stores the job with its planned stages and enqueues its ID. A worker clai
   `GET /jobs/{id}/artifacts/{name}`.
 - At terminal status the runner writes the run manifest (`manifest.json`, served from
   `GET /jobs/{id}/manifest` with `ETag` = manifest hash). `integrity.manifest_sha256` is the SHA-256
-  of the RFC 8785 form of the document without that field (`orphafold.jobs.manifest.verify_manifest`).
+  of the RFC 8785 form of the document without that field (`helix.jobs.manifest.verify_manifest`).
 - An identical job (same kind and params) of the same workspace that is still queued or running is
   returned instead of creating a duplicate (HTTP 200 instead of 202).
 - Recovery at startup: with the in-process queue every `running` job is orphaned; with Redis a job
@@ -256,7 +256,7 @@ model, stores the job with its planned stages and enqueues its ID. A worker clai
 
 The manifest follows `research/provenance-reproducibility.md` section 5.3 with three relaxations so
 retrieval and remote runs are recorded truthfully: `model.weights` may be empty, `parameters.seed` is
-required only for handlers declared `requires_seed=True`, and `software.orphafold.git_commit` is
+required only for handlers declared `requires_seed=True`, and `software.helix.git_commit` is
 `null` when the deployment is not a git checkout. It adds `request` (the submitted params) and
 `execution.stages` (real stage timings).
 
@@ -269,9 +269,9 @@ models are `of:<job_id>-reference` and `of:<job_id>-variant`) and `binding_predi
 ### Database tables
 
 `http_cache`, `actor`, `actor_identity`, `job`, `job_event`, `artifact`, `project`, `project_item`,
-`project_snapshot`, `generated_structure` (`orphafold.db.models`). Tables are created at startup with
+`project_snapshot`, `generated_structure` (`helix.db.models`). Tables are created at startup with
 `create_all`; there are no migrations yet. After changing a model during development, delete
-`api/var/orphafold.db` so the table is created again.
+`api/var/helix.db` so the table is created again.
 
 ## 7. API surface
 
@@ -291,7 +291,7 @@ Reserved prefixes, one router module each: `/search`, `/genes`, `/proteins`, `/v
 `/structures`, `/diseases`, `/literature`, `/compounds`, `/projects`, `/snapshots`, `/compare`,
 `/assistant`.
 
-`make types` writes `api/openapi.json` (`python -m orphafold.openapi --strict`) and from it the web
+`make types` writes `api/openapi.json` (`python -m helix.openapi --strict`) and from it the web
 types in `web/src/lib/api/schema.ts`; run it after adding or changing a route or schema and never
 edit either file by hand. `make check` fails when either is out of date. The shared schemas (`Evidence`,
 `Provenance`, `StructureDescriptor`, `StructureJobResult`, `RunManifest`) are always in its components.
@@ -303,20 +303,20 @@ starting with `/api/v1`; the web prefixes them with `NEXT_PUBLIC_API_URL`.
 
 ## 8. How to add
 
-Every recipe adds new files only. Run `cd api && .venv/bin/uvicorn orphafold.main:app --port 8000`
+Every recipe adds new files only. Run `cd api && .venv/bin/uvicorn helix.main:app --port 8000`
 and check `GET /api/v1/health`: `load_errors` must be empty.
 
 ### A source adapter
 
-Create `api/orphafold/sources/<source_id>.py`. Set the class attributes, write typed methods that
+Create `api/helix/sources/<source_id>.py`. Set the class attributes, write typed methods that
 call `get_json`, `post_json`, `graphql`, `get_text` or `get_bytes`, and instantiate once at module
 level. The instance registers itself and appears under `live_sources` in `/api/v1/meta`.
 
 ```python
-# api/orphafold/sources/reactome.py
+# api/helix/sources/reactome.py
 from typing import Any
 
-from orphafold.sources.base import SourceAdapter, SourceResult
+from helix.sources.base import SourceAdapter, SourceResult
 
 
 class ReactomeSource(SourceAdapter):
@@ -364,15 +364,15 @@ Put a source restricted to non-commercial use behind `noncommercial_only = True`
 
 ### A router and service
 
-Create `api/orphafold/services/<domain>.py` with the logic and response schemas, and
-`api/orphafold/routers/<domain>.py` exposing `router`. The router is mounted under `/api/v1`.
+Create `api/helix/services/<domain>.py` with the logic and response schemas, and
+`api/helix/routers/<domain>.py` exposing `router`. The router is mounted under `/api/v1`.
 
 ```python
-# api/orphafold/services/pathways.py
-from orphafold.evidence import try_build_evidence
-from orphafold.schemas.common import Aggregated, EntityRef, EntityType, Evidence, EvidenceObject, Schema
-from orphafold.sources import SourceCall, gather_sources
-from orphafold.sources.reactome import reactome
+# api/helix/services/pathways.py
+from helix.evidence import try_build_evidence
+from helix.schemas.common import Aggregated, EntityRef, EntityType, Evidence, EvidenceObject, Schema
+from helix.sources import SourceCall, gather_sources
+from helix.sources.reactome import reactome
 
 
 class Pathway(Schema):
@@ -410,11 +410,11 @@ async def protein_pathways(accession: str) -> PathwaysResponse:
 ```
 
 ```python
-# api/orphafold/routers/pathways.py
+# api/helix/routers/pathways.py
 from fastapi import APIRouter
 
-from orphafold.errors import PROBLEM_RESPONSES
-from orphafold.services.pathways import PathwaysResponse, protein_pathways
+from helix.errors import PROBLEM_RESPONSES
+from helix.services.pathways import PathwaysResponse, protein_pathways
 
 router = APIRouter(prefix="/pathways", tags=["pathways"], responses=PROBLEM_RESPONSES)
 
@@ -424,24 +424,24 @@ async def get_pathways(accession: str) -> PathwaysResponse:
     return await protein_pathways(accession)
 ```
 
-Dependencies from `orphafold.deps`: `SessionDep` (async SQLAlchemy session; commit explicitly),
+Dependencies from `helix.deps`: `SessionDep` (async SQLAlchemy session; commit explicitly),
 `CatalogDep`, `SettingsDep`, `QueueDep`, `ArtifactStoreDep`, `Pagination` (`.limit`, `.offset`),
 `CurrentActor`, `OptionalActor`. Outside a request use
-`async with orphafold.db.session.session_scope() as session:` (commits on exit).
+`async with helix.db.session.session_scope() as session:` (commits on exit).
 
-To add a table, create a module in `api/orphafold/db/` that defines models on
-`orphafold.db.base.Base` (column types `UTCDateTime`, `JSONType`, `BigIntegerKey` are in the same
+To add a table, create a module in `api/helix/db/` that defines models on
+`helix.db.base.Base` (column types `UTCDateTime`, `JSONType`, `BigIntegerKey` are in the same
 module). It is imported before `create_all` runs.
 
 ### A model provider
 
-Create `api/orphafold/providers/<provider_id>.py`. Subclass one interface, set the class attributes,
+Create `api/helix/providers/<provider_id>.py`. Subclass one interface, set the class attributes,
 implement `check_availability` and the interface method, and decorate the class. The worked example
-is `api/orphafold/providers/afdb.py`.
+is `api/helix/providers/afdb.py`.
 
 ```python
-# api/orphafold/providers/example_fold.py
-from orphafold.providers.base import (
+# api/helix/providers/example_fold.py
+from helix.providers.base import (
     Availability,
     Capability,
     ChainInput,
@@ -456,8 +456,8 @@ from orphafold.providers.base import (
     StructureResult,
     register_provider,
 )
-from orphafold.schemas.common import Citation, ConfidenceSummary, StructureDescriptor, StructureOrigin
-from orphafold.schemas.jobs import ArtifactRole, StageSpec
+from helix.schemas.common import Citation, ConfidenceSummary, StructureDescriptor, StructureOrigin
+from helix.schemas.jobs import ArtifactRole, StageSpec
 
 
 @register_provider
@@ -470,7 +470,7 @@ class ExampleFoldProvider(StructurePredictor):
     commercial_use = True
     capabilities = (Capability.MONOMER, Capability.PLDDT)
     execution_mode = ExecutionMode.REMOTE_API
-    structure_origin = StructureOrigin.PREDICTED_ORPHAFOLD
+    structure_origin = StructureOrigin.PREDICTED_INTERNAL
     max_residues = 400
     limitations = ("State each limitation in the words of the model's own documentation.",)
     citation = (Citation(text="Authors, Journal (year)"),)
@@ -497,7 +497,7 @@ class ExampleFoldProvider(StructurePredictor):
         return StructureResult(
             descriptor=StructureDescriptor(
                 id=f"of:{context.job_id}",
-                origin=StructureOrigin.PREDICTED_ORPHAFOLD,
+                origin=StructureOrigin.PREDICTED_INTERNAL,
                 provider=self.id,
                 provider_name=self.name,
                 model_name=self.model_name,
@@ -520,7 +520,7 @@ class ExampleFoldProvider(StructurePredictor):
                     role=ArtifactRole.STRUCTURE,
                     media_type="chemical/x-mmcif",
                     content=cif_text.encode(),
-                    structure_origin=StructureOrigin.PREDICTED_ORPHAFOLD,
+                    structure_origin=StructureOrigin.PREDICTED_INTERNAL,
                     sample_index=0,
                 )
             ],
@@ -536,7 +536,7 @@ class ExampleFoldProvider(StructurePredictor):
         raise ProviderError("not_configured", "Replace this method with the real model call.")
 ```
 
-Rules: output of inference triggered by OrphaFold has origin `predicted_orphafold` and ID
+Rules: output of inference triggered by Helix has origin `predicted_internal` and ID
 `of:<job_id>`; retrieval of a third party's prediction has `predicted_external`. Normalise pLDDT to
 0-100 and record the native scale. Report the provider's raw confidence values verbatim in
 `ConfidenceSample.metrics`. Never return coordinates the model did not produce. A remote service with
@@ -545,18 +545,18 @@ a request limit is called through a `SourceAdapter` with `max_concurrency` and
 
 ### A job handler
 
-Create `api/orphafold/jobs/handlers/<kind>.py`. The worked example is
-`api/orphafold/jobs/handlers/structure_retrieval.py`.
+Create `api/helix/jobs/handlers/<kind>.py`. The worked example is
+`api/helix/jobs/handlers/structure_retrieval.py`.
 
 ```python
-# api/orphafold/jobs/handlers/structure_prediction.py
+# api/helix/jobs/handlers/structure_prediction.py
 from pydantic import BaseModel, Field
 
-from orphafold.jobs import JobContext, JobFailed, job_handler
-from orphafold.jobs.structures import store_structure_result
-from orphafold.providers.base import ChainInput, StructurePredictor, StructureRequest, get_provider
-from orphafold.schemas.common import EntityRef, EntityType
-from orphafold.schemas.jobs import StageSpec, StructureJobResult
+from helix.jobs import JobContext, JobFailed, job_handler
+from helix.jobs.structures import store_structure_result
+from helix.providers.base import ChainInput, StructurePredictor, StructureRequest, get_provider
+from helix.schemas.common import EntityRef, EntityType
+from helix.schemas.jobs import StageSpec, StructureJobResult
 
 
 class StructurePredictionParams(BaseModel):
@@ -617,12 +617,12 @@ async def predict_structure(context: JobContext, params: StructurePredictionPara
 | `await context.check_cancelled()`                                                             | Raise `JobCancelled` when cancellation was requested. Do not catch it                                                                                                                                                       |
 | `await context.save_artifact(name, data, media_type=..., role=ArtifactRole.OTHER)`            | Store bytes, text or a `Path`; returns `ArtifactOut` with `sha256` and `url`                                                                                                                                                |
 | `context.manifest`                                                                            | `ManifestBuilder`: `set_model`, `set_parameters`, `add_sequence`, `add_variant`, `add_ligand`, `add_identifier`, `add_source_dataset`, `add_provenance`, `set_msa`, `add_package`, `add_confidence_sample`, `set_execution` |
-| `await context.record_structure(descriptor, ...)`                                             | Register an OrphaFold-generated structure (`generated_structure` table)                                                                                                                                                     |
+| `await context.record_structure(descriptor, ...)`                                             | Register an Helix-generated structure (`generated_structure` table)                                                                                                                                                     |
 | `context.workdir`, `context.params`, `context.job_id`, `context.actor_id`, `context.settings` | Scratch directory (removed afterwards) and job facts                                                                                                                                                                        |
 
 `store_structure_result(context, result, gene_symbol=..., variant_id=..., sequence_source=...)` saves
 every `ProviderFile`, fills the manifest from the `StructureResult`, points the descriptor's file
-URLs at the stored artifacts and registers `predicted_orphafold` structures.
+URLs at the stored artifacts and registers `predicted_internal` structures.
 
 Raise `JobFailed(code, message, detail)` for a failure the user should read. Any other exception
 fails the job with code `internal_error`. A handler that is safe to rerun from the start declares
@@ -631,13 +631,13 @@ fails the job with code `internal_error`. A handler that is safe to rerun from t
 
 ### An evidence mapping
 
-The built-in table in `api/orphafold/evidence.py` covers the sources in the research tables. For a
+The built-in table in `api/helix/evidence.py` covers the sources in the research tables. For a
 source it does not cover, register a rule at module level in that source's adapter module:
 
 ```python
-# api/orphafold/sources/my_source.py
-from orphafold.evidence import EvidenceRule, register_evidence_rule
-from orphafold.schemas.common import EvidenceClass
+# api/helix/sources/my_source.py
+from helix.evidence import EvidenceRule, register_evidence_rule
+from helix.schemas.common import EvidenceClass
 
 register_evidence_rule(
     EvidenceRule(

@@ -68,7 +68,7 @@ const AM_ROW = {
 } as const;
 
 /**
- * Assembles the sequence axis of one protein from the OrphaFold API and feeds the persistent dock.
+ * Assembles the sequence axis of one protein from the Helix API and feeds the persistent dock.
  * The axis appears as soon as the sequence is in; each further row is added when its request
  * settles, and a request that fails leaves a row that says so. Requests share the React Query
  * cache with `useProtein`, `useStructureLedger`, `useEffectMap` and `useAxisVariants`, so a page

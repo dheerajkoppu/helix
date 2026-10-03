@@ -81,7 +81,7 @@ export function ProteinSummary({
   const total = ledger
     ? ledger.experimental.length +
       ledger.predicted_external.length +
-      ledger.predicted_orphafold.length
+      ledger.predicted_internal.length
     : 0;
 
   if (!protein && loadError)
