@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
+import { CandidatesLink } from "@/components/discovery/candidates-link";
 import { AddToProjectButton } from "@/components/project/add-to-project";
 import { EmptyState } from "@/components/states/empty-state";
 import { QueryErrorState, RowsSkeleton } from "@/components/states/query-state";
@@ -30,10 +31,7 @@ import { GENE_WORDS } from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import { useReportSources } from "@/lib/state/shell";
-import {
-  useWorkspaceSubjectStore,
-  type SubjectRef,
-} from "@/lib/state/subject";
+import { useWorkspaceSubjectStore, type SubjectRef } from "@/lib/state/subject";
 import {
   mergeSources,
   subjectChain,
@@ -271,6 +269,11 @@ export function GeneWorkspace({ symbol }: { symbol: string }) {
   return (
     <>
       <SubjectBarActions>
+        <CandidatesLink
+          gene={symbol}
+          diseaseId={knownDiseaseId ?? ownDisease?.id ?? null}
+          variantId={variantRef?.id ?? null}
+        />
         <AddToProjectButton
           size="sm"
           variant="ghost"

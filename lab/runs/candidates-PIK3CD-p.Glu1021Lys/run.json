@@ -1,0 +1,96 @@
+{
+  "run_id": "candidates-PIK3CD-p.Glu1021Lys",
+  "objective": "Find the molecular mechanism that best explains the effect of PIK3CD-p.Glu1021Lys (PIK3CD, UniProt O00329), test it with one targeted computational test, and end on the candidate targets and molecules that mechanism and its direction point to.",
+  "subject": {
+    "gene": "PIK3CD",
+    "variant_id": "PIK3CD-p.Glu1021Lys",
+    "accession": "O00329",
+    "position": 1021,
+    "reference_residue": "E",
+    "alternate_residue": "K",
+    "protein_change": "p.Glu1021Lys"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 200,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-04T00:41:46Z",
+  "finished_at": "2026-10-04T00:46:20Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "876de60747c34810a810cb5e1dda132e",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5",
+      "translator": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/helix_lab",
+    "sub_agent_sessions": 11,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "fb176ca4cf76f13bc4167d5e2979d0ca72aa48c1675f275b6e09ab9bb51d0a9a",
+  "metrics": {
+    "wall_seconds": 273.8,
+    "tool_calls": 116,
+    "distinct_sources": 11,
+    "evidence_items": 23,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 19,
+      "literature": 14,
+      "knowledge_graph": 34,
+      "insight": 5,
+      "planner": 8,
+      "safety": 10,
+      "runner": 4,
+      "analysis": 6,
+      "translator": 16
+    },
+    "policy_denials": 2,
+    "reopenings": 0,
+    "candidates": 4,
+    "candidates_rejected_by_safety": 0,
+    "ruled_out_by_direction": 0,
+    "bridge_kinds": [
+      "same_target"
+    ]
+  },
+  "outcome": {
+    "favoured_before": "ligand_binding",
+    "favoured_after": "ligand_binding",
+    "decision_changed": false,
+    "next_experiment": "Computational membrane-docking and electrostatic comparison of wild-type PIK3CD versus E1021K on the AlphaFold model (AF-O00329-F1): compute the electrostatic surface potential around residue 1021 and the membrane-facing distance, and dock or simulate binding to a PIP2-containing bilayer for both variants. Outcome that confirms H1: E1021K shows a more positive potential at 1021 and a stronger or more frequent PIP2-head-group association than wild type. Outcome that overturns H1: no measurable change in membrane binding, or residue 1021 more than about 10 Å from the membrane-facing surface, which is H1's would_refute criterion.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1,
+    "candidates": [
+      "C1",
+      "C2",
+      "C3",
+      "C4"
+    ],
+    "candidate_molecules": [
+      "Duvelisib",
+      "Idelalisib",
+      "Leniolisib",
+      "Zandelisib"
+    ]
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains its effect on the protein, does a targeted computational test change the conclusion that the starting evidence suggested, and what could a drug act on if that mechanism is right?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

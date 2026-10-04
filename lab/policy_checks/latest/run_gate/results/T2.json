@@ -6,7 +6,7 @@
     "verdict": "no_confident_local_change",
     "job_status": "succeeded",
     "site_plddt_change": 0.0,
-    "job_id": "job_01M41VJERNTZP2MXHJ0SEYFW61",
+    "job_id": "job_01M4264X77F5EGZ5C27EFS9WM5",
     "origin": "job",
     "label": "Cached output of ESM Atlas (ESMFold v1), model version esmfold_v1, generated 2026-10-03 by run job_01M41NZS420XV8D1STVDF7HA2Y. No model was run for this request.",
     "construct": {
@@ -45,8 +45,8 @@
   "sources": [
     {
       "database": "Helix",
-      "record_id": "job_01M41VJERNTZP2MXHJ0SEYFW61",
-      "url": "http://localhost:8000/api/v1/jobs/job_01M41VJERNTZP2MXHJ0SEYFW61/manifest"
+      "record_id": "job_01M4264X77F5EGZ5C27EFS9WM5",
+      "url": "http://localhost:8000/api/v1/jobs/job_01M4264X77F5EGZ5C27EFS9WM5/manifest"
     }
   ],
   "controls": [
@@ -59,8 +59,8 @@
   ],
   "reproducible_command": "HELIX_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m helix_lab_tools.experiments structure_comparison --accession Q06187 --position 28 --alternate-residue H --reference-residue R --gene BTK --variant-id BTK-p.Arg28His",
   "elapsed_seconds": 3.0,
-  "job_id": "job_01M41VJERNTZP2MXHJ0SEYFW61",
-  "manifest_url": "/api/v1/jobs/job_01M41VJERNTZP2MXHJ0SEYFW61/manifest",
-  "result_url": "/api/v1/compare/results/job_01M41VJERNTZP2MXHJ0SEYFW61",
+  "job_id": "job_01M4264X77F5EGZ5C27EFS9WM5",
+  "manifest_url": "/api/v1/jobs/job_01M4264X77F5EGZ5C27EFS9WM5/manifest",
+  "result_url": "/api/v1/compare/results/job_01M4264X77F5EGZ5C27EFS9WM5",
   "compute_seconds": 3.0
 }

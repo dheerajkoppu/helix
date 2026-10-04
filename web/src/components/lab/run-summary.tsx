@@ -208,6 +208,14 @@ export function RunProvenance() {
             <DefinitionRow term="Assumptions reopened" mono>
               {live ? view.reopenings.length : count(metrics.reopenings)}
             </DefinitionRow>
+            <DefinitionRow term="Candidates" mono>
+              {live ? view.candidates.length : count(metrics.candidates)}
+            </DefinitionRow>
+            <DefinitionRow term="Ruled out on direction" mono>
+              {live
+                ? view.ruledOut.length
+                : count(metrics.ruled_out_by_direction)}
+            </DefinitionRow>
             <DefinitionRow term="Record lines" mono>
               {view.events.length}
             </DefinitionRow>

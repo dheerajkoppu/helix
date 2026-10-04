@@ -8,6 +8,7 @@ import { toast } from "sonner";
 
 import { TextLink } from "@/components/data/text-link";
 import { decideApproval, labKeys } from "@/components/lab/api";
+import { CandidatesPanel } from "@/components/lab/candidates-panel";
 import { VerdictTag } from "@/components/lab/format";
 import {
   evidenceBySource,
@@ -57,6 +58,7 @@ const STEP_OF: Record<LoopStageId, LoopStep> = {
   experiment: LOOP_STEPS[3],
   result: LOOP_STEPS[4],
   decision: LOOP_STEPS[5],
+  candidates: LOOP_STEPS[6],
 };
 
 /** The agents' own text, closed until asked for. */
@@ -644,7 +646,9 @@ export function PlainStepPanel({
   const reached =
     (stage === "evidence" && view.evidence.length > 0) ||
     (stage === "hypothesis" && view.hypotheses.length > 0) ||
-    (stage === "experiment" && view.tests.length > 0);
+    (stage === "experiment" && view.tests.length > 0) ||
+    (stage === "candidates" &&
+      (view.candidates.length > 0 || view.ruledOut.length > 0));
   const needsYou =
     stage === "experiment" &&
     !replaying &&
@@ -679,6 +683,7 @@ export function PlainStepPanel({
       {stage === "experiment" ? <ExperimentStep /> : null}
       {stage === "result" ? <ResultStep /> : null}
       {stage === "decision" ? <DecisionStep /> : null}
+      {stage === "candidates" ? <CandidatesPanel /> : null}
     </section>
   );
 }

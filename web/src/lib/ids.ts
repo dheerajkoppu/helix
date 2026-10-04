@@ -144,6 +144,26 @@ export const routes = {
     `/variant/${encodeURIComponent(variantId)}/mechanism`,
   compare: (gene: string, change: string) =>
     `/compare/${encodeURIComponent(gene)}/${encodeURIComponent(change)}`,
+  /**
+   * Candidate targets and molecules for a gene, narrowed by the disease and variant in context.
+   * `heldOut` asks the API to withhold the disease's own drug links, so a recovery must come
+   * through a bridge. The Lab run, the disease page and the gene page all link through this.
+   */
+  discover: (
+    gene: string,
+    options: {
+      disease?: string | null;
+      variant?: string | null;
+      heldOut?: boolean;
+    } = {},
+  ) => {
+    const query = new URLSearchParams();
+    if (options.disease) query.set("disease", options.disease);
+    if (options.variant) query.set("variant", options.variant);
+    if (options.heldOut) query.set("held_out", "1");
+    const search = query.toString();
+    return `/discover/${encodeURIComponent(gene)}${search ? `?${search}` : ""}`;
+  },
   compound: (compoundId: string) =>
     `/compound/${encodeURIComponent(compoundId)}`,
   project: (projectId: string) => `/project/${encodeURIComponent(projectId)}`,
@@ -166,4 +186,5 @@ export function decodeParam(value: string): string {
 }
 
 /** Immutable project snapshot: `ofs_` followed by the first 32 hex characters of the content hash. */
-export const isSnapshotId = (value: string): boolean => /^ofs_[0-9a-f]{32}$/.test(value);
+export const isSnapshotId = (value: string): boolean =>
+  /^ofs_[0-9a-f]{32}$/.test(value);

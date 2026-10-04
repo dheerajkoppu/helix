@@ -19,6 +19,9 @@ IMPLEMENTATIONS: dict[str, str] = {
     "get_job_status": "helix_lab_tools.api",
     "get_comparison_result": "helix_lab_tools.api",
     "search_openalex": "helix_lab_tools.openalex",
+    "list_candidate_targets": "helix_lab_tools.discovery",
+    "get_candidate_detail": "helix_lab_tools.discovery",
+    "get_target_structure": "helix_lab_tools.discovery",
     "list_available_tests": "helix_lab_tools.experiments",
     "run_ligand_contact_test": "helix_lab_tools.experiments",
     "run_stability_test": "helix_lab_tools.experiments",
@@ -39,6 +42,11 @@ IMPLEMENTATIONS: dict[str, str] = {
     "record_interpretation": "helix_lab_tools.record",
     "record_decision": "helix_lab_tools.record",
     "record_next_experiment": "helix_lab_tools.record",
+    "record_target_rationale": "helix_lab_tools.candidates",
+    "propose_candidates": "helix_lab_tools.candidates",
+    "review_candidates": "helix_lab_tools.candidates",
+    "record_candidate_review": "helix_lab_tools.candidates",
+    "record_candidate": "helix_lab_tools.candidates",
     "record_handoff": "helix_lab_tools.record",
     "record_reopening": "helix_lab_tools.record",
     "record_final_report": "helix_lab_tools.record",
@@ -62,10 +70,14 @@ RETRIEVAL_TOOLS = frozenset(
         "get_job_status",
         "get_comparison_result",
         "list_available_tests",
+        "list_candidate_targets",
+        "get_candidate_detail",
+        "get_target_structure",
     }
 )
 
-# Tools that close a run; they stay available after the tool-call budget is spent so the record can be finished
+# Tools that close a run; they stay available after the tool-call budget is spent so the record can be
+# finished. The candidates step is the last step of the loop, so its tools belong here too.
 CLOSING_TOOLS = frozenset(
     {
         "read_record",
@@ -74,6 +86,13 @@ CLOSING_TOOLS = frozenset(
         "record_interpretation",
         "record_decision",
         "record_next_experiment",
+        "list_candidate_targets",
+        "get_candidate_detail",
+        "record_target_rationale",
+        "propose_candidates",
+        "review_candidates",
+        "record_candidate_review",
+        "record_candidate",
         "record_handoff",
         "record_final_report",
     }
@@ -146,14 +165,16 @@ SPECIALISTS: dict[str, dict[str, Any]] = {
     "safety": {
         "title": "Safety agent",
         "model": "claude-sonnet-5",
-        "decision": "Whether the plan and the recorded claims may proceed, and whether a human must approve the action.",
-        "inputs": "The plan, the chosen test candidate and every statement in the record.",
-        "output": "A safety review (cleared or blocked) with findings; an approval request and the human decision for a consequential test.",
+        "decision": "Whether the plan, the recorded claims and the proposed candidates may proceed, and whether a human must approve the action.",
+        "inputs": "The plan, the chosen test candidate, every statement in the record, and the candidate proposal with each direction check.",
+        "output": "A safety review (cleared or blocked) with findings; an approval request and the human decision for a consequential test; a candidate review that rejects every candidate whose direction check is not matches.",
         "tools": [
             "read_record",
             "review_claims",
             "record_safety_review",
             "request_approval",
+            "review_candidates",
+            "record_candidate_review",
             "record_handoff",
         ],
     },
@@ -187,6 +208,24 @@ SPECIALISTS: dict[str, dict[str, Any]] = {
             "record_interpretation",
             "record_decision",
             "record_next_experiment",
+            "record_handoff",
+        ],
+    },
+    "translator": {
+        "title": "Translator agent",
+        "model": "claude-sonnet-5",
+        "decision": "Given the favoured mechanism and its direction, what a drug could act on, and whether a molecule that does it already exists.",
+        "inputs": "The favoured mechanism and its direction after the decision; the candidate response of the discovery endpoint.",
+        "output": "A target rationale with the direction rule, a candidate proposal for the safety review, and one candidate per cleared row carrying its bridge, direction check, evidence and the label Helix hypothesis.",
+        "tools": [
+            "read_record",
+            "list_candidate_targets",
+            "get_candidate_detail",
+            "get_target_structure",
+            "record_target_rationale",
+            "propose_candidates",
+            "record_candidate",
+            "record_gap",
             "record_handoff",
         ],
     },

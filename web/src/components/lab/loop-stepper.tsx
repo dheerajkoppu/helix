@@ -37,7 +37,7 @@ export function LoopStepper({
       aria-label="Discovery loop"
       className={cn("border-b border-border bg-background", className)}
     >
-      <ol className="mx-auto grid w-full max-w-[96rem] grid-cols-3 px-4 sm:grid-cols-6 md:px-6">
+      <ol className="mx-auto grid w-full max-w-[96rem] grid-cols-2 px-4 sm:grid-cols-4 md:px-6 lg:grid-cols-7">
         {LOOP_STAGES.map((stage, index) => {
           const done = complete ? index <= reachedIndex : index < reachedIndex;
           const current = !complete && index === reachedIndex;

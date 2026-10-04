@@ -10,6 +10,7 @@ import { TextLink } from "@/components/data/text-link";
 import { EvidenceBadge } from "@/components/evidence/evidence-badge";
 import { SourceChip } from "@/components/evidence/source-chip";
 import { decideApproval, labKeys } from "@/components/lab/api";
+import { CandidatesPanel } from "@/components/lab/candidates-panel";
 import { toEvidenceClass } from "@/components/lab/evidence-ledger";
 import {
   VerdictTag,
@@ -691,6 +692,10 @@ const STEP_LINE: Record<LoopStageId, (counts: Counts) => string | null> = {
   result: ({ results }) =>
     results ? "A computational test, not a laboratory observation." : null,
   decision: () => null,
+  candidates: ({ candidates, ruledOut }) =>
+    candidates || ruledOut
+      ? `${candidates} candidates, ${ruledOut} ruled out on direction of effect.`
+      : null,
 };
 
 interface Counts {
@@ -700,6 +705,8 @@ interface Counts {
   hypotheses: number;
   tests: number;
   results: number;
+  candidates: number;
+  ruledOut: number;
 }
 
 /** The output of one loop step: everyday words by default, the record's own terms in Advanced. */
@@ -730,6 +737,8 @@ function RecordStepPanel({
     hypotheses: view.hypotheses.length,
     tests: view.tests.length,
     results: view.results.length,
+    candidates: view.candidates.length,
+    ruledOut: view.ruledOut.length,
   });
   return (
     <section aria-label={STEP_LABEL[stage]} data-step={stage}>
@@ -740,6 +749,7 @@ function RecordStepPanel({
       {stage === "experiment" ? <ExperimentStep /> : null}
       {stage === "result" ? <ResultStep onDetails={onDetails} /> : null}
       {stage === "decision" ? <DecisionStep /> : null}
+      {stage === "candidates" ? <CandidatesPanel /> : null}
     </section>
   );
 }

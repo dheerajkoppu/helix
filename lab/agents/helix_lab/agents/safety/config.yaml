@@ -3,7 +3,7 @@
 spec_version: 1
 name: safety
 description: >-
-  Safety agent. Owns: Whether the plan and the recorded claims may proceed, and whether a human must approve the action.
+  Safety agent. Owns: Whether the plan, the recorded claims and the proposed candidates may proceed, and whether a human must approve the action.
 executor:
   type: omnigent
   model: claude-sonnet-5

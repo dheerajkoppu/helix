@@ -70,8 +70,16 @@
  * Source status (sources.ts)
  *   mergeSources(...lists)                  one row per source across responses, worst state wins
  *   findSource(sources, ...ids), failedSource(source, name, error)
+ *
+ * Candidates (discovery.ts)
+ *   useDiscoveryCandidates({ gene, disease, variant, excludeDirect })
+ *                                           candidate targets and molecules, the ruled-out rows and
+ *                                           the edges withheld in held-out mode
+ *   useDiscoveryControls()                  the stored validation result file; 404 before it exists
+ *   toDiscoveryEvidence(evidence)           one backend record in the evidence components' shape
  */
 export * from "./queries";
+export * from "./discovery";
 export * from "./sources";
 export * from "./structures";
 export * from "./colorings";

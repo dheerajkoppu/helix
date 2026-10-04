@@ -63,6 +63,8 @@ export function stepCounts(view: RecordView): StepCounts {
     tests: view.plans.at(-1)?.chosen_test_id ? view.tests.length : 0,
     finished: view.results.length > 0,
     changed: outcome ? outcome.changed : null,
+    candidates: view.candidates.length,
+    ruledOut: view.ruledOut.length,
   };
 }
 
@@ -82,6 +84,8 @@ export function agentCounts(view: RecordView, agent: string): AgentCounts {
     approvals: view.approvals.length,
     results: view.results.length,
     changed: outcome ? outcome.changed : null,
+    candidates: view.candidates.length,
+    ruledOut: view.ruledOut.length,
   };
 }
 

@@ -1,2 +1,2 @@
-{"database": "ClinVar", "record_id": "VCV000011348", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/11348/", "tool": "probe", "agent": "probe", "at": "2026-10-03T21:43:19Z"}
-{"database": "Helix", "record_id": "job_01M41VJERNTZP2MXHJ0SEYFW61", "url": "http://localhost:8000/api/v1/jobs/job_01M41VJERNTZP2MXHJ0SEYFW61/manifest", "tool": "run_structure_comparison", "agent": "runner", "at": "2026-10-03T21:43:56Z"}
+{"database": "ClinVar", "record_id": "VCV000011348", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/11348/", "tool": "probe", "agent": "probe", "at": "2026-10-04T00:48:13Z"}
+{"database": "Helix", "record_id": "job_01M4264X77F5EGZ5C27EFS9WM5", "url": "http://localhost:8000/api/v1/jobs/job_01M4264X77F5EGZ5C27EFS9WM5/manifest", "tool": "run_structure_comparison", "agent": "runner", "at": "2026-10-04T00:48:46Z"}

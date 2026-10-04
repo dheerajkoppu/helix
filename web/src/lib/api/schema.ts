@@ -160,6 +160,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/discovery/candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Candidate targets and molecules for a gene, disease or variant, with the chain behind each */
+        get: operations["read_candidates_api_v1_discovery_candidates_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/discovery/controls": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The stored result of the discovery controls: one positive, one negative, one upstream target */
+        get: operations["read_controls_api_v1_discovery_controls_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/diseases": {
         parameters: {
             query?: never;
@@ -1206,6 +1240,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/structures/similar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Proteins with a similar fold (Foldseek against the PDB and AlphaFold DB)
+         * @description Fold neighbours of a protein, each row carrying every measure Foldseek reported, by name.
+         *
+         *     Answers immediately. A protein whose search is still running comes back with status `pending`
+         *     and `retry_after_seconds`; the flagship proteins and the control subjects are served from a
+         *     stored copy, flagged with `from_cached_example`.
+         */
+        get: operations["get_similar_structures_api_v1_structures_similar_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/structures/{structure_id}": {
         parameters: {
             query?: never;
@@ -1274,6 +1332,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/structures/{structure_id}/pocket-similarity": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Compare the pockets of this structure with those of a structurally similar protein
+         * @description Residue-by-residue pocket comparison between a subject structure and one similar protein.
+         *
+         *     Subject positions are mapped onto the similar protein through the Foldseek alignment of the two
+         *     models, and compared against the pockets P2Rank predicts on the similar protein and the
+         *     molecules RCSB PDB records as bound in an experimental entry of it.
+         */
+        get: operations["get_pocket_similarity_api_v1_structures__structure_id__pocket_similarity_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/structures/{structure_id}/residue-map": {
         parameters: {
             query?: never;
@@ -1329,6 +1411,55 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * ActionRule
+         * @description The required-action rule as a pure function of (mechanism class, direction).
+         */
+        ActionRule: {
+            /**
+             * Action Labels
+             * @description The same actions in everyday words
+             */
+            action_labels: string[];
+            /** Actions */
+            actions: ("inhibit" | "antagonise" | "block_upstream" | "restore" | "activate" | "stabilise" | "chaperone" | "replace" | "bypass" | "release_a_brake" | "remove_the_mutant_protein")[];
+            /**
+             * Direction Needed
+             * @description Which way the subject's activity has to move for a molecule to help
+             * @enum {string}
+             */
+            direction_needed: "less_activity" | "more_activity" | "none";
+            /**
+             * Rule
+             * @description The row of the rule table that fired
+             */
+            rule: string;
+            /**
+             * Why
+             * @description Why this mechanism needs this action, in plain words
+             */
+            why: string;
+        };
+        /**
+         * ActionRuleRow
+         * @description One row of the published rule table, so a page can print the whole table.
+         */
+        ActionRuleRow: {
+            /** Actions */
+            actions: ("inhibit" | "antagonise" | "block_upstream" | "restore" | "activate" | "stabilise" | "chaperone" | "replace" | "bypass" | "release_a_brake" | "remove_the_mutant_protein")[];
+            /**
+             * Direction
+             * @enum {string}
+             */
+            direction: "increased_activity" | "decreased_activity" | "unknown";
+            /**
+             * Mechanism Class
+             * @enum {string}
+             */
+            mechanism_class: "gain_of_function" | "loss_of_function" | "dominant_negative" | "haploinsufficiency" | "neomorph" | "unknown";
+            /** Why */
+            why: string;
+        };
         /** ActorRef */
         ActorRef: {
             /** Actor Id */
@@ -1338,6 +1469,13 @@ export interface components {
              * @enum {string}
              */
             kind: "anonymous" | "account" | "system";
+        };
+        /** AlignedRange */
+        AlignedRange: {
+            /** End */
+            end: number;
+            /** Start */
+            start: number;
         };
         /** AnswerSegment */
         AnswerSegment: {
@@ -1711,6 +1849,77 @@ export interface components {
             /** Url */
             url: string | null;
         };
+        /** Bridge */
+        Bridge: {
+            /** @description The other disease the molecule is recorded for, when there is one */
+            from_disease: components["schemas"]["BridgeDisease"] | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "same_target" | "pathway_node" | "interaction_partner" | "structural_analogue" | "mechanism_class";
+            /** Label */
+            label: string;
+            /**
+             * Partial
+             * @description True when a source this bridge wants was not available
+             * @default false
+             */
+            partial: boolean;
+            /** Partial Reason */
+            partial_reason: string | null;
+            /** Steps */
+            steps: components["schemas"]["BridgeStep"][];
+        };
+        /** BridgeDisease */
+        BridgeDisease: {
+            disease: components["schemas"]["EntityRef"] | null;
+            /** Id */
+            id: string | null;
+            /** Name */
+            name: string | null;
+            /** Source */
+            source: string | null;
+        };
+        /** BridgeStatus */
+        BridgeStatus: {
+            /**
+             * Candidate Count
+             * @default 0
+             */
+            candidate_count: number;
+            /** Elapsed Ms */
+            elapsed_ms: number | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "same_target" | "pathway_node" | "interaction_partner" | "structural_analogue" | "mechanism_class";
+            /** Label */
+            label: string;
+            /** Message */
+            message: string | null;
+            /**
+             * Ruled Out Count
+             * @default 0
+             */
+            ruled_out_count: number;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "ok" | "empty" | "partial" | "failed" | "skipped";
+        };
+        /**
+         * BridgeStep
+         * @description One claim in the chain. Each carries its own evidence; no step is a summary of another.
+         */
+        BridgeStep: {
+            /** Evidence */
+            evidence: components["schemas"]["Evidence"][];
+            /** Statement */
+            statement: string;
+        };
         /**
          * CachedOrigin
          * @description Where a cached example came from: the real run that produced it.
@@ -1733,6 +1942,89 @@ export interface components {
             provider_id: string;
             /** Provider Name */
             provider_name: string | null;
+        };
+        /** Candidate */
+        Candidate: {
+            bridge: components["schemas"]["Bridge"];
+            /** Caveats */
+            caveats: string[];
+            direction_check: components["schemas"]["DirectionCheck"];
+            /** Evidence */
+            evidence: components["schemas"]["Evidence"][];
+            /** Id */
+            id: string;
+            /**
+             * Label
+             * @default Helix hypothesis
+             * @constant
+             */
+            label: "Helix hypothesis";
+            molecule: components["schemas"]["CandidateMolecule"] | null;
+            /** Rank */
+            rank: number;
+            structure: components["schemas"]["CandidateStructure"] | null;
+            target: components["schemas"]["CandidateTarget"];
+        };
+        /** CandidateMolecule */
+        CandidateMolecule: {
+            /**
+             * Action Type
+             * @description ChEMBL mechanism action_type on the target
+             */
+            action_type: string | null;
+            /** Chembl Id */
+            chembl_id: string;
+            compound: components["schemas"]["EntityRef"] | null;
+            /** Inchikey */
+            inchikey: string | null;
+            /**
+             * Max Phase
+             * @description ChEMBL maximum clinical phase
+             */
+            max_phase: number | null;
+            /** Max Phase Label */
+            max_phase_label: string | null;
+            measured_affinity: components["schemas"]["helix__schemas__discovery__MeasuredAffinity"] | null;
+            /** Mechanism Of Action */
+            mechanism_of_action: string | null;
+            /**
+             * Modality
+             * @description ChEMBL molecule_type, the source's own word
+             */
+            modality: string | null;
+            /** Name */
+            name: string | null;
+            /** Withdrawn */
+            withdrawn: boolean | null;
+        };
+        /** CandidateStructure */
+        CandidateStructure: {
+            /** Note */
+            note: string | null;
+            /** Pocket Id */
+            pocket_id: string | null;
+            /** Residues */
+            residues: number[];
+            /** @description The protein whose pocket or fold the chain compared with */
+            similar_to: components["schemas"]["CandidateTarget"] | null;
+            /** Structure Id */
+            structure_id: string | null;
+        };
+        /** CandidateTarget */
+        CandidateTarget: {
+            /** Accession */
+            accession: string;
+            druggability: components["schemas"]["Druggability"] | null;
+            /** Gene Symbol */
+            gene_symbol: string | null;
+            /** Name */
+            name: string | null;
+            protein: components["schemas"]["EntityRef"] | null;
+            /**
+             * Relation
+             * @enum {string}
+             */
+            relation: "same_target" | "pathway_node" | "interaction_partner" | "structural_analogue" | "mechanism_class";
         };
         /** CatalogCounts */
         CatalogCounts: {
@@ -2500,6 +2792,74 @@ export interface components {
              */
             variant: components["schemas"]["SiteContact"][];
         };
+        /** ControlChainStep */
+        ControlChainStep: {
+            /** Record Id */
+            record_id: string | null;
+            /** Record Url */
+            record_url: string | null;
+            /** Source */
+            source: string | null;
+            /** Statement */
+            statement: string;
+        };
+        /** ControlResult */
+        ControlResult: {
+            /** Candidate Count */
+            candidate_count: number | null;
+            /** Chain */
+            chain: components["schemas"]["ControlChainStep"][];
+            /** Detail */
+            detail: string;
+            /** Elapsed Ms */
+            elapsed_ms: number | null;
+            /** Expected */
+            expected: string;
+            /** Expected Molecule */
+            expected_molecule: string | null;
+            /** Expected Molecule Rank */
+            expected_molecule_rank: number | null;
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "positive" | "negative";
+            /** Notes */
+            notes: string[];
+            /** Passed */
+            passed: boolean;
+            /** Request */
+            request: string;
+            /** Ruled Out Count */
+            ruled_out_count: number | null;
+            /** Source Count */
+            source_count: number | null;
+            /** Sources Answered */
+            sources_answered: number | null;
+            /** Subject */
+            subject: string;
+            /** Title */
+            title: string;
+        };
+        /** ControlsResponse */
+        ControlsResponse: {
+            /** All Passed */
+            all_passed: boolean;
+            /** Controls */
+            controls: components["schemas"]["ControlResult"][];
+            /** Engine Version */
+            engine_version: string | null;
+            /** Generated At */
+            generated_at: string | null;
+            /** Passed */
+            passed: number;
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /** Total */
+            total: number;
+        };
         /** CountRow */
         CountRow: {
             /** Count */
@@ -2742,6 +3102,80 @@ export interface components {
             /** Total Residues */
             total_residues: number;
         };
+        /**
+         * DirectionCheck
+         * @description The hard filter. A verdict of 'opposes' never appears in candidates.
+         */
+        DirectionCheck: {
+            /**
+             * Molecule Action
+             * @description ChEMBL action_type, verbatim
+             */
+            molecule_action: string | null;
+            /**
+             * Molecule Effect
+             * @description What the recorded action does to the protein it acts on
+             * @enum {string}
+             */
+            molecule_effect: "lowers" | "raises" | "unknown";
+            /** Required */
+            required: ("inhibit" | "antagonise" | "block_upstream" | "restore" | "activate" | "stabilise" | "chaperone" | "replace" | "bypass" | "release_a_brake" | "remove_the_mutant_protein")[];
+            /**
+             * Required Direction
+             * @enum {string}
+             */
+            required_direction: "less_activity" | "more_activity" | "none";
+            /**
+             * Target Relation Effect
+             * @description How an effect on this target carries over to the subject's activity
+             * @enum {string}
+             */
+            target_relation_effect: "same_way" | "opposite_way" | "unknown";
+            /**
+             * Verdict
+             * @enum {string}
+             */
+            verdict: "matches" | "opposes" | "unknown";
+            /**
+             * Why
+             * @description Built from a fixed template, never free prose
+             */
+            why: string;
+        };
+        /** DiscoveryResponse */
+        DiscoveryResponse: {
+            /** Action Rule Table */
+            action_rule_table: components["schemas"]["ActionRuleRow"][];
+            /** Bridges */
+            bridges: components["schemas"]["BridgeStatus"][];
+            /** Candidates */
+            candidates: components["schemas"]["Candidate"][];
+            /** Counts */
+            counts: {
+                [key: string]: number;
+            };
+            /** Elapsed Ms */
+            elapsed_ms: number | null;
+            /** Exclude Direct */
+            exclude_direct: boolean;
+            /**
+             * From Cache
+             * @default false
+             */
+            from_cache: boolean;
+            /** Limits */
+            limits: string[];
+            /** Ranking Rule */
+            ranking_rule: string[];
+            required_action: components["schemas"]["ActionRule"];
+            /** Ruled Out */
+            ruled_out: components["schemas"]["RuledOut"][];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            subject: components["schemas"]["Subject"];
+            /** Withheld Edges */
+            withheld_edges: components["schemas"]["WithheldEdge"][];
+        };
         /** DiseaseCategory */
         DiseaseCategory: {
             /** Id */
@@ -2975,6 +3409,28 @@ export interface components {
             label: string | null;
             /** Url */
             url: string | null;
+        };
+        /**
+         * Druggability
+         * @description What is recorded about acting on this protein. Counts of records, never a score.
+         */
+        Druggability: {
+            /**
+             * Has Approved Molecule
+             * @default false
+             */
+            has_approved_molecule: boolean;
+            /** Highest Clinical Phase */
+            highest_clinical_phase: number | null;
+            /** Molecules With A Recorded Action */
+            molecules_with_a_recorded_action: number;
+            /** Note */
+            note: string | null;
+            /**
+             * Pocket Count
+             * @description Predicted pockets, when they were read
+             */
+            pocket_count: number | null;
         };
         /** EcoRef */
         EcoRef: {
@@ -4698,7 +5154,7 @@ export interface components {
              * Agent
              * @enum {string}
              */
-            agent: "orchestrator" | "literature" | "knowledge_graph" | "insight" | "planner" | "safety" | "runner" | "analysis" | "human";
+            agent: "orchestrator" | "literature" | "knowledge_graph" | "insight" | "planner" | "safety" | "runner" | "analysis" | "translator" | "human";
             /** At */
             at: string;
             /** Payload */
@@ -4717,7 +5173,7 @@ export interface components {
              * Type
              * @enum {string}
              */
-            type: "objective" | "handoff" | "evidence" | "gap" | "hypothesis" | "test_candidate" | "plan" | "approval_request" | "approval_decision" | "experiment_started" | "experiment_result" | "interpretation" | "decision" | "next_experiment" | "note";
+            type: "objective" | "handoff" | "evidence" | "gap" | "hypothesis" | "test_candidate" | "plan" | "approval_request" | "approval_decision" | "experiment_started" | "experiment_result" | "interpretation" | "decision" | "next_experiment" | "target_rationale" | "candidate" | "note";
         } & {
             [key: string]: unknown;
         };
@@ -5659,42 +6115,6 @@ export interface components {
             urn: string;
         };
         /**
-         * MeasuredAffinity
-         * @description One ChEMBL activity row, verbatim.
-         */
-        MeasuredAffinity: {
-            /** Activity Id */
-            activity_id: string;
-            /** Assay Chembl Id */
-            assay_chembl_id: string | null;
-            /** Assay Description */
-            assay_description: string | null;
-            /** Assay Format */
-            assay_format: string | null;
-            /** Document Chembl Id */
-            document_chembl_id: string | null;
-            /** Pchembl */
-            pchembl: number | null;
-            /** Relation */
-            relation: string;
-            /**
-             * Source
-             * @default chembl
-             * @constant
-             */
-            source: "chembl";
-            /** Standard Type */
-            standard_type: string;
-            /** Units */
-            units: string;
-            /** Url */
-            url: string | null;
-            /** Value */
-            value: number;
-            /** Year */
-            year: number | null;
-        };
-        /**
          * MeasuredAffinitySummary
          * @description Summary of the qualifying ChEMBL activity rows of one compound against the target.
          */
@@ -5727,7 +6147,7 @@ export interface components {
             /** Min Pchembl */
             min_pchembl: number;
             /** @description The qualifying row closest to the median pChEMBL */
-            representative: components["schemas"]["MeasuredAffinity"];
+            representative: components["schemas"]["helix__schemas__compounds__MeasuredAffinity"];
             /**
              * Source
              * @default chembl
@@ -6167,6 +6587,45 @@ export interface components {
             /** Min */
             min: number | null;
         };
+        /**
+         * ObservedLigand
+         * @description A molecule seen bound to the similar protein in an experimental structure, not a prediction.
+         */
+        ObservedLigand: {
+            /**
+             * Binding Site Positions
+             * @description UniProt positions of the similar protein that contact it
+             */
+            binding_site_positions: number[];
+            /**
+             * Common Additive
+             * @description A crystallisation additive rather than a designed binder
+             */
+            common_additive: boolean;
+            /** Comp Id */
+            comp_id: string;
+            evidence: components["schemas"]["Evidence"] | null;
+            /** Formula */
+            formula: string | null;
+            /** Inchikey */
+            inchikey: string | null;
+            /** Name */
+            name: string | null;
+            /**
+             * Positions Shared With Subject Pocket
+             * @description Subject positions whose aligned residue in the similar protein contacts this ligand
+             */
+            positions_shared_with_subject_pocket: number[];
+            /** Smiles */
+            smiles: string | null;
+            /**
+             * Structure Id
+             * @description pdb:<ID> the ligand was observed in
+             */
+            structure_id: string;
+            /** Url */
+            url: string | null;
+        };
         /** OntologyTerm */
         OntologyTerm: {
             /** Id */
@@ -6339,6 +6798,57 @@ export interface components {
             /** Service Url */
             service_url: string | null;
         };
+        /**
+         * PocketPair
+         * @description One subject pocket set beside the pocket of the similar protein its residues align to.
+         */
+        PocketPair: {
+            /**
+             * Aligned Count
+             * @description Subject pocket residues with an aligned partner
+             */
+            aligned_count: number;
+            /** Analogue Pocket Id */
+            analogue_pocket_id: string | null;
+            /** Analogue Pocket Probability */
+            analogue_pocket_probability: number | null;
+            /** Analogue Positions */
+            analogue_positions: number[];
+            /**
+             * Identical Residue Count
+             * @description Of those, how many are the same amino acid
+             */
+            identical_residue_count: number;
+            /**
+             * In Analogue Pocket Count
+             * @description Of those, how many land in a pocket predicted on the similar protein
+             */
+            in_analogue_pocket_count: number;
+            /**
+             * Ligand Contact Count
+             * @description Of those, how many contact a ligand observed bound to the similar protein
+             */
+            ligand_contact_count: number;
+            /**
+             * Shared Residues
+             * @description Subject pocket residues that align to a residue of the similar protein
+             */
+            shared_residues: components["schemas"]["SharedResidue"][];
+            /**
+             * Shares
+             * @description What the two pockets share, one plain sentence each
+             */
+            shares: string[];
+            /** Subject Pocket Id */
+            subject_pocket_id: string;
+            /**
+             * Subject Pocket Probability
+             * @description P2Rank calibrated probability for the subject pocket, 0 to 1
+             */
+            subject_pocket_probability: number | null;
+            /** Subject Positions */
+            subject_positions: number[];
+        };
         /** PocketResidueRef */
         PocketResidueRef: {
             /**
@@ -6356,6 +6866,60 @@ export interface components {
              * @description One-letter code as PrankWeb read it
              */
             residue: string | null;
+        };
+        /**
+         * PocketSimilarity
+         * @description Pocket-level comparison of one subject structure against one similar protein.
+         */
+        PocketSimilarity: {
+            analogue: components["schemas"]["EntityRef"];
+            /**
+             * Analogue Experimental Structure Id
+             * @description Experimental entry the observed ligands were read from
+             */
+            analogue_experimental_structure_id: string | null;
+            /** Analogue Structure Id */
+            analogue_structure_id: string | null;
+            /** Caveats */
+            caveats: string[];
+            /** @default computational_prediction */
+            evidence_class: components["schemas"]["EvidenceClass"];
+            /**
+             * Fold Metrics
+             * @description Fold-level measures for this pair, from Foldseek
+             */
+            fold_metrics: components["schemas"]["SimilarityMetric"][];
+            /** Limits */
+            limits: string[];
+            /** Observed Ligands */
+            observed_ligands: components["schemas"]["ObservedLigand"][];
+            /** Pocket Pairs */
+            pocket_pairs: components["schemas"]["PocketPair"][];
+            /**
+             * Residue Correspondence
+             * @description How a subject position was mapped onto a position of the similar protein
+             */
+            residue_correspondence: string;
+            /** Retry After Seconds */
+            retry_after_seconds: number | null;
+            /**
+             * Shares
+             * @description What the two proteins share overall, one plain sentence each
+             */
+            shares: string[];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ready" | "pending" | "unavailable" | "not_applicable";
+            /** Status Detail */
+            status_detail: string | null;
+            subject: components["schemas"]["EntityRef"];
+            /** Subject Structure Id */
+            subject_structure_id: string;
+            subject_structure_origin: components["schemas"]["StructureOrigin"];
         };
         /** PocketsResponse */
         PocketsResponse: {
@@ -7451,6 +8015,31 @@ export interface components {
             /** Translation */
             translation: number[];
         };
+        /**
+         * RuledOut
+         * @description A molecule the direction filter removed. The list is the evidence the filter works.
+         */
+        RuledOut: {
+            /**
+             * Bridge Kind
+             * @enum {string}
+             */
+            bridge_kind: "same_target" | "pathway_node" | "interaction_partner" | "structural_analogue" | "mechanism_class";
+            direction_check: components["schemas"]["DirectionCheck"];
+            /** Evidence */
+            evidence: components["schemas"]["Evidence"][];
+            /** Id */
+            id: string;
+            molecule: components["schemas"]["CandidateMolecule"];
+            /** Reason */
+            reason: string;
+            /**
+             * Reason Code
+             * @constant
+             */
+            reason_code: "opposes_required_action";
+            target: components["schemas"]["CandidateTarget"];
+        };
         /** RunManifest */
         RunManifest: {
             actor: components["schemas"]["ActorRef"];
@@ -7661,6 +8250,208 @@ export interface components {
             id: "database_fact" | "paper_finding" | "computational_result" | "reasoning_hypothesis";
             /** Label */
             label: string;
+        };
+        /**
+         * SharedResidue
+         * @description One residue of the subject's pocket and the residue it aligns to in the similar protein.
+         */
+        SharedResidue: {
+            /** Analogue Position */
+            analogue_position: number;
+            /** Analogue Residue */
+            analogue_residue: string | null;
+            /**
+             * Contacts Analogue Ligand
+             * @description Component IDs of ligands observed in contact with this residue
+             */
+            contacts_analogue_ligand: string[];
+            /**
+             * In Analogue Pocket
+             * @default false
+             */
+            in_analogue_pocket: boolean;
+            /** Same Residue */
+            same_residue: boolean;
+            /** Subject Position */
+            subject_position: number;
+            /** Subject Residue */
+            subject_residue: string | null;
+        };
+        /**
+         * SimilarProtein
+         * @description One fold-similarity hit, with the identifiers Foldseek's target name carried.
+         */
+        SimilarProtein: {
+            /**
+             * Alignment Count
+             * @description How many alignments to this protein the search returned
+             * @default 1
+             */
+            alignment_count: number;
+            /** Database */
+            database: string;
+            /** Database Label */
+            database_label: string;
+            evidence: components["schemas"]["Evidence"] | null;
+            /** Gene Symbol */
+            gene_symbol: string | null;
+            /**
+             * Id
+             * @description Stable row ID: <database>:<target name>
+             */
+            id: string;
+            /**
+             * Is Same Protein
+             * @description The query's own entry or another model of the same protein
+             * @default false
+             */
+            is_same_protein: boolean;
+            /** Metrics */
+            metrics: components["schemas"]["SimilarityMetric"][];
+            /**
+             * Observed Ligands
+             * @description Component IDs of non-polymer ligands RCSB PDB lists as bound in this entry
+             */
+            observed_ligands: string[];
+            /** Organism */
+            organism: string | null;
+            /** Pdb Chain */
+            pdb_chain: string | null;
+            /** @description The similar protein, when the target name resolves to a UniProt entry */
+            protein: components["schemas"]["EntityRef"] | null;
+            /** @description Residues of the subject that took part in the alignment */
+            query_aligned: components["schemas"]["AlignedRange"] | null;
+            /**
+             * Structure Id
+             * @description pdb:<ID> or afdb:<entryId> of the target
+             */
+            structure_id: string | null;
+            structure_origin: components["schemas"]["StructureOrigin"] | null;
+            /**
+             * Target
+             * @description Target name exactly as Foldseek returned it
+             */
+            target: string;
+            target_aligned: components["schemas"]["AlignedRange"] | null;
+            /**
+             * Title
+             * @description Description Foldseek carried on the target name
+             */
+            title: string | null;
+        };
+        /**
+         * SimilarStructures
+         * @description Fold neighbours of one protein. Pending while the external search is still running.
+         */
+        SimilarStructures: {
+            /** Cached Retrieved At */
+            cached_retrieved_at: string | null;
+            /** Databases */
+            databases: string[];
+            /** @default computational_prediction */
+            evidence_class: components["schemas"]["EvidenceClass"];
+            /**
+             * From Cached Example
+             * @description Served from a stored copy under data/examples, not searched now
+             * @default false
+             */
+            from_cached_example: boolean;
+            /** Limits */
+            limits: string[];
+            /**
+             * Metric Names
+             * @description The measures carried on every row, by name
+             */
+            metric_names: string[];
+            /**
+             * Mode
+             * @description Foldseek search mode that produced these rows
+             */
+            mode: string | null;
+            /**
+             * Mode Note
+             * @description What this mode does and does not report
+             */
+            mode_note: string | null;
+            protein: components["schemas"]["EntityRef"];
+            /** Query Length */
+            query_length: number | null;
+            /** Query Structure Id */
+            query_structure_id: string;
+            query_structure_origin: components["schemas"]["StructureOrigin"];
+            /**
+             * Ranking Rule
+             * @description How the rows below were ordered
+             */
+            ranking_rule: string | null;
+            /** Retry After Seconds */
+            retry_after_seconds: number | null;
+            /**
+             * Service
+             * @default Foldseek Search Server
+             */
+            service: string;
+            /** Service Url */
+            service_url: string | null;
+            /** Similar */
+            similar: components["schemas"]["SimilarProtein"][];
+            /** Sources */
+            sources: components["schemas"]["SourceStatus"][];
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ready" | "pending" | "unavailable" | "not_applicable";
+            /** Status Detail */
+            status_detail: string | null;
+            /**
+             * Total Hits
+             * @description Hits the service found per database, before any cap
+             */
+            total_hits: {
+                [key: string]: number;
+            };
+        };
+        /**
+         * SimilarityMetric
+         * @description One named measure, reported as the source reported it.
+         */
+        SimilarityMetric: {
+            /**
+             * Direction
+             * @default descriptive
+             * @enum {string}
+             */
+            direction: "lower_is_stronger" | "higher_is_stronger" | "descriptive";
+            /**
+             * Label
+             * @description What the measure is called, in words
+             */
+            label: string;
+            /**
+             * Meaning
+             * @description One plain sentence saying what the number means
+             */
+            meaning: string;
+            /**
+             * Name
+             * @description Machine name, e.g. foldseek_evalue
+             */
+            name: string;
+            /**
+             * Source
+             * @description Source adapter ID that reported it, e.g. foldseek
+             */
+            source: string;
+            /**
+             * Source Field
+             * @description Field name in the source's own response, e.g. eval
+             */
+            source_field: string;
+            /** Unit */
+            unit: string | null;
+            /** Value */
+            value: number | null;
         };
         /**
          * SiteConfidence
@@ -8195,6 +8986,60 @@ export interface components {
             molecule: string | null;
             /** Topology */
             topology: string | null;
+        };
+        /**
+         * Subject
+         * @description What the candidates are for: a gene, its protein, and the disease or variant that framed it.
+         */
+        Subject: {
+            /**
+             * Accession
+             * @description UniProt accession of the gene's protein
+             */
+            accession: string | null;
+            disease: components["schemas"]["EntityRef"] | null;
+            gene: components["schemas"]["EntityRef"];
+            /** Gene Symbol */
+            gene_symbol: string;
+            mechanism: components["schemas"]["SubjectMechanism"];
+            protein: components["schemas"]["EntityRef"] | null;
+            variant: components["schemas"]["EntityRef"] | null;
+        };
+        /**
+         * SubjectMechanism
+         * @description Mechanism class and direction of effect of the subject, with where they came from.
+         */
+        SubjectMechanism: {
+            /**
+             * Basis
+             * @description The rule or record that set the class and direction, in plain words
+             */
+            basis: string;
+            /**
+             * Class
+             * @description Catalog mechanism class, or unknown when no record states one
+             * @enum {string}
+             */
+            class: "gain_of_function" | "loss_of_function" | "dominant_negative" | "haploinsufficiency" | "neomorph" | "unknown";
+            /**
+             * Confidence
+             * @description Which record the class and direction came from
+             * @enum {string}
+             */
+            confidence: "stated_in_the_catalog" | "named_in_the_disease_label" | "unknown";
+            /**
+             * Direction
+             * @description Which way the subject's activity moves
+             * @enum {string}
+             */
+            direction: "increased_activity" | "decreased_activity" | "unknown";
+            /**
+             * Disagreements
+             * @description Records that state a different class or direction
+             */
+            disagreements: string[];
+            /** Evidence */
+            evidence: components["schemas"]["Evidence"][];
         };
         /** SubmissionSummary */
         SubmissionSummary: {
@@ -8961,6 +9806,29 @@ export interface components {
              */
             sequence_accession: string | null;
         };
+        /**
+         * WithheldEdge
+         * @description An edge linking the subject disease straight to a molecule, dropped by exclude_direct.
+         */
+        WithheldEdge: {
+            /** Detail */
+            detail: string;
+            /** Disease Id */
+            disease_id: string | null;
+            /** Disease Name */
+            disease_name: string | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "open_targets_disease_drug" | "chembl_indication" | "literature_co_mention";
+            /** Molecule Chembl Id */
+            molecule_chembl_id: string | null;
+            /** Molecule Name */
+            molecule_name: string | null;
+            /** Source */
+            source: string;
+        };
         /** CrossReference */
         helix__schemas__compounds__CrossReference: {
             /** Database */
@@ -8975,6 +9843,60 @@ export interface components {
              * @constant
              */
             source: "unichem";
+            /** Url */
+            url: string | null;
+        };
+        /**
+         * MeasuredAffinity
+         * @description One ChEMBL activity row, verbatim.
+         */
+        helix__schemas__compounds__MeasuredAffinity: {
+            /** Activity Id */
+            activity_id: string;
+            /** Assay Chembl Id */
+            assay_chembl_id: string | null;
+            /** Assay Description */
+            assay_description: string | null;
+            /** Assay Format */
+            assay_format: string | null;
+            /** Document Chembl Id */
+            document_chembl_id: string | null;
+            /** Pchembl */
+            pchembl: number | null;
+            /** Relation */
+            relation: string;
+            /**
+             * Source
+             * @default chembl
+             * @constant
+             */
+            source: "chembl";
+            /** Standard Type */
+            standard_type: string;
+            /** Units */
+            units: string;
+            /** Url */
+            url: string | null;
+            /** Value */
+            value: number;
+            /** Year */
+            year: number | null;
+        };
+        /**
+         * MeasuredAffinity
+         * @description A measured activity of this molecule against this protein, as ChEMBL records it.
+         */
+        helix__schemas__discovery__MeasuredAffinity: {
+            /** Activity Count */
+            activity_count: number;
+            /** Assay Count */
+            assay_count: number;
+            /** Median Pchembl */
+            median_pchembl: number;
+            /** Organism */
+            organism: string | null;
+            /** Standard Types */
+            standard_types: string[];
             /** Url */
             url: string | null;
         };
@@ -9382,6 +10304,91 @@ export interface operations {
                 };
                 content: {
                     "image/svg+xml": unknown;
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    read_candidates_api_v1_discovery_candidates_get: {
+        parameters: {
+            query?: {
+                /** @description HGNC symbol, e.g. PIK3CD */
+                gene?: string | null;
+                /** @description Catalog disease slug, e.g. activated-p110-delta-syndrome-pik3cd */
+                disease?: string | null;
+                /** @description Variant ID, e.g. BTK-p.Arg28His */
+                variant?: string | null;
+                /** @description Drop every record linking this disease straight to a molecule, so a molecule can only be reached through a bridge */
+                exclude_direct?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DiscoveryResponse"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    read_controls_api_v1_discovery_controls_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControlsResponse"];
                 };
             };
             /** @description Problem JSON */
@@ -12539,6 +13546,49 @@ export interface operations {
             };
         };
     };
+    get_similar_structures_api_v1_structures_similar_get: {
+        parameters: {
+            query: {
+                /** @description UniProt accession of the protein, e.g. O00329 */
+                accession: string;
+                /** @description How many hits to return */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimilarStructures"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
     get_structure_api_v1_structures__structure_id__get: {
         parameters: {
             query?: {
@@ -12700,6 +13750,49 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StructureLigands"];
+                };
+            };
+            /** @description Problem JSON */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Problem JSON */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    get_pocket_similarity_api_v1_structures__structure_id__pocket_similarity_get: {
+        parameters: {
+            query: {
+                /** @description UniProt accession of the similar protein to compare against */
+                accession: string;
+            };
+            header?: never;
+            path: {
+                structure_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PocketSimilarity"];
                 };
             };
             /** @description Problem JSON */

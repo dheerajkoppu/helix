@@ -59,7 +59,7 @@ export interface StageRailProps {
 }
 
 /**
- * The six stages as positions on an axis. Each cell shows the stage and the entity that fills it;
+ * The stages as positions on an axis. Each cell shows the stage and the entity that fills it;
  * a stage that cannot open yet says what it needs. On phones the rail collapses to a stepper.
  */
 export function StageRail({
@@ -81,7 +81,12 @@ export function StageRail({
         className,
       )}
     >
-      <ol className={cn("hidden grid-cols-6 lg:grid", simple ? "h-10" : "h-9")}>
+      <ol
+        className={cn(
+          "hidden auto-cols-fr grid-flow-col lg:grid",
+          simple ? "h-10" : "h-9",
+        )}
+      >
         {targets.map(({ stage, target, href }) => {
           const isActive = stage.id === active;
           const body = (
@@ -165,11 +170,11 @@ export function StageRail({
           <span className="tabular font-mono text-xs text-muted-foreground">
             {activeEntry
               ? simple
-                ? `${activeEntry.stage.number} of 6`
-                : `${activeEntry.stage.number}/6`
+                ? `${activeEntry.stage.number} of ${STAGES.length}`
+                : `${activeEntry.stage.number}/${STAGES.length}`
               : simple
                 ? ""
-                : "0/6"}
+                : `0/${STAGES.length}`}
           </span>
           <span className="font-medium">
             {activeEntry
@@ -199,9 +204,7 @@ export function StageRail({
           className="gap-0 rounded-t-2xl p-0"
         >
           <SheetHeader className="border-b border-border-subtle px-4 py-3">
-            <SheetTitle>
-              {simple ? STEPS_LABEL : "Research stages"}
-            </SheetTitle>
+            <SheetTitle>{simple ? STEPS_LABEL : "Research stages"}</SheetTitle>
             <SheetDescription className="sr-only">
               Move between stages. The current disease, gene, variant and
               protein stay in context.

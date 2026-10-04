@@ -1,0 +1,84 @@
+{
+  "run_id": "candidates-PIK3CD-p.Glu1021Lys",
+  "objective": "Find the molecular mechanism that best explains the loss of function of PIK3CD-p.Glu1021Lys (PIK3CD, UniProt O00329), test it with one targeted computational test, and end on the candidate targets and molecules that mechanism and its direction point to.",
+  "subject": {
+    "gene": "PIK3CD",
+    "variant_id": "PIK3CD-p.Glu1021Lys",
+    "accession": "O00329",
+    "position": 1021,
+    "reference_residue": "E",
+    "alternate_residue": "K",
+    "protein_change": "p.Glu1021Lys"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 200,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-04T00:33:06Z",
+  "finished_at": "2026-10-04T00:39:55Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "70ffd58393b94d558979bb5f10c33176",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5",
+      "translator": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/helix_lab",
+    "sub_agent_sessions": 16,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "d9ad60706e897f4571a82e59bc735e1a4a0f69b090cafa568c7627013a5e3fce",
+  "metrics": {
+    "wall_seconds": 409.2,
+    "tool_calls": 146,
+    "distinct_sources": 11,
+    "evidence_items": 24,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 2,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 23,
+      "literature": 15,
+      "knowledge_graph": 40,
+      "insight": 5,
+      "planner": 18,
+      "safety": 15,
+      "runner": 8,
+      "analysis": 12,
+      "translator": 10
+    },
+    "policy_denials": 0,
+    "reopenings": 1,
+    "candidates": 0,
+    "candidates_rejected_by_safety": 3,
+    "ruled_out_by_direction": 0,
+    "bridge_kinds": []
+  },
+  "outcome": {
+    "favoured_before": "ligand_binding",
+    "favoured_after": "ligand_binding",
+    "decision_changed": false,
+    "next_experiment": "Computational test of H1 with the right ligand class: compare the membrane-facing electrostatic surface of the AlphaFold model of O00329 (wild type vs E1021K, same provider and settings), and dock or contact-map PIP2 head groups near the residue-1021 helix (residues 1008-1031). Refutes H1 if residue 1021 faces away from the membrane-binding surface and the membrane-facing potential does not change after E→K. Supports H1 if the residue lies within contact distance of the PIP2 head group, and the membrane-facing potential becomes more positive.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 2,
+    "candidates": [],
+    "candidate_molecules": []
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains the loss of function, does a targeted computational test change the conclusion that the starting evidence suggested, and what could a drug act on if that mechanism is right?",
+  "approval_mode": "pre-approved by --approve",
+  "error": null
+}

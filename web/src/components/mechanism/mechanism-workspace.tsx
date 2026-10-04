@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { KeyHint } from "@/components/data/key-hint";
+import { CandidatesLink } from "@/components/discovery/candidates-link";
 import { AddToProjectButton } from "@/components/project/add-to-project";
 import { StructureOriginTag } from "@/components/evidence/structure-origin-tag";
 import { ModelResultStrip } from "@/components/science/model-result-strip";
@@ -307,6 +308,12 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
   return (
     <>
       <SubjectBarActions>
+        {data?.gene.id ? (
+          <CandidatesLink
+            gene={data.gene.id}
+            variantId={data.variant_id ?? variantId}
+          />
+        ) : null}
         <AddToProjectButton item={projectItem} size="sm" variant="ghost" />
       </SubjectBarActions>
       <WorkspaceZones
@@ -421,11 +428,7 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
                       }
                     >
                       {choices.map((id) => (
-                        <DropdownMenuRadioItem
-                          key={id}
-                          value={id}
-                          closeOnClick
-                        >
+                        <DropdownMenuRadioItem key={id} value={id} closeOnClick>
                           {id.startsWith("afdb:")
                             ? structureName(id)
                             : `${CAUSE_WORDS.labStructure} ${structureName(id)}`}
@@ -557,55 +560,55 @@ export function MechanismWorkspace({ variantId }: { variantId: string }) {
         inspectorLabel="Evidence"
         inspector={
           !showInspector ? undefined : (
-          <Zone
-            zone="inspector"
-            title={
-              advanced
-                ? (candidate?.label ?? unsupported?.label ?? "Evidence")
-                : candidate
-                  ? plainCause(candidate.category)
-                  : unsupported
-                    ? plainCause(unsupported.category)
-                    : CAUSE_WORDS.evidence
-            }
-            detail={
-              candidate && advanced ? (
-                <span className="text-2xs text-muted-foreground">
-                  rank {candidate.rank} of {data?.candidates.length}
-                </span>
-              ) : null
-            }
-            actions={
-              advanced ? undefined : (
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label="Close"
-                  onClick={() => setInspectorOpen(false)}
-                >
-                  <XIcon aria-hidden />
-                </Button>
-              )
-            }
-          >
-            {mechanisms.isPending ? (
-              <RowsSkeleton rows={6} />
-            ) : data?.applicable ? (
-              <CandidateInspector
-                data={data}
-                candidate={candidate}
-                unsupported={unsupported}
-                shownStructureId={shownId}
-                onShowStructure={setStructureChoice}
-                plddt={plddt}
-              />
-            ) : (
-              <EmptyState
-                title="No claim selected"
-                description="The evidence behind a candidate appears here."
-              />
-            )}
-          </Zone>
+            <Zone
+              zone="inspector"
+              title={
+                advanced
+                  ? (candidate?.label ?? unsupported?.label ?? "Evidence")
+                  : candidate
+                    ? plainCause(candidate.category)
+                    : unsupported
+                      ? plainCause(unsupported.category)
+                      : CAUSE_WORDS.evidence
+              }
+              detail={
+                candidate && advanced ? (
+                  <span className="text-2xs text-muted-foreground">
+                    rank {candidate.rank} of {data?.candidates.length}
+                  </span>
+                ) : null
+              }
+              actions={
+                advanced ? undefined : (
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label="Close"
+                    onClick={() => setInspectorOpen(false)}
+                  >
+                    <XIcon aria-hidden />
+                  </Button>
+                )
+              }
+            >
+              {mechanisms.isPending ? (
+                <RowsSkeleton rows={6} />
+              ) : data?.applicable ? (
+                <CandidateInspector
+                  data={data}
+                  candidate={candidate}
+                  unsupported={unsupported}
+                  shownStructureId={shownId}
+                  onShowStructure={setStructureChoice}
+                  plddt={plddt}
+                />
+              ) : (
+                <EmptyState
+                  title="No claim selected"
+                  description="The evidence behind a candidate appears here."
+                />
+              )}
+            </Zone>
           )
         }
       />

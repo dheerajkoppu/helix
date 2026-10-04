@@ -62,12 +62,14 @@ export const useWorkspaceSubjectStore = create<SubjectState>()((set) => ({
         const incoming = links[kind] ?? null;
         const previousId = state.chain[kind]?.id ?? null;
         // Filling an empty link (a gene page resolving its protein) invalidates nothing.
-        if (previousId !== null && previousId !== (incoming?.id ?? null)) changed.add(kind);
+        if (previousId !== null && previousId !== (incoming?.id ?? null))
+          changed.add(kind);
         next[kind] = incoming;
       }
       for (const kind of SUBJECT_KINDS) {
         if (kind in links) continue;
-        if (TIED_TO[kind].some((other) => changed.has(other))) next[kind] = null;
+        if (TIED_TO[kind].some((other) => changed.has(other)))
+          next[kind] = null;
       }
       return { chain: next };
     }),
@@ -98,6 +100,13 @@ export const STAGES = [
     label: "Intervention",
     short: "Intervention",
     key: "i",
+  },
+  {
+    id: "candidates",
+    number: 7,
+    label: "Candidates",
+    short: "Candidates",
+    key: "n",
   },
 ] as const;
 
@@ -185,6 +194,22 @@ export function resolveStage(stage: StageId, chain: SubjectChain): StageTarget {
             missing:
               "Intervention needs a protein. Open a gene to reach its protein.",
           };
+    case "candidates":
+      return gene
+        ? {
+            href: routes.discover(gene.id, {
+              disease: disease?.id,
+              variant: variant?.id,
+            }),
+            subject: gene,
+            missing: null,
+          }
+        : {
+            href: null,
+            subject: null,
+            missing:
+              "Candidates needs a gene. Open a disease or search for a gene.",
+          };
   }
 }
 
@@ -202,6 +227,8 @@ export function stageFromPathname(pathname: string): StageId | null {
       return leaf === "mechanism" ? "mechanism" : "gene";
     case "compare":
       return "compare";
+    case "discover":
+      return "candidates";
     default:
       return null;
   }

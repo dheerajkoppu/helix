@@ -21,6 +21,7 @@ import {
   plainFrequency,
   plainInheritance,
   plainLength,
+  plainMechanismDirection,
   plainSource,
 } from "@/lib/plain-language";
 import type { DiseaseResponse } from "@/lib/workspace-data";
@@ -80,6 +81,10 @@ export function DiseaseSummary({
     ? recordEvidence(definition.source, definition.one_line)
     : null;
   const inheritanceEvidence = recordEvidence(inheritance.source);
+  // the direction of the fault, which is what the Candidates stage turns into a required action
+  const mechanisms = (disease.mechanism ?? []).filter(
+    (mechanism): mechanism is string => typeof mechanism === "string",
+  );
   const causedBy = disease.graph.edges.find((edge) => edge.type === "caused_by")
     ?.evidence[0];
   const counts = KEY_COUNTS.flatMap(([key, label]) => {
@@ -90,9 +95,7 @@ export function DiseaseSummary({
   return (
     <div className="flex flex-col">
       <header className="flex flex-col gap-2 px-3 pt-4 pb-4">
-        <h1 className="text-xl font-medium text-foreground">
-          {disease.name}
-        </h1>
+        <h1 className="text-xl font-medium text-foreground">{disease.name}</h1>
         <p className="text-sm text-muted-foreground">
           {plainDiseaseLine({
             gene: gene?.symbol,
@@ -162,6 +165,19 @@ export function DiseaseSummary({
             </span>
           ) : (
             <Unknown reason={DISEASE_WORDS.noProtein} />
+          )}
+        </DefinitionRow>
+        <DefinitionRow term={DISEASE_WORDS.fault}>
+          {mechanisms.length > 0 ? (
+            <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              {mechanisms.map((mechanism) => (
+                <span key={mechanism}>
+                  {plainMechanismDirection(mechanism)}
+                </span>
+              ))}
+            </span>
+          ) : (
+            <Unknown reason={DISEASE_WORDS.faultUnknown} />
           )}
         </DefinitionRow>
         <DefinitionRow term={DISEASE_WORDS.inheritance}>

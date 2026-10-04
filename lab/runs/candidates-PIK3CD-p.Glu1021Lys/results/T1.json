@@ -1,0 +1,37 @@
+{
+  "test_id": "T1",
+  "test_kind": "stability_effect",
+  "values": {
+    "headline": "FoldX predicts ΔΔG -1.03 kcal/mol for E1021K, below the destabilising threshold of 2.0 kcal/mol (residue pLDDT 86.06).",
+    "verdict": "not_predicted_destabilising",
+    "substitution": "E1021K",
+    "foldx_ddg_kcal_mol": -1.03187,
+    "destabilising_threshold_kcal_mol": 2.0,
+    "threshold_defined_by": "ProtVar display bins",
+    "model": "afdb:AF-O00329-F1",
+    "residue_plddt": 86.06,
+    "plddt_supports_interpretation": true,
+    "missense3d": {
+      "state": "ok",
+      "value": "Neutral"
+    },
+    "other_substitutions_at_residue": []
+  },
+  "sources": [
+    {
+      "database": "EBI ProtVar",
+      "record_id": "O00329:1021:K",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=O00329:1021:K"
+    }
+  ],
+  "controls": [
+    "Within-site comparison: the same predictor for the other substitutions reported at this residue.",
+    "Applicability control: the model confidence (pLDDT) at the residue, because FoldX on a low-confidence region is not interpretable."
+  ],
+  "limitations": [
+    "FoldX on a predicted model is a computational prediction with errors near 1 kcal/mol.",
+    "A neutral stability prediction does not show the variant is tolerated."
+  ],
+  "reproducible_command": "HELIX_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m helix_lab_tools.experiments stability_effect --accession O00329 --position 1021 --alternate-residue K --reference-residue E --gene PIK3CD --variant-id PIK3CD-p.Glu1021Lys",
+  "elapsed_seconds": 0.1
+}

@@ -10,7 +10,8 @@ from typing import Any
 from helix_lab_tools.context import run_dir
 
 BUDGET_FILE = "budget.json"
-DEFAULT_MAX_TOOL_CALLS = 160
+# Raised from 160 when the candidates step was added as the seventh step of the loop
+DEFAULT_MAX_TOOL_CALLS = 200
 DEFAULT_MAX_COMPUTE_SECONDS = 300
 
 

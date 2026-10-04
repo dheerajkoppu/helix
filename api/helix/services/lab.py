@@ -34,7 +34,7 @@ RUN_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,120}$")
 APPROVAL_ID = re.compile(r"^A\d{1,3}$")
 ACTIVE_STATUSES = ("running", "awaiting_approval")
 MAX_ACTIVE_RUNS = 3
-DEFAULT_MAX_TOOL_CALLS = 160
+DEFAULT_MAX_TOOL_CALLS = 200
 DEFAULT_MAX_COMPUTE_SECONDS = 300
 
 
@@ -114,14 +114,19 @@ def agents() -> LabAgentsResponse:
 
 def list_runs() -> LabRunList:
     root = lab_directory() / "runs"
-    runs = []
+    # a run is addressed by its directory name, so when two directories claim the same run_id only
+    # the one named after it can be opened; listing both would offer a row that leads elsewhere
+    by_id: dict[str, LabRun] = {}
     if root.is_dir():
-        for directory in root.iterdir():
-            if directory.is_dir():
-                run = _run(directory)
-                if run is not None:
-                    runs.append(run)
-    runs.sort(key=lambda run: run.started_at or "", reverse=True)
+        for directory in sorted(root.iterdir()):
+            if not directory.is_dir():
+                continue
+            run = _run(directory)
+            if run is None:
+                continue
+            if run.run_id not in by_id or directory.name == run.run_id:
+                by_id[run.run_id] = run
+    runs = sorted(by_id.values(), key=lambda run: run.started_at or "", reverse=True)
     return LabRunList(items=runs, total=len(runs))
 
 

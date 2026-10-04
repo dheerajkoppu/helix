@@ -9,6 +9,7 @@ import { ButtonLink } from "@/components/data/button-link";
 import { TextLink } from "@/components/data/text-link";
 import { AgentColumn } from "@/components/lab/agent-column";
 import { useRunRecord } from "@/components/lab/api";
+import { Candidates } from "@/components/lab/candidates-panel";
 import { UpdatedDecision } from "@/components/lab/decision";
 import { SubjectLinks } from "@/components/lab/entity-links";
 import { EvidenceLedger } from "@/components/lab/evidence-ledger";
@@ -170,6 +171,11 @@ function stepNotes(
         : "Recorded"
       : null,
     decision: outcome ? (outcome.changed ? "Changed" : "Unchanged") : null,
+    candidates: view.candidates.length
+      ? `${view.candidates.length} kept, ${view.ruledOut.length} ruled out`
+      : view.ruledOut.length
+        ? `${view.ruledOut.length} ruled out`
+        : null,
   };
 }
 
@@ -193,6 +199,10 @@ function plainStepNotes(
     result: counts.finished ? plainStepCaption(LOOP_STEPS[4], counts) : null,
     decision:
       counts.changed == null ? null : plainStepCaption(LOOP_STEPS[5], counts),
+    candidates:
+      counts.candidates || counts.ruledOut
+        ? plainStepCaption(LOOP_STEPS[6], counts)
+        : null,
   };
 }
 
@@ -571,6 +581,7 @@ function RunView({
               <TestPlan />
               <ExperimentResult />
               <UpdatedDecision />
+              <Candidates />
               <Report />
               <RunProvenance />
             </div>

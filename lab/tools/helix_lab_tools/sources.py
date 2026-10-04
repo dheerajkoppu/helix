@@ -28,6 +28,12 @@ DATABASE_NAMES = {
     "openalex": "OpenAlex",
     "helix": "Helix",
     "mavedb": "MaveDB",
+    "chembl": "ChEMBL",
+    "reactome": "Reactome",
+    "unichem": "UniChem",
+    "pubchem": "PubChem",
+    "open_targets": "Open Targets",
+    "helix_seed": "Helix seeded catalog",
 }
 
 

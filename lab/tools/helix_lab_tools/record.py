@@ -27,11 +27,20 @@ AGENTS = (
     "safety",
     "runner",
     "analysis",
+    "translator",
     "human",
 )
 VERDICTS = ("supported", "weakened", "refuted", "unchanged")
 EXPERIMENT_KINDS = ("computational", "laboratory")
-ID_PREFIXES = {"evidence": "E", "gap": "G", "hypothesis": "H", "test_candidate": "T", "approval_request": "A"}
+ID_PREFIXES = {
+    "evidence": "E",
+    "gap": "G",
+    "hypothesis": "H",
+    "test_candidate": "T",
+    "approval_request": "A",
+    "target_rationale": "R",
+    "candidate": "C",
+}
 
 Payload = dict[str, Any]
 Event = dict[str, Any]
@@ -191,6 +200,11 @@ def _require_known(identifiers: list[str], events: list[Event], prefix: str, nam
     return cleaned
 
 
+# Public names for the other record modules of the package
+require_text = _require_text
+require_clean = _require_clean
+
+
 def _clip(text: str | None, limit: int = 360) -> str:
     text = text or ""
     return text if len(text) <= limit else text[: limit - 1] + "…"
@@ -300,6 +314,40 @@ def _digest(events: list[Event], sections: list[str] | None) -> Payload:
         "next_experiments": lambda: [
             {"seq": event["seq"], **event["payload"]} for event in of_type(events, "next_experiment")
         ],
+        "target_rationales": lambda: [
+            {
+                "id": event["payload"]["id"],
+                "direction": event["payload"].get("direction"),
+                "required_actions": event["payload"].get("required_actions"),
+                "what_to_act_on": _clip(event["payload"].get("what_to_act_on")),
+                "rule": _clip(event["payload"].get("rule")),
+            }
+            for event in of_type(events, "target_rationale")
+        ],
+        "candidates": lambda: [
+            {
+                "id": event["payload"]["id"],
+                "rank": event["payload"].get("rank"),
+                "target": (event["payload"].get("target") or {}).get("gene_symbol"),
+                "molecule": (event["payload"].get("molecule") or {}).get("name"),
+                "bridge_kind": (event["payload"].get("bridge") or {}).get("kind"),
+                "direction": (event["payload"].get("direction_check") or {}).get("verdict"),
+                "what_would_have_to_be_true": _clip(event["payload"].get("what_would_have_to_be_true")),
+                "source": "; ".join(f"{row['database']} {row['record_id']}" for row in event["sources"]),
+                "label": event["payload"].get("label"),
+            }
+            for event in of_type(events, "candidate")
+        ],
+        "ruled_out": lambda: [
+            {
+                "seq": event["seq"],
+                "molecule": event["payload"].get("molecule"),
+                "target": event["payload"].get("target"),
+                "reason_code": event["payload"].get("reason_code"),
+                "reason": _clip(event["payload"].get("reason")),
+            }
+            for event in notes_of_kind(events, "candidate_rejected")
+        ],
         "notes": lambda: [
             {
                 "seq": event["seq"],
@@ -308,7 +356,8 @@ def _digest(events: list[Event], sections: list[str] | None) -> Payload:
                 "text": _clip(str(event["payload"].get("text") or event["payload"].get("reason") or ""), 240),
             }
             for event in of_type(events, "note")
-            if event["payload"].get("kind") not in ("safety_review", "final_report")
+            if event["payload"].get("kind")
+            not in ("safety_review", "final_report", "candidate_rejected")
         ],
     }
     for name, builder in builders.items():
@@ -322,7 +371,8 @@ def read_record(sections: list[str] | None = None) -> str:
 
     Args:
         sections: Parts to return. Any of evidence, gaps, hypotheses, tests, plans, safety, results,
-            interpretations, decisions, next_experiments, notes. Omit to get all of them.
+            interpretations, decisions, next_experiments, target_rationales, candidates, ruled_out,
+            notes. Omit to get all of them.
     """
     return respond(lambda: _digest(load_events(), sections))
 
@@ -697,6 +747,8 @@ def _statements(events: list[Event]) -> list[tuple[Event, str]]:
         "text",
         "reason",
         "findings",
+        "what_to_act_on",
+        "what_would_have_to_be_true",
     )
     for event in events:
         parts = [str(event["payload"][field]) for field in text_fields if event["payload"].get(field)]
@@ -724,6 +776,7 @@ def _review_claims() -> Payload:
         for event in of_type(events, "hypothesis")
         if event["payload"].get("label") != HYPOTHESIS_LABEL
     ]
+    candidates = of_type(events, "candidate")
     plan = latest_plan(events)
     chosen = by_id(events, plan["payload"]["chosen_test_id"]) if plan else None
     return {
@@ -731,8 +784,22 @@ def _review_claims() -> Payload:
         "clinical_or_treatment_wording": flagged,
         "evidence_without_source": unsourced,
         "hypotheses_without_label": unlabelled,
+        "candidates_without_label": [
+            event["payload"]["id"]
+            for event in candidates
+            if event["payload"].get("label") != "Helix hypothesis"
+        ],
+        "candidates_without_source": [
+            event["payload"]["id"] for event in candidates if not event["sources"]
+        ],
+        "candidates_with_direction_not_matching": [
+            event["payload"]["id"]
+            for event in candidates
+            if (event["payload"].get("direction_check") or {}).get("verdict") != "matches"
+        ],
         "evidence_items": len(of_type(events, "evidence")),
         "hypotheses": len(of_type(events, "hypothesis")),
+        "candidates": len(candidates),
         "chosen_test": (
             {
                 "test_id": chosen["payload"]["id"],

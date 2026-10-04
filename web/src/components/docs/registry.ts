@@ -21,15 +21,13 @@ export const DOC_GROUPS: DocGroup[] = [
       {
         slug: "getting-started",
         title: "Getting started",
-        summary:
-          "Install, run and configure.",
+        summary: "Install, run and configure.",
         file: "getting-started.md",
       },
       {
         slug: "architecture",
         title: "Architecture",
-        summary:
-          "Contracts, identifiers, sources and jobs.",
+        summary: "Contracts, identifiers, sources and jobs.",
         file: "ARCHITECTURE.md",
       },
     ],
@@ -41,22 +39,25 @@ export const DOC_GROUPS: DocGroup[] = [
       {
         slug: "data-sources",
         title: "Data sources",
-        summary:
-          "Each source, its licence and failure behaviour.",
+        summary: "Each source, its licence and failure behaviour.",
         file: "data-sources.md",
       },
       {
         slug: "evidence-classes",
         title: "Evidence classes",
-        summary:
-          "Six evidence classes and three structure origins.",
+        summary: "Six evidence classes and three structure origins.",
         file: "evidence-classes.md",
+      },
+      {
+        slug: "discovery",
+        title: "Candidate targets and molecules",
+        summary: "The bridges, the direction filter and the three controls.",
+        file: "discovery.md",
       },
       {
         slug: "limitations",
         title: "Scientific limitations",
-        summary:
-          "What predictions and database records do not show.",
+        summary: "What predictions and database records do not show.",
         file: "scientific-limitations.md",
       },
       {
@@ -73,29 +74,25 @@ export const DOC_GROUPS: DocGroup[] = [
       {
         slug: "model-providers",
         title: "Model providers",
-        summary:
-          "Registered models and what runs without a GPU.",
+        summary: "Registered models and what runs without a GPU.",
         file: "model-providers.md",
       },
       {
         slug: "adding-a-model",
         title: "Adding a model",
-        summary:
-          "Checklist for a new model provider.",
+        summary: "Checklist for a new model provider.",
         file: "adding-a-model.md",
       },
       {
         slug: "boltz2",
         title: "Boltz-2 provider",
-        summary:
-          "Attaching a Boltz backend.",
+        summary: "Attaching a Boltz backend.",
         file: "providers/boltz2.md",
       },
       {
         slug: "reproducibility",
         title: "Reproducibility and manifests",
-        summary:
-          "Provenance, run manifests, snapshots and exports.",
+        summary: "Provenance, run manifests, snapshots and exports.",
         file: "reproducibility.md",
       },
     ],

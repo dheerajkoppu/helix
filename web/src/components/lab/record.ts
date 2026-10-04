@@ -10,7 +10,7 @@ import {
   type LooseRecord,
 } from "@/components/lab/types";
 
-/** The six positions of the discovery loop, in order. */
+/** The seven positions of the discovery loop, in order. */
 export const LOOP_STAGES = [
   { id: "question", number: 1, label: "Question" },
   { id: "evidence", number: 2, label: "Evidence" },
@@ -18,6 +18,7 @@ export const LOOP_STAGES = [
   { id: "experiment", number: 4, label: "Experiment" },
   { id: "result", number: 5, label: "Result" },
   { id: "decision", number: 6, label: "Updated decision" },
+  { id: "candidates", number: 7, label: "Candidates" },
 ] as const;
 
 export type LoopStageId = (typeof LOOP_STAGES)[number]["id"];
@@ -36,12 +37,17 @@ const STAGE_OF_TYPE: Record<string, LoopStageId> = {
   interpretation: "result",
   decision: "decision",
   next_experiment: "decision",
+  target_rationale: "candidates",
+  candidate: "candidates",
 };
 
 const STAGE_OF_NOTE_KIND: Record<string, LoopStageId> = {
   safety_review: "experiment",
   reopened_assumption: "hypothesis",
   final_report: "decision",
+  candidates_proposed: "candidates",
+  candidate_review: "candidates",
+  candidate_rejected: "candidates",
 };
 
 /** Handoffs and plain notes belong to no stage; they are read in the timeline. */
@@ -209,6 +215,79 @@ export interface ReportEntry {
   event: LabEvent;
 }
 
+/** What the lab decided a molecule would have to do, and why. */
+export interface TargetRationaleEntry {
+  id: string;
+  what_to_act_on: string | null;
+  why: string | null;
+  mechanism_class: string | null;
+  /** gain_of_function, loss_of_function and so on, as the catalogue states it */
+  direction: string | null;
+  required_actions: string[];
+  rule: string | null;
+  event: LabEvent;
+}
+
+/** One step of a bridge: a claim with the records behind it. */
+export interface BridgeStep {
+  statement: string | null;
+  records: string[];
+}
+
+/**
+ * A candidate the lab recorded: a molecule, the protein it acts on, how it was reached and whether its
+ * direction of effect matches what the mechanism needs. Always a Helix hypothesis, never a recommendation.
+ */
+export interface CandidateEntry {
+  id: string;
+  rank: number | null;
+  target: {
+    accession: string | null;
+    gene_symbol: string | null;
+    name: string | null;
+    relation: string | null;
+  };
+  molecule: {
+    name: string | null;
+    chembl_id: string | null;
+    inchikey: string | null;
+    modality: string | null;
+    max_phase: number | null;
+    action_type: string | null;
+  } | null;
+  bridge: {
+    kind: string | null;
+    from_disease: string | null;
+    steps: BridgeStep[];
+  };
+  direction_check: {
+    /** the actions the mechanism needs, as the direction rule derived them */
+    required: string[];
+    molecule_action: string | null;
+    verdict: string | null;
+    why: string | null;
+  };
+  structure: {
+    structure_id: string | null;
+    pocket_id: string | null;
+    similar_to: string | null;
+  } | null;
+  caveats: string[];
+  what_would_have_to_be_true: string | null;
+  label: string | null;
+  event: LabEvent;
+}
+
+/** A molecule the direction filter refused, with the reason the record gives. */
+export interface RuledOutEntry {
+  molecule: string | null;
+  target: string | null;
+  reason_code: string | null;
+  reason: string | null;
+  direction_verdict: string | null;
+  event: LabEvent;
+}
+
 export interface RecordView {
   events: LabEvent[];
   objective: { statement: string | null; event: LabEvent } | null;
@@ -225,6 +304,12 @@ export interface RecordView {
   decisions: DecisionEntry[];
   nextExperiments: NextExperimentEntry[];
   safetyReviews: SafetyReviewEntry[];
+  /** what the lab decided a molecule would have to do to the protein */
+  targetRationales: TargetRationaleEntry[];
+  /** candidates the safety review cleared, strongest bridge first */
+  candidates: CandidateEntry[];
+  /** molecules the direction filter refused, which is the evidence the filter works */
+  ruledOut: RuledOutEntry[];
   /** assumptions the lab opened again after a result contradicted them */
   reopenings: ReopeningEntry[];
   report: ReportEntry | null;
@@ -299,6 +384,7 @@ const emptyCounts = (): Record<LoopStageId, number> => ({
   experiment: 0,
   result: 0,
   decision: 0,
+  candidates: 0,
 });
 
 /**
@@ -321,6 +407,9 @@ export function buildRecordView(events: LabEvent[]): RecordView {
     decisions: [],
     nextExperiments: [],
     safetyReviews: [],
+    targetRationales: [],
+    candidates: [],
+    ruledOut: [],
     reopenings: [],
     report: null,
     policyDenials: [],
@@ -531,9 +620,103 @@ export function buildRecordView(events: LabEvent[]): RecordView {
           event,
         });
         break;
+      case "target_rationale":
+        view.targetRationales.push({
+          id: readText(payload.id) ?? "",
+          what_to_act_on: readText(payload.what_to_act_on),
+          why: readText(payload.why),
+          mechanism_class: readText(payload.mechanism_class),
+          direction: readText(payload.direction),
+          required_actions: readStrings(payload.required_actions),
+          rule: readText(payload.rule),
+          event,
+        });
+        break;
+      case "candidate": {
+        const target = isRecord(payload.target) ? payload.target : {};
+        const molecule = isRecord(payload.molecule) ? payload.molecule : null;
+        const bridge = isRecord(payload.bridge) ? payload.bridge : {};
+        const check = isRecord(payload.direction_check)
+          ? payload.direction_check
+          : {};
+        const structure = isRecord(payload.structure)
+          ? payload.structure
+          : null;
+        const similar = isRecord(structure?.similar_to)
+          ? structure.similar_to
+          : null;
+        const fromDisease = isRecord(bridge.from_disease)
+          ? bridge.from_disease
+          : null;
+        view.candidates.push({
+          id: readText(payload.id) ?? "",
+          rank: readNumber(payload.rank),
+          target: {
+            accession: readText(target.accession),
+            gene_symbol: readText(target.gene_symbol),
+            name: readText(target.name),
+            relation: readText(target.relation),
+          },
+          molecule: molecule
+            ? {
+                name: readText(molecule.name),
+                chembl_id: readText(molecule.chembl_id),
+                inchikey: readText(molecule.inchikey),
+                modality: readText(molecule.modality),
+                max_phase: readNumber(molecule.max_phase),
+                action_type: readText(molecule.action_type),
+              }
+            : null,
+          bridge: {
+            kind: readText(bridge.kind),
+            from_disease: fromDisease
+              ? (readText(fromDisease.name) ?? readText(fromDisease.id))
+              : readText(bridge.from_disease),
+            steps: readList(bridge.steps)
+              .filter(isRecord)
+              .map((step) => ({
+                statement: readText(step.statement),
+                records: readStrings(step.records),
+              })),
+          },
+          direction_check: {
+            required: readStrings(check.required),
+            molecule_action: readText(check.molecule_action),
+            verdict: readText(check.verdict),
+            why: readText(check.why),
+          },
+          structure: structure
+            ? {
+                structure_id: readText(structure.structure_id),
+                pocket_id: readText(structure.pocket_id),
+                similar_to: similar
+                  ? (readText(similar.gene_symbol) ??
+                    readText(similar.accession) ??
+                    readText(similar.structure_id))
+                  : readText(structure.similar_to),
+              }
+            : null,
+          caveats: readStrings(payload.caveats),
+          what_would_have_to_be_true: readText(
+            payload.what_would_have_to_be_true,
+          ),
+          label: readText(payload.label),
+          event,
+        });
+        break;
+      }
       case "note": {
         const kind = readText(payload.kind);
-        if (kind === "safety_review") {
+        if (kind === "candidate_rejected") {
+          view.ruledOut.push({
+            molecule: readText(payload.molecule),
+            target: readText(payload.target),
+            reason_code: readText(payload.reason_code),
+            reason: readText(payload.reason),
+            direction_verdict: readText(payload.direction_verdict),
+            event,
+          });
+        } else if (kind === "safety_review") {
           view.safetyReviews.push({
             test_id: readText(payload.test_id),
             verdict: readText(payload.verdict),
@@ -657,8 +840,43 @@ export function summariseEvent(event: LabEvent): string | null {
     }
     case "next_experiment":
       return readText(payload.description);
+    case "target_rationale":
+      return readText(payload.what_to_act_on);
+    case "candidate": {
+      const molecule = isRecord(payload.molecule) ? payload.molecule : {};
+      const target = isRecord(payload.target) ? payload.target : {};
+      const bridge = isRecord(payload.bridge) ? payload.bridge : {};
+      const head = [
+        readText(molecule.name),
+        readText(target.gene_symbol)
+          ? `on ${readText(target.gene_symbol)}`
+          : null,
+        readText(bridge.kind),
+      ]
+        .filter(Boolean)
+        .join(" ");
+      return (
+        [head || null, readText(payload.what_would_have_to_be_true)]
+          .filter(Boolean)
+          .join(". ") || null
+      );
+    }
     default: {
       const kind = readText(payload.kind);
+      if (kind === "candidate_review") {
+        const verdict = readText(payload.verdict);
+        return [
+          verdict ? `Candidate review ${verdict}.` : null,
+          readText(payload.findings),
+        ]
+          .filter(Boolean)
+          .join(" ");
+      }
+      if (kind === "candidate_rejected")
+        return [readText(payload.molecule), readText(payload.reason)]
+          .filter(Boolean)
+          .join(": ");
+      if (kind === "candidates_proposed") return readText(payload.text);
       if (kind === "final_report")
         return `Final report written${readText(payload.file) ? ` to ${readText(payload.file)}` : ""}.`;
       if (kind === "safety_review") {

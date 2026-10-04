@@ -151,11 +151,20 @@ export function selectionSignature(query: string): string {
   ).toString();
 }
 
-/** Appends the current selection to a path so context survives a move between stages. */
+/**
+ * Appends the current selection to a path so context survives a move between stages. The path may
+ * already carry its own query — the Candidates stage names its disease and variant that way — so
+ * the selection is merged into it rather than tacked on behind a second "?".
+ */
 export function withSelection(
   path: string,
   selection: SelectionSnapshot,
 ): string {
-  const query = mergeSelectionIntoQuery("", selection);
-  return query ? `${path}?${query}` : path;
+  const split = path.indexOf("?");
+  const base = split === -1 ? path : path.slice(0, split);
+  const query = mergeSelectionIntoQuery(
+    split === -1 ? "" : path.slice(split + 1),
+    selection,
+  );
+  return query ? `${base}?${query}` : base;
 }

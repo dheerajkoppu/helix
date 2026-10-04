@@ -14,6 +14,7 @@ def read_record(sections: list[str] | None = None) -> str:
 
     Args:
         sections: Parts to return. Any of evidence, gaps, hypotheses, tests, plans, safety, results,
-            interpretations, decisions, next_experiments, notes. Omit to get all of them.
+            interpretations, decisions, next_experiments, target_rationales, candidates, ruled_out,
+            notes. Omit to get all of them.
     """
     return _implementation(sections=sections)

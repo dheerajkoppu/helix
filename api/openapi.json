@@ -1,6 +1,126 @@
 {
   "components": {
     "schemas": {
+      "ActionRule": {
+        "description": "The required-action rule as a pure function of (mechanism class, direction).",
+        "properties": {
+          "action_labels": {
+            "description": "The same actions in everyday words",
+            "items": {
+              "type": "string"
+            },
+            "title": "Action Labels",
+            "type": "array"
+          },
+          "actions": {
+            "items": {
+              "enum": [
+                "inhibit",
+                "antagonise",
+                "block_upstream",
+                "restore",
+                "activate",
+                "stabilise",
+                "chaperone",
+                "replace",
+                "bypass",
+                "release_a_brake",
+                "remove_the_mutant_protein"
+              ],
+              "type": "string"
+            },
+            "title": "Actions",
+            "type": "array"
+          },
+          "direction_needed": {
+            "description": "Which way the subject's activity has to move for a molecule to help",
+            "enum": [
+              "less_activity",
+              "more_activity",
+              "none"
+            ],
+            "title": "Direction Needed",
+            "type": "string"
+          },
+          "rule": {
+            "description": "The row of the rule table that fired",
+            "title": "Rule",
+            "type": "string"
+          },
+          "why": {
+            "description": "Why this mechanism needs this action, in plain words",
+            "title": "Why",
+            "type": "string"
+          }
+        },
+        "required": [
+          "actions",
+          "action_labels",
+          "rule",
+          "why",
+          "direction_needed"
+        ],
+        "title": "ActionRule",
+        "type": "object"
+      },
+      "ActionRuleRow": {
+        "description": "One row of the published rule table, so a page can print the whole table.",
+        "properties": {
+          "actions": {
+            "items": {
+              "enum": [
+                "inhibit",
+                "antagonise",
+                "block_upstream",
+                "restore",
+                "activate",
+                "stabilise",
+                "chaperone",
+                "replace",
+                "bypass",
+                "release_a_brake",
+                "remove_the_mutant_protein"
+              ],
+              "type": "string"
+            },
+            "title": "Actions",
+            "type": "array"
+          },
+          "direction": {
+            "enum": [
+              "increased_activity",
+              "decreased_activity",
+              "unknown"
+            ],
+            "title": "Direction",
+            "type": "string"
+          },
+          "mechanism_class": {
+            "enum": [
+              "gain_of_function",
+              "loss_of_function",
+              "dominant_negative",
+              "haploinsufficiency",
+              "neomorph",
+              "unknown"
+            ],
+            "title": "Mechanism Class",
+            "type": "string"
+          },
+          "why": {
+            "title": "Why",
+            "type": "string"
+          }
+        },
+        "required": [
+          "mechanism_class",
+          "direction",
+          "actions",
+          "why"
+        ],
+        "title": "ActionRuleRow",
+        "type": "object"
+      },
       "ActorRef": {
         "properties": {
           "actor_id": {
@@ -22,6 +142,24 @@
           "kind"
         ],
         "title": "ActorRef",
+        "type": "object"
+      },
+      "AlignedRange": {
+        "properties": {
+          "end": {
+            "title": "End",
+            "type": "integer"
+          },
+          "start": {
+            "title": "Start",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "start",
+          "end"
+        ],
+        "title": "AlignedRange",
         "type": "object"
       },
       "AnswerSegment": {
@@ -1087,6 +1225,220 @@
         "title": "BoundLigand",
         "type": "object"
       },
+      "Bridge": {
+        "properties": {
+          "from_disease": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BridgeDisease"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The other disease the molecule is recorded for, when there is one"
+          },
+          "kind": {
+            "enum": [
+              "same_target",
+              "pathway_node",
+              "interaction_partner",
+              "structural_analogue",
+              "mechanism_class"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "partial": {
+            "default": false,
+            "description": "True when a source this bridge wants was not available",
+            "title": "Partial",
+            "type": "boolean"
+          },
+          "partial_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Partial Reason"
+          },
+          "steps": {
+            "items": {
+              "$ref": "#/components/schemas/BridgeStep"
+            },
+            "title": "Steps",
+            "type": "array"
+          }
+        },
+        "required": [
+          "kind",
+          "label",
+          "from_disease",
+          "steps",
+          "partial",
+          "partial_reason"
+        ],
+        "title": "Bridge",
+        "type": "object"
+      },
+      "BridgeDisease": {
+        "properties": {
+          "disease": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EntityRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "source",
+          "disease"
+        ],
+        "title": "BridgeDisease",
+        "type": "object"
+      },
+      "BridgeStatus": {
+        "properties": {
+          "candidate_count": {
+            "default": 0,
+            "title": "Candidate Count",
+            "type": "integer"
+          },
+          "elapsed_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elapsed Ms"
+          },
+          "kind": {
+            "enum": [
+              "same_target",
+              "pathway_node",
+              "interaction_partner",
+              "structural_analogue",
+              "mechanism_class"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "ruled_out_count": {
+            "default": 0,
+            "title": "Ruled Out Count",
+            "type": "integer"
+          },
+          "state": {
+            "enum": [
+              "ok",
+              "empty",
+              "partial",
+              "failed",
+              "skipped"
+            ],
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "label",
+          "state",
+          "candidate_count",
+          "ruled_out_count",
+          "message",
+          "elapsed_ms"
+        ],
+        "title": "BridgeStatus",
+        "type": "object"
+      },
+      "BridgeStep": {
+        "description": "One claim in the chain. Each carries its own evidence; no step is a summary of another.",
+        "properties": {
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "title": "Evidence",
+            "type": "array"
+          },
+          "statement": {
+            "title": "Statement",
+            "type": "string"
+          }
+        },
+        "required": [
+          "statement",
+          "evidence"
+        ],
+        "title": "BridgeStep",
+        "type": "object"
+      },
       "CachedOrigin": {
         "description": "Where a cached example came from: the real run that produced it.",
         "properties": {
@@ -1151,6 +1503,350 @@
           "label"
         ],
         "title": "CachedOrigin",
+        "type": "object"
+      },
+      "Candidate": {
+        "properties": {
+          "bridge": {
+            "$ref": "#/components/schemas/Bridge"
+          },
+          "caveats": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Caveats",
+            "type": "array"
+          },
+          "direction_check": {
+            "$ref": "#/components/schemas/DirectionCheck"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "title": "Evidence",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "const": "Helix hypothesis",
+            "default": "Helix hypothesis",
+            "title": "Label",
+            "type": "string"
+          },
+          "molecule": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CandidateMolecule"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rank": {
+            "title": "Rank",
+            "type": "integer"
+          },
+          "structure": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CandidateStructure"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "target": {
+            "$ref": "#/components/schemas/CandidateTarget"
+          }
+        },
+        "required": [
+          "id",
+          "rank",
+          "target",
+          "molecule",
+          "bridge",
+          "direction_check",
+          "structure",
+          "caveats",
+          "evidence",
+          "label"
+        ],
+        "title": "Candidate",
+        "type": "object"
+      },
+      "CandidateMolecule": {
+        "properties": {
+          "action_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ChEMBL mechanism action_type on the target",
+            "title": "Action Type"
+          },
+          "chembl_id": {
+            "title": "Chembl Id",
+            "type": "string"
+          },
+          "compound": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EntityRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "inchikey": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inchikey"
+          },
+          "max_phase": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ChEMBL maximum clinical phase",
+            "title": "Max Phase"
+          },
+          "max_phase_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Phase Label"
+          },
+          "measured_affinity": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/helix__schemas__discovery__MeasuredAffinity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mechanism_of_action": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mechanism Of Action"
+          },
+          "modality": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ChEMBL molecule_type, the source's own word",
+            "title": "Modality"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "withdrawn": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Withdrawn"
+          }
+        },
+        "required": [
+          "inchikey",
+          "chembl_id",
+          "name",
+          "modality",
+          "max_phase",
+          "max_phase_label",
+          "action_type",
+          "mechanism_of_action",
+          "withdrawn",
+          "measured_affinity",
+          "compound"
+        ],
+        "title": "CandidateMolecule",
+        "type": "object"
+      },
+      "CandidateStructure": {
+        "properties": {
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "pocket_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pocket Id"
+          },
+          "residues": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Residues",
+            "type": "array"
+          },
+          "similar_to": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CandidateTarget"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The protein whose pocket or fold the chain compared with"
+          },
+          "structure_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Structure Id"
+          }
+        },
+        "required": [
+          "structure_id",
+          "pocket_id",
+          "residues",
+          "similar_to",
+          "note"
+        ],
+        "title": "CandidateStructure",
+        "type": "object"
+      },
+      "CandidateTarget": {
+        "properties": {
+          "accession": {
+            "title": "Accession",
+            "type": "string"
+          },
+          "druggability": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Druggability"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "gene_symbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gene Symbol"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "protein": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EntityRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "relation": {
+            "enum": [
+              "same_target",
+              "pathway_node",
+              "interaction_partner",
+              "structural_analogue",
+              "mechanism_class"
+            ],
+            "title": "Relation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "accession",
+          "gene_symbol",
+          "name",
+          "relation",
+          "protein",
+          "druggability"
+        ],
+        "title": "CandidateTarget",
         "type": "object"
       },
       "CatalogCounts": {
@@ -3582,6 +4278,270 @@
         "title": "ContactChanges",
         "type": "object"
       },
+      "ControlChainStep": {
+        "properties": {
+          "record_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Record Id"
+          },
+          "record_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Record Url"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "statement": {
+            "title": "Statement",
+            "type": "string"
+          }
+        },
+        "required": [
+          "statement",
+          "source",
+          "record_id",
+          "record_url"
+        ],
+        "title": "ControlChainStep",
+        "type": "object"
+      },
+      "ControlResult": {
+        "properties": {
+          "candidate_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Candidate Count"
+          },
+          "chain": {
+            "items": {
+              "$ref": "#/components/schemas/ControlChainStep"
+            },
+            "title": "Chain",
+            "type": "array"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          },
+          "elapsed_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elapsed Ms"
+          },
+          "expected": {
+            "title": "Expected",
+            "type": "string"
+          },
+          "expected_molecule": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Molecule"
+          },
+          "expected_molecule_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Molecule Rank"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "positive",
+              "negative"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Notes",
+            "type": "array"
+          },
+          "passed": {
+            "title": "Passed",
+            "type": "boolean"
+          },
+          "request": {
+            "title": "Request",
+            "type": "string"
+          },
+          "ruled_out_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ruled Out Count"
+          },
+          "source_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Count"
+          },
+          "sources_answered": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sources Answered"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "subject",
+          "request",
+          "expected",
+          "passed",
+          "detail",
+          "elapsed_ms",
+          "sources_answered",
+          "source_count",
+          "candidate_count",
+          "ruled_out_count",
+          "expected_molecule",
+          "expected_molecule_rank",
+          "chain",
+          "notes"
+        ],
+        "title": "ControlResult",
+        "type": "object"
+      },
+      "ControlsResponse": {
+        "properties": {
+          "all_passed": {
+            "title": "All Passed",
+            "type": "boolean"
+          },
+          "controls": {
+            "items": {
+              "$ref": "#/components/schemas/ControlResult"
+            },
+            "title": "Controls",
+            "type": "array"
+          },
+          "engine_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Engine Version"
+          },
+          "generated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At"
+          },
+          "passed": {
+            "title": "Passed",
+            "type": "integer"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceStatus"
+            },
+            "title": "Sources",
+            "type": "array"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "generated_at",
+          "all_passed",
+          "passed",
+          "total",
+          "engine_version",
+          "controls",
+          "sources"
+        ],
+        "title": "ControlsResponse",
+        "type": "object"
+      },
       "CountRow": {
         "properties": {
           "count": {
@@ -4149,6 +5109,208 @@
           "total_residues"
         ],
         "title": "DifferenceSummary",
+        "type": "object"
+      },
+      "DirectionCheck": {
+        "description": "The hard filter. A verdict of 'opposes' never appears in candidates.",
+        "properties": {
+          "molecule_action": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ChEMBL action_type, verbatim",
+            "title": "Molecule Action"
+          },
+          "molecule_effect": {
+            "description": "What the recorded action does to the protein it acts on",
+            "enum": [
+              "lowers",
+              "raises",
+              "unknown"
+            ],
+            "title": "Molecule Effect",
+            "type": "string"
+          },
+          "required": {
+            "items": {
+              "enum": [
+                "inhibit",
+                "antagonise",
+                "block_upstream",
+                "restore",
+                "activate",
+                "stabilise",
+                "chaperone",
+                "replace",
+                "bypass",
+                "release_a_brake",
+                "remove_the_mutant_protein"
+              ],
+              "type": "string"
+            },
+            "title": "Required",
+            "type": "array"
+          },
+          "required_direction": {
+            "enum": [
+              "less_activity",
+              "more_activity",
+              "none"
+            ],
+            "title": "Required Direction",
+            "type": "string"
+          },
+          "target_relation_effect": {
+            "description": "How an effect on this target carries over to the subject's activity",
+            "enum": [
+              "same_way",
+              "opposite_way",
+              "unknown"
+            ],
+            "title": "Target Relation Effect",
+            "type": "string"
+          },
+          "verdict": {
+            "enum": [
+              "matches",
+              "opposes",
+              "unknown"
+            ],
+            "title": "Verdict",
+            "type": "string"
+          },
+          "why": {
+            "description": "Built from a fixed template, never free prose",
+            "title": "Why",
+            "type": "string"
+          }
+        },
+        "required": [
+          "required",
+          "required_direction",
+          "molecule_action",
+          "molecule_effect",
+          "target_relation_effect",
+          "verdict",
+          "why"
+        ],
+        "title": "DirectionCheck",
+        "type": "object"
+      },
+      "DiscoveryResponse": {
+        "properties": {
+          "action_rule_table": {
+            "items": {
+              "$ref": "#/components/schemas/ActionRuleRow"
+            },
+            "title": "Action Rule Table",
+            "type": "array"
+          },
+          "bridges": {
+            "items": {
+              "$ref": "#/components/schemas/BridgeStatus"
+            },
+            "title": "Bridges",
+            "type": "array"
+          },
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/Candidate"
+            },
+            "title": "Candidates",
+            "type": "array"
+          },
+          "counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Counts",
+            "type": "object"
+          },
+          "elapsed_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elapsed Ms"
+          },
+          "exclude_direct": {
+            "title": "Exclude Direct",
+            "type": "boolean"
+          },
+          "from_cache": {
+            "default": false,
+            "title": "From Cache",
+            "type": "boolean"
+          },
+          "limits": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limits",
+            "type": "array"
+          },
+          "ranking_rule": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Ranking Rule",
+            "type": "array"
+          },
+          "required_action": {
+            "$ref": "#/components/schemas/ActionRule"
+          },
+          "ruled_out": {
+            "items": {
+              "$ref": "#/components/schemas/RuledOut"
+            },
+            "title": "Ruled Out",
+            "type": "array"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceStatus"
+            },
+            "title": "Sources",
+            "type": "array"
+          },
+          "subject": {
+            "$ref": "#/components/schemas/Subject"
+          },
+          "withheld_edges": {
+            "items": {
+              "$ref": "#/components/schemas/WithheldEdge"
+            },
+            "title": "Withheld Edges",
+            "type": "array"
+          }
+        },
+        "required": [
+          "sources",
+          "subject",
+          "required_action",
+          "candidates",
+          "ruled_out",
+          "withheld_edges",
+          "exclude_direct",
+          "bridges",
+          "action_rule_table",
+          "ranking_rule",
+          "limits",
+          "counts",
+          "elapsed_ms",
+          "from_cache"
+        ],
+        "title": "DiscoveryResponse",
         "type": "object"
       },
       "DiseaseCategory": {
@@ -4991,6 +6153,63 @@
           "url"
         ],
         "title": "DiseaseTerm",
+        "type": "object"
+      },
+      "Druggability": {
+        "description": "What is recorded about acting on this protein. Counts of records, never a score.",
+        "properties": {
+          "has_approved_molecule": {
+            "default": false,
+            "title": "Has Approved Molecule",
+            "type": "boolean"
+          },
+          "highest_clinical_phase": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Highest Clinical Phase"
+          },
+          "molecules_with_a_recorded_action": {
+            "title": "Molecules With A Recorded Action",
+            "type": "integer"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "pocket_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Predicted pockets, when they were read",
+            "title": "Pocket Count"
+          }
+        },
+        "required": [
+          "molecules_with_a_recorded_action",
+          "highest_clinical_phase",
+          "has_approved_molecule",
+          "pocket_count",
+          "note"
+        ],
+        "title": "Druggability",
         "type": "object"
       },
       "EcoRef": {
@@ -10725,6 +11944,7 @@
               "safety",
               "runner",
               "analysis",
+              "translator",
               "human"
             ],
             "title": "Agent",
@@ -10777,6 +11997,8 @@
               "interpretation",
               "decision",
               "next_experiment",
+              "target_rationale",
+              "candidate",
               "note"
             ],
             "title": "Type",
@@ -13499,131 +14721,6 @@
         "title": "MaveScoreSet",
         "type": "object"
       },
-      "MeasuredAffinity": {
-        "description": "One ChEMBL activity row, verbatim.",
-        "properties": {
-          "activity_id": {
-            "title": "Activity Id",
-            "type": "string"
-          },
-          "assay_chembl_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Assay Chembl Id"
-          },
-          "assay_description": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Assay Description"
-          },
-          "assay_format": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Assay Format"
-          },
-          "document_chembl_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Document Chembl Id"
-          },
-          "pchembl": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Pchembl"
-          },
-          "relation": {
-            "title": "Relation",
-            "type": "string"
-          },
-          "source": {
-            "const": "chembl",
-            "default": "chembl",
-            "title": "Source",
-            "type": "string"
-          },
-          "standard_type": {
-            "title": "Standard Type",
-            "type": "string"
-          },
-          "units": {
-            "title": "Units",
-            "type": "string"
-          },
-          "url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Url"
-          },
-          "value": {
-            "title": "Value",
-            "type": "number"
-          },
-          "year": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Year"
-          }
-        },
-        "required": [
-          "source",
-          "activity_id",
-          "standard_type",
-          "relation",
-          "value",
-          "units",
-          "pchembl",
-          "assay_chembl_id",
-          "assay_description",
-          "assay_format",
-          "document_chembl_id",
-          "year",
-          "url"
-        ],
-        "title": "MeasuredAffinity",
-        "type": "object"
-      },
       "MeasuredAffinitySummary": {
         "description": "Summary of the qualifying ChEMBL activity rows of one compound against the target.",
         "properties": {
@@ -13664,7 +14761,7 @@
             "type": "number"
           },
           "representative": {
-            "$ref": "#/components/schemas/MeasuredAffinity",
+            "$ref": "#/components/schemas/helix__schemas__compounds__MeasuredAffinity",
             "description": "The qualifying row closest to the median pChEMBL"
           },
           "source": {
@@ -14947,6 +16044,121 @@
         "title": "NumericRange",
         "type": "object"
       },
+      "ObservedLigand": {
+        "description": "A molecule seen bound to the similar protein in an experimental structure, not a prediction.",
+        "properties": {
+          "binding_site_positions": {
+            "description": "UniProt positions of the similar protein that contact it",
+            "items": {
+              "type": "integer"
+            },
+            "title": "Binding Site Positions",
+            "type": "array"
+          },
+          "common_additive": {
+            "description": "A crystallisation additive rather than a designed binder",
+            "title": "Common Additive",
+            "type": "boolean"
+          },
+          "comp_id": {
+            "title": "Comp Id",
+            "type": "string"
+          },
+          "evidence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Evidence"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "formula": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Formula"
+          },
+          "inchikey": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inchikey"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "positions_shared_with_subject_pocket": {
+            "description": "Subject positions whose aligned residue in the similar protein contacts this ligand",
+            "items": {
+              "type": "integer"
+            },
+            "title": "Positions Shared With Subject Pocket",
+            "type": "array"
+          },
+          "smiles": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Smiles"
+          },
+          "structure_id": {
+            "description": "pdb:<ID> the ligand was observed in",
+            "title": "Structure Id",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          }
+        },
+        "required": [
+          "comp_id",
+          "name",
+          "inchikey",
+          "smiles",
+          "formula",
+          "structure_id",
+          "common_additive",
+          "binding_site_positions",
+          "positions_shared_with_subject_pocket",
+          "url",
+          "evidence"
+        ],
+        "title": "ObservedLigand",
+        "type": "object"
+      },
       "OntologyTerm": {
         "properties": {
           "id": {
@@ -15434,6 +16646,115 @@
         "title": "PocketMethod",
         "type": "object"
       },
+      "PocketPair": {
+        "description": "One subject pocket set beside the pocket of the similar protein its residues align to.",
+        "properties": {
+          "aligned_count": {
+            "description": "Subject pocket residues with an aligned partner",
+            "title": "Aligned Count",
+            "type": "integer"
+          },
+          "analogue_pocket_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analogue Pocket Id"
+          },
+          "analogue_pocket_probability": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analogue Pocket Probability"
+          },
+          "analogue_positions": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Analogue Positions",
+            "type": "array"
+          },
+          "identical_residue_count": {
+            "description": "Of those, how many are the same amino acid",
+            "title": "Identical Residue Count",
+            "type": "integer"
+          },
+          "in_analogue_pocket_count": {
+            "description": "Of those, how many land in a pocket predicted on the similar protein",
+            "title": "In Analogue Pocket Count",
+            "type": "integer"
+          },
+          "ligand_contact_count": {
+            "description": "Of those, how many contact a ligand observed bound to the similar protein",
+            "title": "Ligand Contact Count",
+            "type": "integer"
+          },
+          "shared_residues": {
+            "description": "Subject pocket residues that align to a residue of the similar protein",
+            "items": {
+              "$ref": "#/components/schemas/SharedResidue"
+            },
+            "title": "Shared Residues",
+            "type": "array"
+          },
+          "shares": {
+            "description": "What the two pockets share, one plain sentence each",
+            "items": {
+              "type": "string"
+            },
+            "title": "Shares",
+            "type": "array"
+          },
+          "subject_pocket_id": {
+            "title": "Subject Pocket Id",
+            "type": "string"
+          },
+          "subject_pocket_probability": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "P2Rank calibrated probability for the subject pocket, 0 to 1",
+            "title": "Subject Pocket Probability"
+          },
+          "subject_positions": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Subject Positions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "subject_pocket_id",
+          "subject_pocket_probability",
+          "subject_positions",
+          "analogue_pocket_id",
+          "analogue_pocket_probability",
+          "analogue_positions",
+          "shared_residues",
+          "aligned_count",
+          "in_analogue_pocket_count",
+          "identical_residue_count",
+          "ligand_contact_count",
+          "shares"
+        ],
+        "title": "PocketPair",
+        "type": "object"
+      },
       "PocketResidueRef": {
         "properties": {
           "chain": {
@@ -15465,6 +16786,161 @@
           "chain"
         ],
         "title": "PocketResidueRef",
+        "type": "object"
+      },
+      "PocketSimilarity": {
+        "description": "Pocket-level comparison of one subject structure against one similar protein.",
+        "properties": {
+          "analogue": {
+            "$ref": "#/components/schemas/EntityRef"
+          },
+          "analogue_experimental_structure_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Experimental entry the observed ligands were read from",
+            "title": "Analogue Experimental Structure Id"
+          },
+          "analogue_structure_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analogue Structure Id"
+          },
+          "caveats": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Caveats",
+            "type": "array"
+          },
+          "evidence_class": {
+            "$ref": "#/components/schemas/EvidenceClass",
+            "default": "computational_prediction"
+          },
+          "fold_metrics": {
+            "description": "Fold-level measures for this pair, from Foldseek",
+            "items": {
+              "$ref": "#/components/schemas/SimilarityMetric"
+            },
+            "title": "Fold Metrics",
+            "type": "array"
+          },
+          "limits": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limits",
+            "type": "array"
+          },
+          "observed_ligands": {
+            "items": {
+              "$ref": "#/components/schemas/ObservedLigand"
+            },
+            "title": "Observed Ligands",
+            "type": "array"
+          },
+          "pocket_pairs": {
+            "items": {
+              "$ref": "#/components/schemas/PocketPair"
+            },
+            "title": "Pocket Pairs",
+            "type": "array"
+          },
+          "residue_correspondence": {
+            "description": "How a subject position was mapped onto a position of the similar protein",
+            "title": "Residue Correspondence",
+            "type": "string"
+          },
+          "retry_after_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retry After Seconds"
+          },
+          "shares": {
+            "description": "What the two proteins share overall, one plain sentence each",
+            "items": {
+              "type": "string"
+            },
+            "title": "Shares",
+            "type": "array"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceStatus"
+            },
+            "title": "Sources",
+            "type": "array"
+          },
+          "status": {
+            "enum": [
+              "ready",
+              "pending",
+              "unavailable",
+              "not_applicable"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "status_detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status Detail"
+          },
+          "subject": {
+            "$ref": "#/components/schemas/EntityRef"
+          },
+          "subject_structure_id": {
+            "title": "Subject Structure Id",
+            "type": "string"
+          },
+          "subject_structure_origin": {
+            "$ref": "#/components/schemas/StructureOrigin"
+          }
+        },
+        "required": [
+          "sources",
+          "subject",
+          "subject_structure_id",
+          "subject_structure_origin",
+          "analogue",
+          "analogue_structure_id",
+          "analogue_experimental_structure_id",
+          "status",
+          "status_detail",
+          "retry_after_seconds",
+          "evidence_class",
+          "fold_metrics",
+          "residue_correspondence",
+          "pocket_pairs",
+          "observed_ligands",
+          "shares",
+          "caveats",
+          "limits"
+        ],
+        "title": "PocketSimilarity",
         "type": "object"
       },
       "PocketsResponse": {
@@ -18930,6 +20406,63 @@
         "title": "RigidTransform",
         "type": "object"
       },
+      "RuledOut": {
+        "description": "A molecule the direction filter removed. The list is the evidence the filter works.",
+        "properties": {
+          "bridge_kind": {
+            "enum": [
+              "same_target",
+              "pathway_node",
+              "interaction_partner",
+              "structural_analogue",
+              "mechanism_class"
+            ],
+            "title": "Bridge Kind",
+            "type": "string"
+          },
+          "direction_check": {
+            "$ref": "#/components/schemas/DirectionCheck"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "title": "Evidence",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "molecule": {
+            "$ref": "#/components/schemas/CandidateMolecule"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "reason_code": {
+            "const": "opposes_required_action",
+            "title": "Reason Code",
+            "type": "string"
+          },
+          "target": {
+            "$ref": "#/components/schemas/CandidateTarget"
+          }
+        },
+        "required": [
+          "id",
+          "molecule",
+          "target",
+          "bridge_kind",
+          "reason_code",
+          "reason",
+          "direction_check",
+          "evidence"
+        ],
+        "title": "RuledOut",
+        "type": "object"
+      },
       "RunManifest": {
         "properties": {
           "actor": {
@@ -19568,6 +21101,524 @@
           "description"
         ],
         "title": "SegmentKindOption",
+        "type": "object"
+      },
+      "SharedResidue": {
+        "description": "One residue of the subject's pocket and the residue it aligns to in the similar protein.",
+        "properties": {
+          "analogue_position": {
+            "title": "Analogue Position",
+            "type": "integer"
+          },
+          "analogue_residue": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analogue Residue"
+          },
+          "contacts_analogue_ligand": {
+            "description": "Component IDs of ligands observed in contact with this residue",
+            "items": {
+              "type": "string"
+            },
+            "title": "Contacts Analogue Ligand",
+            "type": "array"
+          },
+          "in_analogue_pocket": {
+            "default": false,
+            "title": "In Analogue Pocket",
+            "type": "boolean"
+          },
+          "same_residue": {
+            "title": "Same Residue",
+            "type": "boolean"
+          },
+          "subject_position": {
+            "title": "Subject Position",
+            "type": "integer"
+          },
+          "subject_residue": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject Residue"
+          }
+        },
+        "required": [
+          "subject_position",
+          "subject_residue",
+          "analogue_position",
+          "analogue_residue",
+          "same_residue",
+          "in_analogue_pocket",
+          "contacts_analogue_ligand"
+        ],
+        "title": "SharedResidue",
+        "type": "object"
+      },
+      "SimilarProtein": {
+        "description": "One fold-similarity hit, with the identifiers Foldseek's target name carried.",
+        "properties": {
+          "alignment_count": {
+            "default": 1,
+            "description": "How many alignments to this protein the search returned",
+            "title": "Alignment Count",
+            "type": "integer"
+          },
+          "database": {
+            "title": "Database",
+            "type": "string"
+          },
+          "database_label": {
+            "title": "Database Label",
+            "type": "string"
+          },
+          "evidence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Evidence"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "gene_symbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gene Symbol"
+          },
+          "id": {
+            "description": "Stable row ID: <database>:<target name>",
+            "title": "Id",
+            "type": "string"
+          },
+          "is_same_protein": {
+            "default": false,
+            "description": "The query's own entry or another model of the same protein",
+            "title": "Is Same Protein",
+            "type": "boolean"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/SimilarityMetric"
+            },
+            "title": "Metrics",
+            "type": "array"
+          },
+          "observed_ligands": {
+            "description": "Component IDs of non-polymer ligands RCSB PDB lists as bound in this entry",
+            "items": {
+              "type": "string"
+            },
+            "title": "Observed Ligands",
+            "type": "array"
+          },
+          "organism": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organism"
+          },
+          "pdb_chain": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pdb Chain"
+          },
+          "protein": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EntityRef"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The similar protein, when the target name resolves to a UniProt entry"
+          },
+          "query_aligned": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AlignedRange"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Residues of the subject that took part in the alignment"
+          },
+          "structure_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "pdb:<ID> or afdb:<entryId> of the target",
+            "title": "Structure Id"
+          },
+          "structure_origin": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StructureOrigin"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "target": {
+            "description": "Target name exactly as Foldseek returned it",
+            "title": "Target",
+            "type": "string"
+          },
+          "target_aligned": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AlignedRange"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Description Foldseek carried on the target name",
+            "title": "Title"
+          }
+        },
+        "required": [
+          "id",
+          "database",
+          "database_label",
+          "target",
+          "title",
+          "protein",
+          "gene_symbol",
+          "structure_id",
+          "structure_origin",
+          "pdb_chain",
+          "organism",
+          "is_same_protein",
+          "alignment_count",
+          "metrics",
+          "query_aligned",
+          "target_aligned",
+          "observed_ligands",
+          "evidence"
+        ],
+        "title": "SimilarProtein",
+        "type": "object"
+      },
+      "SimilarStructures": {
+        "description": "Fold neighbours of one protein. Pending while the external search is still running.",
+        "properties": {
+          "cached_retrieved_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cached Retrieved At"
+          },
+          "databases": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Databases",
+            "type": "array"
+          },
+          "evidence_class": {
+            "$ref": "#/components/schemas/EvidenceClass",
+            "default": "computational_prediction"
+          },
+          "from_cached_example": {
+            "default": false,
+            "description": "Served from a stored copy under data/examples, not searched now",
+            "title": "From Cached Example",
+            "type": "boolean"
+          },
+          "limits": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limits",
+            "type": "array"
+          },
+          "metric_names": {
+            "description": "The measures carried on every row, by name",
+            "items": {
+              "type": "string"
+            },
+            "title": "Metric Names",
+            "type": "array"
+          },
+          "mode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Foldseek search mode that produced these rows",
+            "title": "Mode"
+          },
+          "mode_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What this mode does and does not report",
+            "title": "Mode Note"
+          },
+          "protein": {
+            "$ref": "#/components/schemas/EntityRef"
+          },
+          "query_length": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Query Length"
+          },
+          "query_structure_id": {
+            "title": "Query Structure Id",
+            "type": "string"
+          },
+          "query_structure_origin": {
+            "$ref": "#/components/schemas/StructureOrigin"
+          },
+          "ranking_rule": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "How the rows below were ordered",
+            "title": "Ranking Rule"
+          },
+          "retry_after_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retry After Seconds"
+          },
+          "service": {
+            "default": "Foldseek Search Server",
+            "title": "Service",
+            "type": "string"
+          },
+          "service_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Service Url"
+          },
+          "similar": {
+            "items": {
+              "$ref": "#/components/schemas/SimilarProtein"
+            },
+            "title": "Similar",
+            "type": "array"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceStatus"
+            },
+            "title": "Sources",
+            "type": "array"
+          },
+          "status": {
+            "enum": [
+              "ready",
+              "pending",
+              "unavailable",
+              "not_applicable"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "status_detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status Detail"
+          },
+          "total_hits": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "description": "Hits the service found per database, before any cap",
+            "title": "Total Hits",
+            "type": "object"
+          }
+        },
+        "required": [
+          "sources",
+          "protein",
+          "query_structure_id",
+          "query_structure_origin",
+          "query_length",
+          "status",
+          "status_detail",
+          "retry_after_seconds",
+          "evidence_class",
+          "service",
+          "service_url",
+          "mode",
+          "mode_note",
+          "databases",
+          "from_cached_example",
+          "cached_retrieved_at",
+          "total_hits",
+          "ranking_rule",
+          "similar",
+          "metric_names",
+          "limits"
+        ],
+        "title": "SimilarStructures",
+        "type": "object"
+      },
+      "SimilarityMetric": {
+        "description": "One named measure, reported as the source reported it.",
+        "properties": {
+          "direction": {
+            "default": "descriptive",
+            "enum": [
+              "lower_is_stronger",
+              "higher_is_stronger",
+              "descriptive"
+            ],
+            "title": "Direction",
+            "type": "string"
+          },
+          "label": {
+            "description": "What the measure is called, in words",
+            "title": "Label",
+            "type": "string"
+          },
+          "meaning": {
+            "description": "One plain sentence saying what the number means",
+            "title": "Meaning",
+            "type": "string"
+          },
+          "name": {
+            "description": "Machine name, e.g. foldseek_evalue",
+            "title": "Name",
+            "type": "string"
+          },
+          "source": {
+            "description": "Source adapter ID that reported it, e.g. foldseek",
+            "title": "Source",
+            "type": "string"
+          },
+          "source_field": {
+            "description": "Field name in the source's own response, e.g. eval",
+            "title": "Source Field",
+            "type": "string"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "name",
+          "label",
+          "value",
+          "unit",
+          "direction",
+          "source",
+          "source_field",
+          "meaning"
+        ],
+        "title": "SimilarityMetric",
         "type": "object"
       },
       "SiteConfidence": {
@@ -21198,6 +23249,142 @@
           "evidence"
         ],
         "title": "SubcellularLocation",
+        "type": "object"
+      },
+      "Subject": {
+        "description": "What the candidates are for: a gene, its protein, and the disease or variant that framed it.",
+        "properties": {
+          "accession": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "UniProt accession of the gene's protein",
+            "title": "Accession"
+          },
+          "disease": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EntityRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "gene": {
+            "$ref": "#/components/schemas/EntityRef"
+          },
+          "gene_symbol": {
+            "title": "Gene Symbol",
+            "type": "string"
+          },
+          "mechanism": {
+            "$ref": "#/components/schemas/SubjectMechanism"
+          },
+          "protein": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EntityRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "variant": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EntityRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "gene_symbol",
+          "accession",
+          "gene",
+          "protein",
+          "disease",
+          "variant",
+          "mechanism"
+        ],
+        "title": "Subject",
+        "type": "object"
+      },
+      "SubjectMechanism": {
+        "description": "Mechanism class and direction of effect of the subject, with where they came from.",
+        "properties": {
+          "basis": {
+            "description": "The rule or record that set the class and direction, in plain words",
+            "title": "Basis",
+            "type": "string"
+          },
+          "class": {
+            "description": "Catalog mechanism class, or unknown when no record states one",
+            "enum": [
+              "gain_of_function",
+              "loss_of_function",
+              "dominant_negative",
+              "haploinsufficiency",
+              "neomorph",
+              "unknown"
+            ],
+            "title": "Class",
+            "type": "string"
+          },
+          "confidence": {
+            "description": "Which record the class and direction came from",
+            "enum": [
+              "stated_in_the_catalog",
+              "named_in_the_disease_label",
+              "unknown"
+            ],
+            "title": "Confidence",
+            "type": "string"
+          },
+          "direction": {
+            "description": "Which way the subject's activity moves",
+            "enum": [
+              "increased_activity",
+              "decreased_activity",
+              "unknown"
+            ],
+            "title": "Direction",
+            "type": "string"
+          },
+          "disagreements": {
+            "description": "Records that state a different class or direction",
+            "items": {
+              "type": "string"
+            },
+            "title": "Disagreements",
+            "type": "array"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "title": "Evidence",
+            "type": "array"
+          }
+        },
+        "required": [
+          "class",
+          "direction",
+          "confidence",
+          "basis",
+          "disagreements",
+          "evidence"
+        ],
+        "title": "SubjectMechanism",
         "type": "object"
       },
       "SubmissionSummary": {
@@ -23664,6 +25851,83 @@
         "title": "VrsIdentifier",
         "type": "object"
       },
+      "WithheldEdge": {
+        "description": "An edge linking the subject disease straight to a molecule, dropped by exclude_direct.",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          },
+          "disease_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disease Id"
+          },
+          "disease_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disease Name"
+          },
+          "kind": {
+            "enum": [
+              "open_targets_disease_drug",
+              "chembl_indication",
+              "literature_co_mention"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "molecule_chembl_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Molecule Chembl Id"
+          },
+          "molecule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Molecule Name"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "source",
+          "disease_id",
+          "disease_name",
+          "molecule_chembl_id",
+          "molecule_name",
+          "detail"
+        ],
+        "title": "WithheldEdge",
+        "type": "object"
+      },
       "helix__schemas__compounds__CrossReference": {
         "properties": {
           "database": {
@@ -23711,6 +25975,187 @@
           "url"
         ],
         "title": "CrossReference",
+        "type": "object"
+      },
+      "helix__schemas__compounds__MeasuredAffinity": {
+        "description": "One ChEMBL activity row, verbatim.",
+        "properties": {
+          "activity_id": {
+            "title": "Activity Id",
+            "type": "string"
+          },
+          "assay_chembl_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assay Chembl Id"
+          },
+          "assay_description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assay Description"
+          },
+          "assay_format": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assay Format"
+          },
+          "document_chembl_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Document Chembl Id"
+          },
+          "pchembl": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pchembl"
+          },
+          "relation": {
+            "title": "Relation",
+            "type": "string"
+          },
+          "source": {
+            "const": "chembl",
+            "default": "chembl",
+            "title": "Source",
+            "type": "string"
+          },
+          "standard_type": {
+            "title": "Standard Type",
+            "type": "string"
+          },
+          "units": {
+            "title": "Units",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "value": {
+            "title": "Value",
+            "type": "number"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year"
+          }
+        },
+        "required": [
+          "source",
+          "activity_id",
+          "standard_type",
+          "relation",
+          "value",
+          "units",
+          "pchembl",
+          "assay_chembl_id",
+          "assay_description",
+          "assay_format",
+          "document_chembl_id",
+          "year",
+          "url"
+        ],
+        "title": "MeasuredAffinity",
+        "type": "object"
+      },
+      "helix__schemas__discovery__MeasuredAffinity": {
+        "description": "A measured activity of this molecule against this protein, as ChEMBL records it.",
+        "properties": {
+          "activity_count": {
+            "title": "Activity Count",
+            "type": "integer"
+          },
+          "assay_count": {
+            "title": "Assay Count",
+            "type": "integer"
+          },
+          "median_pchembl": {
+            "title": "Median Pchembl",
+            "type": "number"
+          },
+          "organism": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organism"
+          },
+          "standard_types": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Standard Types",
+            "type": "array"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          }
+        },
+        "required": [
+          "median_pchembl",
+          "activity_count",
+          "assay_count",
+          "standard_types",
+          "organism",
+          "url"
+        ],
+        "title": "MeasuredAffinity",
         "type": "object"
       },
       "helix__schemas__diseases__CrossReference": {
@@ -24533,6 +26978,159 @@
         "summary": "2D depiction of a compound (RDKit), transparent background",
         "tags": [
           "compounds"
+        ]
+      }
+    },
+    "/api/v1/discovery/candidates": {
+      "get": {
+        "operationId": "read_candidates_api_v1_discovery_candidates_get",
+        "parameters": [
+          {
+            "description": "HGNC symbol, e.g. PIK3CD",
+            "in": "query",
+            "name": "gene",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "HGNC symbol, e.g. PIK3CD",
+              "title": "Gene"
+            }
+          },
+          {
+            "description": "Catalog disease slug, e.g. activated-p110-delta-syndrome-pik3cd",
+            "in": "query",
+            "name": "disease",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Catalog disease slug, e.g. activated-p110-delta-syndrome-pik3cd",
+              "title": "Disease"
+            }
+          },
+          {
+            "description": "Variant ID, e.g. BTK-p.Arg28His",
+            "in": "query",
+            "name": "variant",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Variant ID, e.g. BTK-p.Arg28His",
+              "title": "Variant"
+            }
+          },
+          {
+            "description": "Drop every record linking this disease straight to a molecule, so a molecule can only be reached through a bridge",
+            "in": "query",
+            "name": "exclude_direct",
+            "required": false,
+            "schema": {
+              "default": false,
+              "description": "Drop every record linking this disease straight to a molecule, so a molecule can only be reached through a bridge",
+              "title": "Exclude Direct",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Problem JSON"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Problem JSON"
+          }
+        },
+        "summary": "Candidate targets and molecules for a gene, disease or variant, with the chain behind each",
+        "tags": [
+          "discovery"
+        ]
+      }
+    },
+    "/api/v1/discovery/controls": {
+      "get": {
+        "operationId": "read_controls_api_v1_discovery_controls_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ControlsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Problem JSON"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Problem JSON"
+          }
+        },
+        "summary": "The stored result of the discovery controls: one positive, one negative, one upstream target",
+        "tags": [
+          "discovery"
         ]
       }
     },
@@ -30265,6 +32863,75 @@
         ]
       }
     },
+    "/api/v1/structures/similar": {
+      "get": {
+        "description": "Fold neighbours of a protein, each row carrying every measure Foldseek reported, by name.\n\nAnswers immediately. A protein whose search is still running comes back with status `pending`\nand `retry_after_seconds`; the flagship proteins and the control subjects are served from a\nstored copy, flagged with `from_cached_example`.",
+        "operationId": "get_similar_structures_api_v1_structures_similar_get",
+        "parameters": [
+          {
+            "description": "UniProt accession of the protein, e.g. O00329",
+            "in": "query",
+            "name": "accession",
+            "required": true,
+            "schema": {
+              "description": "UniProt accession of the protein, e.g. O00329",
+              "title": "Accession",
+              "type": "string"
+            }
+          },
+          {
+            "description": "How many hits to return",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "description": "How many hits to return",
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimilarStructures"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Problem JSON"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Problem JSON"
+          }
+        },
+        "summary": "Proteins with a similar fold (Foldseek against the PDB and AlphaFold DB)",
+        "tags": [
+          "structure similarity"
+        ]
+      }
+    },
     "/api/v1/structures/{structure_id}": {
       "get": {
         "operationId": "get_structure_api_v1_structures__structure_id__get",
@@ -30549,6 +33216,70 @@
         "summary": "Bound non-solvent ligands and their neighbouring residues in UniProt numbering",
         "tags": [
           "structures"
+        ]
+      }
+    },
+    "/api/v1/structures/{structure_id}/pocket-similarity": {
+      "get": {
+        "description": "Residue-by-residue pocket comparison between a subject structure and one similar protein.\n\nSubject positions are mapped onto the similar protein through the Foldseek alignment of the two\nmodels, and compared against the pockets P2Rank predicts on the similar protein and the\nmolecules RCSB PDB records as bound in an experimental entry of it.",
+        "operationId": "get_pocket_similarity_api_v1_structures__structure_id__pocket_similarity_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "structure_id",
+            "required": true,
+            "schema": {
+              "title": "Structure Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "UniProt accession of the similar protein to compare against",
+            "in": "query",
+            "name": "accession",
+            "required": true,
+            "schema": {
+              "description": "UniProt accession of the similar protein to compare against",
+              "title": "Accession",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PocketSimilarity"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Problem JSON"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Problem JSON"
+          }
+        },
+        "summary": "Compare the pockets of this structure with those of a structurally similar protein",
+        "tags": [
+          "structure similarity"
         ]
       }
     },

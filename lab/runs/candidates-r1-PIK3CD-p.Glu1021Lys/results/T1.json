@@ -1,0 +1,76 @@
+{
+  "test_id": "T1",
+  "test_kind": "structural_context",
+  "values": {
+    "headline": "Residue 1021: lines none of the 22 P2Rank pockets; lies in 1 ProtVar predicted pocket(s); lies in no predicted protein-protein interface (ProtVar).",
+    "verdict": "in_predicted_pocket",
+    "in_predicted_interface": null,
+    "p2rank_status": "ready",
+    "p2rank_model": "afdb:AF-O00329-F1",
+    "p2rank_pockets_total": 22,
+    "p2rank_pockets_containing_residue": [],
+    "protvar_pockets_containing_residue": [
+      {
+        "pocket": 16,
+        "score": 805.2,
+        "buriedness": 0.82,
+        "mean_plddt": 79.2,
+        "residues": [
+          886,
+          887,
+          888,
+          889,
+          890,
+          891,
+          892,
+          894,
+          917,
+          919,
+          925,
+          926,
+          928,
+          929,
+          930,
+          931,
+          932,
+          996,
+          997,
+          998,
+          1000,
+          1001,
+          1006,
+          1014,
+          1018,
+          1021,
+          1025,
+          1028
+        ]
+      }
+    ],
+    "protvar_interface": {
+      "state": null,
+      "message": null
+    }
+  },
+  "sources": [
+    {
+      "database": "PrankWeb",
+      "record_id": "AF-O00329-F1",
+      "url": "https://prankweb.cz"
+    },
+    {
+      "database": "EBI ProtVar",
+      "record_id": "O00329:pocket:16",
+      "url": "https://www.ebi.ac.uk/ProtVar/query?search=O00329:1021"
+    }
+  ],
+  "controls": [
+    "Rank control: the rank and probability of the pocket among all predicted pockets of the model.",
+    "Confidence control: mean pLDDT of the pocket residues."
+  ],
+  "limitations": [
+    "Predicted pockets and interfaces are computational predictions, not measured binding sites."
+  ],
+  "reproducible_command": "HELIX_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m helix_lab_tools.experiments structural_context --accession O00329 --position 1021 --alternate-residue K --reference-residue E --gene PIK3CD --variant-id PIK3CD-p.Glu1021Lys",
+  "elapsed_seconds": 0.3
+}

@@ -1,22 +1,33 @@
 # Helix
 
-Open protein research for rare disease.
+What could we aim a drug at in a rare disease, and is there already a molecule that does it?
 
-Helix is an open-source platform for computational rare-disease research. It follows one path
-from a disease to a research hypothesis: disease, gene, pathogenic variant, protein, structural
-change, mechanism, candidate interventions, hypothesis. At every step it shows where each statement
-comes from and how far it can be trusted. The first dataset is the IUIS classification of inborn
-errors of immunity: 604 diseases and 511 genes.
+Helix is an open-source platform for computational rare-disease research. It follows one path:
+disease, gene, pathogenic variant, protein, mechanism, **candidate targets and molecules**, what to
+test next. At every step it shows where each statement comes from and how far it can be trusted. The
+first dataset is the IUIS classification of inborn errors of immunity: 604 diseases and 511 genes.
 
-Helix is a research and hypothesis-generation tool. It is not clinical decision software.
+Every candidate is a hypothesis Helix built from records. Helix is a research and
+hypothesis-generation tool. It is not clinical decision software, and nothing in it is a treatment,
+a dose or advice.
 
 ## Why it exists
 
-Most rare diseases have a known gene and no therapy. The data needed to reason about one of them is
-public but scattered: the clinical classification in ClinVar, the protein in UniProt, structures in
-the PDB and AlphaFold DB, predictions in a dozen services, each with its own identifiers, numbering
-and licence. A researcher assembling it by hand loses the provenance on the way, and a predicted
-structure ends up in the same figure as a crystal structure with nothing to tell them apart.
+Most rare diseases have a known gene and no therapy. Knowing _why_ a mutation is harmful is a
+lookup; the answer is already in a database, scattered across the clinical classification in
+ClinVar, the protein in UniProt, structures in the PDB and AlphaFold DB and predictions in a dozen
+services, each with its own identifiers, numbering and licence. A researcher assembling it by hand
+loses the provenance on the way, and a predicted structure ends up in the same figure as a crystal
+structure with nothing to tell them apart.
+
+The question nobody has answered for most rare diseases is the next one: what could a drug act on.
+Helix answers it by **bridging mechanisms** — a molecule studied for one disease may apply to
+another when the two share a mechanism _and point the same way_. Sharing a gene or a pathway is not
+enough. Ibrutinib blocks BTK; X-linked agammaglobulinemia is caused by BTK loss of function, so a
+BTK blocker would make it worse. **Direction of effect is a hard filter**: a molecule that pushes
+the wrong way is never ranked, and appears instead in a visible "Ruled out" list with the reason.
+[`docs/discovery.md`](docs/discovery.md) describes the engine, its five bridges and its three
+controls.
 
 Helix puts those sources on one residue numbering and one page, and keeps three rules:
 
@@ -41,18 +52,55 @@ Helix puts those sources on one residue numbering and one page, and keeps three 
 | Mechanism     | `/variant/BTK-p.Arg28His/mechanism` | What sits at and around the residue: features, contacts, effect predictions              |
 | Compare       | `/compare/BTK/p.Arg28His`           | Reference and variant models from the same provider, with their difference               |
 | Interventions | `/protein/Q06187/interventions`     | Known drugs, pockets, compounds and binding predictions                                  |
+| Candidates    | `/discover/PIK3CD`                  | What a drug could aim at and which molecules act that way, with the ruled-out list       |
 | Projects      | `/projects`                         | Pinned evidence, notes and hypotheses; snapshots, forks and exports                      |
 
-Jobs (`/jobs`) lists computational runs with their stages, logs and manifests. Models (`/models`)
-lists every model provider and whether it can run on this installation.
+Candidates is where the journey ends. Explore (`/explore`) stays a browser and the Lab stays a
+recorded loop; neither is the destination. Jobs (`/jobs`) lists computational runs with their
+stages, logs and manifests. Models (`/models`) lists every model provider and whether it can run on
+this installation.
+
+## Candidate targets and molecules
+
+`/discover/<gene>` and `GET /api/v1/discovery/candidates` answer the question the rest of the
+platform leads up to. The engine reads the mechanism class and direction from the catalog, derives
+the required action from a published rule table, runs five bridges, and applies the direction filter
+before anything is ranked.
+
+| Bridge                | Claims                                                                          |
+| --------------------- | ------------------------------------------------------------------------------- |
+| `same_target`         | A molecule acts on this very protein, approved or studied in another disease    |
+| `pathway_node`        | A druggable protein upstream or downstream, where acting on it corrects the way |
+| `interaction_partner` | A curated physical partner that is druggable                                    |
+| `structural_analogue` | A protein whose pocket resembles this one and has a known binder                |
+| `mechanism_class`     | Another disease with the same mechanism class and direction, with a drug class  |
+
+Three controls are the product's own evidence that the filter works, stored in
+`lab/experiments/results/discovery-controls.json` and served by `GET /api/v1/discovery/controls`.
+All three pass:
+
+- **Held out.** With `exclude_direct=true` the APDS-to-leniolisib link is withheld, and leniolisib
+  still returns at rank 4 of 24 through a `same_target` bridge whose every step cites a record.
+- **Negative.** For BTK loss of function, all 20 molecules ChEMBL records as lowering BTK — ibrutinib
+  among them — are absent from the candidates and present in the 33 ruled-out rows with the reason.
+- **Upstream.** For STAT1 gain of function, baricitinib returns at rank 2 of 23 aimed at JAK1, not
+  at STAT1. No candidate aims at STAT1 itself.
+
+[`docs/discovery.md`](docs/discovery.md) has the rule table, the five bridges, the held-out mode, the
+ranking keys, the full control numbers and what the method does not do.
 
 ## Agentic lab
 
 The Lab (`/lab`) is a team of AI agents on top of the Helix API, orchestrated by Omnigent
-0.16.0: a supervisor and seven specialists (literature, knowledge graph, insight, planner, safety,
-runner, analysis). It takes one mutation through a recorded loop: question, evidence, hypothesis,
-experiment, result, updated decision. Four policies bound what each agent may do, and a test that
-starts a compute job waits for a human approval.
+0.16.0: a supervisor and eight specialists (literature, knowledge graph, insight, planner, safety,
+runner, analysis, translator). It takes one mutation through a recorded loop: question, evidence,
+hypothesis, experiment, result, updated decision, **candidates**. Four policies bound what each
+agent may do, and a test that starts a compute job waits for a human approval.
+
+The seventh step ends a run on what a drug could act on rather than on the decision. The translator
+may only record a candidate by reference to a row the discovery endpoint returned, the safety agent
+reviews every proposal first, and the tools refuse any candidate whose direction check is not
+`matches` — so no agent can type a molecule name into a record.
 
 - [`SUBMISSION.md`](SUBMISSION.md): the hackathon submission, with the reference run on BTK
   p.Arg28His told from its record, the measured comparison with a single agent and the open limits.
@@ -80,7 +128,7 @@ API reference: http://localhost:8000/api/v1/docs. Every route is under `/api/v1`
 | ------------- | ---------------------------------------------------------------------------------- |
 | `make setup`  | Creates `api/.venv`, installs the API (`EXTRAS=dev,postgres,redis,s3`) and the web |
 | `make dev`    | Runs API and web together; Ctrl-C stops both                                       |
-| `make api`    | Runs the API (`RELOAD=1` restarts it when a file under `api/helix` changes)    |
+| `make api`    | Runs the API (`RELOAD=1` restarts it when a file under `api/helix` changes)        |
 | `make web`    | Runs the web dev server (`API_URL=http://host:port` to call another API)           |
 | `make worker` | Runs a separate job worker (Redis queue only)                                      |
 | `make seed`   | Rebuilds `data/seed/catalog.json` from its sources (`SEED_ARGS="--refresh all"`)   |
@@ -122,13 +170,13 @@ Interactive requests, upstream calls and long-running compute are kept apart. A 
 for a model, and one failing source never fails a page: every aggregated response lists the state
 of each source it asked.
 
-| Path             | Holds                                                                                        |
-| ---------------- | -------------------------------------------------------------------------------------------- |
+| Path             | Holds                                                                                    |
+| ---------------- | ---------------------------------------------------------------------------------------- |
 | `api/`           | FastAPI service, package `helix`: source adapters, seeded catalog, jobs, model providers |
-| `web/`           | Next.js app: workspace, sequence axis, molecular viewer, explore, projects                   |
-| `data/seed/`     | The seeded dataset the API loads at startup, with its sources and build report               |
-| `data/examples/` | Real cached model outputs, each beside the manifest of the run that produced it              |
-| `docs/`          | Architecture, design system, guides, research notes                                          |
+| `web/`           | Next.js app: workspace, sequence axis, molecular viewer, explore, projects               |
+| `data/seed/`     | The seeded dataset the API loads at startup, with its sources and build report           |
+| `data/examples/` | Real cached model outputs, each beside the manifest of the run that produced it          |
+| `docs/`          | Architecture, design system, guides, research notes                                      |
 
 Source adapters, model providers, job handlers, routers and database tables are plugins: a new file
 in the right directory is imported at startup, with no shared code to edit.
@@ -203,6 +251,8 @@ RO-Crate archive. See [`docs/reproducibility.md`](docs/reproducibility.md).
   recommendation.
 - A pathogenicity prediction is not a clinical classification.
 - Absence from a database is not evidence of absence.
+- A candidate is a hypothesis built from records. Tissue expression, pharmacokinetics and toxicity
+  are never checked, and a direction match says nothing about whether a molecule would work.
 
 The full list, with sources, is in
 [`docs/scientific-limitations.md`](docs/scientific-limitations.md).
@@ -212,6 +262,7 @@ The full list, with sources, is in
 | Document                                                           | Covers                                               |
 | ------------------------------------------------------------------ | ---------------------------------------------------- |
 | [`docs/getting-started.md`](docs/getting-started.md)               | Setup, configuration, production services            |
+| [`docs/discovery.md`](docs/discovery.md)                           | The candidate engine, the bridges, the controls      |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)                     | Backend, contracts, extension recipes                |
 | [`docs/data-sources.md`](docs/data-sources.md)                     | Sources, licences, adapter behaviour                 |
 | [`docs/evidence-classes.md`](docs/evidence-classes.md)             | The six evidence classes and three structure origins |
@@ -220,7 +271,7 @@ The full list, with sources, is in
 | [`docs/reproducibility.md`](docs/reproducibility.md)               | Provenance, run manifests, snapshots, exports        |
 | [`docs/scientific-limitations.md`](docs/scientific-limitations.md) | What the outputs do not show                         |
 | [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md)                   | Interface components and page rules                  |
-| [`docs/PRODUCT_BRIEF.md`](docs/PRODUCT_BRIEF.md)                   | What Helix is built to do                        |
+| [`docs/PRODUCT_BRIEF.md`](docs/PRODUCT_BRIEF.md)                   | What Helix is built to do                            |
 
 The same documentation is served by the web app at `/docs`.
 

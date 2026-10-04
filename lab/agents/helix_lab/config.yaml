@@ -23,6 +23,7 @@ tools:
     - safety
     - runner
     - analysis
+    - translator
 guardrails:
   policies:
     role_boundary:

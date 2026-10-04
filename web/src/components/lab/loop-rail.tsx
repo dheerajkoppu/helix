@@ -57,6 +57,17 @@ function stageSummary(
       if (!outcome) return view.nextExperiments.length ? "next test set" : null;
       return outcome.changed ? "changed" : "unchanged";
     }
+    case "candidates": {
+      if (view.candidates.length) {
+        const ruled = view.ruledOut.length
+          ? `, ${view.ruledOut.length} ruled out`
+          : "";
+        return `${plural(view.candidates.length, "candidate")}${ruled}`;
+      }
+      if (view.ruledOut.length)
+        return `${plural(view.ruledOut.length, "row")} ruled out`;
+      return view.targetRationales.length ? "target set" : null;
+    }
   }
 }
 
@@ -98,7 +109,7 @@ export function LoopRail({
         className,
       )}
     >
-      <ol className="mx-auto grid w-full max-w-6xl grid-cols-3 md:grid-cols-6 md:px-3">
+      <ol className="mx-auto grid w-full max-w-6xl grid-cols-2 sm:grid-cols-4 md:grid-cols-7 md:px-3">
         {LOOP_STAGES.map((stage, index) => {
           const reached = view.stageCounts[stage.id] > 0;
           const current = view.stage === stage.id;
@@ -109,7 +120,8 @@ export function LoopRail({
               key={stage.id}
               className={cn(
                 "min-w-0",
-                index < 3 && "border-b border-border-subtle md:border-b-0",
+                index < LOOP_STAGES.length - 1 &&
+                  "border-b border-border-subtle md:border-b-0",
               )}
             >
               <a

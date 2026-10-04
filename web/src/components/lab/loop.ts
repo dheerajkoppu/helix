@@ -25,6 +25,7 @@ export const STEP_LABEL: Record<LoopStageId, string> = {
   experiment: "Experiment",
   result: "Result",
   decision: "Decision",
+  candidates: "Candidates",
 };
 
 /**
@@ -70,6 +71,7 @@ const SPECIALISTS = [
   "safety",
   "runner",
   "analysis",
+  "translator",
 ];
 
 const withId = (id: string | null, text: string | null): string | null =>
@@ -136,8 +138,25 @@ export function briefLine(event: LabEvent): string | null {
       if (changed === null) return readText(payload.why);
       return changed ? "Decision changed" : "Decision unchanged";
     }
+    case "target_rationale":
+      return withId(readText(payload.id), readText(payload.what_to_act_on));
+    case "candidate": {
+      const molecule = isRecord(payload.molecule) ? payload.molecule : {};
+      const target = isRecord(payload.target) ? payload.target : {};
+      const name = readText(molecule.name) ?? readText(target.gene_symbol);
+      return withId(readText(payload.id), name);
+    }
     case "note": {
       const kind = readText(payload.kind);
+      if (kind === "candidate_review") {
+        const verdict = readText(payload.verdict);
+        return verdict
+          ? `Candidates ${humanise(verdict)}`
+          : "Checked candidates";
+      }
+      if (kind === "candidate_rejected")
+        return `Ruled out ${readText(payload.molecule) ?? "a molecule"}`;
+      if (kind === "candidates_proposed") return "Put candidates forward";
       if (kind === "safety_review") {
         const verdict = readText(payload.verdict);
         return (

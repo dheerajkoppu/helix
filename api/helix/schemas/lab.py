@@ -17,6 +17,7 @@ LabAgentName = Literal[
     "safety",
     "runner",
     "analysis",
+    "translator",
     "human",
 ]
 LabEventType = Literal[
@@ -34,6 +35,8 @@ LabEventType = Literal[
     "interpretation",
     "decision",
     "next_experiment",
+    "target_rationale",
+    "candidate",
     "note",
 ]
 

@@ -25,6 +25,7 @@ export const LAB_AGENTS = [
   "safety",
   "runner",
   "analysis",
+  "translator",
   "human",
 ] as const;
 export type LabAgent = (typeof LAB_AGENTS)[number];
@@ -44,6 +45,8 @@ export const LAB_EVENT_TYPES = [
   "interpretation",
   "decision",
   "next_experiment",
+  "target_rationale",
+  "candidate",
   "note",
 ] as const;
 export type LabEventType = (typeof LAB_EVENT_TYPES)[number];
@@ -100,6 +103,9 @@ export interface LabRun {
     compute_seconds: number | null;
     policy_denials: number | null;
     reopenings: number | null;
+    candidates: number | null;
+    /** molecules the direction filter refused, which the run counts from the stored responses */
+    ruled_out_by_direction: number | null;
     tool_calls_by_agent: Array<{ key: string; value: string }>;
   };
   outcome: {
@@ -378,6 +384,8 @@ export function toRun(raw: unknown): LabRun | null {
       compute_seconds: readNumber(metrics.compute_seconds),
       policy_denials: readNumber(metrics.policy_denials),
       reopenings: readNumber(metrics.reopenings),
+      candidates: readNumber(metrics.candidates),
+      ruled_out_by_direction: readNumber(metrics.ruled_out_by_direction),
       tool_calls_by_agent: isRecord(metrics.tool_calls_by_agent)
         ? Object.entries(metrics.tool_calls_by_agent)
             .map(([key, value]) => ({ key, value: verbatim(value) }))

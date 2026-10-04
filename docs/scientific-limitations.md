@@ -120,6 +120,81 @@ shown beside the comparison because they bear on the question the structure mode
 - A drug listed for a target is a database record of a mechanism or an indication. It is not a
   statement that the drug is appropriate for a disease, a variant or a patient.
 
+## Candidate targets and molecules
+
+What `/discover` and `GET /api/v1/discovery/candidates` produce is **mechanism-bridge reasoning**: a
+molecule studied for one disease may apply to another when the two share a mechanism and the
+molecule pushes the way the mechanism needs. Every row is a Helix hypothesis. The engine, the rule
+table and the controls are in [`discovery.md`](discovery.md); what follows is what the reasoning
+does not establish.
+
+### What a candidate is not
+
+- **A candidate is not a treatment, a dose or advice**, and it is not a statement that a molecule
+  would work. It says that records place a molecule's action in the direction this mechanism needs.
+- **A direction match is not an efficacy claim.** It carries no magnitude. It does not say that
+  correcting this protein corrects the disease, nor that the pathway will not compensate.
+- **Nothing in a candidate chain has been validated in a laboratory.** No row has been tested in a
+  cell, an animal or a person for the disease it is offered against.
+
+### What is never checked
+
+- **Tissue and cell type.** The engine never asks whether the protein is present where the disease
+  acts. Every candidate carries that caveat.
+- **Pharmacokinetics.** Nothing asks whether a molecule reaches the tissue, crosses a membrane,
+  survives metabolism, or can be given at a useful exposure.
+- **Toxicity, safety and dose.** A molecule ruled in by direction may be unusable for reasons the
+  engine never looks at.
+- **Selectivity beyond the recorded target.** A molecule's action on other proteins is not weighed.
+  A kinase inhibitor recorded against one kinase is treated as acting on that kinase.
+- **Patient-level anything.** No variant-specific response, no genotype-phenotype correlation, no
+  age, no comorbidity.
+
+### Where the reasoning can be wrong
+
+- **The direction can be wrong.** It is read from the catalog in a documented precedence: the IUIS
+  `mechanism` field first, then the words of the disease label, then `unknown`. A direction inferred
+  from a label is weaker than one stated in a record and is reported as such. When records conflict,
+  the direction is `unknown` and nothing is ruled out on it.
+- **A gene is not a disease.** A gene with both gain- and loss-of-function diseases returns
+  `unknown` for the gene; asking by gene alone can therefore produce no filter at all.
+- **The molecule's action is read from one field.** ChEMBL `action_type` decides what a molecule
+  does to its target. MODULATOR, BINDING AGENT, SUBSTRATE and a missing value all yield `unknown`,
+  which is ranked below matches and never ruled out. **The ruled-out list is therefore a lower bound
+  on what is actually wrong.**
+- **Only molecules with a ChEMBL mechanism record are considered.** A molecule without one is
+  missing from both the candidates and the ruled-out list. Absence from a database is not evidence
+  of absence.
+- **A bridge can rest on a single source.** `pathway_node` rests on Reactome, `interaction_partner`
+  on IntAct and STRING, `mechanism_class` on the IUIS grouping in the Helix catalog. A chain with one
+  source says so on the row. A curation error upstream becomes a Helix hypothesis with no second
+  source to contradict it.
+- **Pathway direction is read from phosphorylation only.** A Reactome reaction is used only when the
+  subject appears modified on one side and unmodified on the other. Ubiquitination, acetylation and
+  methylation are not interpreted, because a ubiquitin mark usually means degradation rather than
+  activation. A protein regulated another way gets no pathway candidates at all, which is reported
+  rather than left silent.
+- **A physical interaction has no direction.** IntAct and STRING state that two proteins bind, not
+  which switches which on, so every `interaction_partner` row is `unknown` by construction.
+- **`mechanism_class` is a curated grouping, not a biological link.** Two diseases in the same IUIS
+  subcategory with the same mechanism class share a required _action_, not a pathway. No record
+  connects the two proteins, every row says so, and the bridge never returns a match.
+- **`structural_analogue` is not running on measured fold similarity in this deployment.** It falls
+  back to shared chemistry inside existing ChEMBL records, marks itself partial with the reason, and
+  nothing measures the molecule against the subject's own protein. A shared-ligand inference is
+  weaker than a structural alignment.
+- **Caps can hide a molecule.** Per-bridge row caps are fixed and documented. A molecule whose
+  record sits on a protein family rather than a single protein can fall outside a cap and be absent
+  from the list without being ruled out.
+
+### What the controls do and do not show
+
+Three stored controls — a held-out positive on APDS, a negative on BTK, an upstream positive on
+STAT1 — all pass. They show the rule behaving correctly on three subjects against the records held
+on one day. They are **not** a measure of how often the engine is right, they test rank position
+rather than hypothesis quality, and no test suite guards them: a source changing its data could move
+the ranks without anything failing loudly.
+
 ## Literature
 
 - Search covers the records Europe PMC indexes from PubMed. Preprints and books are left out.

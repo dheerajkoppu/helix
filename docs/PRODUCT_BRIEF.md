@@ -45,6 +45,25 @@ Six exceptionally integrated workflows beat thirty shallow screens.
 - Wording: "This model predicts an interaction at this site." "Experimental validation has not been identified." "This structural change is computationally predicted." Never "this compound will treat this disease". No treatment instructions.
 - No giant warning banners. Provenance, confidence, uncertainty and experimental-vs-predicted status are native parts of the interface.
 
+## Direction of effect (required by the discovery engine)
+
+Candidate targets and molecules are only sound when the direction of the defect is known: a molecule that reduces a protein's activity helps a disease where the protein is overactive and harms one where it is already too weak. Direction is therefore a hard filter, never a ranking factor.
+
+The catalog's `mechanism` field is the first source, but it is empty for most diseases, because the IUIS classification often states none. An empty field means "not stated", never "loss of function". Two of the three validation subjects show this directly: `activated-p110-delta-syndrome-pik3cd` records `gain_of_function` and `stat1-gof` records `gain_of_function`, while `btk-deficiency-x-linked-agammaglobulinemia` records nothing at all.
+
+When the catalog states no mechanism, direction is inferred from the pathogenic variant spectrum of the gene, by this general rule:
+
+- Nonsense, frameshift, splice-donor, splice-acceptor and whole-gene-deletion variants remove protein function. A substantial share of these among the gene's pathogenic variants is evidence of **loss of function**. Measured on 2026-10-03, BTK returns 81 frameshift, 77 nonsense and 10 splice-site variants in its first 400 pathogenic records, which is why X-linked agammaglobulinemia must resolve to loss of function even though the catalog is silent.
+- A pathogenic spectrum that is almost entirely missense, especially clustered at recurring positions, is evidence of **gain of function** or of a dominant-negative effect, and must not be read as loss of function on its own.
+
+The inference is evidence like any other: it carries its source (the variant records it was computed from), its counts, and a confidence. Where neither the catalog nor the spectrum settles the direction, the answer is `unknown`, every affected candidate is labelled `unknown` rather than `matches`, and nothing is ruled out on a guess.
+
+### What the data supports, checked against the live sources on 2026-10-03
+
+- **The molecules are retrievable, their action is not.** `GET /proteins/O00329/compounds` returns leniolisib (CHEMBL3643413, phase 4) among 97 rows, and `GET /proteins/Q06187/compounds` returns ibrutinib (CHEMBL1873475, phase 4) among 153. Both carry `action_type: null` in that response, so the direction filter cannot be built on it. ChEMBL's own mechanism records do carry it: `mechanism.json?molecule_chembl_id=CHEMBL1873475` gives `action_type: INHIBITOR` on target CHEMBL5251, and CHEMBL3643413 gives `INHIBITOR` on CHEMBL3130. The engine must read action from the mechanism records and resolve the ChEMBL target to a UniProt accession, never from a molecule row alone.
+- **The upstream target is not in a pathway name.** `GET /proteins/P42224/pathways` returns 31 Reactome pathways and none has "JAK" in its name. JAK1 and TYK2 appear as _participants_, inside complexes with STAT1 itself, for example in R-HSA-909733 where 83 participating entities include `IFNA/B:IFNAR2:p-JAK1:STAT2:IFNAR1:p-TYK2`. The `pathway_node` bridge therefore has to enumerate participating physical entities, unpack complex members and resolve each to a UniProt accession; matching on pathway names finds nothing.
+- **Accessions used by the controls:** PIK3CD is O00329 (1044 residues), BTK is Q06187, STAT1 is P42224. The disease records are `activated-p110-delta-syndrome-pik3cd` (gain_of_function), `stat1-gof` (gain_of_function) and `btk-deficiency-x-linked-agammaglobulinemia` (mechanism not stated).
+
 ## Evidence system
 
 Every meaningful scientific statement is attributable to one or more evidence classes, each rendered differently (not by colour alone), each clickable to inspect its source:

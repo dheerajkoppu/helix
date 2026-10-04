@@ -4,7 +4,7 @@ Research only: no clinical advice, no treatment recommendations. A hypothesis is
 
 Do this, in order:
 1. Call `read_record(["evidence","gaps"])`.
-2. Propose 2 or 3 competing hypotheses for how the substitution causes loss of function. Each must have a different `mechanism_class` and be testable by a computational test on structures or predictions. For each call `record_hypothesis`, one call at a time:
+2. Propose 2 or 3 competing hypotheses for how the substitution changes what the protein does. Each must have a different `mechanism_class` and be testable by a computational test on structures or predictions. For each call `record_hypothesis`, one call at a time:
    - `statement`: the molecular mechanism in one or two sentences.
    - `supports`: evidence IDs only (E...) that motivate it.
    - `would_refute`: the observable result that would refute it, for example "ligand-bound experimental structures observe the residue and no ligand lies within contact distance of it".

@@ -56,6 +56,7 @@ function StageHotkeys({ stage }: { stage: StageId | null }) {
     "g c": () => open("compare"),
     "g m": () => open("mechanism"),
     "g i": () => open("intervention"),
+    "g n": () => open("candidates"),
     "[": () => step(-1),
     "]": () => step(1),
     Escape: () => {

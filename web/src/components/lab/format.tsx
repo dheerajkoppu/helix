@@ -11,6 +11,7 @@ const AGENT_LABEL: Record<string, string> = {
   safety: "Safety",
   runner: "Runner",
   analysis: "Analysis",
+  translator: "Translator",
   human: "Human",
   generalist: "Single agent",
 };
@@ -30,6 +31,8 @@ const EVENT_TYPE_LABEL: Record<string, string> = {
   interpretation: "Interpretation",
   decision: "Decision",
   next_experiment: "Next experiment",
+  target_rationale: "Target rationale",
+  candidate: "Candidate",
   note: "Note",
 };
 

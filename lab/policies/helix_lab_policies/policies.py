@@ -199,7 +199,7 @@ def claims_guard(role: str) -> Evaluator:
         call = _tool_call(event)
         if call is not None:
             tool, arguments = call
-            if not tool.startswith(("record_", "request_approval")):
+            if not tool.startswith(("record_", "request_approval", "propose_candidates")):
                 return None
             text = "\n".join(_strings(arguments))
             problems = claims.check_text(

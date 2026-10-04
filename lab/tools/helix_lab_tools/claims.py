@@ -16,14 +16,48 @@ CLINICAL_PATTERNS = [
     r"\b(start|begin|initiate|switch to|continue|stop)\s+(ivig|scig|immunoglobulin|ibrutinib|therapy|treatment|prophylaxis)\b",
     r"\bdiagnos(e|es|ed|ing)\s+(the|this|a|your)\s+(patient|individual|carrier)\b",
     r"\btherapeutic\s+recommendation",
+    # A candidate is a hypothesis about a molecular action, never a molecule offered for a disease
+    r"\b(use|using|give|giving|try|trying|repurpos\w+|offer\w*)\s+[\w-]+\s+(to treat|for treating|as a treatment|as therapy)\b",
+    r"\b(to treat|for treating|as a treatment for|as therapy for)\s+(this|the|that)\s+(disease|condition|syndrome|deficiency|patients?)\b",
+    r"\b(would|will|should|can|could|may|might)\s+(be\s+)?(effective|efficacious|therapeutic|beneficial|curative)\b",
+    r"\b(mg|mcg|microgram|milligram)s?\b\s*(per|/)\s*(kg|m2|day|dose)\b",
+    r"\b(once|twice|three times)\s+(a\s+)?(daily|day|week)\b",
+    r"\b(first|second)[- ]line\s+(treatment|therapy|agent)\b",
 ]
+
+# Suffixes of international nonproprietary names; a token ending in one reads as a molecule name
+MOLECULE_SUFFIXES = (
+    "nib",
+    "mab",
+    "ciclib",
+    "parib",
+    "sertib",
+    "lisib",
+    "tinib",
+    "afil",
+    "prazole",
+    "olimus",
+    "ximab",
+    "zumab",
+    "umab",
+    "vastatin",
+    "caine",
+    "mycin",
+    "cycline",
+    "tidine",
+    "sartan",
+    "pril",
+)
+_MOLECULE_TOKEN = re.compile(
+    r"\b([A-Za-z][a-z]{2,}(?:" + "|".join(MOLECULE_SUFFIXES) + r"))\b",
+)
 
 NEGATION = re.compile(
     r"\b(no|not|never|without|nor|neither|isn't|aren't|is not|are not|does not|do not|cannot)\b[^.;:]{0,60}$",
     re.IGNORECASE,
 )
 
-CITATION = re.compile(r"\b([EGHTA]\d{1,3})\b")
+CITATION = re.compile(r"\b([EGHTARC]\d{1,3})\b")
 
 # A sentence is treated as a factual statement when it reports a measured or scored value, a database
 # classification, or what a named structure shows
@@ -58,6 +92,13 @@ def clinical_violations(text: str) -> list[str]:
 
 def cited_ids(text: str) -> set[str]:
     return set(CITATION.findall(text))
+
+
+def unknown_molecule_names(text: str, allowed: list[str]) -> list[str]:
+    """Molecule names in the text that no tool returned for this candidate."""
+    permitted = {name.lower() for name in allowed if name}
+    found = {match.lower() for match in _MOLECULE_TOKEN.findall(text)}
+    return sorted(name for name in found if name not in permitted)
 
 
 def uncited_factual_sentences(text: str) -> list[str]:

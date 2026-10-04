@@ -11,6 +11,7 @@ export const LOOP_STEPS = [
   "Experiment",
   "Result",
   "Decision",
+  "Candidates",
 ] as const;
 
 export type LoopStep = (typeof LOOP_STEPS)[number];
@@ -166,6 +167,7 @@ const AGENTS: Record<string, { name: string; role: string }> = {
   safety: { name: "Safety", role: "Checks the plan" },
   runner: { name: "Runner", role: "Runs the test" },
   analysis: { name: "Analysis", role: "Updates the answer" },
+  translator: { name: "Translator", role: "Finds what to aim at" },
   human: { name: "You", role: "Approves the test" },
   generalist: { name: "Single agent", role: "Does every step" },
 };
@@ -187,6 +189,8 @@ export interface AgentCounts {
   /** tests that have finished */
   results?: number;
   changed?: boolean | null;
+  candidates?: number;
+  ruledOut?: number;
 }
 
 /** What an agent did, from counts, never from the agent's own text: "Read 5 papers". */
@@ -220,6 +224,10 @@ export function plainAgentLine(
     case "analysis":
       if (counts.changed === false) return "Kept the answer";
       return counts.changed ? "Changed the answer" : "Updated the answer";
+    case "translator":
+      return counts.candidates
+        ? `Found ${plural(counts.candidates, "candidate")}`
+        : "Looked for candidates";
     case "orchestrator":
       return "Ran the loop";
     case "generalist":
@@ -238,6 +246,8 @@ export interface StepCounts {
   tests?: number;
   finished?: boolean;
   changed?: boolean | null;
+  candidates?: number;
+  ruledOut?: number;
 }
 
 /** The caption under a loop step. */
@@ -265,6 +275,14 @@ export function plainStepCaption(
     case "Decision":
       if (counts.changed == null) return "Deciding";
       return counts.changed ? "Answer changed" : "Answer held";
+    case "Candidates":
+      if (!counts.candidates)
+        return counts.ruledOut
+          ? `None kept, ${counts.ruledOut} ruled out`
+          : "Looking for candidates";
+      return counts.ruledOut
+        ? `${plural(counts.candidates, "candidate")}, ${counts.ruledOut} ruled out`
+        : plural(counts.candidates, "candidate");
   }
 }
 
@@ -315,6 +333,114 @@ export function plainConfidence(plddt: number | null | undefined): string {
 
 export const PREDICTION_CAVEAT = "Computer prediction. Not lab-tested.";
 export const HYPOTHESIS_CAVEAT = "Proposed by the agents. Not proven.";
+export const CANDIDATE_CAVEAT = "A Helix idea. Not a treatment.";
+
+/** Candidates: how a molecule was reached, and whether it pushes the protein the right way. */
+
+const BRIDGES: Record<string, string> = {
+  same_target: "Acts on this same protein",
+  pathway_node: "Acts on a step in the pathway",
+  interaction_partner: "Acts on a partner protein",
+  structural_analogue: "Fits a look-alike pocket",
+  mechanism_class: "Same kind of fault elsewhere",
+};
+
+/** How the molecule was reached, in a few words. */
+export function plainBridge(kind: string | null | undefined): string {
+  if (!kind) return "Link not stated";
+  return BRIDGES[kind] ?? sentenceCase(kind);
+}
+
+const DIRECTIONS: Record<string, string> = {
+  matches: "Pushes the right way",
+  opposes: "Pushes the wrong way",
+  unknown: "Direction unknown",
+};
+
+/** Whether the molecule pushes the protein the way the fault needs. */
+export function plainDirection(verdict: string | null | undefined): string {
+  if (!verdict) return DIRECTIONS.unknown;
+  return DIRECTIONS[verdict] ?? sentenceCase(verdict);
+}
+
+const ACTIONS: Record<string, string> = {
+  inhibit: "Turn it down",
+  block: "Turn it down",
+  antagonise: "Turn it down",
+  reduce: "Turn it down",
+  restore: "Turn it back on",
+  activate: "Turn it up",
+  stabilise: "Help it hold its shape",
+  chaperone: "Help it fold",
+  replace: "Replace it",
+  bypass: "Go around it",
+  block_upstream: "Block the step before it",
+  inhibit_upstream: "Block the step before it",
+  release_brake: "Release the brake on the pathway",
+  disinhibit: "Release the brake on the pathway",
+  read_through: "Read past the early stop",
+  degrade: "Clear it away",
+};
+
+/** What a molecule would have to do to the protein: "Turn it down". */
+export function plainRequiredAction(action: string | null | undefined): string {
+  if (!action) return "Action unknown";
+  return ACTIONS[action.toLowerCase()] ?? sentenceCase(action);
+}
+
+const MECHANISM_DIRECTIONS: Record<string, string> = {
+  gain_of_function: "The protein does too much",
+  loss_of_function: "The protein does too little",
+  dominant_negative: "The broken copy blocks the good one",
+  haploinsufficiency: "One working copy is not enough",
+  neomorph: "The protein does something new",
+  too_much: "The protein does too much",
+  too_little: "The protein does too little",
+  increased_activity: "The protein does too much",
+  decreased_activity: "The protein does too little",
+  increased_function: "The protein does too much",
+  decreased_function: "The protein does too little",
+  no_function: "The protein does nothing at all",
+  altered_function: "The protein works differently",
+  unknown: "Direction unknown",
+};
+
+/** The direction of the fault itself: "The protein does too much". */
+export function plainMechanismDirection(
+  direction: string | null | undefined,
+): string {
+  if (!direction) return "Direction unknown";
+  return (
+    MECHANISM_DIRECTIONS[direction.toLowerCase()] ?? sentenceCase(direction)
+  );
+}
+
+/** The candidates panel of a lab run. */
+export const CANDIDATE_WORDS = {
+  title: "Candidates",
+  whatToAimAt: "What to aim at",
+  molecule: "Molecule",
+  target: "Protein",
+  howWeGotHere: "How we got here",
+  direction: "Direction",
+  ruledOut: "Ruled out",
+  ruledOutLine: "Pushed the protein the wrong way.",
+  onlyIf: "Only if",
+  noCandidates: "No candidate passed the direction check.",
+  notReached: "The agents did not reach this step.",
+  seeAll: "See the full view",
+  phase: "Studied up to",
+  noMolecule: "No molecule found yet",
+  rejectedBySafety: "Rejected in review",
+} as const;
+
+/** "Studied up to phase 4" from a ChEMBL max phase. */
+export function plainPhase(phase: number | null | undefined): string | null {
+  if (phase == null || !Number.isFinite(phase)) return null;
+  if (phase >= 4) return "In use for another disease";
+  if (phase >= 1) return `Studied up to phase ${phase}`;
+  return "Not studied in people";
+}
 
 /** Lab screens: everything below is wording for /lab and a lab run. */
 
@@ -562,9 +688,7 @@ export const LAB_WORDS = {
 
 /** Who ran it: "Team of agents" or "One agent". */
 export function plainRunMode(mode: string | null | undefined): string {
-  return mode === "single_agent_baseline"
-    ? LAB_WORDS.oneAgent
-    : LAB_WORDS.team;
+  return mode === "single_agent_baseline" ? LAB_WORDS.oneAgent : LAB_WORDS.team;
 }
 
 /** "No mutation for BTK yet." */
@@ -609,7 +733,7 @@ const EVIDENCE_KINDS: Record<string, { name: string; meaning: string }> = {
     meaning: PREDICTION_CAVEAT,
   },
   helix_hypothesis: {
-    name: "Agent idea",
+    name: "Helix idea",
     meaning: HYPOTHESIS_CAVEAT,
   },
 };
@@ -630,7 +754,7 @@ export function plainEvidenceSource(
   database: string | null | undefined,
 ): string {
   const name = plainDatabase(database);
-  if (evidenceClass === "helix_hypothesis") return "Agent idea";
+  if (evidenceClass === "helix_hypothesis") return "Helix idea";
   if (evidenceClass === "computational_prediction")
     return name ? `${name} prediction` : "Computer prediction";
   return name || plainEvidenceKind(evidenceClass);
@@ -759,9 +883,10 @@ const STAGES: Record<string, { name: string; needs: string }> = {
   compare: { name: "Compare", needs: "Pick a mutation first." },
   mechanism: { name: "Cause", needs: "Pick a mutation first." },
   intervention: { name: "Options", needs: "Pick a mutation first." },
+  candidates: { name: "Candidates", needs: "Pick a gene first." },
 };
 
-/** The six stages in a word each: Disease, Gene, Protein, Compare, Cause, Options. */
+/** Each stage in a word: Disease, Gene, Protein, Compare, Cause, Options, Candidates. */
 export function plainStage(stage: string): string {
   return STAGES[stage]?.name ?? sentenceCase(stage);
 }
@@ -822,7 +947,10 @@ const IMPACTS: Record<string, string> = {
 /** A predicted impact class in everyday words: "Likely harmful". */
 export function plainImpact(impactClass: string | null | undefined): string {
   if (!impactClass) return "No score";
-  const key = impactClass.trim().toLowerCase().replace(/[\s-]+/g, "_");
+  const key = impactClass
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g, "_");
   return IMPACTS[key] ?? sentenceCase(impactClass);
 }
 
@@ -930,7 +1058,8 @@ const PLAIN_METRICS: Record<string, PlainMetric> = {
   binder_probability: {
     label: "Chance it binds",
     unit: "of 1",
-    meaning: "A computer's guess at whether the molecule sticks to the protein.",
+    meaning:
+      "A computer's guess at whether the molecule sticks to the protein.",
     jargon: /Binder probability/i,
   },
 };
@@ -1109,7 +1238,10 @@ export function plainMutationRow(change: string | null | undefined): string {
   const text = change.replace(/^.*p\./, "").trim();
   const shift = /^([A-Z][a-z]{2}\d+)(?:[A-Z][a-z]{2})?fs/.exec(text);
   if (shift) return `Scrambled from ${shift[1]}`;
-  const range = /^([A-Z][a-z]{2}\d+)(?:_([A-Z][a-z]{2}\d+))?(delins|del|dup|ins)/.exec(text);
+  const range =
+    /^([A-Z][a-z]{2}\d+)(?:_([A-Z][a-z]{2}\d+))?(delins|del|dup|ins)/.exec(
+      text,
+    );
   if (range) {
     const spot = range[2] ? `${range[1]} to ${range[2]}` : range[1];
     if (range[3] === "del") return `${spot} removed`;
@@ -1141,7 +1273,9 @@ const CHANGE_KINDS: Record<string, string> = {
 };
 
 /** What kind of change a mutation is, from its consequence term: "One amino acid swapped". */
-export function plainChangeKind(consequence: string | null | undefined): string {
+export function plainChangeKind(
+  consequence: string | null | undefined,
+): string {
   if (!consequence) return "Mutation";
   const key = consequence.toLowerCase().replace(/_variant$/, "");
   return CHANGE_KINDS[key] ?? sentenceCase(key);
@@ -1158,7 +1292,9 @@ const INHERITANCE: Record<string, string> = {
 };
 
 /** How a disease is inherited, in words. Null when the code is not one we know. */
-export function plainInheritance(code: string | null | undefined): string | null {
+export function plainInheritance(
+  code: string | null | undefined,
+): string | null {
   if (!code) return null;
   return INHERITANCE[code.trim().toUpperCase()] ?? null;
 }
@@ -1170,7 +1306,9 @@ export function plainDiseaseLine(facts: {
   immune?: boolean;
 }): string {
   const kind = facts.immune ? "immune disease" : "disease";
-  const lead = facts.inherited ? `An inherited ${kind}` : `A${facts.immune ? "n" : ""} ${kind}`;
+  const lead = facts.inherited
+    ? `An inherited ${kind}`
+    : `A${facts.immune ? "n" : ""} ${kind}`;
   return facts.gene
     ? `${lead} caused by mutations in the ${facts.gene} gene.`
     : `${lead}. No gene named yet.`;
@@ -1319,8 +1457,8 @@ export function plainDrugStage(
 const CONCENTRATIONS: Record<string, string> = {
   nM: "nanomolar",
   uM: "micromolar",
-  "µM": "micromolar",
-  "μM": "micromolar",
+  µM: "micromolar",
+  μM: "micromolar",
   mM: "millimolar",
   pM: "picomolar",
 };
@@ -1346,6 +1484,9 @@ export const DISEASE_WORDS = {
   protein: "Protein",
   inheritance: "Inherited",
   inheritanceUnknown: "Not stated",
+  /** the direction of the fault, which decides what a drug would have to do */
+  fault: "What goes wrong",
+  faultUnknown: "Not stated in the catalog",
   harmful: "Harmful mutations found",
   labStructures: "Structures solved in the lab",
   symptoms: "Symptoms",
@@ -1553,7 +1694,9 @@ export const OPTIONS_WORDS = {
 } as const;
 
 /** A trial stage label from a source, in everyday words: "Phase 3" reads "Late trials". */
-export function plainStageLabel(label: string | null | undefined): string | null {
+export function plainStageLabel(
+  label: string | null | undefined,
+): string | null {
   if (!label) return null;
   const phase = /phase\s*(\d)/i.exec(label);
   if (phase) return plainDrugStage(Number(phase[1]));
@@ -1631,6 +1774,18 @@ const DATABASES: Record<string, string> = {
   chembl: "ChEMBL",
   foldx: "FoldX",
   p2rank: "P2Rank",
+  prankweb: "PrankWeb",
+  foldseek: "Foldseek",
+  unichem: "UniChem",
+  reactome: "Reactome",
+  intact: "IntAct",
+  string: "STRING",
+  "string db": "STRING",
+  opentargets: "Open Targets",
+  "open targets": "Open Targets",
+  "open targets platform": "Open Targets",
+  ensembl: "Ensembl",
+  mondo: "MONDO",
   iuis: "IUIS",
   helix: "Helix",
 };
@@ -1930,4 +2085,359 @@ export const EXPLORE_WORDS = {
   predicted: "Predicted structure",
   harmful: "Harmful mutations",
   openGene: "Open this gene",
+} as const;
+
+/**
+ * The Candidates screen. It builds on the candidate wording already above — `plainBridge`,
+ * `plainDirection`, `plainRequiredAction`, `plainMechanismDirection`, `plainPhase` and
+ * `CANDIDATE_WORDS` — and adds only what a full screen needs on top of the lab's panel.
+ */
+
+const normalizeKey = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g, "_");
+
+const BRIDGE_MEANINGS: Record<string, string> = {
+  same_target: "A molecule that already acts on this very protein.",
+  pathway_node: "A protein just before or after this one in the same pathway.",
+  interaction_partner: "A protein this one physically holds on to.",
+  structural_analogue:
+    "Another protein with a pocket of a similar shape, and a molecule that fits it.",
+  mechanism_class:
+    "Another disease where the protein breaks the same way, with a drug class already in use.",
+};
+
+/** Why that kind of link counts as a link, in one sentence. */
+export function plainBridgeMeaning(kind: string | null | undefined): string {
+  if (!kind) return "";
+  return BRIDGE_MEANINGS[normalizeKey(kind)] ?? "";
+}
+
+const lowerFirst = (text: string) =>
+  text.charAt(0).toLowerCase() + text.slice(1);
+
+/** Every required action as one phrase, mid-sentence: "turn it down, or go around it". */
+export function plainRequiredActions(
+  actions: readonly string[] | null | undefined,
+): string | null {
+  // two action keys can share one plain phrase ("inhibit" and "antagonise" both turn it down)
+  const phrases = [
+    ...new Set(
+      (actions ?? [])
+        .map((action) => plainRequiredAction(action))
+        .filter((phrase) => phrase !== "Action unknown")
+        .map(lowerFirst),
+    ),
+  ];
+  if (phrases.length === 0) return null;
+  if (phrases.length === 1) return phrases[0];
+  return `${phrases.slice(0, -1).join(", ")}, or ${phrases[phrases.length - 1]}`;
+}
+
+/**
+ * The one line the Candidates screen opens on: "The protein does too much, so a drug would need to
+ * turn it down." Says the direction is unknown rather than guessing one.
+ */
+export function plainDirectionLine(facts: {
+  mechanismClass?: string | null;
+  direction?: string | null;
+  actions?: readonly string[] | null;
+}): string {
+  const fault = facts.mechanismClass ?? facts.direction;
+  const stated = fault ? plainMechanismDirection(fault) : null;
+  const known = stated !== null && stated !== "Direction unknown";
+  const action = plainRequiredActions(facts.actions);
+  if (!known)
+    return action
+      ? `What goes wrong here is not recorded, so Helix only looked for molecules that would ${action}.`
+      : "What goes wrong here is not recorded, so Helix cannot say what a drug would need to do.";
+  if (!action)
+    return `${stated}. What a drug would need to do is not recorded.`;
+  return `${stated}, so a drug would need to ${action}.`;
+}
+
+const MOLECULE_ACTIONS: Record<string, string> = {
+  inhibitor: "slows it down",
+  antagonist: "blocks its signal",
+  agonist: "switches it on",
+  partial_agonist: "switches it on a little",
+  inverse_agonist: "turns it below normal",
+  positive_allosteric_modulator: "boosts it",
+  negative_allosteric_modulator: "damps it down",
+  allosteric_antagonist: "blocks it from the side",
+  blocker: "blocks it",
+  opener: "opens it",
+  activator: "switches it on",
+  degrader: "clears it away",
+  modulator: "changes how it works",
+  stabiliser: "holds it together",
+  stabilizer: "holds it together",
+  disrupting_agent: "breaks it apart",
+  substrate: "is used up by it",
+  binding_agent: "binds it",
+  other: "acts on it",
+};
+
+const MOLECULE_ACTIONS_ON: Record<string, string> = {
+  inhibitor: "slows TARGET down",
+  antagonist: "blocks TARGET's signal",
+  agonist: "switches TARGET on",
+  partial_agonist: "switches TARGET on a little",
+  inverse_agonist: "turns TARGET below normal",
+  positive_allosteric_modulator: "boosts TARGET",
+  negative_allosteric_modulator: "damps TARGET down",
+  allosteric_antagonist: "blocks TARGET from the side",
+  blocker: "blocks TARGET",
+  opener: "opens TARGET",
+  activator: "switches TARGET on",
+  degrader: "clears TARGET away",
+  modulator: "changes how TARGET works",
+  stabiliser: "holds TARGET together",
+  stabilizer: "holds TARGET together",
+  disrupting_agent: "breaks TARGET apart",
+  substrate: "is used up by TARGET",
+  binding_agent: "binds TARGET",
+  other: "acts on TARGET",
+};
+
+/**
+ * Disease names as a source writes them, in everyday words. A candidate row says which other
+ * disease a molecule came from, and a drug database writes that in clinical terms. The term the
+ * source used stays on the chain step beside its record; this is only the wording of the row.
+ */
+const INDICATIONS: Record<string, string> = {
+  neoplasm: "a tumour",
+  "lymphoid neoplasm": "a tumour of immune cells",
+  "neoplasm of mature b-cells": "a tumour of B cells",
+  "hematologic neoplasm": "a blood cancer",
+  "haematologic neoplasm": "a blood cancer",
+  "head and neck squamous cell carcinoma": "a head and neck cancer",
+  "chronic obstructive pulmonary disease": "a long-term lung disease",
+  "inborn error of immunity": "an inherited immune disease",
+  "chronic lymphocytic leukemia": "a slow-growing blood cancer",
+  "chronic lymphocytic leukaemia": "a slow-growing blood cancer",
+  "acute lymphoblastic leukemia": "a fast-growing blood cancer",
+  "rheumatoid arthritis": "a joint disease where the immune system attacks",
+  "whim (warts, hypogammaglobulinemia, infections, myelokathexis) syndrome":
+    "WHIM syndrome, an inherited immune disease",
+  "graft versus host disease": "an immune reaction after a transplant",
+  "atopic dermatitis": "a long-term skin rash",
+};
+
+/**
+ * A disease name fit to print as a title. The catalog shortens the direction of the fault to a
+ * code ("STAT1 GOF"), and a code is never visible text, so it is written out.
+ */
+export function plainDiseaseName(
+  name: string | null | undefined,
+): string | null {
+  const text = name?.trim();
+  if (!text) return null;
+  return text
+    .replace(/\bGOF\b/g, "gain of function")
+    .replace(/\bLOF\b/g, "loss of function");
+}
+
+/** "neoplasm" reads "a tumour"; a name already in everyday words is left alone. */
+export function plainIndication(
+  name: string | null | undefined,
+): string | null {
+  const text = name?.trim();
+  if (!text) return null;
+  const mapped = INDICATIONS[text.toLowerCase()];
+  if (mapped) return mapped;
+  // a gain-of-function disease is written as a gene plus a code; the product has words for that
+  const gainOfFunction = /^([A-Z0-9]{2,8})\s+GOF$/.exec(text);
+  if (gainOfFunction)
+    return `a disease where ${gainOfFunction[1]} does too much`;
+  const lossOfFunction = /^([A-Z0-9]{2,8})\s+LOF$/.exec(text);
+  if (lossOfFunction)
+    return `a disease where ${lossOfFunction[1]} does too little`;
+  if (/\bneoplasms?\b/i.test(text))
+    return text.replace(/\bneoplasms?\b/gi, "tumours");
+  if (/\bcarcinoma\b/i.test(text))
+    return text.replace(/\bcarcinoma\b/gi, "cancer");
+  return plainDiseaseName(text);
+}
+
+/**
+ * A sentence an agent wrote, fit for simple mode. The record cross-references its own hypotheses
+ * and tests by code ("(H1)", "T2"), and a code is never visible text; Advanced keeps the sentence
+ * whole. Nothing else about the sentence is changed.
+ */
+export function plainRunSentence(
+  text: string | null | undefined,
+  advanced: boolean,
+): string | null {
+  const sentence = text?.trim();
+  if (!sentence) return null;
+  if (advanced) return sentence;
+  return sentence
+    .replace(/\s*[([][HTE]\d+(?:\s*,\s*[HTE]\d+)*[)\]]/g, "")
+    .replace(/\s+([.,;])/g, "$1")
+    .trim();
+}
+
+/** The same action naming the protein: "slows BTK down". */
+export function plainMoleculeActionOn(
+  actionType: string | null | undefined,
+  target: string,
+): string {
+  const template =
+    (actionType ? MOLECULE_ACTIONS_ON[normalizeKey(actionType)] : null) ??
+    "acts on TARGET";
+  return template.replace("TARGET", target);
+}
+
+/** What a recorded action type does, in everyday words: "slows it down". */
+export function plainMoleculeAction(
+  actionType: string | null | undefined,
+): string {
+  if (!actionType) return "acts on it";
+  return (
+    MOLECULE_ACTIONS[normalizeKey(actionType)] ??
+    normalizeKey(actionType).replace(/_/g, " ")
+  );
+}
+
+/**
+ * Why a molecule was ruled out: what it does, what this disease needs, and the conclusion. The
+ * conclusion is the part a first-time reader cannot be left to infer, so it is always written out:
+ * "Ibrutinib slows BTK down. In this disease the protein already does too little, so this would
+ * push it further the wrong way."
+ */
+export function plainRuledOutReason(facts: {
+  molecule?: string | null;
+  target?: string | null;
+  actionType?: string | null;
+  fault?: string | null;
+}): string {
+  const molecule = facts.molecule ?? "This molecule";
+  const does = facts.target
+    ? plainMoleculeActionOn(facts.actionType, facts.target)
+    : plainMoleculeAction(facts.actionType);
+  const fault = facts.fault ? plainMechanismDirection(facts.fault) : null;
+  const here =
+    fault && fault !== "Direction unknown"
+      ? `In this disease ${lowerFirst(fault)} already, so this would push it further the wrong way.`
+      : "That is the opposite of what this disease needs, so it is ruled out.";
+  return `${molecule} ${does}. ${here}`;
+}
+
+const SIMILARITY_METRICS: Record<string, string> = {
+  foldseek_tm_score: "Fold match",
+  tm_score: "Fold match",
+  pocket_rmsd: "Pocket shape difference",
+  pocket_similarity: "Pocket similarity",
+  shared_ligands: "Molecules both pockets bind",
+  shared_residues: "Amino acids in common",
+  sequence_identity: "Sequence in common",
+  e_value: "Chance of a coincidence",
+};
+
+/** A similarity measure by name: "foldseek_tm_score" reads "Fold match". */
+export function plainSimilarityMetric(name: string): string {
+  return SIMILARITY_METRICS[normalizeKey(name)] ?? sentenceCase(name);
+}
+
+/** "3 candidates" */
+export function plainCandidateCount(count: number): string {
+  return plural(count, "candidate");
+}
+
+/** "1 ruled out" */
+export function plainRuledOutCount(count: number): string {
+  return `${count} ruled out`;
+}
+
+/** A measured binding strength with its unit: "IC50 11 nM, from 7 lab tests". */
+export function plainAffinity(affinity: {
+  type?: string | null;
+  value?: number | string | null;
+  units?: string | null;
+  median_pchembl?: number | null;
+  standard_types?: string[] | null;
+  assay_count?: number | null;
+  activity_count?: number | null;
+}): string | null {
+  const count = affinity.assay_count ?? affinity.activity_count ?? null;
+  const tests = count ? plainLabTests(count) : null;
+  const head =
+    affinity.value !== null && affinity.value !== undefined
+      ? [affinity.type, affinity.value, affinity.units]
+          .filter((part) => part !== null && part !== undefined && part !== "")
+          .join(" ")
+      : null;
+  if (head) return tests ? `${head}, from ${tests}` : head;
+  // pChEMBL is a log scale, so the plain reading is the count of measurements
+  if (tests) return `Measured in ${tests}`;
+  return null;
+}
+
+/** The same measurement with its numbers, for Advanced: "pChEMBL 8.6, IC50, 5 lab tests". */
+export function plainAffinityDetail(affinity: {
+  median_pchembl?: number | null;
+  standard_types?: string[] | null;
+  assay_count?: number | null;
+  activity_count?: number | null;
+}): string | null {
+  const parts: string[] = [];
+  if (affinity.median_pchembl != null)
+    parts.push(`pChEMBL ${affinity.median_pchembl}`);
+  if (affinity.standard_types?.length)
+    parts.push(affinity.standard_types.join(", "));
+  const count = affinity.assay_count ?? affinity.activity_count ?? null;
+  if (count) parts.push(plainLabTests(count));
+  return parts.length ? parts.join(" · ") : null;
+}
+
+/** The Candidates screen, on top of CANDIDATE_WORDS. */
+export const DISCOVERY_WORDS = {
+  title: CANDIDATE_WORDS.title,
+  rule: "The rule behind this",
+  list: CANDIDATE_WORDS.title,
+  aimsAt: "Aims at",
+  noMolecule: CANDIDATE_WORDS.noMolecule,
+  targetOnly: "No molecule has been recorded for it yet.",
+  chain: CANDIDATE_WORDS.howWeGotHere,
+  check: CANDIDATE_WORDS.direction,
+  needed: "Needed",
+  molecule: "This molecule",
+  caveats: "Why this might be wrong",
+  pockets: "The two pockets",
+  sharedResidues: "Shared amino acids",
+  pocketResidues: "Amino acids lining it",
+  ruledOut: CANDIDATE_WORDS.ruledOut,
+  ruledOutLine: CANDIDATE_WORDS.ruledOutLine,
+  hypothesisLine: CANDIDATE_CAVEAT,
+  testLine:
+    "To test one: check the molecule binds this protein, then check it corrects the fault in cells.",
+  heldOut: "Held-out test",
+  heldOutLine:
+    "The known link for this disease was hidden, so anything found here came another way.",
+  withheld: "Links hidden for this run",
+  sources: "Sources",
+  limits: "Limits",
+  notReady: "Candidates are not available yet",
+  notReadyWhy:
+    "The candidate search is not answering. Nothing is shown rather than a guess.",
+  empty: CANDIDATE_WORDS.noCandidates,
+  emptyWhy: "Nothing passed the direction check for this protein.",
+  identifiers: "Codes",
+  strength: "Measured strength",
+  close: "Close",
+  loading: "Looking for candidate targets and molecules. Can take a minute.",
+  evidenceList: "Every record behind this",
+  pocket: "The pocket",
+  pocketNote: "About this pocket",
+  ranking: "How the order was decided",
+  showAll: "Show every candidate",
+  showAllRuledOut: "Show every ruled-out molecule",
+  whyWrong: "The full reason",
+  showFewer: "Show the top ones only",
+  unknownDirection: "Direction unknown",
+  unknownDirectionWhy:
+    "Ranked below the ones that match, because it is not clear which way this pushes.",
 } as const;

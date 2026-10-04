@@ -15,6 +15,7 @@ import { ExternalLink } from "@/components/data/external-link";
 import { KeyHint } from "@/components/data/key-hint";
 import { MonoId } from "@/components/data/mono-id";
 import { SectionHeader } from "@/components/data/section-header";
+import { CandidatesLink } from "@/components/discovery/candidates-link";
 import { EvidencePopover } from "@/components/evidence/evidence-popover";
 import { SourceStatusList } from "@/components/evidence/source-status-list";
 import { LiteraturePanel } from "@/components/literature/literature-panel";
@@ -521,6 +522,9 @@ export function DiseaseWorkspace({ diseaseId }: DiseaseWorkspaceProps) {
     <>
       {disease ? (
         <SubjectBarActions>
+          {gene?.symbol ? (
+            <CandidatesLink gene={gene.symbol} diseaseId={disease.id} />
+          ) : null}
           <AddToProjectButton
             size="sm"
             variant="ghost"
@@ -619,169 +623,175 @@ export function DiseaseWorkspace({ diseaseId }: DiseaseWorkspaceProps) {
           }
         />
       ) : (
-      <WorkspaceZones
-        layoutId="disease"
-        ledgerLabel="Phenotypes"
-        inspectorLabel="Record"
-        ledger={
-          <Zone
-            zone="ledger"
-            title="Phenotypes"
-            count={disease ? phenotypes.length : null}
-            scroll={false}
-            footer={
-              <>
-                <span>Frequency as each source reports it</span>
-                <KeyHint keys="enter" label="Inspect" />
-              </>
-            }
-          >
-            {failure ? (
-              <EmptyState title="No phenotypes loaded" />
-            ) : (
-              <DataTable
-                label={`Phenotypes of ${disease?.name ?? diseaseId}`}
-                columns={PHENOTYPE_COLUMNS}
-                data={phenotypes}
-                loading={query.isPending}
-                getRowId={(row) => row.hpo_id}
-                selectedRowId={phenotype?.hpo_id ?? null}
-                onRowSelect={(row) => {
-                  setParam(
-                    "hp",
-                    row.hpo_id === phenotypeId ? null : row.hpo_id,
-                  );
-                  setParam("panel", null);
-                }}
-                defaultSort={{ id: "frequency", desc: true }}
-                groupBy={frequencyGroup}
-                groupOrder={groupOrder}
-                empty={
-                  <EmptyState
-                    title="No annotated phenotypes"
-                    description={
-                      disease?.xrefs.length
-                        ? "Neither source lists a phenotype for the mapped disorder."
-                        : "Phenotypes are looked up by the mapped Orphanet or OMIM identifier, and this disease has none."
-                    }
-                    searched={[
-                      "Orphadata phenotypes (product 4)",
-                      "HPO annotations",
-                    ]}
-                  />
-                }
-              />
-            )}
-          </Zone>
-        }
-        instrument={
-          <Zone
-            zone="instrument"
-            title="Disease"
-            detail={
-              disease?.category ? (
-                <span className="truncate text-2xs text-muted-foreground">
-                  {disease.category.table !== null
-                    ? `IUIS table ${disease.category.table} · `
-                    : ""}
-                  {disease.category.name}
-                </span>
-              ) : null
-            }
-            actions={
-              <>
-                {!advanced && details ? (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setDetails(false)}
-                  >
-                    {DISEASE_WORDS.summary}
-                  </Button>
-                ) : null}
-                {gene ? (
-                  <ButtonLink
-                    href={stageHref(routes.gene(gene.symbol))}
-                    variant="default"
-                    size="sm"
-                  >
-                    {gene.symbol} gene and variants
-                    <ArrowRightIcon data-icon="inline-end" />
-                  </ButtonLink>
-                ) : null}
-              </>
-            }
-            footer={
-              gene ? (
+        <WorkspaceZones
+          layoutId="disease"
+          ledgerLabel="Phenotypes"
+          inspectorLabel="Record"
+          ledger={
+            <Zone
+              zone="ledger"
+              title="Phenotypes"
+              count={disease ? phenotypes.length : null}
+              scroll={false}
+              footer={
                 <>
-                  <KeyHint keys="]" label={`Next stage: ${gene.symbol} gene`} />
-                  <span>Nodes in the diagram open their stage</span>
+                  <span>Frequency as each source reports it</span>
+                  <KeyHint keys="enter" label="Inspect" />
                 </>
-              ) : disease ? (
-                <span>
-                  No gene is assigned, so the later stages have nothing to open
-                </span>
-              ) : null
-            }
-          >
-            {failure ??
-              (disease ? (
-                <DiseaseRecord disease={disease} stageHref={stageHref} />
+              }
+            >
+              {failure ? (
+                <EmptyState title="No phenotypes loaded" />
               ) : (
-                <RowsSkeleton rows={10} />
-              ))}
-          </Zone>
-        }
-        inspector={
-          <Zone
-            zone="inspector"
-            title={
-              panel === "literature"
-                ? "Literature"
-                : phenotype
-                  ? (phenotype.label ?? phenotype.hpo_id)
-                  : "Record"
-            }
-            scroll={panel !== "literature"}
-            toolbar={
-              <ToggleGroup
-                aria-label="Inspector content"
-                size="sm"
-                variant="outline"
-                spacing={0}
-                value={[panel]}
-                onValueChange={(value) =>
-                  value.length
-                    ? setParam(
-                        "panel",
-                        value[0] === "literature" ? "literature" : null,
-                      )
-                    : null
-                }
-              >
-                <ToggleGroupItem value="record">Record</ToggleGroupItem>
-                <ToggleGroupItem value="literature">Literature</ToggleGroupItem>
-              </ToggleGroup>
-            }
-          >
-            {failure ? (
-              <EmptyState title="No record loaded" />
-            ) : !disease ? (
-              <RowsSkeleton rows={8} />
-            ) : panel === "literature" ? (
-              <LiteraturePanel
-                context={{ disease: disease.id, gene: gene?.symbol }}
-              />
-            ) : (
-              <RecordInspector
-                disease={disease}
-                phenotype={phenotype}
-                onClearPhenotype={() => setParam("hp", null)}
-              />
-            )}
-          </Zone>
-        }
-      />
+                <DataTable
+                  label={`Phenotypes of ${disease?.name ?? diseaseId}`}
+                  columns={PHENOTYPE_COLUMNS}
+                  data={phenotypes}
+                  loading={query.isPending}
+                  getRowId={(row) => row.hpo_id}
+                  selectedRowId={phenotype?.hpo_id ?? null}
+                  onRowSelect={(row) => {
+                    setParam(
+                      "hp",
+                      row.hpo_id === phenotypeId ? null : row.hpo_id,
+                    );
+                    setParam("panel", null);
+                  }}
+                  defaultSort={{ id: "frequency", desc: true }}
+                  groupBy={frequencyGroup}
+                  groupOrder={groupOrder}
+                  empty={
+                    <EmptyState
+                      title="No annotated phenotypes"
+                      description={
+                        disease?.xrefs.length
+                          ? "Neither source lists a phenotype for the mapped disorder."
+                          : "Phenotypes are looked up by the mapped Orphanet or OMIM identifier, and this disease has none."
+                      }
+                      searched={[
+                        "Orphadata phenotypes (product 4)",
+                        "HPO annotations",
+                      ]}
+                    />
+                  }
+                />
+              )}
+            </Zone>
+          }
+          instrument={
+            <Zone
+              zone="instrument"
+              title="Disease"
+              detail={
+                disease?.category ? (
+                  <span className="truncate text-2xs text-muted-foreground">
+                    {disease.category.table !== null
+                      ? `IUIS table ${disease.category.table} · `
+                      : ""}
+                    {disease.category.name}
+                  </span>
+                ) : null
+              }
+              actions={
+                <>
+                  {!advanced && details ? (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setDetails(false)}
+                    >
+                      {DISEASE_WORDS.summary}
+                    </Button>
+                  ) : null}
+                  {gene ? (
+                    <ButtonLink
+                      href={stageHref(routes.gene(gene.symbol))}
+                      variant="default"
+                      size="sm"
+                    >
+                      {gene.symbol} gene and variants
+                      <ArrowRightIcon data-icon="inline-end" />
+                    </ButtonLink>
+                  ) : null}
+                </>
+              }
+              footer={
+                gene ? (
+                  <>
+                    <KeyHint
+                      keys="]"
+                      label={`Next stage: ${gene.symbol} gene`}
+                    />
+                    <span>Nodes in the diagram open their stage</span>
+                  </>
+                ) : disease ? (
+                  <span>
+                    No gene is assigned, so the later stages have nothing to
+                    open
+                  </span>
+                ) : null
+              }
+            >
+              {failure ??
+                (disease ? (
+                  <DiseaseRecord disease={disease} stageHref={stageHref} />
+                ) : (
+                  <RowsSkeleton rows={10} />
+                ))}
+            </Zone>
+          }
+          inspector={
+            <Zone
+              zone="inspector"
+              title={
+                panel === "literature"
+                  ? "Literature"
+                  : phenotype
+                    ? (phenotype.label ?? phenotype.hpo_id)
+                    : "Record"
+              }
+              scroll={panel !== "literature"}
+              toolbar={
+                <ToggleGroup
+                  aria-label="Inspector content"
+                  size="sm"
+                  variant="outline"
+                  spacing={0}
+                  value={[panel]}
+                  onValueChange={(value) =>
+                    value.length
+                      ? setParam(
+                          "panel",
+                          value[0] === "literature" ? "literature" : null,
+                        )
+                      : null
+                  }
+                >
+                  <ToggleGroupItem value="record">Record</ToggleGroupItem>
+                  <ToggleGroupItem value="literature">
+                    Literature
+                  </ToggleGroupItem>
+                </ToggleGroup>
+              }
+            >
+              {failure ? (
+                <EmptyState title="No record loaded" />
+              ) : !disease ? (
+                <RowsSkeleton rows={8} />
+              ) : panel === "literature" ? (
+                <LiteraturePanel
+                  context={{ disease: disease.id, gene: gene?.symbol }}
+                />
+              ) : (
+                <RecordInspector
+                  disease={disease}
+                  phenotype={phenotype}
+                  onClearPhenotype={() => setParam("hp", null)}
+                />
+              )}
+            </Zone>
+          }
+        />
       )}
     </>
   );

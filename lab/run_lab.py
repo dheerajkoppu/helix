@@ -27,7 +27,7 @@ sys.path.insert(0, str(LAB / "tools"))
 
 import httpx  # noqa: E402
 
-from helix_lab_tools import budget, record, registry  # noqa: E402
+from helix_lab_tools import budget, candidates, record, registry  # noqa: E402
 
 RUNS = LAB / "runs"
 BUNDLES = {
@@ -37,8 +37,8 @@ BUNDLES = {
 HARNESS = "claude-sdk"
 QUESTION = (
     "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains "
-    "the loss of function, and does a targeted computational test change the conclusion that the starting "
-    "evidence suggested?"
+    "its effect on the protein, does a targeted computational test change the conclusion that the starting "
+    "evidence suggested, and what could a drug act on if that mechanism is right?"
 )
 # Markers of the terminal session that started the launcher; the agents must not inherit them
 SESSION_MARKERS = (
@@ -123,7 +123,7 @@ def build_prompt(objective: str, subject: dict[str, Any], limits: dict[str, Any]
         f"Subject line: variant_id={subject['variant_id']} gene={subject['gene']} accession={subject['accession']} "
         f"position={subject['position']} reference={subject['reference_residue']} alternate={subject['alternate_residue']}\n"
         f"Budget for the whole run: {limits['max_tool_calls']} lab tool calls and {limits['max_compute_seconds']} compute seconds.\n"
-        "Run the discovery loop to the final report."
+        "Run the discovery loop to the final report. The loop ends on candidates, not on the decision."
     )
 
 
@@ -170,6 +170,16 @@ def describe(event: dict[str, Any]) -> str:
         text = f"{payload['favoured_before']} -> {payload['favoured_after']} (changed: {payload['changed']})"
     elif kind == "next_experiment":
         text = f"{payload['kind']}: {payload['description']}"
+    elif kind == "target_rationale":
+        text = (
+            f"{payload['id']} direction {payload.get('direction')} -> "
+            f"{', '.join(payload.get('required_actions') or [])}: {payload.get('what_to_act_on', '')}"
+        )
+    elif kind == "candidate":
+        molecule = (payload.get("molecule") or {}).get("name") or "no molecule"
+        target = (payload.get("target") or {}).get("gene_symbol") or ""
+        bridge = (payload.get("bridge") or {}).get("kind") or ""
+        text = f"{payload['id']} {molecule} on {target} via {bridge} ({payload.get('label')})"
     elif kind == "note":
         text = f"{payload.get('kind')}: {str(payload.get('text') or payload.get('reason') or payload.get('findings') or '')}"
     else:
@@ -203,6 +213,7 @@ def measure(run_directory: Path, events: list[dict[str, Any]]) -> tuple[dict[str
         "tool_calls_by_agent": spent.get("tool_calls_by_agent", {}),
         "policy_denials": len(record.notes_of_kind(events, "policy_denial")),
         "reopenings": len(record.notes_of_kind(events, "reopened_assumption")),
+        **candidates.candidate_metrics(events, run_directory),
     }
     last = decisions[-1]["payload"] if decisions else None
     outcome = {
@@ -215,6 +226,11 @@ def measure(run_directory: Path, events: list[dict[str, Any]]) -> tuple[dict[str
         "favoured_before_hypothesis": first["payload"]["id"] if first else None,
         "favoured_after_hypothesis": last["favoured_after_hypothesis"] if last else None,
         "decisions": len(decisions),
+        "candidates": [event["payload"]["id"] for event in record.of_type(events, "candidate")],
+        "candidate_molecules": [
+            (event["payload"].get("molecule") or {}).get("name")
+            for event in record.of_type(events, "candidate")
+        ],
     }
     return metrics, outcome
 
@@ -267,8 +283,9 @@ def main() -> None:
     run_directory.mkdir(parents=True, exist_ok=True)
     bundle = BUNDLES[arguments.mode]
     objective = arguments.objective or (
-        f"Find the molecular mechanism that best explains the loss of function of {subject['variant_id']} "
-        f"({subject['gene']}, UniProt {subject['accession']}) and test it with one targeted computational test."
+        f"Find the molecular mechanism that best explains the effect of {subject['variant_id']} "
+        f"({subject['gene']}, UniProt {subject['accession']}), test it with one targeted computational test, "
+        "and end on the candidate targets and molecules that mechanism and its direction point to."
     )
     limits = {
         "max_tool_calls": arguments.max_tool_calls,
@@ -445,7 +462,8 @@ def main() -> None:
             f"run {run_id} {manifest['status']} in {wall_seconds}s: {metrics['tool_calls']} tool calls, "
             f"{metrics['evidence_items']} evidence items from {metrics['distinct_sources']} databases, "
             f"{metrics['tests_considered']} tests considered, favoured {outcome['favoured_before']} -> "
-            f"{outcome['favoured_after']} (changed: {outcome['decision_changed']})",
+            f"{outcome['favoured_after']} (changed: {outcome['decision_changed']}), "
+            f"{metrics['candidates']} candidates, {metrics['ruled_out_by_direction']} ruled out on direction",
             flush=True,
         )
     raise SystemExit(0 if manifest["status"] == "succeeded" else 1)
