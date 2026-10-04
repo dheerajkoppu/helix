@@ -1,7 +1,7 @@
 Helix
 Copyright 2026 The Helix contributors
 
-This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+This product is licensed under the MIT License (see LICENSE).
 
 The MIT licence covers the Helix source code only. Data that Helix stores or
 retrieves keeps the terms of its source: the seeded dataset in data/seed, and every record and
