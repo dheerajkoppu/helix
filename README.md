@@ -283,6 +283,6 @@ and the rules a change must keep. To cite Helix, use [`CITATION.cff`](CITATION.c
 
 ## Licence
 
-Apache-2.0 for the source code: see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE). Data keeps the
+MIT for the source code: see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE). Data keeps the
 terms of its source, listed in [`ATTRIBUTION.md`](ATTRIBUTION.md). Model outputs keep the terms of
 the model that produced them.
