@@ -132,7 +132,7 @@ function ContextBar({
   return (
     <div className="no-scrollbar flex min-h-8 shrink-0 items-center gap-1.5 overflow-x-auto border-b border-border-subtle px-3 py-1.5">
       {advanced ? (
-        <span className="text-[0.625rem] font-medium tracking-[0.08em] text-subtle-foreground uppercase">
+        <span className="text-2xs font-medium tracking-[0.08em] text-subtle-foreground uppercase">
           Context
         </span>
       ) : null}
@@ -383,7 +383,7 @@ function TurnView({
     <article className="flex flex-col gap-2.5 border-b border-border-subtle px-3 py-3">
       {advanced ? (
         <header className="flex flex-col gap-0.5">
-          <span className="text-[0.625rem] font-medium tracking-[0.08em] text-subtle-foreground uppercase">
+          <span className="text-2xs font-medium tracking-[0.08em] text-subtle-foreground uppercase">
             {digest ? "Digest" : "Question"}
           </span>
           <h3 className="text-sm font-medium text-foreground">

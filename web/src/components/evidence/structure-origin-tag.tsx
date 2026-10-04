@@ -102,7 +102,7 @@ export function StructureOriginTag({
         )}
       >
         <StructureOriginGlyph origin={origin} />
-        <span className="font-mono text-[0.625rem] leading-none font-semibold tracking-[0.06em]">
+        <span className="font-mono text-2xs leading-none font-semibold tracking-[0.06em]">
           {meta.tag}
         </span>
       </span>

@@ -607,7 +607,7 @@ function DecisionStep() {
         <span
           data-changed={outcome.changed}
           className={cn(
-            "ml-auto rounded-xs border px-2.5 py-1 text-lg font-medium",
+            "ml-auto rounded-xs border px-2.5 py-1 text-base font-medium",
             outcome.changed
               ? "border-foreground bg-foreground text-background"
               : "border-border-strong text-foreground",

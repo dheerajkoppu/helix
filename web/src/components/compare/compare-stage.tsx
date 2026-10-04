@@ -28,9 +28,9 @@ import { aminoAcidName, routes, toThreeLetter } from "@/lib/ids";
 import { setWorkspaceHover } from "@/lib/state/hover";
 import { startJobWatcher, useJobs, type JobOut } from "@/lib/state/jobs";
 import {
+  COMPARE_EXAMPLES,
   COMPARE_WORDS,
   DETAILS_LABEL,
-  plainChange,
   plainMutationRow,
   plainSpot,
 } from "@/lib/plain-language";
@@ -175,7 +175,9 @@ const COLUMNS: DataTableColumn<ResidueRow>[] = [
   {
     id: "context",
     header: (
-      <span title="Relation to the variant site in the two models">At site</span>
+      <span title="Relation to the variant site in the two models">
+        At site
+      </span>
     ),
     width: "minmax(4.5rem,1fr)",
     accessor: (row) => row.context,
@@ -284,6 +286,32 @@ function NoComparison({
   const { variant, proposed_construct: construct } = plan;
   const runnable = plan.providers.some((provider) => provider.can_run);
   const first = plan.providers.find((provider) => provider.can_run);
+  // Nothing to run and nothing stored: say what a comparison needs and point at one that exists.
+  if (simple && !first && jobs.length === 0)
+    return (
+      <div data-slot="no-comparison" className="mx-auto max-w-xl py-10">
+        <EmptyState
+          size="inline"
+          className="px-4"
+          title={COMPARE_WORDS.none}
+          description={
+            <>
+              {COMPARE_WORDS.needsBothShapes} {COMPARE_WORDS.serviceDown}
+              <br />
+              {COMPARE_WORDS.savedOnes}
+            </>
+          }
+          actions={COMPARE_EXAMPLES.map((example) => (
+            <TextLink
+              key={example.label}
+              href={routes.compare(example.gene, example.change)}
+            >
+              {example.label}
+            </TextLink>
+          ))}
+        />
+      </div>
+    );
   if (simple)
     return (
       <div data-slot="no-comparison" className="mx-auto max-w-xl py-10">
@@ -646,21 +674,21 @@ export function CompareStage({ gene, change }: CompareStageProps) {
     <>
       <SubjectBarActions>
         {simple && result ? null : (
-        <AddToProjectButton
-          size="sm"
-          variant="ghost"
-          label={simple ? undefined : "Add variant"}
-          item={{
-            kind: "variant",
-            ref: variant.variant_id ?? `${gene}-${change}`,
-            label: variantLabel,
-            origin: { route },
-            data: {
-              uniprot_accession: variant.uniprot_accession,
-              position: variant.position,
-            },
-          }}
-        />
+          <AddToProjectButton
+            size="sm"
+            variant="ghost"
+            label={simple ? undefined : "Add variant"}
+            item={{
+              kind: "variant",
+              ref: variant.variant_id ?? `${gene}-${change}`,
+              label: variantLabel,
+              origin: { route },
+              data: {
+                uniprot_accession: variant.uniprot_accession,
+                position: variant.position,
+              },
+            }}
+          />
         )}
         {result ? (
           <AddToProjectButton
@@ -688,40 +716,115 @@ export function CompareStage({ gene, change }: CompareStageProps) {
         ledgerLabel={simple ? "Variant" : "Changed residues"}
         inspectorLabel="Residue"
         ledger={
+          // With no stored comparison the panel would only repeat the instrument: leave it out.
           simple ? (
-            <Zone zone="ledger" title={variant.gene_symbol}>
-              <div className="flex flex-col items-start gap-3 px-4 py-4">
-                <div className="flex flex-col gap-1">
-                  <p
-                    className="text-base font-medium text-foreground"
-                    title={variant.hgvs_p}
-                  >
-                    {plainChange(
-                      aminoAcidName(variant.reference),
-                      aminoAcidName(variant.alternate),
-                      variant.position,
-                    ) ?? plainMutationRow(variant.hgvs_p)}
-                  </p>
+            !summary ? undefined : (
+              <Zone
+                zone="ledger"
+                title={`${variant.gene_symbol} ${plainMutationRow(variant.hgvs_p)}`}
+              >
+                <div className="flex flex-col items-start gap-3 px-4 py-4">
                   {siteDomain ? (
                     <p className="text-xs text-muted-foreground">
                       In the {siteDomain.name} region
                     </p>
                   ) : null}
+                  {/* the inspector owns the detail of the selected mutation; this opens it */}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    data-action="site-details"
+                    onClick={() => {
+                      selectResidue(variant.position);
+                      setSiteDetails(true);
+                    }}
+                  >
+                    {COMPARE_WORDS.aboutMutation}
+                  </Button>
                 </div>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  data-action="site-details"
-                  onClick={() => {
-                    selectResidue(variant.position);
-                    setSiteDetails(true);
-                  }}
-                >
-                  {DETAILS_LABEL}
-                </Button>
-              </div>
-              {!summary ? null : resultQuery.isPending ? (
-                <RowsSkeleton rows={6} />
+                {!summary ? null : resultQuery.isPending ? (
+                  <RowsSkeleton rows={6} />
+                ) : resultQuery.isError || !result ? (
+                  <QueryErrorState
+                    error={resultQuery.error}
+                    subject={`comparison result ${summary.result_id}`}
+                    onRetry={() => void resultQuery.refetch()}
+                  />
+                ) : (
+                  <div className="flex flex-col border-t border-border-subtle py-3">
+                    <span className="flex items-center gap-2 px-4 pb-1 text-2xs text-subtle-foreground">
+                      {COMPARE_WORDS.movedMost}
+                      <ClaimLabel
+                        evidenceClass="computational_prediction"
+                        className="sr-only"
+                      />
+                    </span>
+                    <ul>
+                      {topShifts.map((row) => (
+                        <li key={row.id}>
+                          <button
+                            type="button"
+                            aria-pressed={position === row.position}
+                            onClick={() => selectResidue(row.position)}
+                            onMouseEnter={() =>
+                              accession
+                                ? setWorkspaceHover({
+                                    accession,
+                                    position: row.position,
+                                    origin: "ledger",
+                                  })
+                                : undefined
+                            }
+                            onMouseLeave={() => setWorkspaceHover(null)}
+                            className="flex h-8 w-full cursor-pointer items-center gap-2 px-4 text-left text-sm outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset aria-pressed:bg-active"
+                          >
+                            <span className="min-w-0 flex-1 truncate text-foreground">
+                              {plainSpot(
+                                sequence?.[row.position - 1],
+                                row.position,
+                              )}
+                            </span>
+                            <span
+                              className="tabular shrink-0 font-mono text-xs text-muted-foreground"
+                              title={COMPARE_WORDS.angstrom}
+                            >
+                              {formatAngstrom(row.displacement ?? 0)}
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                    <JobLines jobs={jobs} />
+                  </div>
+                )}
+              </Zone>
+            )
+          ) : (
+            <Zone
+              zone="ledger"
+              title="Changed residues"
+              count={result ? compared : null}
+              scroll={false}
+              actions={
+                result && canRunInference ? (
+                  <RunJobButton
+                    kind={planData.job_kind}
+                    params={{ variant_id: variant.variant_id }}
+                    label="New run"
+                    size="xs"
+                    variant="ghost"
+                  />
+                ) : null
+              }
+              footer={<KeyHint keys="enter" label="Select residue" />}
+            >
+              {!summary ? (
+                <EmptyState
+                  title="No comparison computed"
+                  description="Residues ranked by Cα displacement appear here once a run exists."
+                />
+              ) : resultQuery.isPending ? (
+                <RowsSkeleton rows={8} />
               ) : resultQuery.isError || !result ? (
                 <QueryErrorState
                   error={resultQuery.error}
@@ -729,164 +832,88 @@ export function CompareStage({ gene, change }: CompareStageProps) {
                   onRetry={() => void resultQuery.refetch()}
                 />
               ) : (
-                <div className="flex flex-col border-t border-border-subtle py-3">
-                  <span className="flex items-center gap-2 px-4 pb-1 text-2xs text-subtle-foreground">
-                    {COMPARE_WORDS.movedMost}
-                    <ClaimLabel
-                      evidenceClass="computational_prediction"
-                      className="sr-only"
+                <div className="flex h-full min-h-0 flex-col">
+                  <div className="shrink-0">
+                    <SectionHeader
+                      title="Result"
+                      actions={
+                        <ClaimLabel
+                          evidenceClass="computational_prediction"
+                          className="text-2xs"
+                        />
+                      }
                     />
-                  </span>
-                  <ul>
-                    {topShifts.map((row) => (
-                      <li key={row.id}>
-                        <button
-                          type="button"
-                          aria-pressed={position === row.position}
-                          onClick={() => selectResidue(row.position)}
-                          onMouseEnter={() =>
-                            accession
-                              ? setWorkspaceHover({
-                                  accession,
-                                  position: row.position,
-                                  origin: "ledger",
-                                })
-                              : undefined
-                          }
-                          onMouseLeave={() => setWorkspaceHover(null)}
-                          className="flex h-8 w-full cursor-pointer items-center gap-2 px-4 text-left text-sm outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset aria-pressed:bg-active"
-                        >
-                          <span className="min-w-0 flex-1 truncate text-foreground">
-                            {plainSpot(sequence?.[row.position - 1], row.position)}
-                          </span>
-                          <span
-                            className="tabular shrink-0 font-mono text-xs text-muted-foreground"
-                            title={COMPARE_WORDS.angstrom}
+                    <p className="px-3 pt-1.5 text-2xs leading-4 text-muted-foreground">
+                      {result.label}
+                    </p>
+                    <p className="px-3 pt-1 pb-1.5 text-2xs leading-4 text-subtle-foreground">
+                      Largest Cα displacement{" "}
+                      <span className="tabular font-mono text-foreground">
+                        {formatAngstrom(largest, 3)}
+                      </span>{" "}
+                      among {compared} compared residues;{" "}
+                      {result.difference.masking.masked_residues} masked.{" "}
+                      {
+                        result.caveats.find(
+                          (entry) =>
+                            entry.id === "similar_fold_is_uninformative",
+                        )?.text
+                      }
+                    </p>
+                    {results.length > 1 ? (
+                      <div className="flex flex-wrap gap-1 px-3 pb-1.5">
+                        {results.map((entry) => (
+                          <Button
+                            key={entry.result_id}
+                            size="xs"
+                            variant={
+                              entry.result_id === summary.result_id
+                                ? "secondary"
+                                : "ghost"
+                            }
+                            onClick={() => setChosenResult(entry.result_id)}
                           >
-                            {formatAngstrom(row.displacement ?? 0)}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                  <JobLines jobs={jobs} />
+                            {entry.provider.model_name ?? entry.provider.name}{" "}
+                            {entry.generated_at?.slice(0, 10)}
+                            {entry.origin === "cached_example" ? " cached" : ""}
+                          </Button>
+                        ))}
+                      </div>
+                    ) : null}
+                    <JobLines jobs={jobs} />
+                  </div>
+                  <div className="min-h-0 flex-1 border-t border-border-subtle">
+                    <DataTable
+                      label={`Residues of the ${variantLabel} comparison`}
+                      columns={COLUMNS}
+                      data={rows}
+                      getRowId={(row) => row.id}
+                      selectedRowId={position ? String(position) : null}
+                      onRowSelect={(row) => selectResidue(row.position)}
+                      onRowHover={(row) =>
+                        setWorkspaceHover(
+                          row && accession
+                            ? {
+                                accession,
+                                position: row.position,
+                                origin: "ledger",
+                              }
+                            : null,
+                        )
+                      }
+                      defaultSort={{ id: "displacement", desc: true }}
+                      groupBy={(row) => (row.masked ? "masked" : "compared")}
+                      groupOrder={["compared", "masked"]}
+                      groupLabel={(group) =>
+                        group === "masked"
+                          ? `Masked: pLDDT below ${result.difference.masking.plddt_threshold} in either model`
+                          : "Compared"
+                      }
+                    />
+                  </div>
                 </div>
               )}
             </Zone>
-          ) : (
-          <Zone
-            zone="ledger"
-            title="Changed residues"
-            count={result ? compared : null}
-            scroll={false}
-            actions={
-              result && canRunInference ? (
-                <RunJobButton
-                  kind={planData.job_kind}
-                  params={{ variant_id: variant.variant_id }}
-                  label="New run"
-                  size="xs"
-                  variant="ghost"
-                />
-              ) : null
-            }
-            footer={<KeyHint keys="enter" label="Select residue" />}
-          >
-            {!summary ? (
-              <EmptyState
-                title="No comparison computed"
-                description="Residues ranked by Cα displacement appear here once a run exists."
-              />
-            ) : resultQuery.isPending ? (
-              <RowsSkeleton rows={8} />
-            ) : resultQuery.isError || !result ? (
-              <QueryErrorState
-                error={resultQuery.error}
-                subject={`comparison result ${summary.result_id}`}
-                onRetry={() => void resultQuery.refetch()}
-              />
-            ) : (
-              <div className="flex h-full min-h-0 flex-col">
-                <div className="shrink-0">
-                  <SectionHeader
-                    title="Result"
-                    actions={
-                      <ClaimLabel
-                        evidenceClass="computational_prediction"
-                        className="text-2xs"
-                      />
-                    }
-                  />
-                  <p className="px-3 pt-1.5 text-2xs leading-4 text-muted-foreground">
-                    {result.label}
-                  </p>
-                  <p className="px-3 pt-1 pb-1.5 text-2xs leading-4 text-subtle-foreground">
-                    Largest Cα displacement{" "}
-                    <span className="tabular font-mono text-foreground">
-                      {formatAngstrom(largest, 3)}
-                    </span>{" "}
-                    among {compared} compared residues;{" "}
-                    {result.difference.masking.masked_residues} masked.{" "}
-                    {
-                      result.caveats.find(
-                        (entry) => entry.id === "similar_fold_is_uninformative",
-                      )?.text
-                    }
-                  </p>
-                  {results.length > 1 ? (
-                    <div className="flex flex-wrap gap-1 px-3 pb-1.5">
-                      {results.map((entry) => (
-                        <Button
-                          key={entry.result_id}
-                          size="xs"
-                          variant={
-                            entry.result_id === summary.result_id
-                              ? "secondary"
-                              : "ghost"
-                          }
-                          onClick={() => setChosenResult(entry.result_id)}
-                        >
-                          {entry.provider.model_name ?? entry.provider.name}{" "}
-                          {entry.generated_at?.slice(0, 10)}
-                          {entry.origin === "cached_example" ? " cached" : ""}
-                        </Button>
-                      ))}
-                    </div>
-                  ) : null}
-                  <JobLines jobs={jobs} />
-                </div>
-                <div className="min-h-0 flex-1 border-t border-border-subtle">
-                  <DataTable
-                    label={`Residues of the ${variantLabel} comparison`}
-                    columns={COLUMNS}
-                    data={rows}
-                    getRowId={(row) => row.id}
-                    selectedRowId={position ? String(position) : null}
-                    onRowSelect={(row) => selectResidue(row.position)}
-                    onRowHover={(row) =>
-                      setWorkspaceHover(
-                        row && accession
-                          ? {
-                              accession,
-                              position: row.position,
-                              origin: "ledger",
-                            }
-                          : null,
-                      )
-                    }
-                    defaultSort={{ id: "displacement", desc: true }}
-                    groupBy={(row) => (row.masked ? "masked" : "compared")}
-                    groupOrder={["compared", "masked"]}
-                    groupLabel={(group) =>
-                      group === "masked"
-                        ? `Masked: pLDDT below ${result.difference.masking.plddt_threshold} in either model`
-                        : "Compared"
-                    }
-                  />
-                </div>
-              </div>
-            )}
-          </Zone>
           )
         }
         instrument={
@@ -1010,74 +1037,74 @@ export function CompareStage({ gene, change }: CompareStageProps) {
         }
         inspector={
           simple && !inspecting ? undefined : (
-          <Zone
-            zone="inspector"
-            title={
-              position && selectedLetter
-                ? simple
-                  ? isSite
-                    ? plainMutationRow(variant.hgvs_p)
-                    : plainSpot(selectedLetter, position)
-                  : isSite
-                    ? `${toThreeLetter(variant.reference)}${position} → ${toThreeLetter(variant.alternate)}`
-                    : `${toThreeLetter(selectedLetter) ?? selectedLetter}${position}`
-                : "Residue"
-            }
-            detail={
-              simple ? null : position ? (
-                <span className="text-2xs text-muted-foreground">
-                  {isSite
-                    ? "variant site"
-                    : selectedLetter
-                      ? aminoAcidName(selectedLetter)
-                      : null}
-                </span>
-              ) : null
-            }
-            actions={
-              simple ? (
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label="Close"
-                  title="Close"
-                  onClick={() => {
-                    setSiteDetails(false);
-                    selectResidue(variant.position);
-                  }}
-                >
-                  <XIcon />
-                </Button>
-              ) : undefined
-            }
-            footer={
-              simple ? undefined : <KeyHint keys="i" label="Hide inspector" />
-            }
-          >
-            {position ? (
-              <ResidueInspectorBody
-                plan={planData}
-                result={result}
-                sequence={sequence}
-                position={position}
-                simple={simple}
-              />
-            ) : (
-              <EmptyState
-                title="No residue selected"
-                description="Click a residue in a model, in the table or on the sequence axis."
-                actions={
+            <Zone
+              zone="inspector"
+              title={
+                position && selectedLetter
+                  ? simple
+                    ? isSite
+                      ? plainMutationRow(variant.hgvs_p)
+                      : plainSpot(selectedLetter, position)
+                    : isSite
+                      ? `${toThreeLetter(variant.reference)}${position} → ${toThreeLetter(variant.alternate)}`
+                      : `${toThreeLetter(selectedLetter) ?? selectedLetter}${position}`
+                  : "Residue"
+              }
+              detail={
+                simple ? null : position ? (
+                  <span className="text-2xs text-muted-foreground">
+                    {isSite
+                      ? "variant site"
+                      : selectedLetter
+                        ? aminoAcidName(selectedLetter)
+                        : null}
+                  </span>
+                ) : null
+              }
+              actions={
+                simple ? (
                   <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => selectResidue(variant.position)}
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label="Close"
+                    title="Close"
+                    onClick={() => {
+                      setSiteDetails(false);
+                      selectResidue(variant.position);
+                    }}
                   >
-                    Select the variant site
+                    <XIcon />
                   </Button>
-                }
-              />
-            )}
-          </Zone>
+                ) : undefined
+              }
+              footer={
+                simple ? undefined : <KeyHint keys="i" label="Hide inspector" />
+              }
+            >
+              {position ? (
+                <ResidueInspectorBody
+                  plan={planData}
+                  result={result}
+                  sequence={sequence}
+                  position={position}
+                  simple={simple}
+                />
+              ) : (
+                <EmptyState
+                  title="No residue selected"
+                  description="Click a residue in a model, in the table or on the sequence axis."
+                  actions={
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => selectResidue(variant.position)}
+                    >
+                      Select the variant site
+                    </Button>
+                  }
+                />
+              )}
+            </Zone>
           )
         }
       />

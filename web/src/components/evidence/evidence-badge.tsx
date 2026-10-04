@@ -96,7 +96,7 @@ export function EvidenceBadge({
     >
       <span className={cn("inline-flex items-center gap-1", meta.textClass)}>
         <EvidenceGlyph evidenceClass={evidenceClass} />
-        <span className="font-mono text-[0.625rem] leading-none font-semibold tracking-[0.06em]">
+        <span className="font-mono text-2xs leading-none font-semibold tracking-[0.06em]">
           {meta.code}
         </span>
       </span>

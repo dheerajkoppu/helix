@@ -66,7 +66,7 @@ export function Zone({
         )}
       >
         {advanced ? (
-          <span className="text-[0.625rem] font-medium tracking-[0.08em] text-subtle-foreground uppercase">
+          <span className="text-2xs font-medium tracking-[0.08em] text-subtle-foreground uppercase">
             {ZONE_LABEL[zone]}
           </span>
         ) : null}

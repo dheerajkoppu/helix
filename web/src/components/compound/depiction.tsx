@@ -33,7 +33,7 @@ export function CompoundDepiction({
     return (
       <span
         className={cn(
-          "flex items-center justify-center border border-dashed border-border text-center text-[0.625rem] leading-tight text-subtle-foreground",
+          "flex items-center justify-center border border-dashed border-border text-center text-2xs leading-tight text-subtle-foreground",
           className,
         )}
       >

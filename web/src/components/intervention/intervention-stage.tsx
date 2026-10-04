@@ -8,6 +8,7 @@ import {
   useBindingJobs,
   useModelProviders,
 } from "@/components/compound/queries";
+import { TextLink } from "@/components/data/text-link";
 import { StructureOriginTag } from "@/components/evidence/structure-origin-tag";
 import { LiteraturePanel } from "@/components/literature/literature-panel";
 import { AddToProjectButton } from "@/components/project/add-to-project";
@@ -31,7 +32,11 @@ import {
   Zone,
 } from "@/components/workspace";
 import { routes } from "@/lib/ids";
-import { OPTIONS_WORDS, plainBindingSpot } from "@/lib/plain-language";
+import {
+  GROUP_LINKS,
+  OPTIONS_WORDS,
+  plainBindingSpot,
+} from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import { useReportSources } from "@/lib/state/shell";
@@ -362,11 +367,11 @@ export function InterventionStage({ accession }: { accession: string }) {
   const proteinLabel = symbol ?? accession;
   const hasSelection = Boolean(
     row ??
-      treatment ??
-      pocket ??
-      curatedPartner ??
-      physicalPartner ??
-      mechanismClass,
+    treatment ??
+    pocket ??
+    curatedPartner ??
+    physicalPartner ??
+    mechanismClass,
   );
   const sourceGap = down.chembl ?? down.pdb ?? down.openTargets;
 
@@ -482,18 +487,30 @@ export function InterventionStage({ accession }: { accession: string }) {
               ) : null
             }
             actions={
-              <ToggleGroup
-                size="sm"
-                variant="outline"
-                spacing={0}
-                value={[view]}
-                onValueChange={(value) =>
-                  value.length ? setView(value[0] as View) : null
-                }
-              >
-                <ToggleGroupItem value="table">Table</ToggleGroupItem>
-                <ToggleGroupItem value="structure">3D</ToggleGroupItem>
-              </ToggleGroup>
+              <span className="flex items-center gap-3">
+                <ToggleGroup
+                  size="sm"
+                  variant="outline"
+                  spacing={0}
+                  value={[view]}
+                  onValueChange={(value) =>
+                    value.length ? setView(value[0] as View) : null
+                  }
+                >
+                  <ToggleGroupItem value="table">Table</ToggleGroupItem>
+                  <ToggleGroupItem value="structure">3D</ToggleGroupItem>
+                </ToggleGroup>
+                {/* Options sits under Candidates in simple mode: this is the way back. */}
+                {!advanced && symbol ? (
+                  <TextLink
+                    href={routes.discover(symbol, { disease: diseaseId })}
+                    className="shrink-0 text-xs text-muted-foreground"
+                    data-action="open-candidates"
+                  >
+                    {GROUP_LINKS.candidates}
+                  </TextLink>
+                ) : null}
+              </span>
             }
             toolbar={
               view === "table" && (advanced || sort === "predicted") ? (
@@ -589,80 +606,80 @@ export function InterventionStage({ accession }: { accession: string }) {
         }
         inspector={
           !advanced && !hasSelection ? undefined : (
-          <Zone
-            zone="inspector"
-            title={<span className="truncate">{inspectorTitle}</span>}
-            detail={row && advanced ? <TierMark tier={row.tier} /> : null}
-            scroll={panel === "detail"}
-            actions={
-              <>
-                <ToggleGroup
-                  size="sm"
-                  variant="outline"
-                  spacing={0}
-                  value={[panel]}
-                  onValueChange={(value) =>
-                    value.length
-                      ? setPanel(value[0] as "detail" | "literature")
-                      : null
-                  }
-                >
-                  <ToggleGroupItem value="detail">Detail</ToggleGroupItem>
-                  <ToggleGroupItem value="literature">Papers</ToggleGroupItem>
-                </ToggleGroup>
-                {advanced ? null : (
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label="Close"
-                    onClick={() => select(null)}
+            <Zone
+              zone="inspector"
+              title={<span className="truncate">{inspectorTitle}</span>}
+              detail={row && advanced ? <TierMark tier={row.tier} /> : null}
+              scroll={panel === "detail"}
+              actions={
+                <>
+                  <ToggleGroup
+                    size="sm"
+                    variant="outline"
+                    spacing={0}
+                    value={[panel]}
+                    onValueChange={(value) =>
+                      value.length
+                        ? setPanel(value[0] as "detail" | "literature")
+                        : null
+                    }
                   >
-                    <XIcon aria-hidden />
-                  </Button>
-                )}
-              </>
-            }
-          >
-            {panel === "literature" ? (
-              <LiteraturePanel
-                context={{
-                  gene: symbol,
-                  accession,
-                  residue: position,
-                }}
-              />
-            ) : (
-              <InterventionInspector
-                advanced={advanced}
-                shownStructureId={
-                  view === "structure" ? (shown.structure?.id ?? null) : null
-                }
-                accession={accession}
-                selected={selected}
-                rows={rows}
-                row={row}
-                treatment={treatment}
-                pocket={pocket}
-                pocketsResponse={pocketData}
-                curated={curatedPartner}
-                physical={physicalPartner}
-                mechanismClass={mechanismClass}
-                compounds={compoundData}
-                down={down}
-                provider={provider}
-                position={position}
-                constraintId={constraintId}
-                onConstraint={setConstraintId}
-                onResidue={selectResidue}
-                onSelect={select}
-                onShowStructure={(pdbId) => {
-                  setFocus({ kind: "pdb", pdbId });
-                  setView("structure");
-                }}
-                onShowPose={showPose}
-              />
-            )}
-          </Zone>
+                    <ToggleGroupItem value="detail">Detail</ToggleGroupItem>
+                    <ToggleGroupItem value="literature">Papers</ToggleGroupItem>
+                  </ToggleGroup>
+                  {advanced ? null : (
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label="Close"
+                      onClick={() => select(null)}
+                    >
+                      <XIcon aria-hidden />
+                    </Button>
+                  )}
+                </>
+              }
+            >
+              {panel === "literature" ? (
+                <LiteraturePanel
+                  context={{
+                    gene: symbol,
+                    accession,
+                    residue: position,
+                  }}
+                />
+              ) : (
+                <InterventionInspector
+                  advanced={advanced}
+                  shownStructureId={
+                    view === "structure" ? (shown.structure?.id ?? null) : null
+                  }
+                  accession={accession}
+                  selected={selected}
+                  rows={rows}
+                  row={row}
+                  treatment={treatment}
+                  pocket={pocket}
+                  pocketsResponse={pocketData}
+                  curated={curatedPartner}
+                  physical={physicalPartner}
+                  mechanismClass={mechanismClass}
+                  compounds={compoundData}
+                  down={down}
+                  provider={provider}
+                  position={position}
+                  constraintId={constraintId}
+                  onConstraint={setConstraintId}
+                  onResidue={selectResidue}
+                  onSelect={select}
+                  onShowStructure={(pdbId) => {
+                    setFocus({ kind: "pdb", pdbId });
+                    setView("structure");
+                  }}
+                  onShowPose={showPose}
+                />
+              )}
+            </Zone>
           )
         }
       />

@@ -70,9 +70,9 @@ const REPRESENTATION_LABEL: Record<Representation, string> = {
 };
 
 const MENU_TRIGGER =
-  "inline-flex h-6 shrink-0 cursor-pointer items-center gap-1 rounded-md border border-border px-2 text-xs whitespace-nowrap text-foreground outline-none hover:bg-accent focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 aria-expanded:bg-active disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex h-7 shrink-0 cursor-pointer items-center gap-1 rounded-md border border-border px-2 text-xs whitespace-nowrap text-foreground outline-none hover:bg-accent focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 aria-expanded:bg-active disabled:pointer-events-none disabled:opacity-50";
 const ICON_TRIGGER =
-  "inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/30 aria-expanded:bg-active disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/30 aria-expanded:bg-active disabled:pointer-events-none disabled:opacity-50";
 
 /** The control row of the 3D viewport. Every control is a button or a menu, so all of it is reachable by keyboard. */
 export function ViewerToolbar({
@@ -107,7 +107,7 @@ export function ViewerToolbar({
       aria-label="3D viewer controls"
       data-slot="viewer-toolbar"
       data-compact={compact ? "" : undefined}
-      className="scroll-thin flex h-8 shrink-0 items-center gap-2 overflow-x-auto border-b border-border-subtle bg-background pl-2 data-compact:h-10 data-compact:pl-3"
+      className="scroll-thin flex h-9 shrink-0 items-center gap-2 overflow-x-auto border-b border-border-subtle bg-background pl-2 data-compact:h-11 data-compact:pl-3"
     >
       <ToggleGroup
         size="sm"

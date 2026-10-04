@@ -4,6 +4,7 @@ import { XIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { ButtonLink } from "@/components/data/button-link";
+import { TextLink } from "@/components/data/text-link";
 import { AddToProjectButton } from "@/components/project/add-to-project";
 import { EmptyState } from "@/components/states/empty-state";
 import { QueryErrorState, RowsSkeleton } from "@/components/states/query-state";
@@ -19,6 +20,7 @@ import { isApiError } from "@/lib/api/client";
 import { routes } from "@/lib/ids";
 import {
   DISCOVERY_WORDS,
+  GROUP_LINKS,
   plainCandidateCount,
   plainDiseaseName,
   plainRuledOutCount,
@@ -281,20 +283,32 @@ export function DiscoveryStage({
               ) : null
             }
             actions={
-              selected?.structural && accession ? (
-                <ToggleGroup
-                  size="sm"
-                  variant="outline"
-                  spacing={0}
-                  value={[view]}
-                  onValueChange={(value) =>
-                    value.length ? setView(value[0] as View) : null
-                  }
-                >
-                  <ToggleGroupItem value="list">List</ToggleGroupItem>
-                  <ToggleGroupItem value="pockets">3D</ToggleGroupItem>
-                </ToggleGroup>
-              ) : null
+              <span className="flex items-center gap-3">
+                {selected?.structural && accession ? (
+                  <ToggleGroup
+                    size="sm"
+                    variant="outline"
+                    spacing={0}
+                    value={[view]}
+                    onValueChange={(value) =>
+                      value.length ? setView(value[0] as View) : null
+                    }
+                  >
+                    <ToggleGroupItem value="list">List</ToggleGroupItem>
+                    <ToggleGroupItem value="pockets">3D</ToggleGroupItem>
+                  </ToggleGroup>
+                ) : null}
+                {/* Options is not a step of its own in simple mode: it is reached from here. */}
+                {!advanced && accession ? (
+                  <TextLink
+                    href={routes.interventions(accession)}
+                    className="shrink-0 text-xs text-muted-foreground"
+                    data-action="open-options"
+                  >
+                    {GROUP_LINKS.options}
+                  </TextLink>
+                ) : null}
+              </span>
             }
             footer={
               data ? (

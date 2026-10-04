@@ -24,12 +24,16 @@ import {
   CHOOSE_STEP_LABEL,
   STEPS_LABEL,
   plainStage,
-  plainStageNeeds,
+  plainStageGroup,
+  plainStageGroupNeeds,
 } from "@/lib/plain-language";
 import { withSelection } from "@/lib/state/selection-url";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import {
   STAGES,
+  STAGE_GROUPS,
+  groupOfStage,
+  resolveGroup,
   resolveStage,
   stageFromPathname,
   useWorkspaceSubjectStore,
@@ -50,17 +54,31 @@ function useStageTargets() {
   });
 }
 
+/** The same links, grouped into the three questions simple mode asks. */
+function useGroupTargets(active: StageId | null) {
+  const chain = useWorkspaceSubjectStore((state) => state.chain);
+  const selection = useWorkspaceSelection();
+  return STAGE_GROUPS.map((group) => {
+    const target = resolveGroup(group, chain, active);
+    return {
+      group,
+      href: target.href ? withSelection(target.href, selection) : null,
+    };
+  });
+}
+
 export interface StageRailProps {
   /** overrides the stage derived from the pathname */
   current?: StageId | null;
-  /** stage names only: the entity that fills each stage is left out */
+  /** three grouped questions instead of seven stages */
   simple?: boolean;
   className?: string;
 }
 
 /**
- * The stages as positions on an axis. Each cell shows the stage and the entity that fills it;
- * a stage that cannot open yet says what it needs. On phones the rail collapses to a stepper.
+ * The stages as positions on an axis. Advanced mode shows all seven with the entity that fills each;
+ * simple mode groups them into three questions and names the page you are on underneath. A stage or
+ * group that cannot open yet says what it needs. On phones the rail collapses to a stepper.
  */
 export function StageRail({
   current,
@@ -70,23 +88,187 @@ export function StageRail({
   const pathname = usePathname();
   const active = current === undefined ? stageFromPathname(pathname) : current;
   const targets = useStageTargets();
+  const groups = useGroupTargets(active);
   const [sheetOpen, setSheetOpen] = useState(false);
   const activeEntry = targets.find((entry) => entry.stage.id === active);
+  const activeGroup = groupOfStage(active);
+  const activeGroupEntry = groups.find(
+    (entry) => entry.group.id === activeGroup,
+  );
+
+  const frame = cn(
+    "shrink-0 border-b border-border-strong/70 bg-background",
+    className,
+  );
+
+  if (simple)
+    return (
+      <nav aria-label="Research steps" className={frame}>
+        <ol className="hidden h-12 auto-cols-fr grid-flow-col lg:grid">
+          {groups.map(({ group, href }) => {
+            const isActive = group.id === activeGroup;
+            const body = (
+              <>
+                <span
+                  className={cn(
+                    "tabular font-mono text-2xs",
+                    isActive ? "text-foreground" : "text-subtle-foreground",
+                  )}
+                >
+                  {group.number}
+                </span>
+                <span className="flex min-w-0 flex-col">
+                  <span className={cn("truncate", isActive && "font-medium")}>
+                    {plainStageGroup(group.id)}
+                  </span>
+                  {isActive && active ? (
+                    <span className="truncate text-2xs text-muted-foreground">
+                      {plainStage(active)}
+                    </span>
+                  ) : null}
+                </span>
+              </>
+            );
+            const cell = cn(
+              "relative flex h-full min-w-0 items-center gap-2 px-3 text-sm outline-offset-[-2px]",
+              // tick on the axis at the start of every step
+              "before:absolute before:bottom-0 before:left-0 before:h-1.5 before:w-px before:bg-border-strong",
+              isActive &&
+                "text-foreground after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-foreground",
+            );
+            return (
+              <li key={group.id} className="min-w-0">
+                {href ? (
+                  <Link
+                    href={href}
+                    aria-current={isActive ? "step" : undefined}
+                    className={cn(
+                      cell,
+                      !isActive &&
+                        "text-muted-foreground hover:bg-accent hover:text-foreground",
+                    )}
+                  >
+                    {body}
+                  </Link>
+                ) : (
+                  <Tooltip>
+                    <TooltipTrigger
+                      render={
+                        <span
+                          tabIndex={0}
+                          aria-disabled="true"
+                          className={cn(
+                            cell,
+                            "cursor-default text-disabled-foreground",
+                          )}
+                        />
+                      }
+                    >
+                      {body}
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      {plainStageGroupNeeds(group.id)}
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+
+        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+          <SheetTrigger className="flex h-10 w-full items-center gap-2 px-3 text-left text-sm lg:hidden">
+            <span className="tabular shrink-0 font-mono text-xs whitespace-nowrap text-muted-foreground">
+              {activeGroupEntry
+                ? `${activeGroupEntry.group.number} of ${STAGE_GROUPS.length}`
+                : ""}
+            </span>
+            <span className="shrink-0 font-medium whitespace-nowrap">
+              {activeGroupEntry
+                ? plainStageGroup(activeGroupEntry.group.id)
+                : CHOOSE_STEP_LABEL}
+            </span>
+            {activeGroupEntry && active ? (
+              <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
+                {plainStage(active)}
+              </span>
+            ) : null}
+            <ChevronDownIcon
+              className="ml-auto size-4 shrink-0 text-muted-foreground"
+              aria-hidden
+            />
+          </SheetTrigger>
+          <SheetContent
+            side="bottom"
+            showCloseButton={false}
+            className="gap-0 rounded-t-2xl p-0"
+          >
+            <SheetHeader className="border-b border-border-subtle px-4 py-3">
+              <SheetTitle>{STEPS_LABEL}</SheetTitle>
+              <SheetDescription className="sr-only">
+                Move between the three steps. The current disease, gene,
+                mutation and protein stay in context.
+              </SheetDescription>
+            </SheetHeader>
+            <ol className="pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+              {groups.map(({ group, href }) => {
+                const isActive = group.id === activeGroup;
+                const row =
+                  "flex min-h-12 items-center gap-3 border-b border-border-subtle px-4 py-2 text-sm last:border-b-0";
+                const body = (
+                  <>
+                    <span className="tabular w-3 font-mono text-xs text-muted-foreground">
+                      {group.number}
+                    </span>
+                    <span className="flex min-w-0 flex-col">
+                      <span className={cn(isActive && "font-medium")}>
+                        {plainStageGroup(group.id)}
+                      </span>
+                      <span className="truncate text-xs text-muted-foreground">
+                        {isActive && active
+                          ? plainStage(active)
+                          : href
+                            ? ""
+                            : plainStageGroupNeeds(group.id)}
+                      </span>
+                    </span>
+                  </>
+                );
+                return (
+                  <li key={group.id}>
+                    {href ? (
+                      <Link
+                        href={href}
+                        onClick={() => setSheetOpen(false)}
+                        aria-current={isActive ? "step" : undefined}
+                        className={cn(
+                          row,
+                          isActive &&
+                            "bg-active shadow-[inset_2px_0_0_var(--foreground)]",
+                        )}
+                      >
+                        {body}
+                      </Link>
+                    ) : (
+                      <span
+                        aria-disabled="true"
+                        className={cn(row, "text-disabled-foreground")}
+                      >
+                        {body}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </SheetContent>
+        </Sheet>
+      </nav>
+    );
 
   return (
-    <nav
-      aria-label="Research stages"
-      className={cn(
-        "shrink-0 border-b border-border-strong/70 bg-background",
-        className,
-      )}
-    >
-      <ol
-        className={cn(
-          "hidden auto-cols-fr grid-flow-col lg:grid",
-          simple ? "h-10" : "h-9",
-        )}
-      >
+    <nav aria-label="Research stages" className={frame}>
+      <ol className="hidden h-9 auto-cols-fr grid-flow-col lg:grid">
         {targets.map(({ stage, target, href }) => {
           const isActive = stage.id === active;
           const body = (
@@ -99,15 +281,10 @@ export function StageRail({
               >
                 {stage.number}
               </span>
-              <span
-                className={cn(
-                  simple ? "min-w-0 truncate" : "shrink-0",
-                  isActive && "font-medium",
-                )}
-              >
-                {simple ? plainStage(stage.id) : stage.label}
+              <span className={cn("shrink-0", isActive && "font-medium")}>
+                {stage.label}
               </span>
-              {target.subject && !simple ? (
+              {target.subject ? (
                 <span
                   className="min-w-0 truncate font-mono text-2xs text-muted-foreground"
                   translate="no"
@@ -118,8 +295,7 @@ export function StageRail({
             </>
           );
           const cell = cn(
-            "relative flex h-full min-w-0 items-center gap-2 px-3 outline-offset-[-2px]",
-            simple ? "text-sm" : "text-xs",
+            "relative flex h-full min-w-0 items-center gap-2 px-3 text-xs outline-offset-[-2px]",
             // tick on the axis at the start of every stage
             "before:absolute before:bottom-0 before:left-0 before:h-1.5 before:w-px before:bg-border-strong",
             isActive &&
@@ -156,7 +332,7 @@ export function StageRail({
                     {body}
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
-                    {simple ? plainStageNeeds(stage.id) : target.missing}
+                    {target.missing}
                   </TooltipContent>
                 </Tooltip>
               )}
@@ -169,23 +345,13 @@ export function StageRail({
         <SheetTrigger className="flex h-10 w-full items-center gap-2 px-3 text-left text-sm lg:hidden">
           <span className="tabular font-mono text-xs text-muted-foreground">
             {activeEntry
-              ? simple
-                ? `${activeEntry.stage.number} of ${STAGES.length}`
-                : `${activeEntry.stage.number}/${STAGES.length}`
-              : simple
-                ? ""
-                : `0/${STAGES.length}`}
+              ? `${activeEntry.stage.number}/${STAGES.length}`
+              : `0/${STAGES.length}`}
           </span>
           <span className="font-medium">
-            {activeEntry
-              ? simple
-                ? plainStage(activeEntry.stage.id)
-                : activeEntry.stage.label
-              : simple
-                ? CHOOSE_STEP_LABEL
-                : "Choose a stage"}
+            {activeEntry ? activeEntry.stage.label : "Choose a stage"}
           </span>
-          {activeEntry?.target.subject && !simple ? (
+          {activeEntry?.target.subject ? (
             <span
               className="min-w-0 truncate font-mono text-xs text-muted-foreground"
               translate="no"
@@ -204,7 +370,7 @@ export function StageRail({
           className="gap-0 rounded-t-2xl p-0"
         >
           <SheetHeader className="border-b border-border-subtle px-4 py-3">
-            <SheetTitle>{simple ? STEPS_LABEL : "Research stages"}</SheetTitle>
+            <SheetTitle>Research stages</SheetTitle>
             <SheetDescription className="sr-only">
               Move between stages. The current disease, gene, variant and
               protein stay in context.
@@ -222,11 +388,10 @@ export function StageRail({
                   </span>
                   <span className="flex min-w-0 flex-col">
                     <span className={cn(isActive && "font-medium")}>
-                      {simple ? plainStage(stage.id) : stage.label}
+                      {stage.label}
                     </span>
                     <span className="truncate text-xs text-muted-foreground">
-                      {target.subject?.label ??
-                        (simple ? plainStageNeeds(stage.id) : target.missing)}
+                      {target.subject?.label ?? target.missing}
                     </span>
                   </span>
                 </>

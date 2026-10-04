@@ -115,7 +115,7 @@ function TrunkNode({
 }) {
   const body = (
     <>
-      <span className="text-[0.625rem] leading-3 font-medium tracking-[0.08em] text-subtle-foreground uppercase">
+      <span className="text-2xs leading-4 font-medium tracking-[0.08em] text-subtle-foreground uppercase">
         {kind}
         {current ? " · this page" : ""}
       </span>
@@ -500,7 +500,7 @@ export function RelationshipDiagram({
                     </span>
                   )}
                   {node.in_catalog ? (
-                    <span className="shrink-0 rounded-xs border border-border px-1 text-[0.625rem] leading-[14px] text-muted-foreground">
+                    <span className="shrink-0 rounded-xs border border-border px-1 text-2xs leading-4 text-muted-foreground">
                       in catalog
                     </span>
                   ) : null}

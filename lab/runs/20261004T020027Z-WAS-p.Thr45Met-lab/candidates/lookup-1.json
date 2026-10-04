@@ -1,0 +1,1750 @@
+{
+  "query": {
+    "gene": "WAS",
+    "disease": null,
+    "variant": "WAS-p.Thr45Met",
+    "exclude_direct": "false"
+  },
+  "response": {
+    "sources": [
+      {
+        "source": "afdb",
+        "name": "AlphaFold DB",
+        "state": "ok",
+        "message": null,
+        "release": "v6",
+        "retrieved_at": "2026-10-03T23:35:30.287455Z",
+        "license": "CC-BY-4.0",
+        "url": "https://alphafold.ebi.ac.uk",
+        "from_cache": true,
+        "stale": false,
+        "elapsed_ms": null
+      },
+      {
+        "source": "alphamissense",
+        "name": "AlphaMissense (AlphaFold DB file)",
+        "state": "ok",
+        "message": null,
+        "release": null,
+        "retrieved_at": "2026-10-03T23:35:31.343328Z",
+        "license": "CC-BY-4.0",
+        "url": "https://alphafold.ebi.ac.uk",
+        "from_cache": true,
+        "stale": false,
+        "elapsed_ms": null
+      },
+      {
+        "source": "chembl",
+        "name": "ChEMBL",
+        "state": "unavailable",
+        "message": "ChEMBL is not answering; Helix will try it again shortly.",
+        "release": "ChEMBL_37",
+        "retrieved_at": "2026-10-03T23:34:43.705774Z",
+        "license": "CC-BY-SA-3.0",
+        "url": "https://www.ebi.ac.uk/chembl/",
+        "from_cache": false,
+        "stale": false,
+        "elapsed_ms": 0.001500004145782441
+      },
+      {
+        "source": "helix_seed",
+        "name": "Helix seeded catalog",
+        "state": "ok",
+        "message": null,
+        "release": "iuis_2024 2026-10-03",
+        "retrieved_at": "2026-10-04T01:20:05.678009Z",
+        "license": null,
+        "url": null,
+        "from_cache": false,
+        "stale": false,
+        "elapsed_ms": null
+      },
+      {
+        "source": "intact",
+        "name": "IntAct",
+        "state": "ok",
+        "message": null,
+        "release": null,
+        "retrieved_at": "2026-10-03T23:35:31.075003Z",
+        "license": "CC-BY-4.0",
+        "url": "https://www.ebi.ac.uk/intact",
+        "from_cache": true,
+        "stale": false,
+        "elapsed_ms": null
+      },
+      {
+        "source": "interpro",
+        "name": "InterPro",
+        "state": "ok",
+        "message": null,
+        "release": "110.0",
+        "retrieved_at": "2026-10-03T23:35:30.783744Z",
+        "license": "CC0-1.0",
+        "url": "https://www.ebi.ac.uk/interpro",
+        "from_cache": true,
+        "stale": false,
+        "elapsed_ms": null
+      },
+      {
+        "source": "mavedb",
+        "name": "MaveDB",
+        "state": "empty",
+        "message": null,
+        "release": null,
+        "retrieved_at": "2026-10-03T23:35:31.519378Z",
+        "license": "LicenseRef-MaveDB-per-score-set",
+        "url": "https://www.mavedb.org",
+        "from_cache": true,
+        "stale": false,
+        "elapsed_ms": null
+      },
+      {
+        "source": "pdbe",
+        "name": "PDBe SIFTS",
+        "state": "ok",
+        "message": null,
+        "release": null,
+        "retrieved_at": "2026-10-03T23:35:30.796085Z",
+        "license": "CC0-1.0",
+        "url": "https://www.ebi.ac.uk/pdbe/",
+        "from_cache": true,
+        "stale": false,
+        "elapsed_ms": null
+      },
+      {
+        "source": "prankweb",
+        "name": "PrankWeb (P2Rank)",
+        "state": "ok",
+        "message": null,
+        "release": null,
+        "retrieved_at": "2026-10-04T02:05:06.771773Z",
+        "license": null,
+        "url": "https://prankweb.cz",
+        "from_cache": false,
+        "stale": false,
+        "elapsed_ms": 485.23983400082216
+      },
+      {
+        "source": "protvar",
+        "name": "EBI ProtVar",
+        "state": "ok",
+        "message": null,
+        "release": "data release 2.1",
+        "retrieved_at": "2026-10-03T23:35:31.473466Z",
+        "license": "CC-BY-4.0",
+        "url": "https://www.ebi.ac.uk/ProtVar/",
+        "from_cache": true,
+        "stale": false,
+        "elapsed_ms": null
+      },
+      {
+        "source": "rcsb_pdb",
+        "name": "RCSB PDB",
+        "state": "ok",
+        "message": null,
+        "release": null,
+        "retrieved_at": "2026-10-03T23:35:31.290528Z",
+        "license": "CC0-1.0",
+        "url": "https://www.rcsb.org",
+        "from_cache": true,
+        "stale": false,
+        "elapsed_ms": null
+      },
+      {
+        "source": "reactome",
+        "name": "Reactome",
+        "state": "ok",
+        "message": null,
+        "release": null,
+        "retrieved_at": "2026-10-04T02:05:08.537670Z",
+        "license": "CC0-1.0",
+        "url": "https://reactome.org",
+        "from_cache": false,
+        "stale": false,
+        "elapsed_ms": 1754.7587919980288
+      },
+      {
+        "source": "string",
+        "name": "STRING",
+        "state": "ok",
+        "message": null,
+        "release": "12.5",
+        "retrieved_at": "2026-10-03T23:35:31.392204Z",
+        "license": "CC-BY-4.0",
+        "url": "https://string-db.org",
+        "from_cache": true,
+        "stale": false,
+        "elapsed_ms": null
+      },
+      {
+        "source": "uniprot",
+        "name": "UniProtKB",
+        "state": "ok",
+        "message": null,
+        "release": "2026_03",
+        "retrieved_at": "2026-10-03T23:35:21.589368Z",
+        "license": "CC-BY-4.0",
+        "url": "https://www.uniprot.org",
+        "from_cache": true,
+        "stale": false,
+        "elapsed_ms": null
+      }
+    ],
+    "subject": {
+      "gene_symbol": "WAS",
+      "accession": "P42768",
+      "gene": {
+        "type": "gene",
+        "id": "WAS",
+        "label": "WASP actin nucleation promoting factor",
+        "curie": "hgnc:12731",
+        "href": "/gene/WAS"
+      },
+      "protein": {
+        "type": "protein",
+        "id": "P42768",
+        "label": "Actin nucleation-promoting factor WAS",
+        "curie": "uniprot:P42768",
+        "href": "/protein/P42768"
+      },
+      "disease": null,
+      "variant": {
+        "type": "variant",
+        "id": "WAS-p.Thr45Met",
+        "label": "WAS-p.Thr45Met",
+        "curie": null,
+        "href": "/variant/WAS-p.Thr45Met"
+      },
+      "mechanism": {
+        "class": "unknown",
+        "direction": "unknown",
+        "confidence": "unknown",
+        "basis": "Two catalog records state mechanisms that point in opposite directions, so no direction is used.",
+        "disagreements": [
+          "The catalog records different mechanisms for WAS: Wiskott–Aldrich syndrome (WAS LOF) (loss of function), X-linked neutropenia/myelodysplasia (gain of function). Ask for one disease to get a direction.",
+          "The variant's mechanism candidates (stability) would fit a protein that does too little, but a residue candidate does not state which way the activity moves, so the direction stays unknown."
+        ],
+        "evidence": [
+          {
+            "id": "ev_1152ec87a9f42352721f140c44",
+            "evidence_class": "literature",
+            "subject": {
+              "type": "disease",
+              "id": "wiskott-aldrich-syndrome",
+              "label": "Wiskott–Aldrich syndrome (WAS LOF)",
+              "curie": "MONDO:0010518",
+              "href": "/disease/wiskott-aldrich-syndrome"
+            },
+            "predicate": "has_mechanism_class",
+            "object": {
+              "type": "mechanism",
+              "value": null,
+              "id": null,
+              "label": "IUIS records the mechanism of Wiskott–Aldrich syndrome (WAS LOF) as loss of function.",
+              "unit": null,
+              "context": []
+            },
+            "statement": "IUIS records the mechanism of Wiskott–Aldrich syndrome (WAS LOF) as loss of function.",
+            "direction": "supports",
+            "eco": {
+              "id": "ECO:0000322",
+              "label": "imported manually asserted information used in automatic assertion",
+              "assigned_by": "helix_mapping"
+            },
+            "strength": null,
+            "source": {
+              "database": "iuis",
+              "record_id": "Table 2.1 row 1",
+              "record_version": null,
+              "release": "2025-04-15",
+              "license": "CC BY-ND 4.0",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12829761/table/tbl2/",
+              "retrieved_at": "2026-10-03T18:04:43Z",
+              "request": "GET https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12829761/fullTextXML",
+              "response_sha256": "30bcc09a4f50bbaf167ff119c45f2c1be93513ede0b8828d99fa228b7bf81843"
+            },
+            "modifiers": [],
+            "citations": [],
+            "asserted_at": null,
+            "structure_origin": null,
+            "generated_by": null,
+            "derived_from": [],
+            "created_by": {
+              "actor_id": "system",
+              "kind": "system"
+            },
+            "authoring": null,
+            "supersedes": null,
+            "code": "LIT",
+            "label": "Published literature",
+            "claim_label": "database_annotation"
+          },
+          {
+            "id": "ev_de9b720f2ccd7107c666a90f6d",
+            "evidence_class": "literature",
+            "subject": {
+              "type": "disease",
+              "id": "x-linked-neutropenia-myelodysplasia",
+              "label": "X-linked neutropenia/myelodysplasia",
+              "curie": "MONDO:0010294",
+              "href": "/disease/x-linked-neutropenia-myelodysplasia"
+            },
+            "predicate": "has_mechanism_class",
+            "object": {
+              "type": "mechanism",
+              "value": null,
+              "id": null,
+              "label": "IUIS records the mechanism of X-linked neutropenia/myelodysplasia as gain of function.",
+              "unit": null,
+              "context": []
+            },
+            "statement": "IUIS records the mechanism of X-linked neutropenia/myelodysplasia as gain of function.",
+            "direction": "supports",
+            "eco": {
+              "id": "ECO:0000322",
+              "label": "imported manually asserted information used in automatic assertion",
+              "assigned_by": "helix_mapping"
+            },
+            "strength": null,
+            "source": {
+              "database": "iuis",
+              "record_id": "Table 5.1 row 7",
+              "record_version": null,
+              "release": "2025-04-15",
+              "license": "CC BY-ND 4.0",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12829761/table/tbl5/",
+              "retrieved_at": "2026-10-03T18:04:43Z",
+              "request": "GET https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12829761/fullTextXML",
+              "response_sha256": "30bcc09a4f50bbaf167ff119c45f2c1be93513ede0b8828d99fa228b7bf81843"
+            },
+            "modifiers": [],
+            "citations": [],
+            "asserted_at": null,
+            "structure_origin": null,
+            "generated_by": null,
+            "derived_from": [],
+            "created_by": {
+              "actor_id": "system",
+              "kind": "system"
+            },
+            "authoring": null,
+            "supersedes": null,
+            "code": "LIT",
+            "label": "Published literature",
+            "claim_label": "database_annotation"
+          }
+        ]
+      }
+    },
+    "required_action": {
+      "actions": [],
+      "action_labels": [],
+      "rule": "unknown mechanism or unknown direction -> no action",
+      "why": "No record states which way this protein's activity moves, so no required action is derived and nothing is ruled out on direction.",
+      "direction_needed": "none"
+    },
+    "candidates": [
+      {
+        "id": "cand_01",
+        "rank": 1,
+        "target": {
+          "accession": "Q06187",
+          "gene_symbol": "BTK",
+          "name": "Tyrosine-protein kinase BTK",
+          "relation": "pathway_node",
+          "protein": {
+            "type": "protein",
+            "id": "Q06187",
+            "label": null,
+            "curie": "uniprot:Q06187",
+            "href": "/protein/Q06187"
+          },
+          "druggability": {
+            "molecules_with_a_recorded_action": 20,
+            "highest_clinical_phase": 4.0,
+            "has_approved_molecule": true,
+            "pocket_count": null,
+            "note": "BTK is upstream of WAS in Reactome."
+          }
+        },
+        "molecule": {
+          "inchikey": "WDENQIQQYWYTPO-IBGZPJMESA-N",
+          "chembl_id": "CHEMBL3707348",
+          "name": "Acalabrutinib",
+          "modality": "Small molecule",
+          "max_phase": 4.0,
+          "max_phase_label": "Approved",
+          "action_type": "INHIBITOR",
+          "mechanism_of_action": "Tyrosine-protein kinase BTK inhibitor",
+          "withdrawn": false,
+          "measured_affinity": null,
+          "compound": {
+            "type": "compound",
+            "id": "WDENQIQQYWYTPO-IBGZPJMESA-N",
+            "label": "Acalabrutinib",
+            "curie": "chembl:CHEMBL3707348",
+            "href": "/compound/WDENQIQQYWYTPO-IBGZPJMESA-N"
+          }
+        },
+        "bridge": {
+          "kind": "pathway_node",
+          "label": "A druggable protein up or down the pathway",
+          "from_disease": null,
+          "steps": [
+            {
+              "statement": "Reactome records the reaction \"Src phosphorylate WASP,N-WASP\" (R-HSA-2197698), which produces the modified form of WAS, and names it in the entity that catalyses the reaction: BTK. So BTK is upstream of WAS.",
+              "evidence": [
+                {
+                  "id": "ev_0d54709012d85863bc9b31cb92",
+                  "evidence_class": "curated_database",
+                  "subject": {
+                    "type": "protein",
+                    "id": "Q06187",
+                    "label": "BTK",
+                    "curie": "uniprot:Q06187",
+                    "href": "/protein/Q06187"
+                  },
+                  "predicate": "produces_active_form_of",
+                  "object": {
+                    "type": "protein",
+                    "value": null,
+                    "id": "uniprot:P42768",
+                    "label": "WAS",
+                    "unit": null,
+                    "context": []
+                  },
+                  "statement": "Src phosphorylate WASP,N-WASP (R-HSA-2197698)",
+                  "direction": "supports",
+                  "eco": {
+                    "id": "ECO:0000322",
+                    "label": "imported manually asserted information used in automatic assertion",
+                    "assigned_by": "helix_mapping"
+                  },
+                  "strength": null,
+                  "source": {
+                    "database": "reactome",
+                    "record_id": "R-HSA-2197698",
+                    "record_version": null,
+                    "release": null,
+                    "license": "CC0-1.0",
+                    "url": "https://reactome.org/content/detail/R-HSA-2197698",
+                    "retrieved_at": "2026-10-04T02:05:08.623463Z",
+                    "request": "POST https://reactome.org/ContentService/data/query/ids",
+                    "response_sha256": "d08f2a16a48390cca60387fa4cd6e3c6343c1f64fd87689b3227aa96f950f4b9"
+                  },
+                  "modifiers": [],
+                  "citations": [],
+                  "asserted_at": null,
+                  "structure_origin": null,
+                  "generated_by": null,
+                  "derived_from": [],
+                  "created_by": {
+                    "actor_id": "system",
+                    "kind": "system"
+                  },
+                  "authoring": null,
+                  "supersedes": null,
+                  "code": "CUR",
+                  "label": "Curated database",
+                  "claim_label": "database_annotation"
+                }
+              ]
+            },
+            {
+              "statement": "ChEMBL records Acalabrutinib as an inhibitor of Tyrosine-protein kinase BTK, described as \"Tyrosine-protein kinase BTK inhibitor\".",
+              "evidence": [
+                {
+                  "id": "ev_75f48b5bc9b69342a22b9265ab",
+                  "evidence_class": "curated_database",
+                  "subject": {
+                    "type": "protein",
+                    "id": "P42768",
+                    "label": "Actin nucleation-promoting factor WAS",
+                    "curie": "uniprot:P42768",
+                    "href": "/protein/P42768"
+                  },
+                  "predicate": "inhibitor",
+                  "object": {
+                    "type": "target",
+                    "value": null,
+                    "id": "chembl:CHEMBL5251",
+                    "label": "Tyrosine-protein kinase BTK",
+                    "unit": null,
+                    "context": []
+                  },
+                  "statement": "Acalabrutinib: Tyrosine-protein kinase BTK inhibitor (INHIBITOR)",
+                  "direction": "supports",
+                  "eco": {
+                    "id": "ECO:0000322",
+                    "label": "imported manually asserted information used in automatic assertion",
+                    "assigned_by": "helix_mapping"
+                  },
+                  "strength": {
+                    "scheme": "chembl_max_phase",
+                    "value": 4.0,
+                    "unit": null,
+                    "rank": null,
+                    "max_rank": null,
+                    "criteria": []
+                  },
+                  "source": {
+                    "database": "chembl",
+                    "record_id": "mechanism:6899",
+                    "record_version": null,
+                    "release": "ChEMBL_37",
+                    "license": "CC-BY-SA-3.0",
+                    "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3707348",
+                    "retrieved_at": "2026-10-03T23:34:44.000742Z",
+                    "request": "GET https://www.ebi.ac.uk/chembl/api/data/mechanism.json?target_chembl_id__in=CHEMBL4296642%2CCHEMBL4523704%2CCHEMBL4630740%2CCHEMBL5251%2CCHEMBL5291968%2CCHEMBL5482987%2CCHEMBL6066563%2CCHEMBL6066564%2CCHEMBL6066565%2CCHEMBL6193847%2CCHEMBL6195602&limit=1000&offset=0",
+                    "response_sha256": "97106eddcfad818817f2a2c211f31b51d03764d07fdb82e73edcbcee94c4f3a9"
+                  },
+                  "modifiers": [],
+                  "citations": [],
+                  "asserted_at": null,
+                  "structure_origin": null,
+                  "generated_by": null,
+                  "derived_from": [],
+                  "created_by": {
+                    "actor_id": "system",
+                    "kind": "system"
+                  },
+                  "authoring": null,
+                  "supersedes": null,
+                  "code": "CUR",
+                  "label": "Curated database",
+                  "claim_label": "database_annotation"
+                }
+              ]
+            }
+          ],
+          "partial": false,
+          "partial_reason": null
+        },
+        "direction_check": {
+          "required": [],
+          "required_direction": "none",
+          "molecule_action": "INHIBITOR",
+          "molecule_effect": "lowers",
+          "target_relation_effect": "same_way",
+          "verdict": "unknown",
+          "why": "No record states which way the activity of WAS moves, so the required action is not known and this molecule is neither matched nor ruled out."
+        },
+        "structure": null,
+        "caveats": [
+          "The direction of effect could not be checked, so this candidate may push the wrong way.",
+          "The molecule is not recorded against the subject's own protein.",
+          "No record measures this molecule against this protein.",
+          "Tissue expression was not checked, so the protein may not be present where it matters."
+        ],
+        "evidence": [
+          {
+            "id": "ev_0d54709012d85863bc9b31cb92",
+            "evidence_class": "curated_database",
+            "subject": {
+              "type": "protein",
+              "id": "Q06187",
+              "label": "BTK",
+              "curie": "uniprot:Q06187",
+              "href": "/protein/Q06187"
+            },
+            "predicate": "produces_active_form_of",
+            "object": {
+              "type": "protein",
+              "value": null,
+              "id": "uniprot:P42768",
+              "label": "WAS",
+              "unit": null,
+              "context": []
+            },
+            "statement": "Src phosphorylate WASP,N-WASP (R-HSA-2197698)",
+            "direction": "supports",
+            "eco": {
+              "id": "ECO:0000322",
+              "label": "imported manually asserted information used in automatic assertion",
+              "assigned_by": "helix_mapping"
+            },
+            "strength": null,
+            "source": {
+              "database": "reactome",
+              "record_id": "R-HSA-2197698",
+              "record_version": null,
+              "release": null,
+              "license": "CC0-1.0",
+              "url": "https://reactome.org/content/detail/R-HSA-2197698",
+              "retrieved_at": "2026-10-04T02:05:08.623463Z",
+              "request": "POST https://reactome.org/ContentService/data/query/ids",
+              "response_sha256": "d08f2a16a48390cca60387fa4cd6e3c6343c1f64fd87689b3227aa96f950f4b9"
+            },
+            "modifiers": [],
+            "citations": [],
+            "asserted_at": null,
+            "structure_origin": null,
+            "generated_by": null,
+            "derived_from": [],
+            "created_by": {
+              "actor_id": "system",
+              "kind": "system"
+            },
+            "authoring": null,
+            "supersedes": null,
+            "code": "CUR",
+            "label": "Curated database",
+            "claim_label": "database_annotation"
+          },
+          {
+            "id": "ev_75f48b5bc9b69342a22b9265ab",
+            "evidence_class": "curated_database",
+            "subject": {
+              "type": "protein",
+              "id": "P42768",
+              "label": "Actin nucleation-promoting factor WAS",
+              "curie": "uniprot:P42768",
+              "href": "/protein/P42768"
+            },
+            "predicate": "inhibitor",
+            "object": {
+              "type": "target",
+              "value": null,
+              "id": "chembl:CHEMBL5251",
+              "label": "Tyrosine-protein kinase BTK",
+              "unit": null,
+              "context": []
+            },
+            "statement": "Acalabrutinib: Tyrosine-protein kinase BTK inhibitor (INHIBITOR)",
+            "direction": "supports",
+            "eco": {
+              "id": "ECO:0000322",
+              "label": "imported manually asserted information used in automatic assertion",
+              "assigned_by": "helix_mapping"
+            },
+            "strength": {
+              "scheme": "chembl_max_phase",
+              "value": 4.0,
+              "unit": null,
+              "rank": null,
+              "max_rank": null,
+              "criteria": []
+            },
+            "source": {
+              "database": "chembl",
+              "record_id": "mechanism:6899",
+              "record_version": null,
+              "release": "ChEMBL_37",
+              "license": "CC-BY-SA-3.0",
+              "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3707348",
+              "retrieved_at": "2026-10-03T23:34:44.000742Z",
+              "request": "GET https://www.ebi.ac.uk/chembl/api/data/mechanism.json?target_chembl_id__in=CHEMBL4296642%2CCHEMBL4523704%2CCHEMBL4630740%2CCHEMBL5251%2CCHEMBL5291968%2CCHEMBL5482987%2CCHEMBL6066563%2CCHEMBL6066564%2CCHEMBL6066565%2CCHEMBL6193847%2CCHEMBL6195602&limit=1000&offset=0",
+              "response_sha256": "97106eddcfad818817f2a2c211f31b51d03764d07fdb82e73edcbcee94c4f3a9"
+            },
+            "modifiers": [],
+            "citations": [],
+            "asserted_at": null,
+            "structure_origin": null,
+            "generated_by": null,
+            "derived_from": [],
+            "created_by": {
+              "actor_id": "system",
+              "kind": "system"
+            },
+            "authoring": null,
+            "supersedes": null,
+            "code": "CUR",
+            "label": "Curated database",
+            "claim_label": "database_annotation"
+          }
+        ],
+        "label": "Helix hypothesis"
+      },
+      {
+        "id": "cand_02",
+        "rank": 2,
+        "target": {
+          "accession": "Q06187",
+          "gene_symbol": "BTK",
+          "name": "Tyrosine-protein kinase BTK",
+          "relation": "pathway_node",
+          "protein": {
+            "type": "protein",
+            "id": "Q06187",
+            "label": null,
+            "curie": "uniprot:Q06187",
+            "href": "/protein/Q06187"
+          },
+          "druggability": {
+            "molecules_with_a_recorded_action": 20,
+            "highest_clinical_phase": 4.0,
+            "has_approved_molecule": true,
+            "pocket_count": null,
+            "note": "BTK is upstream of WAS in Reactome."
+          }
+        },
+        "molecule": {
+          "inchikey": "XYFPWWZEPKGCCK-GOSISDBHSA-N",
+          "chembl_id": "CHEMBL1873475",
+          "name": "Ibrutinib",
+          "modality": "Small molecule",
+          "max_phase": 4.0,
+          "max_phase_label": "Approved",
+          "action_type": "INHIBITOR",
+          "mechanism_of_action": "Tyrosine-protein kinase BTK inhibitor",
+          "withdrawn": false,
+          "measured_affinity": null,
+          "compound": {
+            "type": "compound",
+            "id": "XYFPWWZEPKGCCK-GOSISDBHSA-N",
+            "label": "Ibrutinib",
+            "curie": "chembl:CHEMBL1873475",
+            "href": "/compound/XYFPWWZEPKGCCK-GOSISDBHSA-N"
+          }
+        },
+        "bridge": {
+          "kind": "pathway_node",
+          "label": "A druggable protein up or down the pathway",
+          "from_disease": null,
+          "steps": [
+            {
+              "statement": "Reactome records the reaction \"Src phosphorylate WASP,N-WASP\" (R-HSA-2197698), which produces the modified form of WAS, and names it in the entity that catalyses the reaction: BTK. So BTK is upstream of WAS.",
+              "evidence": [
+                {
+                  "id": "ev_0d54709012d85863bc9b31cb92",
+                  "evidence_class": "curated_database",
+                  "subject": {
+                    "type": "protein",
+                    "id": "Q06187",
+                    "label": "BTK",
+                    "curie": "uniprot:Q06187",
+                    "href": "/protein/Q06187"
+                  },
+                  "predicate": "produces_active_form_of",
+                  "object": {
+                    "type": "protein",
+                    "value": null,
+                    "id": "uniprot:P42768",
+                    "label": "WAS",
+                    "unit": null,
+                    "context": []
+                  },
+                  "statement": "Src phosphorylate WASP,N-WASP (R-HSA-2197698)",
+                  "direction": "supports",
+                  "eco": {
+                    "id": "ECO:0000322",
+                    "label": "imported manually asserted information used in automatic assertion",
+                    "assigned_by": "helix_mapping"
+                  },
+                  "strength": null,
+                  "source": {
+                    "database": "reactome",
+                    "record_id": "R-HSA-2197698",
+                    "record_version": null,
+                    "release": null,
+                    "license": "CC0-1.0",
+                    "url": "https://reactome.org/content/detail/R-HSA-2197698",
+                    "retrieved_at": "2026-10-04T02:05:08.623463Z",
+                    "request": "POST https://reactome.org/ContentService/data/query/ids",
+                    "response_sha256": "d08f2a16a48390cca60387fa4cd6e3c6343c1f64fd87689b3227aa96f950f4b9"
+                  },
+                  "modifiers": [],
+                  "citations": [],
+                  "asserted_at": null,
+                  "structure_origin": null,
+                  "generated_by": null,
+                  "derived_from": [],
+                  "created_by": {
+                    "actor_id": "system",
+                    "kind": "system"
+                  },
+                  "authoring": null,
+                  "supersedes": null,
+                  "code": "CUR",
+                  "label": "Curated database",
+                  "claim_label": "database_annotation"
+                }
+              ]
+            },
+            {
+              "statement": "ChEMBL records Ibrutinib as an inhibitor of Tyrosine-protein kinase BTK, described as \"Tyrosine-protein kinase BTK inhibitor\".",
+              "evidence": [
+                {
+                  "id": "ev_b5149c1614da8e6f0d9b7c4bd6",
+                  "evidence_class": "curated_database",
+                  "subject": {
+                    "type": "protein",
+                    "id": "P42768",
+                    "label": "Actin nucleation-promoting factor WAS",
+                    "curie": "uniprot:P42768",
+                    "href": "/protein/P42768"
+                  },
+                  "predicate": "inhibitor",
+                  "object": {
+                    "type": "target",
+                    "value": null,
+                    "id": "chembl:CHEMBL5251",
+                    "label": "Tyrosine-protein kinase BTK",
+                    "unit": null,
+                    "context": []
+                  },
+                  "statement": "Ibrutinib: Tyrosine-protein kinase BTK inhibitor (INHIBITOR)",
+                  "direction": "supports",
+                  "eco": {
+                    "id": "ECO:0000322",
+                    "label": "imported manually asserted information used in automatic assertion",
+                    "assigned_by": "helix_mapping"
+                  },
+                  "strength": {
+                    "scheme": "chembl_max_phase",
+                    "value": 4.0,
+                    "unit": null,
+                    "rank": null,
+                    "max_rank": null,
+                    "criteria": []
+                  },
+                  "source": {
+                    "database": "chembl",
+                    "record_id": "mechanism:2242",
+                    "record_version": null,
+                    "release": "ChEMBL_37",
+                    "license": "CC-BY-SA-3.0",
+                    "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1873475",
+                    "retrieved_at": "2026-10-03T23:34:44.000742Z",
+                    "request": "GET https://www.ebi.ac.uk/chembl/api/data/mechanism.json?target_chembl_id__in=CHEMBL4296642%2CCHEMBL4523704%2CCHEMBL4630740%2CCHEMBL5251%2CCHEMBL5291968%2CCHEMBL5482987%2CCHEMBL6066563%2CCHEMBL6066564%2CCHEMBL6066565%2CCHEMBL6193847%2CCHEMBL6195602&limit=1000&offset=0",
+                    "response_sha256": "97106eddcfad818817f2a2c211f31b51d03764d07fdb82e73edcbcee94c4f3a9"
+                  },
+                  "modifiers": [],
+                  "citations": [],
+                  "asserted_at": null,
+                  "structure_origin": null,
+                  "generated_by": null,
+                  "derived_from": [],
+                  "created_by": {
+                    "actor_id": "system",
+                    "kind": "system"
+                  },
+                  "authoring": null,
+                  "supersedes": null,
+                  "code": "CUR",
+                  "label": "Curated database",
+                  "claim_label": "database_annotation"
+                }
+              ]
+            }
+          ],
+          "partial": false,
+          "partial_reason": null
+        },
+        "direction_check": {
+          "required": [],
+          "required_direction": "none",
+          "molecule_action": "INHIBITOR",
+          "molecule_effect": "lowers",
+          "target_relation_effect": "same_way",
+          "verdict": "unknown",
+          "why": "No record states which way the activity of WAS moves, so the required action is not known and this molecule is neither matched nor ruled out."
+        },
+        "structure": null,
+        "caveats": [
+          "The direction of effect could not be checked, so this candidate may push the wrong way.",
+          "The molecule is not recorded against the subject's own protein.",
+          "No record measures this molecule against this protein.",
+          "Tissue expression was not checked, so the protein may not be present where it matters."
+        ],
+        "evidence": [
+          {
+            "id": "ev_0d54709012d85863bc9b31cb92",
+            "evidence_class": "curated_database",
+            "subject": {
+              "type": "protein",
+              "id": "Q06187",
+              "label": "BTK",
+              "curie": "uniprot:Q06187",
+              "href": "/protein/Q06187"
+            },
+            "predicate": "produces_active_form_of",
+            "object": {
+              "type": "protein",
+              "value": null,
+              "id": "uniprot:P42768",
+              "label": "WAS",
+              "unit": null,
+              "context": []
+            },
+            "statement": "Src phosphorylate WASP,N-WASP (R-HSA-2197698)",
+            "direction": "supports",
+            "eco": {
+              "id": "ECO:0000322",
+              "label": "imported manually asserted information used in automatic assertion",
+              "assigned_by": "helix_mapping"
+            },
+            "strength": null,
+            "source": {
+              "database": "reactome",
+              "record_id": "R-HSA-2197698",
+              "record_version": null,
+              "release": null,
+              "license": "CC0-1.0",
+              "url": "https://reactome.org/content/detail/R-HSA-2197698",
+              "retrieved_at": "2026-10-04T02:05:08.623463Z",
+              "request": "POST https://reactome.org/ContentService/data/query/ids",
+              "response_sha256": "d08f2a16a48390cca60387fa4cd6e3c6343c1f64fd87689b3227aa96f950f4b9"
+            },
+            "modifiers": [],
+            "citations": [],
+            "asserted_at": null,
+            "structure_origin": null,
+            "generated_by": null,
+            "derived_from": [],
+            "created_by": {
+              "actor_id": "system",
+              "kind": "system"
+            },
+            "authoring": null,
+            "supersedes": null,
+            "code": "CUR",
+            "label": "Curated database",
+            "claim_label": "database_annotation"
+          },
+          {
+            "id": "ev_b5149c1614da8e6f0d9b7c4bd6",
+            "evidence_class": "curated_database",
+            "subject": {
+              "type": "protein",
+              "id": "P42768",
+              "label": "Actin nucleation-promoting factor WAS",
+              "curie": "uniprot:P42768",
+              "href": "/protein/P42768"
+            },
+            "predicate": "inhibitor",
+            "object": {
+              "type": "target",
+              "value": null,
+              "id": "chembl:CHEMBL5251",
+              "label": "Tyrosine-protein kinase BTK",
+              "unit": null,
+              "context": []
+            },
+            "statement": "Ibrutinib: Tyrosine-protein kinase BTK inhibitor (INHIBITOR)",
+            "direction": "supports",
+            "eco": {
+              "id": "ECO:0000322",
+              "label": "imported manually asserted information used in automatic assertion",
+              "assigned_by": "helix_mapping"
+            },
+            "strength": {
+              "scheme": "chembl_max_phase",
+              "value": 4.0,
+              "unit": null,
+              "rank": null,
+              "max_rank": null,
+              "criteria": []
+            },
+            "source": {
+              "database": "chembl",
+              "record_id": "mechanism:2242",
+              "record_version": null,
+              "release": "ChEMBL_37",
+              "license": "CC-BY-SA-3.0",
+              "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1873475",
+              "retrieved_at": "2026-10-03T23:34:44.000742Z",
+              "request": "GET https://www.ebi.ac.uk/chembl/api/data/mechanism.json?target_chembl_id__in=CHEMBL4296642%2CCHEMBL4523704%2CCHEMBL4630740%2CCHEMBL5251%2CCHEMBL5291968%2CCHEMBL5482987%2CCHEMBL6066563%2CCHEMBL6066564%2CCHEMBL6066565%2CCHEMBL6193847%2CCHEMBL6195602&limit=1000&offset=0",
+              "response_sha256": "97106eddcfad818817f2a2c211f31b51d03764d07fdb82e73edcbcee94c4f3a9"
+            },
+            "modifiers": [],
+            "citations": [],
+            "asserted_at": null,
+            "structure_origin": null,
+            "generated_by": null,
+            "derived_from": [],
+            "created_by": {
+              "actor_id": "system",
+              "kind": "system"
+            },
+            "authoring": null,
+            "supersedes": null,
+            "code": "CUR",
+            "label": "Curated database",
+            "claim_label": "database_annotation"
+          }
+        ],
+        "label": "Helix hypothesis"
+      },
+      {
+        "id": "cand_03",
+        "rank": 3,
+        "target": {
+          "accession": "Q06187",
+          "gene_symbol": "BTK",
+          "name": "Tyrosine-protein kinase BTK",
+          "relation": "pathway_node",
+          "protein": {
+            "type": "protein",
+            "id": "Q06187",
+            "label": null,
+            "curie": "uniprot:Q06187",
+            "href": "/protein/Q06187"
+          },
+          "druggability": {
+            "molecules_with_a_recorded_action": 20,
+            "highest_clinical_phase": 4.0,
+            "has_approved_molecule": true,
+            "pocket_count": null,
+            "note": "BTK is upstream of WAS in Reactome."
+          }
+        },
+        "molecule": {
+          "inchikey": "FWZAWAUZXYCBKZ-NSHDSACASA-N",
+          "chembl_id": "CHEMBL4650485",
+          "name": "Pirtobrutinib",
+          "modality": "Small molecule",
+          "max_phase": 4.0,
+          "max_phase_label": "Approved",
+          "action_type": "INHIBITOR",
+          "mechanism_of_action": "Tyrosine-protein kinase BTK inhibitor",
+          "withdrawn": false,
+          "measured_affinity": null,
+          "compound": {
+            "type": "compound",
+            "id": "FWZAWAUZXYCBKZ-NSHDSACASA-N",
+            "label": "Pirtobrutinib",
+            "curie": "chembl:CHEMBL4650485",
+            "href": "/compound/FWZAWAUZXYCBKZ-NSHDSACASA-N"
+          }
+        },
+        "bridge": {
+          "kind": "pathway_node",
+          "label": "A druggable protein up or down the pathway",
+          "from_disease": null,
+          "steps": [
+            {
+              "statement": "Reactome records the reaction \"Src phosphorylate WASP,N-WASP\" (R-HSA-2197698), which produces the modified form of WAS, and names it in the entity that catalyses the reaction: BTK. So BTK is upstream of WAS.",
+              "evidence": [
+                {
+                  "id": "ev_0d54709012d85863bc9b31cb92",
+                  "evidence_class": "curated_database",
+                  "subject": {
+                    "type": "protein",
+                    "id": "Q06187",
+                    "label": "BTK",
+                    "curie": "uniprot:Q06187",
+                    "href": "/protein/Q06187"
+                  },
+                  "predicate": "produces_active_form_of",
+                  "object": {
+                    "type": "protein",
+                    "value": null,
+                    "id": "uniprot:P42768",
+                    "label": "WAS",
+                    "unit": null,
+                    "context": []
+                  },
+                  "statement": "Src phosphorylate WASP,N-WASP (R-HSA-2197698)",
+                  "direction": "supports",
+                  "eco": {
+                    "id": "ECO:0000322",
+                    "label": "imported manually asserted information used in automatic assertion",
+                    "assigned_by": "helix_mapping"
+                  },
+                  "strength": null,
+                  "source": {
+                    "database": "reactome",
+                    "record_id": "R-HSA-2197698",
+                    "record_version": null,
+                    "release": null,
+                    "license": "CC0-1.0",
+                    "url": "https://reactome.org/content/detail/R-HSA-2197698",
+                    "retrieved_at": "2026-10-04T02:05:08.623463Z",
+                    "request": "POST https://reactome.org/ContentService/data/query/ids",
+                    "response_sha256": "d08f2a16a48390cca60387fa4cd6e3c6343c1f64fd87689b3227aa96f950f4b9"
+                  },
+                  "modifiers": [],
+                  "citations": [],
+                  "asserted_at": null,
+                  "structure_origin": null,
+                  "generated_by": null,
+                  "derived_from": [],
+                  "created_by": {
+                    "actor_id": "system",
+                    "kind": "system"
+                  },
+                  "authoring": null,
+                  "supersedes": null,
+                  "code": "CUR",
+                  "label": "Curated database",
+                  "claim_label": "database_annotation"
+                }
+              ]
+            },
+            {
+              "statement": "ChEMBL records Pirtobrutinib as an inhibitor of Tyrosine-protein kinase BTK, described as \"Tyrosine-protein kinase BTK inhibitor\".",
+              "evidence": [
+                {
+                  "id": "ev_ba54ae7f3d0534a670d3fba004",
+                  "evidence_class": "curated_database",
+                  "subject": {
+                    "type": "protein",
+                    "id": "P42768",
+                    "label": "Actin nucleation-promoting factor WAS",
+                    "curie": "uniprot:P42768",
+                    "href": "/protein/P42768"
+                  },
+                  "predicate": "inhibitor",
+                  "object": {
+                    "type": "target",
+                    "value": null,
+                    "id": "chembl:CHEMBL5251",
+                    "label": "Tyrosine-protein kinase BTK",
+                    "unit": null,
+                    "context": []
+                  },
+                  "statement": "Pirtobrutinib: Tyrosine-protein kinase BTK inhibitor (INHIBITOR)",
+                  "direction": "supports",
+                  "eco": {
+                    "id": "ECO:0000322",
+                    "label": "imported manually asserted information used in automatic assertion",
+                    "assigned_by": "helix_mapping"
+                  },
+                  "strength": {
+                    "scheme": "chembl_max_phase",
+                    "value": 4.0,
+                    "unit": null,
+                    "rank": null,
+                    "max_rank": null,
+                    "criteria": []
+                  },
+                  "source": {
+                    "database": "chembl",
+                    "record_id": "mechanism:8956",
+                    "record_version": null,
+                    "release": "ChEMBL_37",
+                    "license": "CC-BY-SA-3.0",
+                    "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650485",
+                    "retrieved_at": "2026-10-03T23:34:44.000742Z",
+                    "request": "GET https://www.ebi.ac.uk/chembl/api/data/mechanism.json?target_chembl_id__in=CHEMBL4296642%2CCHEMBL4523704%2CCHEMBL4630740%2CCHEMBL5251%2CCHEMBL5291968%2CCHEMBL5482987%2CCHEMBL6066563%2CCHEMBL6066564%2CCHEMBL6066565%2CCHEMBL6193847%2CCHEMBL6195602&limit=1000&offset=0",
+                    "response_sha256": "97106eddcfad818817f2a2c211f31b51d03764d07fdb82e73edcbcee94c4f3a9"
+                  },
+                  "modifiers": [],
+                  "citations": [],
+                  "asserted_at": null,
+                  "structure_origin": null,
+                  "generated_by": null,
+                  "derived_from": [],
+                  "created_by": {
+                    "actor_id": "system",
+                    "kind": "system"
+                  },
+                  "authoring": null,
+                  "supersedes": null,
+                  "code": "CUR",
+                  "label": "Curated database",
+                  "claim_label": "database_annotation"
+                }
+              ]
+            }
+          ],
+          "partial": false,
+          "partial_reason": null
+        },
+        "direction_check": {
+          "required": [],
+          "required_direction": "none",
+          "molecule_action": "INHIBITOR",
+          "molecule_effect": "lowers",
+          "target_relation_effect": "same_way",
+          "verdict": "unknown",
+          "why": "No record states which way the activity of WAS moves, so the required action is not known and this molecule is neither matched nor ruled out."
+        },
+        "structure": null,
+        "caveats": [
+          "The direction of effect could not be checked, so this candidate may push the wrong way.",
+          "The molecule is not recorded against the subject's own protein.",
+          "No record measures this molecule against this protein.",
+          "Tissue expression was not checked, so the protein may not be present where it matters."
+        ],
+        "evidence": [
+          {
+            "id": "ev_0d54709012d85863bc9b31cb92",
+            "evidence_class": "curated_database",
+            "subject": {
+              "type": "protein",
+              "id": "Q06187",
+              "label": "BTK",
+              "curie": "uniprot:Q06187",
+              "href": "/protein/Q06187"
+            },
+            "predicate": "produces_active_form_of",
+            "object": {
+              "type": "protein",
+              "value": null,
+              "id": "uniprot:P42768",
+              "label": "WAS",
+              "unit": null,
+              "context": []
+            },
+            "statement": "Src phosphorylate WASP,N-WASP (R-HSA-2197698)",
+            "direction": "supports",
+            "eco": {
+              "id": "ECO:0000322",
+              "label": "imported manually asserted information used in automatic assertion",
+              "assigned_by": "helix_mapping"
+            },
+            "strength": null,
+            "source": {
+              "database": "reactome",
+              "record_id": "R-HSA-2197698",
+              "record_version": null,
+              "release": null,
+              "license": "CC0-1.0",
+              "url": "https://reactome.org/content/detail/R-HSA-2197698",
+              "retrieved_at": "2026-10-04T02:05:08.623463Z",
+              "request": "POST https://reactome.org/ContentService/data/query/ids",
+              "response_sha256": "d08f2a16a48390cca60387fa4cd6e3c6343c1f64fd87689b3227aa96f950f4b9"
+            },
+            "modifiers": [],
+            "citations": [],
+            "asserted_at": null,
+            "structure_origin": null,
+            "generated_by": null,
+            "derived_from": [],
+            "created_by": {
+              "actor_id": "system",
+              "kind": "system"
+            },
+            "authoring": null,
+            "supersedes": null,
+            "code": "CUR",
+            "label": "Curated database",
+            "claim_label": "database_annotation"
+          },
+          {
+            "id": "ev_ba54ae7f3d0534a670d3fba004",
+            "evidence_class": "curated_database",
+            "subject": {
+              "type": "protein",
+              "id": "P42768",
+              "label": "Actin nucleation-promoting factor WAS",
+              "curie": "uniprot:P42768",
+              "href": "/protein/P42768"
+            },
+            "predicate": "inhibitor",
+            "object": {
+              "type": "target",
+              "value": null,
+              "id": "chembl:CHEMBL5251",
+              "label": "Tyrosine-protein kinase BTK",
+              "unit": null,
+              "context": []
+            },
+            "statement": "Pirtobrutinib: Tyrosine-protein kinase BTK inhibitor (INHIBITOR)",
+            "direction": "supports",
+            "eco": {
+              "id": "ECO:0000322",
+              "label": "imported manually asserted information used in automatic assertion",
+              "assigned_by": "helix_mapping"
+            },
+            "strength": {
+              "scheme": "chembl_max_phase",
+              "value": 4.0,
+              "unit": null,
+              "rank": null,
+              "max_rank": null,
+              "criteria": []
+            },
+            "source": {
+              "database": "chembl",
+              "record_id": "mechanism:8956",
+              "record_version": null,
+              "release": "ChEMBL_37",
+              "license": "CC-BY-SA-3.0",
+              "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650485",
+              "retrieved_at": "2026-10-03T23:34:44.000742Z",
+              "request": "GET https://www.ebi.ac.uk/chembl/api/data/mechanism.json?target_chembl_id__in=CHEMBL4296642%2CCHEMBL4523704%2CCHEMBL4630740%2CCHEMBL5251%2CCHEMBL5291968%2CCHEMBL5482987%2CCHEMBL6066563%2CCHEMBL6066564%2CCHEMBL6066565%2CCHEMBL6193847%2CCHEMBL6195602&limit=1000&offset=0",
+              "response_sha256": "97106eddcfad818817f2a2c211f31b51d03764d07fdb82e73edcbcee94c4f3a9"
+            },
+            "modifiers": [],
+            "citations": [],
+            "asserted_at": null,
+            "structure_origin": null,
+            "generated_by": null,
+            "derived_from": [],
+            "created_by": {
+              "actor_id": "system",
+              "kind": "system"
+            },
+            "authoring": null,
+            "supersedes": null,
+            "code": "CUR",
+            "label": "Curated database",
+            "claim_label": "database_annotation"
+          }
+        ],
+        "label": "Helix hypothesis"
+      },
+      {
+        "id": "cand_04",
+        "rank": 4,
+        "target": {
+          "accession": "Q06187",
+          "gene_symbol": "BTK",
+          "name": "Tyrosine-protein kinase BTK",
+          "relation": "pathway_node",
+          "protein": {
+            "type": "protein",
+            "id": "Q06187",
+            "label": null,
+            "curie": "uniprot:Q06187",
+            "href": "/protein/Q06187"
+          },
+          "druggability": {
+            "molecules_with_a_recorded_action": 20,
+            "highest_clinical_phase": 4.0,
+            "has_approved_molecule": true,
+            "pocket_count": null,
+            "note": "BTK is upstream of WAS in Reactome."
+          }
+        },
+        "molecule": {
+          "inchikey": "SEJLPXCPMNSRAM-GOSISDBHSA-N",
+          "chembl_id": "CHEMBL4071161",
+          "name": "Tirabrutinib",
+          "modality": "Small molecule",
+          "max_phase": 4.0,
+          "max_phase_label": "Approved",
+          "action_type": "INHIBITOR",
+          "mechanism_of_action": "Tyrosine-protein kinase BTK inhibitor",
+          "withdrawn": false,
+          "measured_affinity": null,
+          "compound": {
+            "type": "compound",
+            "id": "SEJLPXCPMNSRAM-GOSISDBHSA-N",
+            "label": "Tirabrutinib",
+            "curie": "chembl:CHEMBL4071161",
+            "href": "/compound/SEJLPXCPMNSRAM-GOSISDBHSA-N"
+          }
+        },
+        "bridge": {
+          "kind": "pathway_node",
+          "label": "A druggable protein up or down the pathway",
+          "from_disease": null,
+          "steps": [
+            {
+              "statement": "Reactome records the reaction \"Src phosphorylate WASP,N-WASP\" (R-HSA-2197698), which produces the modified form of WAS, and names it in the entity that catalyses the reaction: BTK. So BTK is upstream of WAS.",
+              "evidence": [
+                {
+                  "id": "ev_0d54709012d85863bc9b31cb92",
+                  "evidence_class": "curated_database",
+                  "subject": {
+                    "type": "protein",
+                    "id": "Q06187",
+                    "label": "BTK",
+                    "curie": "uniprot:Q06187",
+                    "href": "/protein/Q06187"
+                  },
+                  "predicate": "produces_active_form_of",
+                  "object": {
+                    "type": "protein",
+                    "value": null,
+                    "id": "uniprot:P42768",
+                    "label": "WAS",
+                    "unit": null,
+                    "context": []
+                  },
+                  "statement": "Src phosphorylate WASP,N-WASP (R-HSA-2197698)",
+                  "direction": "supports",
+                  "eco": {
+                    "id": "ECO:0000322",
+                    "label": "imported manually asserted information used in automatic assertion",
+                    "assigned_by": "helix_mapping"
+                  },
+                  "strength": null,
+                  "source": {
+                    "database": "reactome",
+                    "record_id": "R-HSA-2197698",
+                    "record_version": null,
+                    "release": null,
+                    "license": "CC0-1.0",
+                    "url": "https://reactome.org/content/detail/R-HSA-2197698",
+                    "retrieved_at": "2026-10-04T02:05:08.623463Z",
+                    "request": "POST https://reactome.org/ContentService/data/query/ids",
+                    "response_sha256": "d08f2a16a48390cca60387fa4cd6e3c6343c1f64fd87689b3227aa96f950f4b9"
+                  },
+                  "modifiers": [],
+                  "citations": [],
+                  "asserted_at": null,
+                  "structure_origin": null,
+                  "generated_by": null,
+                  "derived_from": [],
+                  "created_by": {
+                    "actor_id": "system",
+                    "kind": "system"
+                  },
+                  "authoring": null,
+                  "supersedes": null,
+                  "code": "CUR",
+                  "label": "Curated database",
+                  "claim_label": "database_annotation"
+                }
+              ]
+            },
+            {
+              "statement": "ChEMBL records Tirabrutinib as an inhibitor of Tyrosine-protein kinase BTK, described as \"Tyrosine-protein kinase BTK inhibitor\".",
+              "evidence": [
+                {
+                  "id": "ev_ce893f74160f217e7a5aaae81b",
+                  "evidence_class": "curated_database",
+                  "subject": {
+                    "type": "protein",
+                    "id": "P42768",
+                    "label": "Actin nucleation-promoting factor WAS",
+                    "curie": "uniprot:P42768",
+                    "href": "/protein/P42768"
+                  },
+                  "predicate": "inhibitor",
+                  "object": {
+                    "type": "target",
+                    "value": null,
+                    "id": "chembl:CHEMBL5251",
+                    "label": "Tyrosine-protein kinase BTK",
+                    "unit": null,
+                    "context": []
+                  },
+                  "statement": "Tirabrutinib: Tyrosine-protein kinase BTK inhibitor (INHIBITOR)",
+                  "direction": "supports",
+                  "eco": {
+                    "id": "ECO:0000322",
+                    "label": "imported manually asserted information used in automatic assertion",
+                    "assigned_by": "helix_mapping"
+                  },
+                  "strength": {
+                    "scheme": "chembl_max_phase",
+                    "value": 4.0,
+                    "unit": null,
+                    "rank": null,
+                    "max_rank": null,
+                    "criteria": []
+                  },
+                  "source": {
+                    "database": "chembl",
+                    "record_id": "mechanism:4297",
+                    "record_version": null,
+                    "release": "ChEMBL_37",
+                    "license": "CC-BY-SA-3.0",
+                    "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4071161",
+                    "retrieved_at": "2026-10-03T23:34:44.000742Z",
+                    "request": "GET https://www.ebi.ac.uk/chembl/api/data/mechanism.json?target_chembl_id__in=CHEMBL4296642%2CCHEMBL4523704%2CCHEMBL4630740%2CCHEMBL5251%2CCHEMBL5291968%2CCHEMBL5482987%2CCHEMBL6066563%2CCHEMBL6066564%2CCHEMBL6066565%2CCHEMBL6193847%2CCHEMBL6195602&limit=1000&offset=0",
+                    "response_sha256": "97106eddcfad818817f2a2c211f31b51d03764d07fdb82e73edcbcee94c4f3a9"
+                  },
+                  "modifiers": [],
+                  "citations": [],
+                  "asserted_at": null,
+                  "structure_origin": null,
+                  "generated_by": null,
+                  "derived_from": [],
+                  "created_by": {
+                    "actor_id": "system",
+                    "kind": "system"
+                  },
+                  "authoring": null,
+                  "supersedes": null,
+                  "code": "CUR",
+                  "label": "Curated database",
+                  "claim_label": "database_annotation"
+                }
+              ]
+            }
+          ],
+          "partial": false,
+          "partial_reason": null
+        },
+        "direction_check": {
+          "required": [],
+          "required_direction": "none",
+          "molecule_action": "INHIBITOR",
+          "molecule_effect": "lowers",
+          "target_relation_effect": "same_way",
+          "verdict": "unknown",
+          "why": "No record states which way the activity of WAS moves, so the required action is not known and this molecule is neither matched nor ruled out."
+        },
+        "structure": null,
+        "caveats": [
+          "The direction of effect could not be checked, so this candidate may push the wrong way.",
+          "The molecule is not recorded against the subject's own protein.",
+          "No record measures this molecule against this protein.",
+          "Tissue expression was not checked, so the protein may not be present where it matters."
+        ],
+        "evidence": [
+          {
+            "id": "ev_0d54709012d85863bc9b31cb92",
+            "evidence_class": "curated_database",
+            "subject": {
+              "type": "protein",
+              "id": "Q06187",
+              "label": "BTK",
+              "curie": "uniprot:Q06187",
+              "href": "/protein/Q06187"
+            },
+            "predicate": "produces_active_form_of",
+            "object": {
+              "type": "protein",
+              "value": null,
+              "id": "uniprot:P42768",
+              "label": "WAS",
+              "unit": null,
+              "context": []
+            },
+            "statement": "Src phosphorylate WASP,N-WASP (R-HSA-2197698)",
+            "direction": "supports",
+            "eco": {
+              "id": "ECO:0000322",
+              "label": "imported manually asserted information used in automatic assertion",
+              "assigned_by": "helix_mapping"
+            },
+            "strength": null,
+            "source": {
+              "database": "reactome",
+              "record_id": "R-HSA-2197698",
+              "record_version": null,
+              "release": null,
+              "license": "CC0-1.0",
+              "url": "https://reactome.org/content/detail/R-HSA-2197698",
+              "retrieved_at": "2026-10-04T02:05:08.623463Z",
+              "request": "POST https://reactome.org/ContentService/data/query/ids",
+              "response_sha256": "d08f2a16a48390cca60387fa4cd6e3c6343c1f64fd87689b3227aa96f950f4b9"
+            },
+            "modifiers": [],
+            "citations": [],
+            "asserted_at": null,
+            "structure_origin": null,
+            "generated_by": null,
+            "derived_from": [],
+            "created_by": {
+              "actor_id": "system",
+              "kind": "system"
+            },
+            "authoring": null,
+            "supersedes": null,
+            "code": "CUR",
+            "label": "Curated database",
+            "claim_label": "database_annotation"
+          },
+          {
+            "id": "ev_ce893f74160f217e7a5aaae81b",
+            "evidence_class": "curated_database",
+            "subject": {
+              "type": "protein",
+              "id": "P42768",
+              "label": "Actin nucleation-promoting factor WAS",
+              "curie": "uniprot:P42768",
+              "href": "/protein/P42768"
+            },
+            "predicate": "inhibitor",
+            "object": {
+              "type": "target",
+              "value": null,
+              "id": "chembl:CHEMBL5251",
+              "label": "Tyrosine-protein kinase BTK",
+              "unit": null,
+              "context": []
+            },
+            "statement": "Tirabrutinib: Tyrosine-protein kinase BTK inhibitor (INHIBITOR)",
+            "direction": "supports",
+            "eco": {
+              "id": "ECO:0000322",
+              "label": "imported manually asserted information used in automatic assertion",
+              "assigned_by": "helix_mapping"
+            },
+            "strength": {
+              "scheme": "chembl_max_phase",
+              "value": 4.0,
+              "unit": null,
+              "rank": null,
+              "max_rank": null,
+              "criteria": []
+            },
+            "source": {
+              "database": "chembl",
+              "record_id": "mechanism:4297",
+              "record_version": null,
+              "release": "ChEMBL_37",
+              "license": "CC-BY-SA-3.0",
+              "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4071161",
+              "retrieved_at": "2026-10-03T23:34:44.000742Z",
+              "request": "GET https://www.ebi.ac.uk/chembl/api/data/mechanism.json?target_chembl_id__in=CHEMBL4296642%2CCHEMBL4523704%2CCHEMBL4630740%2CCHEMBL5251%2CCHEMBL5291968%2CCHEMBL5482987%2CCHEMBL6066563%2CCHEMBL6066564%2CCHEMBL6066565%2CCHEMBL6193847%2CCHEMBL6195602&limit=1000&offset=0",
+              "response_sha256": "97106eddcfad818817f2a2c211f31b51d03764d07fdb82e73edcbcee94c4f3a9"
+            },
+            "modifiers": [],
+            "citations": [],
+            "asserted_at": null,
+            "structure_origin": null,
+            "generated_by": null,
+            "derived_from": [],
+            "created_by": {
+              "actor_id": "system",
+              "kind": "system"
+            },
+            "authoring": null,
+            "supersedes": null,
+            "code": "CUR",
+            "label": "Curated database",
+            "claim_label": "database_annotation"
+          }
+        ],
+        "label": "Helix hypothesis"
+      }
+    ],
+    "ruled_out": [],
+    "withheld_edges": [
+      {
+        "kind": "literature_co_mention",
+        "source": "Europe PMC",
+        "disease_id": null,
+        "disease_name": null,
+        "molecule_chembl_id": null,
+        "molecule_name": null,
+        "detail": "Papers that name this disease and a molecule together are not read by the discovery engine at all, in either mode, so they can never be the reason a molecule is suggested."
+      }
+    ],
+    "exclude_direct": false,
+    "bridges": [
+      {
+        "kind": "same_target",
+        "label": "A molecule that acts on this very protein",
+        "state": "empty",
+        "candidate_count": 0,
+        "ruled_out_count": 0,
+        "message": "ChEMBL records no molecule with an action on this protein.",
+        "elapsed_ms": 0.8
+      },
+      {
+        "kind": "pathway_node",
+        "label": "A druggable protein up or down the pathway",
+        "state": "ok",
+        "candidate_count": 4,
+        "ruled_out_count": 0,
+        "message": null,
+        "elapsed_ms": 1940.2
+      },
+      {
+        "kind": "interaction_partner",
+        "label": "A druggable protein this one binds",
+        "state": "empty",
+        "candidate_count": 0,
+        "ruled_out_count": 0,
+        "message": "ChEMBL records no molecule with an action on any curated partner of this protein.",
+        "elapsed_ms": 10.7
+      },
+      {
+        "kind": "structural_analogue",
+        "label": "A protein with a similar pocket that has a known binder",
+        "state": "empty",
+        "candidate_count": 0,
+        "ruled_out_count": 0,
+        "message": "No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment.",
+        "elapsed_ms": 0.0
+      },
+      {
+        "kind": "mechanism_class",
+        "label": "A disease with the same mechanism where a drug class is established",
+        "state": "empty",
+        "candidate_count": 0,
+        "ruled_out_count": 0,
+        "message": "No mechanism class is recorded for this subject, so no other disease can be matched on mechanism.",
+        "elapsed_ms": 0.0
+      }
+    ],
+    "action_rule_table": [
+      {
+        "mechanism_class": "gain_of_function",
+        "direction": "increased_activity",
+        "actions": [
+          "inhibit",
+          "antagonise",
+          "block_upstream"
+        ],
+        "why": "The protein does too much, so a molecule can only help by reducing what it does."
+      },
+      {
+        "mechanism_class": "neomorph",
+        "direction": "increased_activity",
+        "actions": [
+          "inhibit",
+          "antagonise",
+          "block_upstream"
+        ],
+        "why": "The protein does something it should not do, so a molecule can only help by removing that activity."
+      },
+      {
+        "mechanism_class": "loss_of_function",
+        "direction": "decreased_activity",
+        "actions": [
+          "restore",
+          "activate",
+          "stabilise",
+          "chaperone",
+          "replace",
+          "bypass",
+          "release_a_brake"
+        ],
+        "why": "The protein does too little, so a molecule can only help by bringing the activity back."
+      },
+      {
+        "mechanism_class": "haploinsufficiency",
+        "direction": "decreased_activity",
+        "actions": [
+          "restore",
+          "activate",
+          "stabilise",
+          "chaperone",
+          "replace",
+          "bypass",
+          "release_a_brake"
+        ],
+        "why": "One working copy makes too little protein, so a molecule can only help by bringing the activity back."
+      },
+      {
+        "mechanism_class": "dominant_negative",
+        "direction": "decreased_activity",
+        "actions": [
+          "remove_the_mutant_protein",
+          "restore",
+          "stabilise",
+          "bypass",
+          "release_a_brake"
+        ],
+        "why": "The broken copy blocks the working copy, so a molecule can only help by clearing the broken copy or by working around it."
+      },
+      {
+        "mechanism_class": "unknown",
+        "direction": "unknown",
+        "actions": [],
+        "why": "No record states which way this protein's activity moves, so no required action is derived and nothing is ruled out on direction."
+      }
+    ],
+    "ranking_rule": [
+      "The direction check first: a molecule whose action matches the mechanism comes before one whose direction could not be checked.",
+      "Then how directly the bridge connects: this very protein, then a protein up or down the pathway, then a protein this one binds, then a protein with a similar pocket, then another disease with the same mechanism.",
+      "Then the strongest kind of record in the chain: experimental, then clinical database, then curated database, then published literature, then computational prediction.",
+      "Then whether the record is on this protein alone rather than on a group of related proteins.",
+      "Then the highest clinical phase recorded for the molecule, because a molecule given to people has clinical records behind it.",
+      "Then the measured activity against the protein, as the strength of that record.",
+      "Then the number of different sources in the chain.",
+      "There is no combined score, no probability of success and no claim that a molecule would work."
+    ],
+    "limits": [
+      "No record states which way this protein's activity moves, so nothing was ruled out on direction and every candidate is labelled unknown.",
+      "Every row is a hypothesis Helix built from records. None of it is a treatment, a dose or advice.",
+      "A candidate says a molecule acts in the direction this mechanism needs. It does not say the molecule would work.",
+      "Tissue and cell type were not checked, so a protein may not be present where it matters.",
+      "Only molecules that ChEMBL records a mechanism for are considered. A molecule without such a record is missing from both lists.",
+      "A molecule in the ruled-out list is ruled out for this mechanism. It may be right for another disease of the same gene.",
+      "The catalog lists 2 diseases for WAS. Ask for one of them to get a mechanism and a direction for that disease."
+    ],
+    "counts": {
+      "candidates": 4,
+      "ruled_out": 0,
+      "withheld_edges": 1,
+      "matches": 0,
+      "direction_unknown": 4,
+      "bridges_ok": 1
+    },
+    "elapsed_ms": 2433.7,
+    "from_cache": false
+  }
+}

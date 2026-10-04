@@ -1,0 +1,84 @@
+{
+  "run_id": "20261004T020651Z-BTK-p.Arg525Gln-lab",
+  "objective": "Find the molecular mechanism that best explains the effect of BTK-p.Arg525Gln (BTK, UniProt Q06187), test it with one targeted computational test, and end on the candidate targets and molecules that mechanism and its direction point to.",
+  "subject": {
+    "gene": "BTK",
+    "variant_id": "BTK-p.Arg525Gln",
+    "accession": "Q06187",
+    "position": 525,
+    "reference_residue": "R",
+    "alternate_residue": "Q",
+    "protein_change": "p.Arg525Gln"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 200,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-04T02:06:51Z",
+  "finished_at": "2026-10-04T02:11:43Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "23badbb8d93a446b9a1faec1ddc40b10",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5",
+      "translator": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/helix_lab",
+    "sub_agent_sessions": 11,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "fb176ca4cf76f13bc4167d5e2979d0ca72aa48c1675f275b6e09ab9bb51d0a9a",
+  "metrics": {
+    "wall_seconds": 291.8,
+    "tool_calls": 117,
+    "distinct_sources": 11,
+    "evidence_items": 21,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 22,
+      "literature": 14,
+      "knowledge_graph": 34,
+      "insight": 5,
+      "planner": 9,
+      "safety": 10,
+      "runner": 5,
+      "analysis": 6,
+      "translator": 12
+    },
+    "policy_denials": 0,
+    "reopenings": 0,
+    "candidates": 0,
+    "candidates_rejected_by_safety": 2,
+    "ruled_out_by_direction": 33,
+    "bridge_kinds": []
+  },
+  "outcome": {
+    "favoured_before": "ligand_binding",
+    "favoured_after": "ligand_binding",
+    "decision_changed": false,
+    "next_experiment": "Laboratory: express and purify recombinant BTK kinase domain (wild type and R525Q) and run two assays in parallel. (a) Kinase activity with ATP titration to get apparent ATP Km and kcat. (b) Differential scanning fluorimetry to get melting temperature and expression yield. H1 is confirmed if R525Q shows a raised ATP Km or lower activity with a melting temperature close to wild type. H1 is overturned if ATP Km is unchanged. H2 is favoured if melting temperature drops clearly below wild type or the protein is produced at low yield.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1,
+    "candidates": [],
+    "candidate_molecules": []
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains its effect on the protein, does a targeted computational test change the conclusion that the starting evidence suggested, and what could a drug act on if that mechanism is right?",
+  "approval_mode": "waits for a human decision through the API",
+  "error": null
+}

@@ -331,7 +331,7 @@ function columnsFor(
     {
       id: "symbol",
       header: EXPLORE_WORDS.gene,
-      width: 84,
+      width: 92,
       mono: true,
       accessor: (gene) => gene.symbol,
       cell: (gene) => (
@@ -388,7 +388,7 @@ function columnsFor(
     {
       id: "table",
       header: <span title="Table of the IUIS classification">Tbl</span>,
-      width: 60,
+      width: 66,
       mono: true,
       accessor: (gene) =>
         gene.category_ids
@@ -399,7 +399,7 @@ function columnsFor(
     {
       id: "inheritance",
       header: "Inherit.",
-      width: 84,
+      width: 92,
       mono: true,
       accessor: (gene) => gene.inheritance_codes.join(", "),
       cell: (gene) =>
@@ -426,7 +426,7 @@ function columnsFor(
       header: (
         <span title="Residues in the UniProt canonical sequence">aa</span>
       ),
-      width: 56,
+      width: 62,
       align: "right",
       accessor: (gene) => gene.protein_length,
       cell: (gene) => statCell(gene.protein_length),
@@ -438,7 +438,7 @@ function columnsFor(
       ) : (
         <span title={MEASURES.structures}>PDB</span>
       ),
-      width: simple ? 144 : 68,
+      width: simple ? 162 : 74,
       align: "right",
       accessor: (gene) => gene.stats.experimental_structure_count,
       cell: (gene) => statCell(gene.stats.experimental_structure_count),
@@ -450,7 +450,7 @@ function columnsFor(
       ) : (
         <span title={MEASURES.alphafold}>AFDB</span>
       ),
-      width: simple ? 180 : 64,
+      width: simple ? 202 : 72,
       accessor: (gene) =>
         gene.stats.has_alphafold_model === null
           ? null
@@ -465,7 +465,7 @@ function columnsFor(
       ) : (
         <span title={MEASURES.pathogenic}>CV P/LP</span>
       ),
-      width: simple ? 172 : 84,
+      width: simple ? 192 : 92,
       align: "right",
       accessor: (gene) => gene.stats.clinvar_pathogenic_count,
       cell: (gene) => statCell(gene.stats.clinvar_pathogenic_count),
@@ -473,7 +473,7 @@ function columnsFor(
     {
       id: "total_variants",
       header: <span title={MEASURES.total}>CV all</span>,
-      width: 76,
+      width: 84,
       align: "right",
       accessor: (gene) => gene.stats.clinvar_total_count,
       cell: (gene) => statCell(gene.stats.clinvar_total_count),
@@ -481,7 +481,7 @@ function columnsFor(
     {
       id: "publications",
       header: <span title={MEASURES.publications}>Pubs</span>,
-      width: 64,
+      width: 70,
       align: "right",
       accessor: (gene) => gene.stats.publication_count,
       cell: (gene) => statCell(gene.stats.publication_count),

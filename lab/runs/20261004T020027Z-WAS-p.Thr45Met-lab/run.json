@@ -1,0 +1,84 @@
+{
+  "run_id": "20261004T020027Z-WAS-p.Thr45Met-lab",
+  "objective": "Does this mutation change the folded shape of the protein? Compare the predicted shape of the normal and mutated protein before deciding.",
+  "subject": {
+    "gene": "WAS",
+    "variant_id": "WAS-p.Thr45Met",
+    "accession": "P42768",
+    "position": 45,
+    "reference_residue": "T",
+    "alternate_residue": "M",
+    "protein_change": "p.Thr45Met"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 200,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-04T02:00:27Z",
+  "finished_at": "2026-10-04T02:06:28Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "c2ed151a8f1947158dbf8818dfa91e55",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5",
+      "translator": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/helix_lab",
+    "sub_agent_sessions": 16,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "fb176ca4cf76f13bc4167d5e2979d0ca72aa48c1675f275b6e09ab9bb51d0a9a",
+  "metrics": {
+    "wall_seconds": 361.1,
+    "tool_calls": 147,
+    "distinct_sources": 11,
+    "evidence_items": 24,
+    "hypotheses": 3,
+    "tests_considered": 4,
+    "approvals": 0,
+    "tests_executed": 2,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 30,
+      "literature": 15,
+      "knowledge_graph": 40,
+      "insight": 5,
+      "planner": 15,
+      "safety": 14,
+      "runner": 8,
+      "analysis": 12,
+      "translator": 8
+    },
+    "policy_denials": 2,
+    "reopenings": 1,
+    "candidates": 0,
+    "candidates_rejected_by_safety": 0,
+    "ruled_out_by_direction": 0,
+    "bridge_kinds": []
+  },
+  "outcome": {
+    "favoured_before": "protein_interaction",
+    "favoured_after": "stability_folding",
+    "decision_changed": true,
+    "next_experiment": "Computational check on the 9S9X WASP/WIP complex (computational, no approval needed). Measure the minimum heavy-atom distance from residue 45 to any WIP atom and the relative side-chain accessibility of residue 45 in both the complex and AF-P42768-F1. Also model Met at position 45 in 9S9X and recompute the interface contacts and buried surface area. Outcome that would overturn H2 in favour of H1: residue 45 within about 5 Å of WIP with the Met model adding interface contacts or clashes. Outcome that would confirm H2: residue 45 more than 5 Å from WIP, relative accessibility below 40% in both models, and no interface change.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H2",
+    "decisions": 2,
+    "candidates": [],
+    "candidate_molecules": []
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains its effect on the protein, does a targeted computational test change the conclusion that the starting evidence suggested, and what could a drug act on if that mechanism is right?",
+  "approval_mode": "waits for a human decision through the API",
+  "error": null
+}

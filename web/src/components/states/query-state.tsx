@@ -75,7 +75,7 @@ export function RowsSkeleton({
       {Array.from({ length: rows }, (_, index) => (
         <div
           key={index}
-          className="flex h-7 items-center gap-3 border-b border-border-subtle px-3"
+          className="flex h-9 items-center gap-3 border-b border-border-subtle px-3"
         >
           <Skeleton className="h-2.5 w-10 rounded-xs" />
           <Skeleton

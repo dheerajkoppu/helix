@@ -1,0 +1,4 @@
+Objective: Find the molecular mechanism that best explains the effect of BTK-p.Arg525Gln (BTK, UniProt Q06187), test it with one targeted computational test, and end on the candidate targets and molecules that mechanism and its direction point to.
+Subject line: variant_id=BTK-p.Arg525Gln gene=BTK accession=Q06187 position=525 reference=R alternate=Q
+Budget for the whole run: 200 lab tool calls and 300 compute seconds.
+Run the discovery loop to the final report. The loop ends on candidates, not on the decision.

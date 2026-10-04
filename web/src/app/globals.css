@@ -84,24 +84,25 @@
   --color-origin-predicted-external: var(--origin-predicted-external);
   --color-origin-predicted-internal: var(--origin-predicted-internal);
 
-  --text-2xs: 0.6875rem;
+  /* One step up from the original scale: nothing below 12px, body at 15px. */
+  --text-2xs: 0.75rem;
   --text-2xs--line-height: 1rem;
-  --text-xs: 0.75rem;
-  --text-xs--line-height: 1rem;
-  --text-sm: 0.8125rem;
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.125rem;
+  --text-sm: 0.875rem;
   --text-sm--line-height: 1.25rem;
-  --text-base: 0.875rem;
-  --text-base--line-height: 1.25rem;
-  --text-lg: 1rem;
-  --text-lg--line-height: 1.5rem;
-  --text-xl: 1.125rem;
-  --text-xl--line-height: 1.5rem;
-  --text-2xl: 1.375rem;
-  --text-2xl--line-height: 1.75rem;
-  --text-3xl: 1.75rem;
-  --text-3xl--line-height: 2rem;
-  --text-4xl: 2.5rem;
-  --text-4xl--line-height: 2.75rem;
+  --text-base: 0.9375rem;
+  --text-base--line-height: 1.375rem;
+  --text-lg: 1.0625rem;
+  --text-lg--line-height: 1.625rem;
+  --text-xl: 1.1875rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 1.875rem;
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: 2.25rem;
+  --text-4xl: 2.75rem;
+  --text-4xl--line-height: 3rem;
 
   --radius-xs: 2px;
   --radius-sm: 3px;
@@ -133,9 +134,10 @@
   --popover: oklch(1 0 0);
 
   --foreground: oklch(0.205 0.006 250);
-  --muted-foreground: oklch(0.445 0.008 250);
-  --fg-subtle: oklch(0.53 0.008 250);
-  --fg-disabled: oklch(0.7 0.006 250);
+  /* Secondary ink clears 4.5:1 on every in-flow surface, bg-active included. */
+  --muted-foreground: oklch(0.425 0.008 250);
+  --fg-subtle: oklch(0.495 0.008 250);
+  --fg-disabled: oklch(0.625 0.006 250);
 
   --primary: oklch(0.205 0.006 250);
   --primary-foreground: oklch(1 0 0);
@@ -148,7 +150,7 @@
   --ring: oklch(0.205 0.006 250);
 
   --destructive: oklch(0.53 0.2 27);
-  --warning: oklch(0.55 0.11 70);
+  --warning: oklch(0.52 0.115 70);
 
   --sidebar: oklch(0.98 0.002 250);
   --sidebar-accent: oklch(0.95 0.004 250);
@@ -196,7 +198,6 @@
   --ev-prediction: oklch(0.52 0.2 295);
   --ev-hypothesis: #5a6068;
 
-
   /* 3D canvas ground. Dark canvas is pure black so the very-high pLDDT blue keeps 3:1. */
   --viewer-canvas: #ffffff;
 }
@@ -211,9 +212,9 @@
   --popover: oklch(0.225 0.005 250);
 
   --foreground: oklch(0.95 0.003 250);
-  --muted-foreground: oklch(0.74 0.006 250);
-  --fg-subtle: oklch(0.64 0.006 250);
-  --fg-disabled: oklch(0.45 0.006 250);
+  --muted-foreground: oklch(0.775 0.006 250);
+  --fg-subtle: oklch(0.675 0.006 250);
+  --fg-disabled: oklch(0.525 0.006 250);
 
   --primary: oklch(0.95 0.003 250);
   --primary-foreground: oklch(0.18 0.004 250);

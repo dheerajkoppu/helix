@@ -138,7 +138,7 @@ export function RunStatusTag({
         className,
       )}
     >
-      <span aria-hidden className="font-mono text-[0.625rem]">
+      <span aria-hidden className="font-mono text-2xs">
         {meta.glyph}
       </span>
       {plain ? plainRunState(status) : meta.label}
@@ -184,7 +184,7 @@ export function VerdictTag({
     >
       <span
         aria-hidden
-        className="inline-flex size-3.5 items-center justify-center rounded-xs border border-border-strong font-mono text-[0.625rem] leading-none"
+        className="inline-flex size-4 items-center justify-center rounded-xs border border-border-strong font-mono text-2xs leading-none"
       >
         {meta.glyph}
       </span>

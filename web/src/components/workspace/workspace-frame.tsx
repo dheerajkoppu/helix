@@ -14,6 +14,9 @@ import { withSelection } from "@/lib/state/selection-url";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import {
   STAGES,
+  STAGE_GROUPS,
+  groupOfStage,
+  resolveGroup,
   resolveStage,
   stageFromPathname,
   useWorkspaceSubjectStore,
@@ -24,20 +27,42 @@ import {
 const OPEN_LAYER =
   '[role="dialog"], [role="menu"], [role="listbox"], [data-slot="popover-content"], [data-slot="hover-card-content"]';
 
-function StageHotkeys({ stage }: { stage: StageId | null }) {
+function StageHotkeys({
+  stage,
+  simple,
+}: {
+  stage: StageId | null;
+  simple: boolean;
+}) {
   const router = useRouter();
 
-  const open = (target: StageId) => {
-    const { href } = resolveStage(
-      target,
-      useWorkspaceSubjectStore.getState().chain,
-    );
+  const go = (href: string | null) => {
     if (href)
       router.push(withSelection(href, useWorkspaceSelection.getState()));
   };
 
+  const open = (target: StageId) => {
+    go(resolveStage(target, useWorkspaceSubjectStore.getState().chain).href);
+  };
+
+  // Simple mode groups the stages, so [ and ] move by group; every g-key still opens its own stage.
   const step = (direction: 1 | -1) => {
     const chain = useWorkspaceSubjectStore.getState().chain;
+    if (simple) {
+      const start = STAGE_GROUPS.findIndex(
+        (entry) => entry.id === groupOfStage(stage),
+      );
+      for (
+        let index =
+          (start === -1 ? (direction === 1 ? -1 : 3) : start) + direction;
+        index >= 0 && index < STAGE_GROUPS.length;
+        index += direction
+      ) {
+        const { href } = resolveGroup(STAGE_GROUPS[index], chain, null);
+        if (href) return go(href);
+      }
+      return;
+    }
     const start = STAGES.findIndex((entry) => entry.id === stage);
     for (
       let index = start + direction;
@@ -109,7 +134,7 @@ export function WorkspaceFrame({
       <Suspense fallback={null}>
         <SelectionUrlSync />
       </Suspense>
-      <StageHotkeys stage={current} />
+      <StageHotkeys stage={current} simple={simple} />
       <SubjectBar
         simple={simple}
         rail={

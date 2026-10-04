@@ -82,8 +82,8 @@ function DesktopZones({
           <ResizablePanel
             id="ledger"
             panelRef={ledgerRef}
-            defaultSize={320}
-            minSize={240}
+            defaultSize={360}
+            minSize={264}
             maxSize="45%"
             collapsible
             collapsedSize={0}
@@ -103,8 +103,8 @@ function DesktopZones({
           <ResizablePanel
             id="inspector"
             panelRef={inspectorRef}
-            defaultSize={340}
-            minSize={280}
+            defaultSize={376}
+            minSize={300}
             maxSize="45%"
             collapsible
             collapsedSize={0}

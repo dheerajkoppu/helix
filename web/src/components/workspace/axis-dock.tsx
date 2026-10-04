@@ -248,7 +248,7 @@ export function AxisDockSlot({ stage, className }: AxisDockSlotProps) {
         {simple ? (
           <span className="font-medium text-foreground">{SEQUENCE_LABEL}</span>
         ) : (
-          <span className="text-[0.625rem] font-medium tracking-[0.08em] text-subtle-foreground uppercase">
+          <span className="text-2xs font-medium tracking-[0.08em] text-subtle-foreground uppercase">
             Axis
           </span>
         )}

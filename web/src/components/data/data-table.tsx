@@ -23,7 +23,7 @@ const features = tableFeatures({
   sortFns,
 });
 
-export const DATA_TABLE_ROW_HEIGHT = 28;
+export const DATA_TABLE_ROW_HEIGHT = 36;
 
 export interface DataTableColumn<Row> {
   id: string;
@@ -256,7 +256,7 @@ export function DataTable<Row extends RowData>({
     >
       <div
         role="row"
-        className="grid h-7 shrink-0 items-center border-b border-border bg-muted"
+        className="grid h-9 shrink-0 items-center border-b border-border bg-muted"
         style={{ gridTemplateColumns }}
       >
         {columns.map((column, index) => {
@@ -292,7 +292,7 @@ export function DataTable<Row extends RowData>({
                     : undefined
               }
               className={cn(
-                "flex h-full min-w-0 items-center px-2 text-2xs font-medium tracking-[0.02em] text-muted-foreground uppercase",
+                "flex h-full min-w-0 items-center px-3 text-2xs font-medium tracking-[0.02em] text-muted-foreground uppercase",
                 column.align === "right" && "justify-end",
               )}
             >
@@ -301,7 +301,7 @@ export function DataTable<Row extends RowData>({
                   type="button"
                   onClick={header?.column.getToggleSortingHandler()}
                   className={cn(
-                    "group/th -mx-1 inline-flex h-5 min-w-0 cursor-pointer items-center gap-1 rounded-xs px-1 uppercase hover:text-foreground",
+                    "group/th -mx-1 inline-flex h-6 min-w-0 cursor-pointer items-center gap-1 rounded-xs px-1 uppercase hover:text-foreground",
                     sorted && "text-foreground",
                     column.align === "right" && "flex-row-reverse",
                   )}
@@ -342,7 +342,7 @@ export function DataTable<Row extends RowData>({
                   <div
                     key={item.key}
                     role="row"
-                    className="absolute inset-x-0 top-0 flex items-center gap-2 border-b border-border-subtle bg-sunken px-2 text-2xs font-medium text-muted-foreground"
+                    className="absolute inset-x-0 top-0 flex items-center gap-2 border-b border-border-subtle bg-sunken px-3 text-2xs font-medium text-muted-foreground"
                     style={position}
                   >
                     <span role="gridcell" className="flex items-center gap-2">
@@ -397,7 +397,7 @@ export function DataTable<Row extends RowData>({
                         key={column.id}
                         role="gridcell"
                         className={cn(
-                          "min-w-0 truncate px-2",
+                          "min-w-0 truncate px-3",
                           column.align === "right" && "text-right",
                           (column.mono || column.align === "right") &&
                             "tabular font-mono",

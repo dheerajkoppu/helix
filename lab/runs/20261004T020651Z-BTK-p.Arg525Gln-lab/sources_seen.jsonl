@@ -1,0 +1,157 @@
+{"database": "Europe PMC", "record_id": "PMID:41853684", "url": "https://europepmc.org/article/MED/41853684", "tool": "search_literature", "agent": "literature", "at": "2026-10-04T02:07:07Z"}
+{"database": "Europe PMC", "record_id": "PMID:32184360", "url": "https://europepmc.org/article/MED/32184360", "tool": "search_literature", "agent": "literature", "at": "2026-10-04T02:07:07Z"}
+{"database": "Europe PMC", "record_id": "PMID:33806595", "url": "https://europepmc.org/article/MED/33806595", "tool": "search_literature", "agent": "literature", "at": "2026-10-04T02:07:07Z"}
+{"database": "Europe PMC", "record_id": "PMID:26059659", "url": "https://europepmc.org/article/MED/26059659", "tool": "search_literature", "agent": "literature", "at": "2026-10-04T02:07:07Z"}
+{"database": "Europe PMC", "record_id": "PMID:17327079", "url": "https://europepmc.org/article/MED/17327079", "tool": "search_literature", "agent": "literature", "at": "2026-10-04T02:07:07Z"}
+{"database": "Europe PMC", "record_id": "PMID:8594569", "url": "https://europepmc.org/article/MED/8594569", "tool": "search_literature", "agent": "literature", "at": "2026-10-04T02:07:07Z"}
+{"database": "ClinVar", "record_id": "VCV000011342.16", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/11342/", "tool": "get_variant", "agent": "knowledge_graph", "at": "2026-10-04T02:07:09Z"}
+{"database": "UniProtKB", "record_id": "VAR_006255", "url": "https://web.expasy.org/variant_pages/VAR_006255.html", "tool": "get_variant", "agent": "knowledge_graph", "at": "2026-10-04T02:07:09Z"}
+{"database": "Ensembl VEP", "record_id": "NM_000061.3:c.1574G>A", "url": "https://rest.ensembl.org/documentation/info/vep_hgvs_get", "tool": "get_variant", "agent": "knowledge_graph", "at": "2026-10-04T02:07:09Z"}
+{"database": "UniProtKB", "record_id": "Q06187", "url": "https://www.uniprot.org/uniprotkb/Q06187/entry", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-04T02:07:10Z"}
+{"database": "InterPro", "record_id": "IPR050198", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR050198/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-04T02:07:10Z"}
+{"database": "InterPro", "record_id": "IPR001245", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR001245/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-04T02:07:10Z"}
+{"database": "InterPro", "record_id": "IPR020635", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR020635/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-04T02:07:10Z"}
+{"database": "InterPro", "record_id": "IPR000719", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR000719/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-04T02:07:10Z"}
+{"database": "InterPro", "record_id": "IPR011009", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR011009/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-04T02:07:10Z"}
+{"database": "InterPro", "record_id": "IPR008266", "url": "https://www.ebi.ac.uk/interpro/entry/InterPro/IPR008266/", "tool": "get_residue_annotations", "agent": "knowledge_graph", "at": "2026-10-04T02:07:10Z"}
+{"database": "AlphaMissense", "record_id": "AF-Q06187-F1:R525Q", "url": "https://alphafold.ebi.ac.uk/entry/AF-Q06187-F1", "tool": "get_variant_effect_values", "agent": "knowledge_graph", "at": "2026-10-04T02:07:10Z"}
+{"database": "EBI ProtVar", "record_id": "Q06187:525", "url": "https://www.ebi.ac.uk/ProtVar/query?search=Q06187:525:Q", "tool": "get_variant_effect_values", "agent": "knowledge_graph", "at": "2026-10-04T02:07:10Z"}
+{"database": "EBI ProtVar", "record_id": "Q06187:525:Q", "url": "https://www.ebi.ac.uk/ProtVar/query?search=Q06187:525:Q", "tool": "get_variant_effect_values", "agent": "knowledge_graph", "at": "2026-10-04T02:07:10Z"}
+{"database": "PDBe SIFTS", "record_id": "Q06187", "url": "https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/Q06187", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-04T02:07:11Z"}
+{"database": "RCSB PDB", "record_id": "5P9J", "url": "https://www.rcsb.org/structure/5P9J", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-04T02:07:11Z"}
+{"database": "RCSB PDB", "record_id": "6DI1", "url": "https://www.rcsb.org/structure/6DI1", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-04T02:07:11Z"}
+{"database": "RCSB PDB", "record_id": "5P9I", "url": "https://www.rcsb.org/structure/5P9I", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-04T02:07:11Z"}
+{"database": "RCSB PDB", "record_id": "6HRP", "url": "https://www.rcsb.org/structure/6HRP", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-04T02:07:11Z"}
+{"database": "RCSB PDB", "record_id": "1K2P", "url": "https://www.rcsb.org/structure/1K2P", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-04T02:07:11Z"}
+{"database": "RCSB PDB", "record_id": "3GEN", "url": "https://www.rcsb.org/structure/3GEN", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-04T02:07:11Z"}
+{"database": "RCSB PDB", "record_id": "3K54", "url": "https://www.rcsb.org/structure/3K54", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-04T02:07:11Z"}
+{"database": "RCSB PDB", "record_id": "3OCS", "url": "https://www.rcsb.org/structure/3OCS", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-04T02:07:11Z"}
+{"database": "AlphaFold DB", "record_id": "AF-Q06187-F1", "url": "https://alphafold.ebi.ac.uk/entry/AF-Q06187-F1", "tool": "get_structure_ledger", "agent": "knowledge_graph", "at": "2026-10-04T02:07:11Z"}
+{"database": "ClinVar", "record_id": "VCV000663091.9", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/663091/", "tool": "list_variants_near", "agent": "knowledge_graph", "at": "2026-10-04T02:07:12Z"}
+{"database": "Europe PMC", "record_id": "PMID:36464706", "url": "https://europepmc.org/article/MED/36464706", "tool": "search_literature", "agent": "literature", "at": "2026-10-04T02:07:12Z"}
+{"database": "IUIS 2024 classification", "record_id": "Table 3.1 row 1 (btk-deficiency-x-linked-agammaglobulinemia)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12829761/table/tbl3/", "tool": "get_gene", "agent": "knowledge_graph", "at": "2026-10-04T02:07:12Z"}
+{"database": "OpenAlex", "record_id": "W3048137895", "url": "https://openalex.org/W3048137895", "tool": "search_openalex", "agent": "literature", "at": "2026-10-04T02:07:13Z"}
+{"database": "OpenAlex", "record_id": "W3193823839", "url": "https://openalex.org/W3193823839", "tool": "search_openalex", "agent": "literature", "at": "2026-10-04T02:07:13Z"}
+{"database": "OpenAlex", "record_id": "W2951478780", "url": "https://openalex.org/W2951478780", "tool": "search_openalex", "agent": "literature", "at": "2026-10-04T02:07:13Z"}
+{"database": "OpenAlex", "record_id": "W2600048225", "url": "https://openalex.org/W2600048225", "tool": "search_openalex", "agent": "literature", "at": "2026-10-04T02:07:13Z"}
+{"database": "OpenAlex", "record_id": "W3022466913", "url": "https://openalex.org/W3022466913", "tool": "search_openalex", "agent": "literature", "at": "2026-10-04T02:07:13Z"}
+{"database": "OpenAlex", "record_id": "W2612589724", "url": "https://openalex.org/W2612589724", "tool": "search_openalex", "agent": "literature", "at": "2026-10-04T02:07:13Z"}
+{"database": "OpenAlex", "record_id": "W4412019395", "url": "https://openalex.org/W4412019395", "tool": "search_openalex", "agent": "literature", "at": "2026-10-04T02:07:13Z"}
+{"database": "OpenAlex", "record_id": "W4414625263", "url": "https://openalex.org/W4414625263", "tool": "search_openalex", "agent": "literature", "at": "2026-10-04T02:07:13Z"}
+{"database": "Europe PMC", "record_id": "PMID:32784026", "url": "https://europepmc.org/article/MED/32784026", "tool": "get_publication", "agent": "literature", "at": "2026-10-04T02:07:16Z"}
+{"database": "RCSB PDB", "record_id": "6E4F", "url": "https://www.rcsb.org/structure/6E4F", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "4RFZ", "url": "https://www.rcsb.org/structure/4RFZ", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "7L5O", "url": "https://www.rcsb.org/structure/7L5O", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6DI9", "url": "https://www.rcsb.org/structure/6DI9", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "7N5O", "url": "https://www.rcsb.org/structure/7N5O", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "5P9L", "url": "https://www.rcsb.org/structure/5P9L", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6J6M", "url": "https://www.rcsb.org/structure/6J6M", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "5P9K", "url": "https://www.rcsb.org/structure/5P9K", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6BLN", "url": "https://www.rcsb.org/structure/6BLN", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "8FLV", "url": "https://www.rcsb.org/structure/8FLV", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6DI0", "url": "https://www.rcsb.org/structure/6DI0", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "7KXM", "url": "https://www.rcsb.org/structure/7KXM", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "5U9D", "url": "https://www.rcsb.org/structure/5U9D", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "8FLN", "url": "https://www.rcsb.org/structure/8FLN", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6X3P", "url": "https://www.rcsb.org/structure/6X3P", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "7KXN", "url": "https://www.rcsb.org/structure/7KXN", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "4RX5", "url": "https://www.rcsb.org/structure/4RX5", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6HRT", "url": "https://www.rcsb.org/structure/6HRT", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "7KXQ", "url": "https://www.rcsb.org/structure/7KXQ", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "5KUP", "url": "https://www.rcsb.org/structure/5KUP", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "7YC9", "url": "https://www.rcsb.org/structure/7YC9", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "9Y57", "url": "https://www.rcsb.org/structure/9Y57", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6VXQ", "url": "https://www.rcsb.org/structure/6VXQ", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6NFH", "url": "https://www.rcsb.org/structure/6NFH", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "5P9M", "url": "https://www.rcsb.org/structure/5P9M", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6OMU", "url": "https://www.rcsb.org/structure/6OMU", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6O8I", "url": "https://www.rcsb.org/structure/6O8I", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6DI5", "url": "https://www.rcsb.org/structure/6DI5", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "8FLL", "url": "https://www.rcsb.org/structure/8FLL", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6BKW", "url": "https://www.rcsb.org/structure/6BKW", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "5T18", "url": "https://www.rcsb.org/structure/5T18", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "7N4Q", "url": "https://www.rcsb.org/structure/7N4Q", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "6W07", "url": "https://www.rcsb.org/structure/6W07", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "7R61", "url": "https://www.rcsb.org/structure/7R61", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "7LTZ", "url": "https://www.rcsb.org/structure/7LTZ", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "RCSB PDB", "record_id": "4OT5", "url": "https://www.rcsb.org/structure/4OT5", "tool": "run_ligand_contact_test", "agent": "runner", "at": "2026-10-04T02:09:16Z"}
+{"database": "iuis", "record_id": "Table 3.1 row 1", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12829761/table/tbl3/", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "Reactome", "record_id": "R-HSA-9606163", "url": "https://reactome.org/content/detail/R-HSA-9606163", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:6427", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3301582", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "IntAct", "record_id": "EBI-6428217", "url": "https://www.ebi.ac.uk/intact/details/interaction/EBI-6428217", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:7473", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297717", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:5623", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL2103879", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:5653", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1184904", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:8195", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297865", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:115765", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297865", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:26980108", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL5731556", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:6899", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3707348", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:53188", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3707348", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:24805898", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL5135831", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:7959", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3900554", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:114414", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3900554", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:17768487", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL3888436", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:7798", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297674", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:115314", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297674", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:26719418", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL5730622", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "Reactome", "record_id": "R-HSA-2424484", "url": "https://reactome.org/content/detail/R-HSA-2424484", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4087", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4116008", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:9145", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650338", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:136557", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650338", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:27609857", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL5733795", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:8042", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4594348", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:136520", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4594348", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:22813276", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL4714263", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4725", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3265032", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:8031", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4072833", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:113958", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4072833", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:19061184", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL4358514", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:8043", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4065122", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:129676", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4065122", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:24773315", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL5127265", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:5323", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL2103830", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:8231", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4594275", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:2242", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1873475", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:23286", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1873475", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:16286650", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL3705255", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:8354", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3986824", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4521", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3545193", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:146963", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3545193", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4389", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3979920", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:8908", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650321", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:136548", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650321", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:28707299", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL5738132", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4330", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3545138", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:8956", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650485", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:130428", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650485", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:29055467", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL6071575", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4232", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4163691", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:115228", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4163691", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:22813277", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL4714263", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4800", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL515271", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4803", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3545159", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4804", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL2170582", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4339", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL5314384", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4805", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL475251", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:8045", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3702854", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:126777", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3702854", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:22813278", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL4714263", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:7431", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4085457", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:149870", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4085457", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:18020387", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL4005765", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4237", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL5095034", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4174", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3301625", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:48062", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3301625", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:24398438", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL5043203", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:4297", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4071161", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:71536", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4071161", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:29287532", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL6158586", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:9370", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650323", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:130143", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650323", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:24398441", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL5043203", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:8488", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297640", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:147424", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297640", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:22395811", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL4668340", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "mechanism:7458", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3936761", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "drug_indication:115126", "url": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3936761", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}
+{"database": "ChEMBL", "record_id": "activity:19306050", "url": "https://www.ebi.ac.uk/chembl/explore/assay/CHEMBL4414913", "tool": "list_candidate_targets", "agent": "translator", "at": "2026-10-04T02:10:11Z"}

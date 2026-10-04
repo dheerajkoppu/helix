@@ -57,7 +57,7 @@ function JobsCount({
   return (
     <span
       className={cn(
-        "tabular inline-flex h-4 items-center gap-1 rounded-xs border border-border-strong px-1 font-mono text-[0.625rem] text-foreground",
+        "tabular inline-flex h-5 items-center gap-1 rounded-xs border border-border-strong px-1 font-mono text-2xs text-foreground",
         className,
       )}
       aria-label={`${count} running or queued`}

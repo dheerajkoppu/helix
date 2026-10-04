@@ -94,7 +94,7 @@ export function AxisStrip({
           <span
             key={domain.id}
             title={`${domain.label ?? domain.description ?? "Domain"} ${domain.start}-${domain.end}`}
-            className="absolute inset-y-0 overflow-hidden border border-border-strong bg-muted px-1 text-[0.625rem] leading-[0.875rem] whitespace-nowrap text-muted-foreground"
+            className="absolute inset-y-0 overflow-hidden border border-border-strong bg-muted px-1 text-2xs leading-4 whitespace-nowrap text-muted-foreground"
             style={{
               left: `${((domain.start - 1) / length) * 100}%`,
               width: `${((domain.end - domain.start + 1) / length) * 100}%`,

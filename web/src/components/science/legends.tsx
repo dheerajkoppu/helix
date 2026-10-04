@@ -173,7 +173,7 @@ export function AlphaMissenseLegend({
             ),
           )}
         </div>
-        <div className="tabular relative h-3 font-mono text-[0.625rem] text-subtle-foreground">
+        <div className="tabular relative h-4 font-mono text-2xs text-subtle-foreground">
           <span className="absolute left-0">0</span>
           <span
             className="absolute -translate-x-1/2"

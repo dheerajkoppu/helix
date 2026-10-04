@@ -31,7 +31,7 @@ export function Swatch({
       aria-hidden
       className={cn(
         "relative inline-flex size-3 shrink-0 items-center justify-center overflow-hidden rounded-[1px] ring-1 ring-border-strong/60 ring-inset",
-        code && "size-3.5",
+        code && "size-4",
         swatchClass,
         className,
       )}
@@ -43,7 +43,7 @@ export function Swatch({
       {code ? (
         <span
           className={cn(
-            "relative font-mono text-[0.5625rem] leading-none font-semibold",
+            "relative font-mono text-2xs leading-none font-semibold",
             onFill === "white" ? "text-white" : "text-[#15171a]",
           )}
         >

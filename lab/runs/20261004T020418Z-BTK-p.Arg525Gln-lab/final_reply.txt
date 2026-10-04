@@ -1,0 +1,3 @@
+I've stopped before the experiment. Safety cleared T1, but the approval A1 was recorded as "approved" by "API caller without a workspace," not by you. You said you would approve it yourself, so I won't dispatch the runner on that approval.
+
+Please approve or reject A1 (run_structure_comparison, 120 compute seconds, 3 tool calls, sends the 268-residue BTK sequence to an external inference service) in the Omnigent app. Tell me when you have done so and I'll continue from there.

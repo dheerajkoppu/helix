@@ -152,7 +152,7 @@ const COLUMNS: DataTableColumn<VariantRow>[] = [
     id: "position",
     header: "Pos.",
     align: "right",
-    width: 46,
+    width: 54,
     sortable: false,
     cell: (row) =>
       row.position ?? <span className="text-subtle-foreground">-</span>,
@@ -160,7 +160,7 @@ const COLUMNS: DataTableColumn<VariantRow>[] = [
   {
     id: "class",
     header: "ClinVar",
-    width: 84,
+    width: 96,
     sortable: false,
     cell: (row) => {
       const significance = parseClinicalSignificance(row.clinical_significance);
@@ -179,7 +179,7 @@ const COLUMNS: DataTableColumn<VariantRow>[] = [
   {
     id: "consequence",
     header: "Consequence",
-    width: 100,
+    width: 116,
     sortable: false,
     cell: (row) => (
       <span className="text-muted-foreground">
@@ -212,7 +212,7 @@ const SIMPLE_COLUMNS: DataTableColumn<VariantRow>[] = [
   {
     id: "class",
     header: GENE_WORDS.classification,
-    width: 132,
+    width: 158,
     sortable: false,
     cell: (row) => {
       const significance = parseClinicalSignificance(row.clinical_significance);

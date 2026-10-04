@@ -1,0 +1,658 @@
+{
+  "test_id": "T1",
+  "test_kind": "ligand_contact",
+  "values": {
+    "headline": "Residue 525 is within 4.5 Å of an organic ligand in 8 of 40 ligand-bound structures (0B9, 73T, 7G8, 7GB, BA0, GMQ); closest 2.69 Å to 73T (6-Fluoro-5-(R)-(3-(S)-(8-fluoro-1-methyl-2,4-dioxo-1,2-dihydroquinazo…) in PDB 5T18.",
+    "verdict": "contact_with_organic_ligand",
+    "contact_threshold_angstrom": 4.5,
+    "experimental_structures_total": 170,
+    "structures_observing_residue": 126,
+    "ligand_bound_structures_examined": 40,
+    "structures_with_contact": [
+      "5P9K",
+      "5P9M",
+      "5T18",
+      "6HRP",
+      "6HRT",
+      "6J6M",
+      "6X3P",
+      "7N4Q"
+    ],
+    "closest_contacts": [
+      {
+        "structure": "5T18",
+        "resolution": 1.5,
+        "ligand": "73T",
+        "ligand_name": "6-Fluoro-5-(R)-(3-(S)-(8-fluoro-1-methyl-2,4-dioxo-1,2-dihydroquinazo…",
+        "ligand_kind": "organic",
+        "chain": "A",
+        "distance_angstrom": 2.69,
+        "residue_in_structure": "ARG",
+        "residue_mutated_in_structure": null
+      },
+      {
+        "structure": "5P9M",
+        "resolution": 1.41,
+        "ligand": "7GB",
+        "ligand_name": "6-azanyl-9-[(3~{R})-1-[(~{E})-but-2-enoyl]pyrrolidin-3-yl]-7-(4-pheno…",
+        "ligand_kind": "organic",
+        "chain": "A",
+        "distance_angstrom": 2.92,
+        "residue_in_structure": "ARG",
+        "residue_mutated_in_structure": null
+      },
+      {
+        "structure": "6X3P",
+        "resolution": 1.34,
+        "ligand": "UM4",
+        "ligand_name": "4-{8-amino-3-[(6R,8aS)-3-oxooctahydroindolizin-6-yl]imidazo[1,5-a]pyr…",
+        "ligand_kind": "organic",
+        "chain": "A",
+        "distance_angstrom": 3.39,
+        "residue_in_structure": "ARG",
+        "residue_mutated_in_structure": null
+      },
+      {
+        "structure": "6J6M",
+        "resolution": 1.25,
+        "ligand": "BA0",
+        "ligand_name": "(7S)-2-(4-phenoxyphenyl)-7-(1-propanoylpiperidin-4-yl)-4,5,6,7-tetrah…",
+        "ligand_kind": "organic",
+        "chain": "A",
+        "distance_angstrom": 3.48,
+        "residue_in_structure": "ARG",
+        "residue_mutated_in_structure": null
+      },
+      {
+        "structure": "7N4Q",
+        "resolution": 1.5,
+        "ligand": "0B9",
+        "ligand_name": "(2R)-2-(3-chloro-5-fluoroanilino)-2-cyclopropyl-N-[(3R)-1-(7H-pyrrolo…",
+        "ligand_kind": "organic",
+        "chain": "A",
+        "distance_angstrom": 3.49,
+        "residue_in_structure": "ARG",
+        "residue_mutated_in_structure": null
+      },
+      {
+        "structure": "5P9K",
+        "resolution": 1.28,
+        "ligand": "7G8",
+        "ligand_name": "4-[4-[[5-fluoranyl-4-[[3-(propanoylamino)phenyl]amino]pyrimidin-2-yl]…",
+        "ligand_kind": "organic",
+        "chain": "A",
+        "distance_angstrom": 3.58,
+        "residue_in_structure": "ARG",
+        "residue_mutated_in_structure": null
+      },
+      {
+        "structure": "6HRP",
+        "resolution": 1.12,
+        "ligand": "GMQ",
+        "ligand_name": "6-~{tert}-butyl-8-fluoranyl-2-[2-(hydroxymethyl)-3-[1-methyl-5-[(5-mo…",
+        "ligand_kind": "organic",
+        "chain": "A",
+        "distance_angstrom": 4.39,
+        "residue_in_structure": "ARG",
+        "residue_mutated_in_structure": null
+      },
+      {
+        "structure": "6HRT",
+        "resolution": 1.36,
+        "ligand": "GMW",
+        "ligand_name": "(9~{S})-12-(6-~{tert}-butyl-8-fluoranyl-1-oxidanylidene-phthalazin-2-…",
+        "ligand_kind": "organic",
+        "chain": "A",
+        "distance_angstrom": 4.5,
+        "residue_in_structure": "ARG",
+        "residue_mutated_in_structure": null
+      }
+    ],
+    "ligands": [
+      {
+        "ligand": "0B9",
+        "name": "(2R)-2-(3-chloro-5-fluoroanilino)-2-cyclopropyl-N-[(3R)-1-(7H-pyrrolo…",
+        "kind": "organic",
+        "structures": [
+          "7N4Q"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 1,
+        "min_distance_angstrom": 3.49,
+        "median_residues_neighbouring_ligand": 19
+      },
+      {
+        "ligand": "73T",
+        "name": "6-Fluoro-5-(R)-(3-(S)-(8-fluoro-1-methyl-2,4-dioxo-1,2-dihydroquinazo…",
+        "kind": "organic",
+        "structures": [
+          "5T18"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 1,
+        "min_distance_angstrom": 2.69,
+        "median_residues_neighbouring_ligand": 20
+      },
+      {
+        "ligand": "7G8",
+        "name": "4-[4-[[5-fluoranyl-4-[[3-(propanoylamino)phenyl]amino]pyrimidin-2-yl]…",
+        "kind": "organic",
+        "structures": [
+          "5P9K"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 1,
+        "min_distance_angstrom": 3.58,
+        "median_residues_neighbouring_ligand": 16
+      },
+      {
+        "ligand": "7GB",
+        "name": "6-azanyl-9-[(3~{R})-1-[(~{E})-but-2-enoyl]pyrrolidin-3-yl]-7-(4-pheno…",
+        "kind": "organic",
+        "structures": [
+          "5P9M"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 1,
+        "min_distance_angstrom": 2.92,
+        "median_residues_neighbouring_ligand": 18
+      },
+      {
+        "ligand": "BA0",
+        "name": "(7S)-2-(4-phenoxyphenyl)-7-(1-propanoylpiperidin-4-yl)-4,5,6,7-tetrah…",
+        "kind": "organic",
+        "structures": [
+          "6J6M"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 1,
+        "min_distance_angstrom": 3.48,
+        "median_residues_neighbouring_ligand": 20
+      },
+      {
+        "ligand": "GMQ",
+        "name": "6-~{tert}-butyl-8-fluoranyl-2-[2-(hydroxymethyl)-3-[1-methyl-5-[(5-mo…",
+        "kind": "organic",
+        "structures": [
+          "6HRP"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 1,
+        "min_distance_angstrom": 4.39,
+        "median_residues_neighbouring_ligand": 25
+      },
+      {
+        "ligand": "GMW",
+        "name": "(9~{S})-12-(6-~{tert}-butyl-8-fluoranyl-1-oxidanylidene-phthalazin-2-…",
+        "kind": "organic",
+        "structures": [
+          "6HRT"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 1,
+        "min_distance_angstrom": 4.5,
+        "median_residues_neighbouring_ligand": 26
+      },
+      {
+        "ligand": "UM4",
+        "name": "4-{8-amino-3-[(6R,8aS)-3-oxooctahydroindolizin-6-yl]imidazo[1,5-a]pyr…",
+        "kind": "organic",
+        "structures": [
+          "6X3P"
+        ],
+        "instances": 2,
+        "instances_contacting_residue": 1,
+        "min_distance_angstrom": 3.39,
+        "median_residues_neighbouring_ligand": 17.0
+      },
+      {
+        "ligand": "0BQ",
+        "name": "5-(1H-benzimidazol-2-yl)-2,4-dihydro-3H-1,2,4-triazol-3-one",
+        "kind": "organic",
+        "structures": [
+          "7N5O"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 8
+      },
+      {
+        "ligand": "1E8",
+        "name": "1-{(3R)-3-[4-amino-3-(4-phenoxyphenyl)-1H-pyrazolo[3,4-d]pyrimidin-1-…",
+        "kind": "organic",
+        "structures": [
+          "5P9I"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 19
+      },
+      {
+        "ligand": "2IJ",
+        "name": "5-{(3S)-1-[(Z)-iminomethyl]piperidin-3-yl}-2-(4-phenoxyphenoxy)pyridi…",
+        "kind": "organic",
+        "structures": [
+          "7R61"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 17
+      },
+      {
+        "ligand": "3OV",
+        "name": "6-(dimethylamino)-8-fluoro-2-[2-(hydroxymethyl)-3-(1-methyl-5-{[5-(mo…",
+        "kind": "organic",
+        "structures": [
+          "4RFZ"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 24
+      },
+      {
+        "ligand": "3YO",
+        "name": "N-(6-fluoro-2-methyl-3-{5-[(5-methyl-4,5,6,7-tetrahydropyrazolo[1,5-a…",
+        "kind": "organic",
+        "structures": [
+          "4RX5"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 20
+      },
+      {
+        "ligand": "481",
+        "name": "4-tert-butyl-N-{3-[8-({4-[(4-methylpiperazin-1-yl)carbonyl]phenyl}ami…",
+        "kind": "organic",
+        "structures": [
+          "4OT5"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 24
+      },
+      {
+        "ligand": "6XL",
+        "name": "6-~{tert}-butyl-8-fluoranyl-2-[3-(hydroxymethyl)-4-[1-methyl-6-oxidan…",
+        "kind": "organic",
+        "structures": [
+          "5KUP"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 21
+      },
+      {
+        "ligand": "7G9",
+        "name": "~{N}-[3-[[5-fluoranyl-2-[[4-(2-methoxyethoxy)phenyl]amino]pyrimidin-4…",
+        "kind": "organic",
+        "structures": [
+          "5P9L"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 11
+      },
+      {
+        "ligand": "83P",
+        "name": "(R)-N-methyl-2-(3-((quinoxalin-6-ylamino)methyl)furan-2-carbonyl)-2,3…",
+        "kind": "organic",
+        "structures": [
+          "5U9D"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 22
+      },
+      {
+        "ligand": "8E8",
+        "name": "1-[(3~{R})-3-[4-azanyl-3-(4-phenoxyphenyl)pyrazolo[3,4-d]pyrimidin-1-…",
+        "kind": "organic",
+        "structures": [
+          "5P9J"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 18
+      },
+      {
+        "ligand": "A1CSJ",
+        "name": "1-{4-[(5-fluoro-2-methoxybenzamido)methyl]phenyl}-4-({6-[(1S)-1-hydro…",
+        "kind": "organic",
+        "structures": [
+          "9Y57"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 21
+      },
+      {
+        "ligand": "BTB",
+        "name": "2-[BIS-(2-HYDROXY-ETHYL)-AMINO]-2-HYDROXYMETHYL-PROPANE-1,3-DIOL",
+        "kind": "organic",
+        "structures": [
+          "6X3P",
+          "8FLL",
+          "8FLN"
+        ],
+        "instances": 3,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 4
+      },
+      {
+        "ligand": "DXM",
+        "name": "N-(3-{5-[(1,5-dimethyl-1H-pyrazol-3-yl)amino]-1-methyl-6-oxo-1,6-dihy…",
+        "kind": "organic",
+        "structures": [
+          "6BKW"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 24
+      },
+      {
+        "ligand": "DY4",
+        "name": "N-(3-{5-[(1,5-dimethyl-1H-pyrazol-3-yl)amino]-6-oxo-1,6-dihydropyrida…",
+        "kind": "organic",
+        "structures": [
+          "6BLN"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 21
+      },
+      {
+        "ligand": "FPZ",
+        "name": "triphenylphosphane",
+        "kind": "organic",
+        "structures": [
+          "6BKW"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 5
+      },
+      {
+        "ligand": "GJ7",
+        "name": "2-(4-phenoxyphenoxy)-6-[(1S,4S)-5-propanoyl-2,5-diazabicyclo[2.2.1]he…",
+        "kind": "organic",
+        "structures": [
+          "6DI5"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 16
+      },
+      {
+        "ligand": "GJD",
+        "name": "4-amino-2-[(3S)-3-(propanoylamino)pyrrolidin-1-yl]pyrimidine-5-carbox…",
+        "kind": "organic",
+        "structures": [
+          "6DI1"
+        ],
+        "instances": 1,
+        "instances_contacting_residue": 0,
+        "min_distance_angstrom": null,
+        "median_residues_neighbouring_ligand": 13
+      }
+    ],
+    "negative_control_ligands_never_contacting_residue": [
+      "0BQ",
+      "1E8",
+      "2IJ",
+      "3OV",
+      "3YO",
+      "481",
+      "6XL",
+      "7G9",
+      "83P",
+      "8E8",
+      "A1CSJ",
+      "BTB",
+      "DXM",
+      "DY4",
+      "FPZ",
+      "GJ7",
+      "GJD",
+      "GJG",
+      "GJJ",
+      "HRA",
+      "IS4",
+      "KLM",
+      "LTJ",
+      "MZJ",
+      "PG0"
+    ],
+    "structures_with_residue_mutated": [],
+    "structures_unavailable": []
+  },
+  "sources": [
+    {
+      "database": "RCSB PDB",
+      "record_id": "5P9J",
+      "url": "https://www.rcsb.org/structure/5P9J"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6DI1",
+      "url": "https://www.rcsb.org/structure/6DI1"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "5P9I",
+      "url": "https://www.rcsb.org/structure/5P9I"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6HRP",
+      "url": "https://www.rcsb.org/structure/6HRP"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6E4F",
+      "url": "https://www.rcsb.org/structure/6E4F"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "4RFZ",
+      "url": "https://www.rcsb.org/structure/4RFZ"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "7L5O",
+      "url": "https://www.rcsb.org/structure/7L5O"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6DI9",
+      "url": "https://www.rcsb.org/structure/6DI9"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "7N5O",
+      "url": "https://www.rcsb.org/structure/7N5O"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "5P9L",
+      "url": "https://www.rcsb.org/structure/5P9L"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6J6M",
+      "url": "https://www.rcsb.org/structure/6J6M"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "5P9K",
+      "url": "https://www.rcsb.org/structure/5P9K"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6BLN",
+      "url": "https://www.rcsb.org/structure/6BLN"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "8FLV",
+      "url": "https://www.rcsb.org/structure/8FLV"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6DI0",
+      "url": "https://www.rcsb.org/structure/6DI0"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "7KXM",
+      "url": "https://www.rcsb.org/structure/7KXM"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "5U9D",
+      "url": "https://www.rcsb.org/structure/5U9D"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "8FLN",
+      "url": "https://www.rcsb.org/structure/8FLN"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6X3P",
+      "url": "https://www.rcsb.org/structure/6X3P"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "7KXN",
+      "url": "https://www.rcsb.org/structure/7KXN"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "4RX5",
+      "url": "https://www.rcsb.org/structure/4RX5"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6HRT",
+      "url": "https://www.rcsb.org/structure/6HRT"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "7KXQ",
+      "url": "https://www.rcsb.org/structure/7KXQ"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "5KUP",
+      "url": "https://www.rcsb.org/structure/5KUP"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "7YC9",
+      "url": "https://www.rcsb.org/structure/7YC9"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "9Y57",
+      "url": "https://www.rcsb.org/structure/9Y57"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6VXQ",
+      "url": "https://www.rcsb.org/structure/6VXQ"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6NFH",
+      "url": "https://www.rcsb.org/structure/6NFH"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "5P9M",
+      "url": "https://www.rcsb.org/structure/5P9M"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6OMU",
+      "url": "https://www.rcsb.org/structure/6OMU"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6O8I",
+      "url": "https://www.rcsb.org/structure/6O8I"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6DI5",
+      "url": "https://www.rcsb.org/structure/6DI5"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "8FLL",
+      "url": "https://www.rcsb.org/structure/8FLL"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6BKW",
+      "url": "https://www.rcsb.org/structure/6BKW"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "5T18",
+      "url": "https://www.rcsb.org/structure/5T18"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "7N4Q",
+      "url": "https://www.rcsb.org/structure/7N4Q"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "6W07",
+      "url": "https://www.rcsb.org/structure/6W07"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "7R61",
+      "url": "https://www.rcsb.org/structure/7R61"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "7LTZ",
+      "url": "https://www.rcsb.org/structure/7LTZ"
+    },
+    {
+      "database": "RCSB PDB",
+      "record_id": "4OT5",
+      "url": "https://www.rcsb.org/structure/4OT5"
+    }
+  ],
+  "controls": [
+    "Negative control: ligands in the same structures that never list the residue as a neighbour.",
+    "Selectivity control: number of distinct residues that neighbour the contacting ligand, so a contact is not an artefact of a large neighbour list.",
+    "Site-state control: structures in which the residue itself is mutated are reported separately."
+  ],
+  "limitations": [
+    "A crystal contact with a soluble analogue is not a measurement of binding by the variant protein.",
+    "Absence of a ligand-bound structure is not evidence of absence of binding."
+  ],
+  "reproducible_command": "HELIX_API_URL=http://localhost:8000 PYTHONPATH=lab/tools lab/.venv/bin/python -m helix_lab_tools.experiments ligand_contact --accession Q06187 --position 525 --alternate-residue Q --reference-residue R --gene BTK --variant-id BTK-p.Arg525Gln",
+  "elapsed_seconds": 0.2
+}

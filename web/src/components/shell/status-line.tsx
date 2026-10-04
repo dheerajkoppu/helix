@@ -250,7 +250,7 @@ export function StatusLine() {
   const setShortcutsOpen = useShell((state) => state.setShortcutsOpen);
   if (!advanced) return null;
   return (
-    <footer className="z-40 flex h-6 shrink-0 items-center overflow-hidden border-t border-border bg-sunken font-mono text-[0.6875rem] leading-none whitespace-nowrap">
+    <footer className="z-40 flex h-7 shrink-0 items-center overflow-hidden border-t border-border bg-sunken font-mono text-2xs leading-none whitespace-nowrap">
       <div className="flex h-full min-w-0 items-center overflow-hidden">
         <ApiSegment />
         <SourcesSegment />

@@ -51,7 +51,7 @@ export function EntityTypeTag({
       <meta.icon className="size-3 shrink-0" aria-hidden />
       <span
         aria-hidden
-        className="font-mono text-[0.625rem] leading-none font-semibold tracking-[0.06em]"
+        className="font-mono text-2xs leading-none font-semibold tracking-[0.06em]"
       >
         {meta.code}
       </span>

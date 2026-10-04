@@ -1,0 +1,4 @@
+Objective: I want the reference versus variant structure prediction run for this mutation. Include the structure_comparison test among your candidates and choose it, then request my approval before running it. I will approve it myself.
+Subject line: variant_id=BTK-p.Arg525Gln gene=BTK accession=Q06187 position=525 reference=R alternate=Q
+Budget for the whole run: 200 lab tool calls and 300 compute seconds.
+Run the discovery loop to the final report. The loop ends on candidates, not on the decision.

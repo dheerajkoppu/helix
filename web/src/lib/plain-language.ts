@@ -896,6 +896,31 @@ export function plainStageNeeds(stage: string): string {
   return STAGES[stage]?.needs ?? "Not ready yet.";
 }
 
+/** Simple mode shows three questions instead of seven stages. */
+const STAGE_GROUPS: Record<string, { name: string; needs: string }> = {
+  mutation: { name: "The mutation", needs: "Pick a gene first." },
+  breaks: { name: "What it breaks", needs: "Pick a mutation first." },
+  help: { name: "What could help", needs: "Pick a gene first." },
+};
+
+/** A group in a few words: "The mutation", "What it breaks", "What could help". */
+export function plainStageGroup(group: string): string {
+  return STAGE_GROUPS[group]?.name ?? sentenceCase(group);
+}
+
+/** Why a group can't open yet. */
+export function plainStageGroupNeeds(group: string): string {
+  return STAGE_GROUPS[group]?.needs ?? "Not ready yet.";
+}
+
+/** Links that reach a page inside a group, from the page it sits with. */
+export const GROUP_LINKS = {
+  compare: "Compare normal and mutated",
+  pickMutation: "Pick a mutation first",
+  options: "Known drugs",
+  candidates: "Candidates",
+} as const;
+
 const SHAPES: Record<string, string> = {
   cartoon: "Cartoon",
   surface: "Surface",
@@ -1579,7 +1604,20 @@ export const COMPARE_WORDS = {
   cannotRun: "No model can run this right now.",
   run: "Run comparison",
   loadSaved: "Load saved result",
+  needsBothShapes:
+    "A comparison needs a predicted shape for the normal protein and for the mutated one.",
+  serviceDown:
+    "No prediction service can run right now: the public ESMFold endpoint is returning errors.",
+  savedOnes: "These mutations have a saved comparison:",
+  aboutMutation: "About this mutation",
 } as const;
+
+/** Mutations with a stored comparison, offered when none can be computed. */
+export const COMPARE_EXAMPLES = [
+  { gene: "BTK", change: "p.Arg28His", label: "BTK Arg28 → His" },
+  { gene: "BTK", change: "p.Arg525Gln", label: "BTK Arg525 → Gln" },
+  { gene: "WAS", change: "p.Thr45Met", label: "WAS Thr45 → Met" },
+] as const;
 
 const PROXIMITY: Record<string, string> = {
   at_residue: "At the mutated spot",

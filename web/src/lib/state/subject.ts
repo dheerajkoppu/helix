@@ -112,6 +112,67 @@ export const STAGES = [
 
 export type StageId = (typeof STAGES)[number]["id"];
 
+/**
+ * Simple mode asks three questions instead of walking seven stages. Every stage still exists and
+ * every route still works: a group opens its first stage, or stays on the one already open.
+ * `opens` is tried in order, so the group lands on the page the reader expects.
+ */
+export const STAGE_GROUPS = [
+  {
+    id: "mutation",
+    number: 1,
+    stages: ["disease", "gene", "protein", "compare"],
+    opens: ["gene", "disease", "protein", "compare"],
+  },
+  { id: "breaks", number: 2, stages: ["mechanism"], opens: ["mechanism"] },
+  {
+    id: "help",
+    number: 3,
+    stages: ["intervention", "candidates"],
+    opens: ["candidates", "intervention"],
+  },
+] as const satisfies ReadonlyArray<{
+  id: string;
+  number: number;
+  stages: readonly StageId[];
+  opens: readonly StageId[];
+}>;
+
+export type StageGroupId = (typeof STAGE_GROUPS)[number]["id"];
+
+/** The group a stage belongs to. */
+export function groupOfStage(stage: StageId | null): StageGroupId | null {
+  if (!stage) return null;
+  return (
+    STAGE_GROUPS.find((group) =>
+      (group.stages as readonly StageId[]).includes(stage),
+    )?.id ?? null
+  );
+}
+
+export interface StageGroupTarget {
+  /** the stage the group opens: the active one when it is inside the group */
+  stage: StageId | null;
+  href: string | null;
+}
+
+/** Where a group leads for the current chain, keeping the reader on the page they are already on. */
+export function resolveGroup(
+  group: (typeof STAGE_GROUPS)[number],
+  chain: SubjectChain,
+  active: StageId | null,
+): StageGroupTarget {
+  const order: StageId[] =
+    active && (group.stages as readonly StageId[]).includes(active)
+      ? [active, ...group.opens]
+      : [...group.opens];
+  for (const stage of order) {
+    const { href } = resolveStage(stage, chain);
+    if (href) return { stage, href };
+  }
+  return { stage: null, href: null };
+}
+
 export interface StageTarget {
   /** null when the stage cannot be opened yet */
   href: string | null;

@@ -63,7 +63,7 @@ export function Explainer({ term, producedBy, className }: ExplainerProps) {
         data-slot="explainer"
         aria-label={`What does ${name} mean?`}
         className={cn(
-          "inline-flex size-3.5 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-strong font-sans text-[0.5625rem] leading-none font-medium text-subtle-foreground hover:border-foreground hover:text-foreground aria-expanded:border-foreground aria-expanded:text-foreground",
+          "inline-flex size-[1.125rem] shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-strong font-sans text-2xs leading-none font-medium text-subtle-foreground hover:border-foreground hover:text-foreground aria-expanded:border-foreground aria-expanded:text-foreground",
           className,
         )}
       >

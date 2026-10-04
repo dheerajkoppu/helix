@@ -6,6 +6,7 @@ import { cn } from "cn";
 
 import { ButtonLink } from "@/components/data/button-link";
 import { KeyHint } from "@/components/data/key-hint";
+import { TextLink } from "@/components/data/text-link";
 import { RunJobButton } from "@/components/jobs/run-job";
 import { LiteraturePanel } from "@/components/literature/literature-panel";
 import { AddToProjectButton } from "@/components/project/add-to-project";
@@ -23,7 +24,7 @@ import {
 import { apiDownloadUrl } from "@/lib/api/client";
 import { formatProteinChange, routes, toThreeLetter } from "@/lib/ids";
 import {
-  MUTATION_WORDS,
+  GROUP_LINKS,
   PROTEIN_WORDS,
   plainSelection,
   plainUnit,
@@ -232,76 +233,78 @@ export function ProteinWorkspace({ accession }: { accession: string }) {
               />
             </Zone>
           ) : (
-          <Zone
-            zone="ledger"
-            title={ledgerView === "structures" ? "Structures" : "Features"}
-            count={
-              ledgerView === "structures"
-                ? ledger
-                  ? ledger.experimental.length +
-                    ledger.predicted_external.length +
-                    ledger.predicted_internal.length
-                  : null
-                : protein
-                  ? featureRows(protein).length
-                  : null
-            }
-            scroll={false}
-            actions={
-              <ToggleGroup
-                size="sm"
-                variant="outline"
-                spacing={0}
-                value={[ledgerView]}
-                onValueChange={(value) =>
-                  value.length ? setLedgerView(value[0] as LedgerView) : null
-                }
-              >
-                <ToggleGroupItem value="structures">Structures</ToggleGroupItem>
-                <ToggleGroupItem value="features">Features</ToggleGroupItem>
-              </ToggleGroup>
-            }
-            footer={
-              <KeyHint
-                keys="enter"
-                label={
-                  ledgerView === "structures"
-                    ? "Set as active structure"
-                    : "Select residues"
-                }
-              />
-            }
-          >
-            {ledgerView === "structures" ? (
-              ledger ? (
-                <StructureTable
-                  accession={accession}
-                  gene={geneSymbol}
-                  ledger={ledger}
-                  sequenceLength={sequence?.length ?? null}
-                  activeId={activeId}
-                  onSelect={(id) => setStructure(id)}
+            <Zone
+              zone="ledger"
+              title={ledgerView === "structures" ? "Structures" : "Features"}
+              count={
+                ledgerView === "structures"
+                  ? ledger
+                    ? ledger.experimental.length +
+                      ledger.predicted_external.length +
+                      ledger.predicted_internal.length
+                    : null
+                  : protein
+                    ? featureRows(protein).length
+                    : null
+              }
+              scroll={false}
+              actions={
+                <ToggleGroup
+                  size="sm"
+                  variant="outline"
+                  spacing={0}
+                  value={[ledgerView]}
+                  onValueChange={(value) =>
+                    value.length ? setLedgerView(value[0] as LedgerView) : null
+                  }
+                >
+                  <ToggleGroupItem value="structures">
+                    Structures
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="features">Features</ToggleGroupItem>
+                </ToggleGroup>
+              }
+              footer={
+                <KeyHint
+                  keys="enter"
+                  label={
+                    ledgerView === "structures"
+                      ? "Set as active structure"
+                      : "Select residues"
+                  }
                 />
-              ) : ledgerQuery.isError ? (
+              }
+            >
+              {ledgerView === "structures" ? (
+                ledger ? (
+                  <StructureTable
+                    accession={accession}
+                    gene={geneSymbol}
+                    ledger={ledger}
+                    sequenceLength={sequence?.length ?? null}
+                    activeId={activeId}
+                    onSelect={(id) => setStructure(id)}
+                  />
+                ) : ledgerQuery.isError ? (
+                  <QueryErrorState
+                    error={ledgerQuery.error}
+                    subject={`structures of ${accession}`}
+                    onRetry={() => void ledgerQuery.refetch()}
+                  />
+                ) : (
+                  <RowsSkeleton rows={10} />
+                )
+              ) : protein ? (
+                <FeatureTable accession={accession} protein={protein} />
+              ) : axis.error ? (
                 <QueryErrorState
-                  error={ledgerQuery.error}
-                  subject={`structures of ${accession}`}
-                  onRetry={() => void ledgerQuery.refetch()}
+                  error={axis.error}
+                  subject={`${accession} from UniProt`}
                 />
               ) : (
                 <RowsSkeleton rows={10} />
-              )
-            ) : protein ? (
-              <FeatureTable accession={accession} protein={protein} />
-            ) : axis.error ? (
-              <QueryErrorState
-                error={axis.error}
-                subject={`${accession} from UniProt`}
-              />
-            ) : (
-              <RowsSkeleton rows={10} />
-            )}
-          </Zone>
+              )}
+            </Zone>
           )
         }
         instrument={
@@ -329,9 +332,18 @@ export function ProteinWorkspace({ accession }: { accession: string }) {
                     size="sm"
                     data-action="compare-variant"
                   >
-                    {MUTATION_WORDS.compare}
+                    {GROUP_LINKS.compare}
                     <ArrowRightIcon data-icon="inline-end" />
                   </ButtonLink>
+                ) : geneSymbol ? (
+                  // Compare is not a step of its own in simple mode: it is reached from here.
+                  <TextLink
+                    href={withSelection(routes.gene(geneSymbol), snapshot)}
+                    className="text-xs text-muted-foreground"
+                    data-action="compare-variant"
+                  >
+                    {GROUP_LINKS.compare}: {GROUP_LINKS.pickMutation}
+                  </TextLink>
                 ) : null
               ) : active ? (
                 <AddToProjectButton
@@ -356,12 +368,12 @@ export function ProteinWorkspace({ accession }: { accession: string }) {
             }
             footer={
               simple ? undefined : (
-              <span className="truncate">
-                {ledger && ledger.experimental.length === 0 && active
-                  ? `No experimental structure for ${accession}; the model shown is a prediction. `
-                  : null}
-                {numbering}
-              </span>
+                <span className="truncate">
+                  {ledger && ledger.experimental.length === 0 && active
+                    ? `No experimental structure for ${accession}; the model shown is a prediction. `
+                    : null}
+                  {numbering}
+                </span>
               )
             }
           >
@@ -372,8 +384,8 @@ export function ProteinWorkspace({ accession }: { accession: string }) {
                   simple
                     ? "No lab or predicted structure found."
                     : length > 2700
-                    ? `No experimental entry exists, and AlphaFold DB holds no single model for proteins over 2,700 residues (this one has ${length}). A prediction job can be run on the sequence or on a residue window.`
-                    : "No experimental entry and no existing predicted model were found. A prediction job can be run on the sequence."
+                      ? `No experimental entry exists, and AlphaFold DB holds no single model for proteins over 2,700 residues (this one has ${length}). A prediction job can be run on the sequence or on a residue window.`
+                      : "No experimental entry and no existing predicted model were found. A prediction job can be run on the sequence."
                 }
                 searched={["RCSB PDB", "PDBe SIFTS", "AlphaFold DB"]}
                 actions={
@@ -457,114 +469,114 @@ export function ProteinWorkspace({ accession }: { accession: string }) {
         }
         inspector={
           simple && ranges.length === 0 ? undefined : (
-          <Zone
-            zone="inspector"
-            title={inspectorTitle}
-            scroll={inspectorView !== "literature"}
-            actions={
-              simple ? (
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label="Clear selection"
-                  title="Clear selection"
-                  onClick={clearSelection}
-                >
-                  <XIcon />
-                </Button>
-              ) : undefined
-            }
-            toolbar={
-              simple ? undefined : (
-              <ToggleGroup
-                size="sm"
-                variant="outline"
-                spacing={0}
-                value={[inspectorView]}
-                onValueChange={(value) =>
-                  value.length
-                    ? setInspectorView(value[0] as InspectorView)
-                    : null
-                }
-              >
-                {INSPECTOR_VIEWS.map(([value, text]) => (
-                  <ToggleGroupItem key={value} value={value}>
-                    {text}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
-              )
-            }
-          >
-            {inspectorView === "confidence" ? (
-              <ConfidencePanel
-                accession={accession}
-                sequence={sequence}
-                active={active}
-                ledger={ledger}
-                canonical={canonical}
-                position={position}
-              />
-            ) : inspectorView === "ligands" ? (
-              <LigandPanel
-                accession={accession}
-                active={active}
-                ledger={ledger}
-                ligand={ligand}
-                onLigand={setLigand}
-                onStructure={(id) => setStructure(id)}
-              />
-            ) : inspectorView === "literature" ? (
-              <LiteraturePanel
-                context={{
-                  gene: geneSymbol ?? undefined,
-                  accession,
-                  residue: position ?? undefined,
-                }}
-              />
-            ) : axis.error ? (
-              <QueryErrorState
-                error={axis.error}
-                subject={`${accession} from UniProt`}
-              />
-            ) : !protein ? (
-              <RowsSkeleton rows={8} />
-            ) : position !== null ? (
-              <ResidueInspector
-                key={position}
-                accession={accession}
-                gene={geneSymbol}
-                position={position}
-                variants={variants}
-                active={active}
-                simple={simple}
-              />
-            ) : range ? (
-              <RangeInspector
-                accession={accession}
-                gene={geneSymbol}
-                range={range}
-                protein={protein}
-                ledger={ledger}
-                variants={variants}
-                plddt={plddtTrack?.values ?? null}
-                plddtSource={
-                  canonical
-                    ? `${structureDetail(canonical)}, ${shortId(canonical.id)}`
-                    : null
-                }
-                onStructure={(id) => setStructure(id)}
-                simple={simple}
-              />
-            ) : ranges.length > 1 ? (
-              <EmptyState
-                title={`${ranges.length} ranges selected`}
-                description="Select one residue or one range to inspect it. Esc clears the selection."
-              />
-            ) : (
-              <ProteinOverview protein={protein} ledger={ledger} />
-            )}
-          </Zone>
+            <Zone
+              zone="inspector"
+              title={inspectorTitle}
+              scroll={inspectorView !== "literature"}
+              actions={
+                simple ? (
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label="Clear selection"
+                    title="Clear selection"
+                    onClick={clearSelection}
+                  >
+                    <XIcon />
+                  </Button>
+                ) : undefined
+              }
+              toolbar={
+                simple ? undefined : (
+                  <ToggleGroup
+                    size="sm"
+                    variant="outline"
+                    spacing={0}
+                    value={[inspectorView]}
+                    onValueChange={(value) =>
+                      value.length
+                        ? setInspectorView(value[0] as InspectorView)
+                        : null
+                    }
+                  >
+                    {INSPECTOR_VIEWS.map(([value, text]) => (
+                      <ToggleGroupItem key={value} value={value}>
+                        {text}
+                      </ToggleGroupItem>
+                    ))}
+                  </ToggleGroup>
+                )
+              }
+            >
+              {inspectorView === "confidence" ? (
+                <ConfidencePanel
+                  accession={accession}
+                  sequence={sequence}
+                  active={active}
+                  ledger={ledger}
+                  canonical={canonical}
+                  position={position}
+                />
+              ) : inspectorView === "ligands" ? (
+                <LigandPanel
+                  accession={accession}
+                  active={active}
+                  ledger={ledger}
+                  ligand={ligand}
+                  onLigand={setLigand}
+                  onStructure={(id) => setStructure(id)}
+                />
+              ) : inspectorView === "literature" ? (
+                <LiteraturePanel
+                  context={{
+                    gene: geneSymbol ?? undefined,
+                    accession,
+                    residue: position ?? undefined,
+                  }}
+                />
+              ) : axis.error ? (
+                <QueryErrorState
+                  error={axis.error}
+                  subject={`${accession} from UniProt`}
+                />
+              ) : !protein ? (
+                <RowsSkeleton rows={8} />
+              ) : position !== null ? (
+                <ResidueInspector
+                  key={position}
+                  accession={accession}
+                  gene={geneSymbol}
+                  position={position}
+                  variants={variants}
+                  active={active}
+                  simple={simple}
+                />
+              ) : range ? (
+                <RangeInspector
+                  accession={accession}
+                  gene={geneSymbol}
+                  range={range}
+                  protein={protein}
+                  ledger={ledger}
+                  variants={variants}
+                  plddt={plddtTrack?.values ?? null}
+                  plddtSource={
+                    canonical
+                      ? `${structureDetail(canonical)}, ${shortId(canonical.id)}`
+                      : null
+                  }
+                  onStructure={(id) => setStructure(id)}
+                  simple={simple}
+                />
+              ) : ranges.length > 1 ? (
+                <EmptyState
+                  title={`${ranges.length} ranges selected`}
+                  description="Select one residue or one range to inspect it. Esc clears the selection."
+                />
+              ) : (
+                <ProteinOverview protein={protein} ledger={ledger} />
+              )}
+            </Zone>
           )
         }
       />

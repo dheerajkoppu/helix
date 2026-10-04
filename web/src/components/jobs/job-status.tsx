@@ -54,7 +54,7 @@ export function JobStatusTag({
         className,
       )}
     >
-      <span aria-hidden className="font-mono text-[0.625rem]">
+      <span aria-hidden className="font-mono text-2xs">
         {meta.glyph}
       </span>
       {meta.label}

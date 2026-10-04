@@ -49,7 +49,7 @@ export function TierMark({ tier }: { tier: ComparisonRow["tier"] }) {
     <span
       title={`Tier ${meta.code}: ${meta.label}. ${meta.description}`}
       className={cn(
-        "inline-flex size-[18px] items-center justify-center rounded-xs border font-mono text-[0.625rem] font-semibold",
+        "inline-flex size-5 items-center justify-center rounded-xs border font-mono text-2xs font-semibold",
         tier === "A_experimental"
           ? "border-border-strong text-foreground"
           : "border-dashed border-border-strong text-muted-foreground",

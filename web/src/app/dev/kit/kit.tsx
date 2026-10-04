@@ -95,7 +95,7 @@ function ThemePane({
         className,
       )}
     >
-      <p className="mb-3 font-mono text-[0.625rem] tracking-[0.08em] text-subtle-foreground uppercase">
+      <p className="mb-3 font-mono text-2xs tracking-[0.08em] text-subtle-foreground uppercase">
         {theme}
       </p>
       {children}
@@ -120,7 +120,7 @@ function Specimen({ name, path, note, wide = false, children }: SpecimenProps) {
       <div className="flex flex-col gap-1 border-border bg-sunken px-4 py-3 lg:border-r">
         <h3 className="text-sm font-medium text-foreground">{name}</h3>
         {path ? (
-          <code className="font-mono text-[0.625rem] break-words text-muted-foreground">
+          <code className="font-mono text-2xs break-words text-muted-foreground">
             {path}
           </code>
         ) : null}
@@ -253,7 +253,7 @@ function TokenTable() {
           ))}
         </ul>
         <p className="mt-4 mb-2 font-medium">Radius</p>
-        <div className="flex items-end gap-2 font-mono text-[0.625rem] text-muted-foreground">
+        <div className="flex items-end gap-2 font-mono text-2xs text-muted-foreground">
           <span className="flex flex-col items-center gap-1">
             <span className="size-6 rounded-xs border border-border-strong" />2
           </span>

@@ -1,0 +1,4 @@
+Objective: Does this mutation change the folded shape of the protein? Compare the predicted shape of the normal and mutated protein before deciding.
+Subject line: variant_id=WAS-p.Thr45Met gene=WAS accession=P42768 position=45 reference=T alternate=M
+Budget for the whole run: 200 lab tool calls and 300 compute seconds.
+Run the discovery loop to the final report. The loop ends on candidates, not on the decision.
