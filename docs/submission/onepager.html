@@ -7,7 +7,7 @@
     <style>
       @page {
         size: Letter;
-        margin: 0.6in 0.62in 0.5in 0.62in;
+        margin: 0.58in 0.62in 0.44in 0.62in;
       }
 
       :root {
@@ -36,12 +36,12 @@
           Arial,
           sans-serif;
         font-size: 9pt;
-        line-height: 1.36;
+        line-height: 1.31;
         -webkit-font-smoothing: antialiased;
       }
 
       p {
-        margin: 0 0 3.6pt;
+        margin: 0 0 2.5pt;
       }
       p:last-child {
         margin-bottom: 0;
@@ -60,7 +60,7 @@
         display: flex;
         align-items: flex-start;
         gap: 8pt;
-        padding-bottom: 4.5pt;
+        padding-bottom: 3.6pt;
         border-bottom: 1.1pt solid var(--rule-strong);
       }
       .mark {
@@ -103,8 +103,8 @@
         letter-spacing: 0.05em;
         text-transform: uppercase;
         color: var(--ink);
-        margin: 4.5pt 0 2.6pt;
-        padding-bottom: 1.6pt;
+        margin: 2.5pt 0 1.7pt;
+        padding-bottom: 1.2pt;
         border-bottom: 0.5pt solid var(--rule);
       }
       h2 .sub {
@@ -126,7 +126,7 @@
       ul.cols li {
         padding-left: 6.5pt;
         position: relative;
-        margin-bottom: 0.6pt;
+        margin-bottom: 0.3pt;
         break-inside: avoid;
       }
       ul.cols li::before {
@@ -147,14 +147,14 @@
         display: flex;
         align-items: stretch;
         gap: 2.6pt;
-        margin: 3.6pt 0 0;
-        font-size: 7.4pt;
-        line-height: 1.18;
+        margin: 3pt 0 0;
+        font-size: 7.3pt;
+        line-height: 1.16;
       }
       .node {
         flex: 1 1 0;
         border: 0.5pt solid var(--rule);
-        padding: 2.6pt 3.2pt;
+        padding: 2.2pt 2.8pt;
         color: var(--ink-2);
       }
       .node b {
@@ -195,7 +195,7 @@
       .caption {
         font-size: 8pt;
         color: var(--ink-3);
-        margin: 2.4pt 0 0;
+        margin: 1.8pt 0 0;
       }
 
       /* timeline */
@@ -206,10 +206,10 @@
       table.timeline {
         flex: 1 1 0;
         border-collapse: collapse;
-        font-size: 8.6pt;
+        font-size: 8.4pt;
       }
       table.timeline td {
-        padding: 0.8pt 0;
+        padding: 0.6pt 0;
         vertical-align: baseline;
         border-bottom: 0.4pt solid #ededf0;
       }
@@ -226,8 +226,8 @@
 
       /* closing */
       .closing {
-        margin-top: 5.5pt;
-        padding-top: 3.6pt;
+        margin-top: 3.4pt;
+        padding-top: 2.4pt;
         border-top: 1.1pt solid var(--rule-strong);
         font-size: 8pt;
         color: var(--ink-3);
@@ -281,16 +281,14 @@
     <section>
       <h2>Challenge Tackled</h2>
       <p>
-        About five thousand rare diseases come down to one broken gene, and
-        fewer than one in twenty has a treatment.
-        <strong
-          >Our user is a translational researcher with a gene and no
-          therapy</strong
-        >: to find what might help one protein they must check every molecule
-        recorded as acting on it, one database at a time, and judge whether each
-        pushes the protein the right way or the wrong way. Helix covers the IUIS
-        2024 inborn-errors-of-immunity catalog:
-        <strong>511 genes, 604 diseases</strong>.
+        About five thousand rare diseases come down to a single broken gene, and
+        fewer than one in twenty has a treatment. Helix is for the researcher
+        who has the gene and nothing else. Their job today is to open one
+        database at a time, find every molecule recorded as acting on that
+        protein, and decide one by one whether it pushes the protein the way the
+        disease needs or the wrong way. Helix does that pass over the IUIS 2024
+        catalog of inborn errors of immunity —
+        <strong>511 genes and 604 diseases</strong> — and shows its working.
       </p>
 
       <div class="diagram">
@@ -299,17 +297,19 @@
         </div>
         <span class="arrow">→</span>
         <div class="node">
-          <b>Mechanism</b>class + direction, from the catalog
+          <b>What went wrong</b>too much activity, or too little
         </div>
         <span class="arrow">→</span>
-        <div class="node"><b>Required action</b>fixed rule table, no model</div>
+        <div class="node">
+          <b>Direction needed</b>fixed rule table, no model
+        </div>
         <span class="arrow">→</span>
         <div class="node">
-          <b>5 bridges</b>target, pathway, interaction, structure, class
+          <b>Five ways across</b>target, pathway, interaction, structure, class
         </div>
         <span class="arrow">→</span>
         <div class="node filter">
-          <b>Direction filter</b>need × action × carry-over
+          <b>The filter</b>what's needed × what the drug does × how it carries
         </div>
         <span class="arrow">→</span>
         <div class="outs">
@@ -320,8 +320,10 @@
         </div>
       </div>
       <p class="caption">
-        Nine Omnigent agents — a supervisor and eight specialists — drive the
-        same tool layer through a recorded loop.
+        Read it left to right: Helix works out which way the broken protein has
+        to move, follows five kinds of recorded relationship to find molecules,
+        and the filter throws out everything pushing the wrong way. Nine
+        Omnigent agents drive this loop, and every step is recorded.
       </p>
     </section>
 
@@ -329,52 +331,61 @@
       <h2>Tools / ML Models Used</h2>
       <ul class="cols">
         <li>
-          <strong>Claude Sonnet 5</strong>
-          <span class="role">— reasoning, every agent, both arms</span>
-        </li>
-        <li>
-          <strong>Omnigent 0.16.0</strong>
-          <span class="role">— supervisor + 8 specialists</span>
+          <strong>Omnigent 0.16.0 with Claude Sonnet 5</strong>
+          <span class="role"
+            >— runs the nine agents, one supervisor and eight specialists; same
+            model in both arms of our comparison.</span
+          >
         </li>
         <li>
           <strong>ChEMBL</strong>
           <span class="role"
-            >— action type + activities: the direction signal</span
+            >— what a drug actually does to its target, up or down. The filter
+            runs on that one fact.</span
           >
         </li>
         <li>
           <strong>Reactome, IntAct, STRING</strong>
-          <span class="role">— pathway, interaction</span>
+          <span class="role"
+            >— which proteins sit upstream of the broken one or touch it, so we
+            can aim at a neighbour.</span
+          >
         </li>
         <li>
           <strong>Open Targets</strong>
-          <span class="role">— held-out ground truth</span>
+          <span class="role"
+            >— drugs already known to work. We hide them, then see if we find
+            them again.</span
+          >
         </li>
         <li>
           <strong>AlphaFold DB, ESMFold v1</strong>
-          <span class="role">— structures</span>
-        </li>
-        <li>
-          <strong>Boltz-2</strong>
-          <span class="role">— binding affinity, pending a GPU backend</span>
+          <span class="role"
+            >— a predicted structure when no experiment has solved one.</span
+          >
+          <strong>PrankWeb</strong>
+          <span class="role">finds the pockets a drug could bind;</span>
+          <strong>Mol*</strong> <span class="role">draws them.</span>
         </li>
         <li>
           <strong>AlphaMissense, ProtVar</strong>
-          <span class="role">— variant effect</span>
+          <span class="role">— how damaging one mutation looks.</span>
         </li>
         <li>
-          <strong>PrankWeb</strong> <span class="role">— pockets;</span>
-          <strong>Mol*</strong> <span class="role">— 3D viewer</span>
+          <strong>Boltz-2</strong>
+          <span class="role"
+            >— would score binding strength; waiting on a GPU.</span
+          >
         </li>
         <li>
           <strong>Europe PMC, OpenAlex</strong>
-          <span class="role">— literature</span>
+          <span class="role">— the papers behind each claim.</span>
         </li>
         <li>
           <strong>FastAPI</strong>
-          <span class="role">— API and discovery engine</span>
+          <span class="role">— the API and discovery engine;</span>
+          <strong>Next.js</strong> <span class="role">— the web app.</span>
         </li>
-        <li><strong>Next.js</strong> <span class="role">— web app</span></li>
       </ul>
     </section>
 
@@ -382,23 +393,24 @@
       <h2>What Worked Well</h2>
       <p>
         <strong
-          >Direction of effect is a hard filter, not a ranking factor.</strong
+          >The filter turns away 34 molecules in X-linked agammaglobulinemia,
+          and it is right to.</strong
         >
-        A molecule that lowers a protein's activity helps a disease where that
-        protein is overactive and harms one where it is already too weak, so
-        anything pushing the wrong way is refused outright and shown with its
-        reason. For X-linked agammaglobulinemia the engine refuses
-        <strong>34 molecules</strong>, among them all 20 that ChEMBL records as
-        lowering BTK — ibrutinib included, a cancer drug in use today.
+        In that disease the BTK protein is already too weak, so a drug that
+        weakens it further would make things worse. All 20 molecules ChEMBL
+        records as lowering BTK are among the 34 refused — ibrutinib included, a
+        cancer drug in use today.
       </p>
       <p>
-        The same rule still finds drugs: with the APDS link withheld,
-        <strong>leniolisib returns at rank 4 of 27</strong> through a chain of
-        three cited records, and for STAT1 gain of function baricitinib returns
-        at <strong>rank 2 of 23, aimed at JAK1 upstream</strong>, not at STAT1.
-        <strong>All 4 stored controls pass.</strong> One request settles
-        <strong>410 molecule-direction judgments</strong> from 492 upstream
-        records over 8 databases.
+        Being this strict does not stop it finding drugs. We hid the record
+        linking leniolisib to APDS and asked again: it came back at
+        <strong>rank 4 of 27</strong> through three cited records. For STAT1
+        gain of function it returned baricitinib at
+        <strong>rank 2 of 23</strong> by aiming at JAK1, the protein one step
+        upstream, not at STAT1 itself.
+        <strong>All four stored controls pass.</strong> Over 16 requests the
+        engine settled <strong>410</strong> such judgments from 492 records
+        across 8 databases.
       </p>
     </section>
 
@@ -406,38 +418,43 @@
       <h2>What Was Challenging</h2>
       <p>
         <strong
-          >Measuring the engine caught a real bug in our own filter.</strong
+          >Measuring the engine caught our own filter making a mistake.</strong
         >
-        Run across all 604 diseases with the known drug links held out, it
-        refused <strong>plerixafor for WHIM syndrome</strong> — the drug used
-        for that disease. ChEMBL records its one CXCR4 mechanism as
-        <code>PARTIAL AGONIST</code>, while the four activities ChEMBL holds for
-        that same pair are all IC50: one curated field said raise, four
-        measurements said lower, and the filter believed the field. The fix —
+        We ran it over all 604 diseases with the known drug links hidden. It
+        refused
+        <strong>plerixafor for WHIM syndrome</strong> — and plerixafor is the
+        drug used for WHIM syndrome. ChEMBL's one curated field calls plerixafor
+        a <code>PARTIAL AGONIST</code> of CXCR4, meaning it turns the protein
+        up; all four activity measurements for that same pair say it turns it
+        down. One field said raise, four measurements said lower, and our filter
+        believed the field. So we changed the rule:
         <strong
-          >a rejection may no longer rest on an action type that another record
-          of the same molecule and protein contradicts</strong
+          >a refusal may no longer rest on an action type that another record of
+          the same molecule and protein contradicts.</strong
         >
-        — puts plerixafor back at rank 8 and makes the case a permanent fourth
+        Plerixafor now comes back at rank 8, and that case is a permanent fourth
         control.
       </p>
       <p>
-        <strong>Recall is low, and reported as it came out:</strong> 12 of 226
-        held-out pairs (<strong>5.3%</strong>) over 32 evaluable diseases,
-        median rank 5.5, 1 false rejection. The cause table for the 213 misses
-        shows most are antibodies, replacement proteins, transplant conditioning
-        or drugs with no ChEMBL mechanism record at all — things a mechanism
-        engine is right to stay silent about.
+        <strong>Recall is low, and we report it as it came out.</strong> The
+        engine recovered 12 of 226 hidden drug-disease pairs —
+        <strong>5.3%</strong> — across the 32 diseases we could check against,
+        at a median rank of 5.5, with one wrong refusal left. Of the 213 misses,
+        53 molecules have no ChEMBL mechanism record at all, 51 are not small
+        molecules (antibodies, replacement proteins, gene therapies) and 47 act
+        on a non-human protein — things a mechanism engine is right to stay
+        silent about.
       </p>
       <p>
         <strong
-          >The ablation went against our own agent team, and we kept the
+          >Our own comparison went against our agent team, and we kept the
           result.</strong
         >
-        Same tools, model and budget, 13 variants per arm: the lab took a median
-        <strong>198.5 s against 84.2 s</strong> for one generalist agent, slower
-        in 13 of 13 pairs. It bought breadth — 10.69 against 7.46 databases
-        cited — and all 26 runs produced a complete cited record.
+        Same tools, model and budget, 13 variants each: the nine-agent lab took
+        a median <strong>198.5 seconds against 84.2</strong> for one generalist
+        agent, slower in all 13 pairs. It bought breadth —
+        <strong>10.69</strong> databases cited on average against 7.46 — and all
+        26 runs produced a complete cited record.
       </p>
     </section>
 
@@ -501,10 +518,10 @@
 
     <div class="closing">
       <div class="next">
-        <b>If we had 24 more hours,</b> we would add a functional-counterpart
-        bridge: the 61-pair "no bridge path" bucket holds amiloride on ENaC, the
-        channel that counterbalances CFTR — a relationship no
-        physical-interaction record carries.
+        <b>If we had 24 more hours,</b> we would add a bridge for proteins that
+        work against each other rather than touch each other. The 61 misses with
+        no path include amiloride on ENaC, the channel that counterbalances CFTR
+        in cystic fibrosis — a relationship no interaction database records.
       </div>
       <div class="disclaimer">
         Every row is a hypothesis built from records and labelled as one. No
