@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Helix — technical report</title>
+    <link rel="stylesheet" href="_fonts.css" />
+    <style>
+      @page {
+        size: Letter;
+        margin: 0.6in 0.62in 0.5in 0.62in;
+      }
+
+      :root {
+        --ink: #111113;
+        --ink-2: #33343a;
+        --ink-3: #6b6c75;
+        --rule: #d6d7dc;
+        --rule-strong: #111113;
+        --refuse: #a51c23;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #fff;
+        color: var(--ink-2);
+        font-family:
+          "IBM Plex Sans",
+          -apple-system,
+          "Helvetica Neue",
+          Arial,
+          sans-serif;
+        font-size: 9pt;
+        line-height: 1.36;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      p {
+        margin: 0 0 3.6pt;
+      }
+      p:last-child {
+        margin-bottom: 0;
+      }
+      strong {
+        font-weight: 600;
+        color: var(--ink);
+      }
+      code {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 0.92em;
+      }
+
+      /* masthead */
+      header.masthead {
+        display: flex;
+        align-items: flex-start;
+        gap: 8pt;
+        padding-bottom: 4.5pt;
+        border-bottom: 1.1pt solid var(--rule-strong);
+      }
+      .mark {
+        flex: 0 0 auto;
+        margin-top: 0.5pt;
+      }
+      .masthead .names {
+        flex: 1 1 auto;
+      }
+      .wordmark {
+        font-size: 14.5pt;
+        font-weight: 700;
+        letter-spacing: -0.012em;
+        color: var(--ink);
+        line-height: 1.05;
+      }
+      .tagline {
+        font-size: 9.2pt;
+        font-weight: 600;
+        color: var(--ink);
+        margin-top: 1.2pt;
+      }
+      .meta {
+        flex: 0 0 auto;
+        text-align: right;
+        font-size: 7.6pt;
+        color: var(--ink-3);
+        line-height: 1.32;
+        padding-top: 1.5pt;
+      }
+      .meta b {
+        color: var(--ink-2);
+        font-weight: 600;
+      }
+
+      /* sections */
+      h2 {
+        font-size: 9pt;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--ink);
+        margin: 4.5pt 0 2.6pt;
+        padding-bottom: 1.6pt;
+        border-bottom: 0.5pt solid var(--rule);
+      }
+      h2 .sub {
+        font-weight: 400;
+        letter-spacing: 0;
+        text-transform: none;
+        color: var(--ink-3);
+        font-size: 8pt;
+      }
+
+      /* two-column list */
+      ul.cols {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        columns: 2;
+        column-gap: 18pt;
+      }
+      ul.cols li {
+        padding-left: 6.5pt;
+        position: relative;
+        margin-bottom: 0.6pt;
+        break-inside: avoid;
+      }
+      ul.cols li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 4.4pt;
+        width: 2.4pt;
+        height: 2.4pt;
+        background: var(--ink-3);
+      }
+      .role {
+        color: var(--ink-3);
+      }
+
+      /* architecture diagram */
+      .diagram {
+        display: flex;
+        align-items: stretch;
+        gap: 2.6pt;
+        margin: 3.6pt 0 0;
+        font-size: 7.4pt;
+        line-height: 1.18;
+      }
+      .node {
+        flex: 1 1 0;
+        border: 0.5pt solid var(--rule);
+        padding: 2.6pt 3.2pt;
+        color: var(--ink-2);
+      }
+      .node b {
+        display: block;
+        font-weight: 600;
+        color: var(--ink);
+        margin-bottom: 0.5pt;
+      }
+      .node.filter {
+        border: 1.1pt solid var(--rule-strong);
+        flex: 1.1 1 0;
+      }
+      .arrow {
+        flex: 0 0 auto;
+        align-self: center;
+        color: var(--ink-3);
+        font-size: 8pt;
+      }
+      .outs {
+        flex: 1.5 1 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2.6pt;
+      }
+      .outs .node {
+        flex: 1 1 auto;
+      }
+      .outs .ranked {
+        border-color: var(--ink-3);
+      }
+      .outs .refused {
+        border-color: var(--refuse);
+        color: var(--refuse);
+      }
+      .outs .refused b {
+        color: var(--refuse);
+      }
+      .caption {
+        font-size: 8pt;
+        color: var(--ink-3);
+        margin: 2.4pt 0 0;
+      }
+
+      /* timeline */
+      .timelines {
+        display: flex;
+        gap: 18pt;
+      }
+      table.timeline {
+        flex: 1 1 0;
+        border-collapse: collapse;
+        font-size: 8.6pt;
+      }
+      table.timeline td {
+        padding: 0.8pt 0;
+        vertical-align: baseline;
+        border-bottom: 0.4pt solid #ededf0;
+      }
+      table.timeline tr:last-child td {
+        border-bottom: 0;
+      }
+      table.timeline td.t {
+        width: 56pt;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-3);
+        font-weight: 600;
+      }
+
+      /* closing */
+      .closing {
+        margin-top: 5.5pt;
+        padding-top: 3.6pt;
+        border-top: 1.1pt solid var(--rule-strong);
+        font-size: 8pt;
+        color: var(--ink-3);
+        display: flex;
+        gap: 16pt;
+        align-items: baseline;
+      }
+      .closing .next {
+        flex: 1 1 auto;
+        color: var(--ink-2);
+      }
+      .closing .next b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .closing .disclaimer {
+        flex: 0 0 38%;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="masthead">
+      <svg
+        class="mark"
+        width="25"
+        height="25"
+        viewBox="0 0 32 32"
+        aria-hidden="true"
+      >
+        <rect width="32" height="32" rx="7" fill="#111113" />
+        <path
+          d="M5.4 13.6v4.8M11 11.9v8.2M16 5.2v21.6M21 11.2v9.6M26.6 14v4"
+          stroke="#ffffff"
+          stroke-width="3.4"
+          stroke-linecap="round"
+        />
+      </svg>
+      <div class="names">
+        <div class="wordmark">Helix</div>
+        <div class="tagline">
+          An AI lab that works out what a drug could aim at in a rare disease.
+        </div>
+      </div>
+      <div class="meta">
+        <b>Hack-Nation&nbsp;×&nbsp;Databricks</b><br />
+        Challenge 03 — Agentic Scientific Discovery<br />
+        Technical report · 2026-10-03
+      </div>
+    </header>
+
+    <section>
+      <h2>Challenge Tackled</h2>
+      <p>
+        About five thousand rare diseases come down to one broken gene, and
+        fewer than one in twenty has a treatment.
+        <strong
+          >Our user is a translational researcher with a gene and no
+          therapy</strong
+        >: to find what might help one protein they must check every molecule
+        recorded as acting on it, one database at a time, and judge whether each
+        pushes the protein the right way or the wrong way. Helix covers the IUIS
+        2024 inborn-errors-of-immunity catalog:
+        <strong>511 genes, 604 diseases</strong>.
+      </p>
+
+      <div class="diagram">
+        <div class="node">
+          <b>Disease → gene → mutation</b>on the 3D protein
+        </div>
+        <span class="arrow">→</span>
+        <div class="node">
+          <b>Mechanism</b>class + direction, from the catalog
+        </div>
+        <span class="arrow">→</span>
+        <div class="node"><b>Required action</b>fixed rule table, no model</div>
+        <span class="arrow">→</span>
+        <div class="node">
+          <b>5 bridges</b>target, pathway, interaction, structure, class
+        </div>
+        <span class="arrow">→</span>
+        <div class="node filter">
+          <b>Direction filter</b>need × action × carry-over
+        </div>
+        <span class="arrow">→</span>
+        <div class="outs">
+          <div class="node ranked">
+            <b>Ranked candidates</b>each a cited chain
+          </div>
+          <div class="node refused"><b>Refused</b>shown with the reason</div>
+        </div>
+      </div>
+      <p class="caption">
+        Eight Omnigent agents — a supervisor and seven specialists — drive the
+        same tool layer through a recorded loop.
+      </p>
+    </section>
+
+    <section>
+      <h2>Tools / ML Models Used</h2>
+      <ul class="cols">
+        <li>
+          <strong>Claude Sonnet 5</strong>
+          <span class="role">— reasoning, every agent, both arms</span>
+        </li>
+        <li>
+          <strong>Omnigent 0.16.0</strong>
+          <span class="role">— supervisor + 7 specialists</span>
+        </li>
+        <li>
+          <strong>ChEMBL</strong>
+          <span class="role"
+            >— action type + activities: the direction signal</span
+          >
+        </li>
+        <li>
+          <strong>Reactome, IntAct, STRING</strong>
+          <span class="role">— pathway, interaction</span>
+        </li>
+        <li>
+          <strong>Open Targets</strong>
+          <span class="role">— held-out ground truth</span>
+        </li>
+        <li>
+          <strong>AlphaFold DB, ESMFold v1</strong>
+          <span class="role">— structures</span>
+        </li>
+        <li>
+          <strong>Boltz-2</strong>
+          <span class="role">— binding affinity, pending a GPU backend</span>
+        </li>
+        <li>
+          <strong>AlphaMissense, ProtVar</strong>
+          <span class="role">— variant effect</span>
+        </li>
+        <li>
+          <strong>PrankWeb</strong> <span class="role">— pockets;</span>
+          <strong>Mol*</strong> <span class="role">— 3D viewer</span>
+        </li>
+        <li>
+          <strong>Europe PMC, OpenAlex</strong>
+          <span class="role">— literature</span>
+        </li>
+        <li>
+          <strong>FastAPI</strong>
+          <span class="role">— API and discovery engine</span>
+        </li>
+        <li><strong>Next.js</strong> <span class="role">— web app</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>What Worked Well</h2>
+      <p>
+        <strong
+          >Direction of effect is a hard filter, not a ranking factor.</strong
+        >
+        A molecule that lowers a protein's activity helps a disease where that
+        protein is overactive and harms one where it is already too weak, so
+        anything pushing the wrong way is refused outright and shown with its
+        reason. For X-linked agammaglobulinemia the engine refuses
+        <strong>34 molecules</strong>, among them all 20 that ChEMBL records as
+        lowering BTK — ibrutinib included, a cancer drug in use today.
+      </p>
+      <p>
+        The same rule still finds drugs: with the APDS link withheld,
+        <strong>leniolisib returns at rank 4 of 27</strong> through a chain of
+        three cited records, and for STAT1 gain of function baricitinib returns
+        at <strong>rank 2 of 23, aimed at JAK1 upstream</strong>, not at STAT1.
+        <strong>All 4 stored controls pass.</strong> One request settles
+        <strong>410 molecule-direction judgments</strong> from 492 upstream
+        records over 8 databases.
+      </p>
+    </section>
+
+    <section>
+      <h2>What Was Challenging</h2>
+      <p>
+        <strong
+          >Measuring the engine caught a real bug in our own filter.</strong
+        >
+        Run across all 604 diseases with the known drug links held out, it
+        refused <strong>plerixafor for WHIM syndrome</strong> — the drug used
+        for that disease. ChEMBL records its one CXCR4 mechanism as
+        <code>PARTIAL AGONIST</code>, while the four activities ChEMBL holds for
+        that same pair are all IC50: one curated field said raise, four
+        measurements said lower, and the filter believed the field. The fix —
+        <strong
+          >a rejection may no longer rest on an action type that another record
+          of the same molecule and protein contradicts</strong
+        >
+        — puts plerixafor back at rank 8 and makes the case a permanent fourth
+        control.
+      </p>
+      <p>
+        <strong>Recall is low, and reported as it came out:</strong> 12 of 226
+        held-out pairs (<strong>5.3%</strong>) over 32 evaluable diseases,
+        median rank 5.5, 1 false rejection. The cause table for the 213 misses
+        shows most are antibodies, replacement proteins, transplant conditioning
+        or drugs with no ChEMBL mechanism record at all — things a mechanism
+        engine is right to stay silent about.
+      </p>
+      <p>
+        <strong
+          >The ablation went against our own agent team, and we kept the
+          result.</strong
+        >
+        Same tools, model and budget, 13 variants per arm: the lab took a median
+        <strong>198.5 s against 84.2 s</strong> for one generalist agent, slower
+        in 13 of 13 pairs. It bought breadth — 10.69 against 7.46 databases
+        cited — and all 26 runs produced a complete cited record.
+      </p>
+    </section>
+
+    <section>
+      <h2>
+        How We Spent the Time &nbsp;<span class="sub"
+          >one day, 2026-10-03, from <code>git log</code></span
+        >
+      </h2>
+      <div class="timelines">
+        <table class="timeline">
+          <tr>
+            <td class="t">12:45</td>
+            <td>Foundation — backend core, design system, shell</td>
+          </tr>
+          <tr>
+            <td class="t">15:04</td>
+            <td>Platform — engines, journey pages, simple UI</td>
+          </tr>
+          <tr>
+            <td class="t">15:07–15:41</td>
+            <td>Benchmark: 26 runs, agent team against one agent</td>
+          </tr>
+          <tr>
+            <td class="t">16:30</td>
+            <td>Lab, measured comparison, plain-language pass</td>
+          </tr>
+          <tr>
+            <td class="t">18:49</td>
+            <td>
+              <strong>Discovery engine</strong> — bridges, direction filter
+            </td>
+          </tr>
+        </table>
+        <table class="timeline">
+          <tr>
+            <td class="t">19:11–19:43</td>
+            <td>Interface — three stages, type scale, new mark</td>
+          </tr>
+          <tr>
+            <td class="t">20:00</td>
+            <td>Lab as the demo centrepiece</td>
+          </tr>
+          <tr>
+            <td class="t">20:06</td>
+            <td>Measure the engine over 604 diseases</td>
+          </tr>
+          <tr>
+            <td class="t">20:23</td>
+            <td>
+              <strong>Fix the filter</strong>, re-measure, classify misses
+            </td>
+          </tr>
+          <tr>
+            <td class="t">20:51</td>
+            <td>MIT relicence</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <div class="closing">
+      <div class="next">
+        <b>If we had 24 more hours,</b> we would add a functional-counterpart
+        bridge: the 61-pair "no bridge path" bucket holds amiloride on ENaC, the
+        channel that counterbalances CFTR — a relationship no
+        physical-interaction record carries.
+      </div>
+      <div class="disclaimer">
+        Every row is a hypothesis built from records and labelled as one. No
+        treatment, no dose, no advice; nothing validated in a laboratory.
+      </div>
+    </div>
+  </body>
+</html>

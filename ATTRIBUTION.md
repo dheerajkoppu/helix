@@ -1,6 +1,6 @@
 # Attribution
 
-Helix is licensed under Apache-2.0. Third-party data is not covered by that licence: every
+Helix is licensed under MIT. Third-party data is not covered by that licence: every
 source below keeps its own terms. Helix is a research and hypothesis-generation tool and is
 not clinical decision software.
 

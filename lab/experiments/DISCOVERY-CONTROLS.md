@@ -2,8 +2,9 @@
 
 Run 2026-10-04T03:23:36Z against the live API. 4 of 4 passed.
 
-These three calls are the product's own evidence that the direction-of-effect filter works: one
-recovery with the answer held out, one refusal, one upstream target. Every expected molecule is
+These four calls are the product's own evidence that the direction-of-effect filter works: one
+recovery with the answer held out, one refusal, one upstream target, and one regression test for an
+error the accuracy experiment found in the filter. Every expected molecule is
 resolved to a ChEMBL id and an InChIKey through a separate endpoint before any candidate row is
 matched, so nothing passes on a name.
 

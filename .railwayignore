@@ -1,0 +1,16 @@
+# The API image needs api/, data/seed, data/examples and the lab record only. Everything here is
+# either rebuilt in the image or irrelevant to it, and lab/.venv alone is ~470 MB.
+lab/.venv
+lab/tools
+lab/policy_checks
+lab/experiments/reference
+api/.venv
+api/var
+api/openapi.json
+web
+docs
+data/.cache
+.git
+**/__pycache__
+**/.ruff_cache
+SUBMISSION.md

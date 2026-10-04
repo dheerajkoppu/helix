@@ -959,8 +959,9 @@ def markdown(document: dict[str, Any]) -> str:
         f"Run {document['generated_at']} against the live API. "
         f"{document['passed']} of {document['total']} passed.",
         "",
-        "These three calls are the product's own evidence that the direction-of-effect filter works: one",
-        "recovery with the answer held out, one refusal, one upstream target. Every expected molecule is",
+        "These four calls are the product's own evidence that the direction-of-effect filter works: one",
+        "recovery with the answer held out, one refusal, one upstream target, and one regression test for an",
+        "error the accuracy experiment found in the filter. Every expected molecule is",
         "resolved to a ChEMBL id and an InChIKey through a separate endpoint before any candidate row is",
         "matched, so nothing passes on a name.",
         "",

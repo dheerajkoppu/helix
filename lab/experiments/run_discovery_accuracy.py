@@ -2,8 +2,8 @@
 
     lab/.venv/bin/python lab/experiments/run_discovery_accuracy.py
 
-The three controls in run_discovery_controls.py show the direction filter behaving correctly on three
-subjects. Three subjects are three subjects. This runner asks a different question: over every disease in
+The four controls in run_discovery_controls.py show the direction filter behaving correctly on four
+subjects. Four subjects are four subjects. This runner asks a different question: over every disease in
 the catalog for which some molecule is really used or really being tried, does the engine find that molecule
 when the record naming it is withheld, and does it ever push one the wrong way?
 
@@ -928,15 +928,16 @@ def markdown(payload: dict[str, Any]) -> str:
         "mechanism sit on the subject's own protein or a readable pathway node are the places to look."
     )
     out(
-        f"- **The safety metric is the good one.** {rejection['pairs']} false rejections in "
-        f"{summary['n_pairs']} pairs, and only one of the two is a direction error rather than a drug "
-        "aimed at a symptom. That one matters a great deal and is written up below."
+        f"- **The safety metric is the good one.** {rejection['pairs']} false rejection(s) in "
+        f"{summary['n_pairs']} pairs. Every case is opened individually below; a refusal of a drug "
+        "aimed at a symptom is counted here even though the engine is right about the protein."
     )
     out(
         "- **The control subject is not in this set.** APDS, the held-out positive in "
         "`DISCOVERY-CONTROLS.md`, has no Open Targets disease node and ChEMBL files leniolisib under a "
-        "parent term, so no ground-truth pair exists for it under exact identifier matching. The three "
-        "controls and this experiment do not overlap on a single subject."
+        "parent term, so no ground-truth pair exists for it under exact identifier matching. Controls 1 "
+        "to 3 and this experiment do not overlap on a single subject; control 4 does, because this "
+        "experiment is where it came from."
     )
     out("")
 
@@ -1254,7 +1255,7 @@ def main() -> int:
             "failing loudly.",
             "The ground truth itself can be wrong. Open Targets records a Phase 1 trial as a drug for a "
             "disease without saying whether the intent was to correct the protein or to damp a symptom, "
-            "and one of the two false rejections turned out to be exactly that distinction. A pair in "
+            "and the one remaining false rejection is exactly that distinction. A pair in "
             "this ground truth is a record that a molecule is being tried, not a record that it works.",
             "The runner was itself wrong once: an earlier version read `direction_needed` as absent only "
             "when null, while the endpoint writes the string \"none\", which mislabelled 11 pairs as "

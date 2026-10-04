@@ -40,3 +40,6 @@ data/seed/*.tmp
 .idea/
 .vscode/
 web/.dev.log
+
+# Submission archive built by scripts/make-submission-zip.sh
+Helix_Code.zip

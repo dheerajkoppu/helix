@@ -11,9 +11,10 @@ advice, and no row claims a molecule would work.
 
 **How well it does this is measured, and the honest summary is: safe, and not yet useful often
 enough.** Across the whole catalog with the disease's own drug records withheld, it recovered a known
-drug for 11 of 226 disease-molecule pairs and for 2 of 32 evaluable diseases, while wrongly refusing
-2 of those 226 — one of which, plerixafor for WHIM syndrome, is a real direction-of-effect error from
-a single wrong upstream field. Method, full figures and limits:
+drug for 12 of 226 disease-molecule pairs and for 3 of 32 evaluable diseases, while wrongly refusing
+1 of those 226. That measurement also caught a real direction-of-effect error in the filter itself —
+plerixafor refused for WHIM syndrome off a single ChEMBL `action_type` field — which has been fixed
+and kept as a fourth control. Method, full figures and limits:
 [Measuring the engine](#measuring-the-engine).
 
 Code: `api/helix/discovery/`. Endpoints: `GET /api/v1/discovery/candidates`,
@@ -291,13 +292,14 @@ out, one refusal, one upstream target. They are run by
 `lab/experiments/results/discovery-controls.json`, written up in
 `lab/experiments/DISCOVERY-CONTROLS.md` and served by `GET /api/v1/discovery/controls`.
 
-Run 2026-10-04T01:08:36Z. **3 of 3 passed.**
+Run 2026-10-04T03:23:36Z. **4 of 4 passed.**
 
 | Control                                                                                  | Result   | Candidates | Ruled out | Sources | Server build |
 | ---------------------------------------------------------------------------------------- | -------- | ---------- | --------- | ------- | ------------ |
-| Held-out positive: a molecule studied for APDS, recovered without the edge that names it | **PASS** | 24         | 0         | 7 of 8  | 536.8 ms     |
-| Negative: no molecule that lowers BTK is offered for BTK loss of function                | **PASS** | 4          | 33        | 8 of 8  | 208.5 ms     |
-| Upstream positive: a JAK inhibitor reached through the pathway, not through STAT1        | **PASS** | 23         | 4         | 6 of 6  | 50.6 ms      |
+| Held-out positive: a molecule studied for APDS, recovered without the edge that names it | **PASS** | 27         | 0         | 7 of 8  | 3370.7 ms    |
+| Negative: no molecule that lowers BTK is offered for BTK loss of function                | **PASS** | 4          | 34        | 8 of 8  | 1598.2 ms    |
+| Upstream positive: a JAK inhibitor reached through the pathway, not through STAT1        | **PASS** | 23         | 4         | 6 of 6  | 1386.3 ms    |
+| Safety: a rejection may not rest on an `action_type` the measurements contradict         | **PASS** | 17         | 0         | 8 of 8  | 436.5 ms     |
 
 Wall times in the stored file are 2-3 ms because the engine keeps assembled responses for fifteen
 minutes and the final run was served from that cache; each control records whether it was, and how
@@ -311,7 +313,7 @@ candidates" is declared in the runner as rank ≤ 10 and printed in the result.
 
 `/discovery/candidates?disease=activated-p110-delta-syndrome-pik3cd&exclude_direct=true`
 
-Leniolisib came back at **rank 4 of 24** through a `same_target` bridge, direction check `matches`,
+Leniolisib came back at **rank 4 of 27** through a `same_target` bridge, direction check `matches`,
 `bridge.from_disease` null, while **18** disease-to-molecule edges were withheld, one of them naming
 this molecule. All three steps cite a record:
 
@@ -330,7 +332,7 @@ The identity was checked, and the brief this was built from was wrong about it: 
 mobocertinib, a different molecule; CHEMBL3989909 is leniolisib phosphate, the salt. The cited
 mechanism was corroborated through a second endpoint: `GET /proteins/O00329/compounds` returns
 mechanism 8305, action INHIBITOR, for the same molecule. Asking by gene rather than by disease
-(`gene=PIK3CD&exclude_direct=true`) also gives rank 4 of 24, so the control does not rest on one
+(`gene=PIK3CD&exclude_direct=true`) also gives rank 4 of 27, so the control does not rest on one
 spelling of the request.
 
 ### 2. Negative — X-linked agammaglobulinemia, BTK, loss of function
@@ -346,7 +348,7 @@ Ibrutinib resolved from those records to CHEMBL1873475 / XYFPWWZEPKGCCK-GOSISDBH
 through `GET /compounds/XYFPWWZEPKGCCK-GOSISDBHSA-N` as IBRUTINIB, and sits in `ruled_out` with the
 plain reason quoted above.
 
-33 ruled-out rows in total, all `opposes_required_action`, including SYK- and SRC-family inhibitors
+34 ruled-out rows in total, including SYK- and SRC-family inhibitors
 reached through the pathway bridge that would lower BTK phosphorylation. The only 4 candidates are
 direction-unknown rows on CD79B and HSP90AB1. **Nothing aimed at BTK is ranked.**
 
@@ -366,26 +368,47 @@ records on those proteins. JAK2 could not be resolved independently by the runne
 it are reported but not counted. Tofacitinib is absent, for the cap reason given under Ranking; the
 control needs one JAK-family molecule and two are present.
 
+### 4. Safety — WHIM syndrome, CXCR4, gain of function
+
+`/discovery/candidates?disease=whim-syndrome&exclude_direct=true`
+
+This control exists because the accuracy experiment caught the engine refusing **plerixafor for WHIM
+syndrome**, the disease plerixafor is used for. ChEMBL records one mechanism of plerixafor on CXCR4
+(P61073) with `action_type` PARTIAL AGONIST, and holds four measured activities of the same molecule
+against the same protein, all IC50: one curated field says raise, four measurements say lower, and
+the filter believed the field. **The root cause was that a rejection could rest on a single ChEMBL
+`action_type` field.** The fix is one rule: the engine refuses to reject when another record of the
+same molecule against the same protein contradicts that field.
+
+Plerixafor (CHEMBL18442 / YIQPUIGJQJDJOS-UHFFFAOYSA-N, resolved through `GET /compounds/`) is now
+absent from `ruled_out`, reads direction `unknown` rather than `opposes` with the corroboration
+"ChEMBL holds 4 measured activities of this molecule against this protein (IC50), which lowers it",
+and is offered at **rank 8 of 17**. The control also asserts the filter still rejects elsewhere, so
+the change cannot pass by switching the filter off; control 2 is the standing proof of that.
+
 ### What a pass here does not prove
 
-- **Three subjects are three subjects.** Each control shows the rule behaving correctly once, on one
+- **Four subjects are four subjects.** Each control shows the rule behaving correctly once, on one
   disease, against today's records. It is not a measure of how often the engine is right.
+- **Control 4 passes because the engine was changed.** It is a regression test for an error the
+  accuracy experiment found, not a demonstration that the engine was right.
 - Ranking is checked for **position, not for quality**. Nothing here tests whether a higher-ranked
   molecule is a better hypothesis than a lower-ranked one.
-- The engine was not touched and no rule was relaxed to make a control pass. Leniolisib landed at 4
-  and baricitinib at 2, so the rank ≤ 10 threshold did not decide either outcome.
+- No rule was relaxed to make a control pass. Controls 1 to 3 ran against an untouched engine;
+  control 4 is the exception and says so. Leniolisib landed at 4 and baricitinib at 2, so the
+  rank ≤ 10 threshold did not decide either outcome.
 - Bridges that contributed nothing are named in each control's notes rather than left silent: for
-  APDS, `pathway_node` and `mechanism_class` were empty and `structural_analogue` ran partial; for
-  BTK and STAT1, `structural_analogue` was empty.
+  APDS, `pathway_node` and `mechanism_class` were empty; for BTK, `mechanism_class`; for STAT1,
+  `same_target` and `structural_analogue`; for WHIM, `pathway_node` and `structural_analogue`.
 - Open Targets answered `empty` for APDS, so whatever it holds did not reach that result.
 - No test suite covers this. Verification is the live calls recorded above. A source changing its
   data could change the ranks without anything failing loudly.
-- Three controls are not a rate. How often the engine recovers a drug that is really used is measured
+- Four controls are not a rate. How often the engine recovers a drug that is really used is measured
   separately, and it is low: see [Measuring the engine](#measuring-the-engine).
 
 ## Measuring the engine
 
-Two experiments measure the engine beyond the three controls. One asks whether its answers are right
+Two experiments measure the engine beyond the four controls. One asks whether its answers are right
 across the whole catalog; the other counts the work one request settles and times the engine itself.
 Both are re-runnable from a single command, both write their raw passes and a summary block that
 recomputes every derived figure, and neither changed an engine threshold, ranking key or rule.
@@ -422,30 +445,36 @@ find that molecule when the record naming it is withheld, and does it ever rule 
 7. **Both lists are read.** A known-used molecule found in `candidates` is a recovery with its rank;
    one found in `ruled_out` is a false rejection and is opened individually.
 
-What came out, run 2026-10-04T02:53:25Z, n = 226 disease-molecule pairs over 32 diseases:
+What came out, run 2026-10-04T03:21:54Z, n = 226 disease-molecule pairs over 32 diseases:
 
 | Metric                              | Value                                                                                      |
 | ----------------------------------- | ------------------------------------------------------------------------------------------ |
-| Recall, pairs                       | **11 of 226 (4.9%)**; in-universe 11 of 173 (6.4%)                                         |
-| Recall, diseases                    | **2 of 32 (6.2%)**                                                                         |
-| Where the recall comes from         | Cystic fibrosis 10, CD40 ligand deficiency 1                                               |
-| Median rank when recovered          | 5, range 1 to 12; 10 of 11 inside the top 10                                               |
-| **False rejection**                 | **2 of 226 (0.9%)**, 2 diseases; 2 of 173 (1.2%) in universe                               |
+| Recall, pairs                       | **12 of 226 (5.3%)**; in-universe 12 of 173 (6.9%)                                         |
+| Recall, diseases                    | **3 of 32 (9.4%)**                                                                         |
+| Where the recall comes from         | Cystic fibrosis 10, CD40 ligand deficiency 1, WHIM syndrome 1                              |
+| Median rank when recovered          | 5.5, range 1 to 12; 11 of 12 inside the top 10                                             |
+| **False rejection**                 | **1 of 226 (0.4%)**, 1 disease; 1 of 173 (0.6%) in universe                                |
 | Missed                              | 213, of which 53 have no ChEMBL mechanism record and **160 do**                            |
-| Direction verdict on recovered rows | 11 `unknown`, 0 `matches`                                                                  |
-| Bridges that recovered anything     | `same_target` 10, `interaction_partner` 1; the other three 0                               |
+| Direction verdict on recovered rows | 12 `unknown`, 0 `matches`                                                                  |
+| Bridges that recovered anything     | `same_target` 11, `interaction_partner` 1; the other three 0                               |
 | Coverage                            | 604 catalog diseases → 35 eligible → 32 evaluated                                          |
 | Cost                                | 1342 API requests; about 9 s warm, 1219 s cold; 3 failures, all 400 `disease_without_gene` |
 
-The two false rejections, each opened by hand:
+The first run of this experiment produced two false rejections. One was a real bug in the engine and
+was fixed; the other stands. Both opened by hand:
 
-- **PLERIXAFOR for WHIM syndrome** is a real direction-of-effect error. Blocking CXCR4 is the
-  molecule's entire pharmacology, and ChEMBL records its single mechanism on P61073 with `action_type`
-  PARTIAL AGONIST (checked through `GET /compounds/CHEMBL18442`). Direction is read from `action_type`
-  alone, so the engine concluded the molecule raises CXCR4 and refused it against a mechanism needing
-  less. The rule fired correctly on a record that is wrong for this purpose, and no wording of the
-  rule would catch it, because the rule has exactly one input.
-- **BARICITINIB for AD-HIES STAT3 deficiency** is a legitimate refusal counted against the engine.
+- **PLERIXAFOR for WHIM syndrome was a real direction-of-effect error, now fixed.** Blocking CXCR4 is
+  the molecule's entire pharmacology, and ChEMBL records its single mechanism on P61073 with
+  `action_type` PARTIAL AGONIST (checked through `GET /compounds/CHEMBL18442`), so the engine
+  concluded the molecule raises CXCR4 and refused it against a mechanism needing less. The root cause
+  was that a rejection could rest on that single `action_type` field. ChEMBL's own records contradict
+  it: four measured activities of plerixafor against P61073, all IC50, all lowering the protein. The
+  fix is that **the engine refuses to reject when another record of the same molecule against the same
+  protein contradicts the `action_type`** — a contradicted field yields `unknown`, not `opposes`.
+  Plerixafor now comes back at rank 8 of 17 for WHIM syndrome, and the case is kept as control 4. The
+  filter was not weakened: control 2 still refuses 20 of 20 recorded BTK-lowering molecules.
+- **BARICITINIB for AD-HIES STAT3 deficiency** is the one remaining false rejection, and a legitimate
+  refusal counted against the engine.
   The catalog direction is right and a JAK1 inhibitor does lower STAT3 phosphorylation; the Phase 1
   record targets the inflammatory phenotype, not the protein. The engine has no representation of
   treating a symptom.
@@ -457,10 +486,11 @@ pairs found by route A alone and 12 found by both, so route B added no pair of i
 matching is on exact
 MONDO or ORPHA identifiers, so pairs filed under a parent term are invisible and the 35-disease
 eligible set is a lower bound — which is why APDS, the subject of control 1, cannot be evaluated here
-and the controls and this experiment share no subject; a disease with no stated mechanism cannot
+and controls 1 to 3 share no subject with this experiment (control 4 shares one by construction,
+because this experiment is where it came from); a disease with no stated mechanism cannot
 produce a false rejection at all, and 8 of the 32 resolved to mechanism `unknown`; the ground truth
-itself records that a molecule is being tried, not that it works; and the 0.9% safety figure rests on
-two events.
+itself records that a molecule is being tried, not that it works; and the 0.4% safety figure rests on
+a single event, having been 2 events before the direction-filter fix.
 
 ### Effort and speed: the method
 
@@ -498,7 +528,8 @@ would mean purging a cache shared with a running dev server.
 
 The scheduling change (all five bridges started together, protein records fetched once per request)
 was measured for equivalence first: **0 of 16 subjects differ** on eight count fields, in each of
-three independent after-passes, and the three controls still pass 3 of 3 with identical ranks. The
+three independent after-passes, and the three controls that existed then still pass 3 of 3 with
+identical ranks. The
 reliable speed figure is the within-pass counterfactual, where observed over a serial-head model is
 1.009 before and 0.819, 0.818, 0.820 after: **the overlap removes 18% of the serial schedule, stable
 to 0.2 percentage points.** The cross-pass figure is -8.4% (1937.9 ms before, mean 1774.5 ms after)
@@ -548,12 +579,14 @@ These are limits of the reasoning, not bugs. They are listed again in
 - **Direction is read from `action_type` alone.** A molecule recorded as MODULATOR, BINDING AGENT or
   SUBSTRATE, or with no action recorded, gets `unknown` rather than a decision. It is ranked below
   matches and never ruled out, which means **the ruled-out list is a lower bound** on what is
-  actually wrong. It also means a wrong `action_type` upstream can refuse the right drug, and one
-  measured case exists: plerixafor is ruled out for WHIM syndrome, the disease it is used for, because
-  ChEMBL records its CXCR4 mechanism as PARTIAL AGONIST (see
-  [Measuring the engine](#measuring-the-engine)). Nothing in the engine flags that disagreement.
+  actually wrong. A wrong `action_type` upstream can therefore still refuse the right drug. One
+  measured case existed — plerixafor ruled out for WHIM syndrome, the disease it is used for, because
+  ChEMBL records its CXCR4 mechanism as PARTIAL AGONIST — and it is fixed: a rejection is now refused
+  when another record of the same molecule against the same protein contradicts the field (see
+  [Measuring the engine](#measuring-the-engine)). That check needs a second ChEMBL record, not a
+  second source, so where no contradicting record exists a wrong field still decides.
 - **Recall is low.** Across the catalog, with ground truth built only from the records held-out mode
-  withholds, the engine recovered a known drug for 11 of 226 pairs and for 2 of 32 evaluable
+  withholds, the engine recovered a known drug for 12 of 226 pairs and for 3 of 32 evaluable
   diseases. A thin or empty candidate list is the normal outcome, and 160 of the misses were molecules
   the engine had a ChEMBL mechanism record for.
 - **Only molecules ChEMBL records a mechanism for are considered.** A molecule without such a record
@@ -589,7 +622,7 @@ anything found here came another way." Every screen ends on "A Helix idea. Not a
 ## Running it
 
 ```bash
-# the three controls, against the live API
+# the four controls, against the live API
 api/.venv/bin/python lab/experiments/run_discovery_controls.py
 
 # the stored result

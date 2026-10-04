@@ -206,7 +206,8 @@ records, databases consulted, target proteins and molecules: **0 of 16 subjects 
 the three after-passes independently (`summary.equivalence_before_vs_after`, and the same comparison
 against `after2` and `after3`).
 
-The three controls were re-run after the change and **3 of 3 pass**, with the same ranks as before:
+The three controls that existed at the time were re-run after the change and **3 of 3 pass**, with
+the same ranks as before:
 leniolisib at rank 4 of 24 for APDS with its own edge held out; 20 of 20 BTK-lowering molecules ruled
 out with verdict `opposes` and none ranked; baricitinib at rank 2 of 23 on JAK1, not on STAT1.
 
@@ -297,7 +298,7 @@ runs themselves. None is investigated further here, and none is dismissed.
   independently recounted from the rows, and the per-bridge counts are pre-de-duplication, so a
   molecule judged by two bridges on the same protein is two judgments here.
 - **All of this says nothing about whether the answers are right.** Effort removed and time taken are
-  not accuracy. Correctness evidence is three controls on three subjects, and no test suite covers
+  not accuracy. Correctness evidence is four controls on four subjects, and no test suite covers
   the engine.
 
 ---
@@ -317,7 +318,7 @@ lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase manual
 # recompute every total, median and ratio quoted above from the stored passes
 lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase summary
 
-# the three correctness controls, which must still pass
+# the four correctness controls, which must still pass
 api/.venv/bin/python lab/experiments/run_discovery_controls.py
 ```
 

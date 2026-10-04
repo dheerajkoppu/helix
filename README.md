@@ -75,16 +75,20 @@ before anything is ranked.
 | `structural_analogue` | A protein whose pocket resembles this one and has a known binder                |
 | `mechanism_class`     | Another disease with the same mechanism class and direction, with a drug class  |
 
-Three controls are the product's own evidence that the filter works, stored in
+Four controls are the product's own evidence that the filter works, stored in
 `lab/experiments/results/discovery-controls.json` and served by `GET /api/v1/discovery/controls`.
-All three pass:
+All four pass:
 
 - **Held out.** With `exclude_direct=true` the APDS-to-leniolisib link is withheld, and leniolisib
-  still returns at rank 4 of 24 through a `same_target` bridge whose every step cites a record.
+  still returns at rank 4 of 27 through a `same_target` bridge whose every step cites a record.
 - **Negative.** For BTK loss of function, all 20 molecules ChEMBL records as lowering BTK — ibrutinib
-  among them — are absent from the candidates and present in the 33 ruled-out rows with the reason.
+  among them — are absent from the candidates and present in the 34 ruled-out rows with the reason.
 - **Upstream.** For STAT1 gain of function, baricitinib returns at rank 2 of 23 aimed at JAK1, not
   at STAT1. No candidate aims at STAT1 itself.
+- **Safety.** Measuring the engine caught it refusing plerixafor for WHIM syndrome, the disease that
+  drug is used for, off a single ChEMBL `action_type` field. A rejection may no longer rest on a
+  field another record of the same molecule and protein contradicts; plerixafor is offered at rank 8,
+  and the case is kept as a permanent control.
 
 [`docs/discovery.md`](docs/discovery.md) has the rule table, the five bridges, the held-out mode, the
 ranking keys, the full control numbers and what the method does not do.
