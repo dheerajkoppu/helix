@@ -9,7 +9,8 @@ This measures **effort and time**. It is not a measure of whether the engine is 
 still all the correctness evidence there is.
 
 It is also not the agent-lab benchmark. [`RESULTS.md`](RESULTS.md) compared eight agents against one
-agent and found the lab 2.4 times slower; that comparison stands and is about a different question.
+agent (the lab as it stood then: a supervisor and seven specialists, before the translator) and found
+the lab 2.4 times slower; that comparison stands and is about a different question.
 The bottleneck measured here is the one the product actually removes: crossing ChEMBL mechanisms,
 Reactome reactions, interaction records and a disease catalog by hand, molecule by molecule, deciding
 for each whether it pushes the protein the right way.

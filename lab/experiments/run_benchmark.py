@@ -33,7 +33,7 @@ EXPERIMENTS = Path(__file__).resolve().parent
 LAB = EXPERIMENTS.parent
 sys.path.insert(0, str(LAB / "tools"))
 
-from helix_lab_tools.registry import EXPERIMENT_TOOLS, RETRIEVAL_TOOLS  # noqa: E402
+from helix_lab_tools.registry import EXPERIMENT_TOOLS, RETRIEVAL_TOOLS, SPECIALISTS  # noqa: E402
 
 RUNS = LAB / "runs"
 RESULTS = EXPERIMENTS / "results"
@@ -52,7 +52,8 @@ QUESTION = (
 ARMS: dict[str, dict[str, str]] = {
     "specialist_lab": {
         "suffix": "lab",
-        "label": "Specialist lab: Omnigent supervisor and seven specialist agents",
+        # Counted from the registry so the label of a re-run names the specialists the bundle actually holds
+        "label": f"Specialist lab: Omnigent supervisor and {len(SPECIALISTS)} specialist agents",
     },
     "single_agent_baseline": {
         "suffix": "baseline",

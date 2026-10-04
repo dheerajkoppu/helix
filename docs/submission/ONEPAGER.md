@@ -31,13 +31,13 @@ disease → gene → mutation  →  mechanism          →  required action     
              (each a cited chain)                   (shown with the reason)
 ```
 
-Eight Omnigent agents — a supervisor and seven specialists — drive the same tool layer through a
+Nine Omnigent agents — a supervisor and eight specialists — drive the same tool layer through a
 recorded loop.
 
 ## Tools / ML Models Used
 
 - **Claude Sonnet 5** — reasoning, every agent, both arms
-- **Omnigent 0.16.0** — supervisor + 7 specialists
+- **Omnigent 0.16.0** — supervisor + 8 specialists
 - **ChEMBL** — action type + activities: the direction signal
 - **Reactome, IntAct, STRING** — pathway, interaction
 - **Open Targets** — held-out ground truth

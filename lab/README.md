@@ -21,6 +21,7 @@ This is research and hypothesis generation only. The lab gives no clinical advic
 | `agents/agents.json`            | Agent specifications and policies as data (served by `GET /api/v1/lab/agents`)                                                                                                                |
 | `tools/helix_lab_tools/`        | Function tools: Helix API wrappers, OpenAlex search, the tests, the research record, the budget ledger, the registry of who may call what                                                     |
 | `tools/generate_agent_tools.py` | Generates every `config.yaml`, every tool file and `agents.json` from the registry                                                                                                            |
+| `tools/generate_lab_docs.py`    | Generates `docs/lab/agent-specs.md` and `docs/lab/policies.md` from the bundle, the registry and the policy sources                                                                           |
 | `policies/helix_lab_policies/`  | Omnigent policies: role boundary, approval gate, claims guard, run budget                                                                                                                     |
 | `run_lab.py`                    | Launcher: creates a run, starts Omnigent headlessly, streams the record, finalises `run.json`                                                                                                 |
 | `omnigent_driver.py`            | Runs one bundle on a per-run Omnigent server and exports the session transcripts                                                                                                              |
@@ -133,6 +134,7 @@ python3 -m venv lab/.venv
 lab/.venv/bin/pip install omnigent==0.16.0
 lab/.venv/bin/pip install -e lab/tools && lab/.venv/bin/pip install --no-deps -e lab/policies
 lab/.venv/bin/python lab/tools/generate_agent_tools.py      # after changing the registry or a prompt
+lab/.venv/bin/python lab/tools/generate_lab_docs.py         # rebuilds docs/lab/agent-specs.md and policies.md
 ```
 
 ```bash
@@ -222,7 +224,7 @@ Additions to the shared contract, all optional for a reader: `subject` also carr
 
 `runs/reference-BTK-p.Arg28His/` is the reference run on BTK p.Arg28His (UniProt Q06187). The numbers below are read from its `run.json` and `record.jsonl`.
 
-Launched with `lab/.venv/bin/python lab/run_lab.py --variant BTK-p.Arg28His --approve --run-id reference-BTK-p.Arg28His` on 2026-10-03 by the build agent (the run needed no approval). Omnigent 0.16.0, harness `claude-sdk`, model `claude-sonnet-5` for all eight agents, one supervisor session and 13 sub-agent sessions exported.
+Launched with `lab/.venv/bin/python lab/run_lab.py --variant BTK-p.Arg28His --approve --run-id reference-BTK-p.Arg28His` on 2026-10-03 by the build agent (the run needed no approval). Omnigent 0.16.0, harness `claude-sdk`, model `claude-sonnet-5` for all eight agents of that run (it predates the translator, so the bundle held seven specialists), one supervisor session and 13 sub-agent sessions exported.
 
 | Measured                    | Value                                                                                                                                                                 |
 | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

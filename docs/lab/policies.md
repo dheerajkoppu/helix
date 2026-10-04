@@ -1,6 +1,6 @@
 # Policies and the human approval gate
 
-Built on 2026-10-03T23:34:41Z by a script that reads the files named below. Every quoted block is copied from the file at the line numbers given, so it goes stale when the file changes.
+Built on 2026-10-04T04:48:16Z by `lab/tools/generate_lab_docs.py`, which reads the files named below. Every quoted block is copied from the file at the line numbers given, so it goes stale when the file changes and the generator has not been run again.
 
 Four Omnigent policies are Python functions in `lab/policies/helix_lab_policies/policies.py`. Each agent's `config.yaml` declares all four under `guardrails.policies` with the agent's own role.
 
@@ -13,7 +13,7 @@ Four Omnigent policies are Python functions in `lab/policies/helix_lab_policies/
 
 ## How the policies are declared
 
-`lab/agents/helix_lab/config.yaml`, lines 26 to 51:
+`lab/agents/helix_lab/config.yaml`, lines 27 to 52:
 
 ```yaml
 guardrails:
@@ -44,7 +44,7 @@ guardrails:
           role: orchestrator
 ```
 
-The seven specialist specs and the control spec hold the same block with `role:` set to `literature`, `knowledge_graph`, `insight`, `planner`, `safety`, `runner`, `analysis` or `generalist`.
+The eight specialist specs and the control spec hold the same block with `role:` set to `literature`, `knowledge_graph`, `insight`, `planner`, `safety`, `runner`, `analysis`, `translator` or `generalist`.
 
 ## Supervisor policies abstain on sub-agent calls
 
@@ -221,7 +221,7 @@ def claims_guard(role: str) -> Evaluator:
         call = _tool_call(event)
         if call is not None:
             tool, arguments = call
-            if not tool.startswith(("record_", "request_approval")):
+            if not tool.startswith(("record_", "request_approval", "propose_candidates")):
                 return None
             text = "\n".join(_strings(arguments))
             problems = claims.check_text(
@@ -260,7 +260,7 @@ def claims_guard(role: str) -> Evaluator:
 
 The text checks it calls:
 
-`lab/tools/helix_lab_tools/claims.py`, lines 5 to 19:
+`lab/tools/helix_lab_tools/claims.py`, lines 5 to 26:
 
 ```python
 CLINICAL_PATTERNS = [
@@ -277,10 +277,17 @@ CLINICAL_PATTERNS = [
     r"\b(start|begin|initiate|switch to|continue|stop)\s+(ivig|scig|immunoglobulin|ibrutinib|therapy|treatment|prophylaxis)\b",
     r"\bdiagnos(e|es|ed|ing)\s+(the|this|a|your)\s+(patient|individual|carrier)\b",
     r"\btherapeutic\s+recommendation",
+    # A candidate is a hypothesis about a molecular action, never a molecule offered for a disease
+    r"\b(use|using|give|giving|try|trying|repurpos\w+|offer\w*)\s+[\w-]+\s+(to treat|for treating|as a treatment|as therapy)\b",
+    r"\b(to treat|for treating|as a treatment for|as therapy for)\s+(this|the|that)\s+(disease|condition|syndrome|deficiency|patients?)\b",
+    r"\b(would|will|should|can|could|may|might)\s+(be\s+)?(effective|efficacious|therapeutic|beneficial|curative)\b",
+    r"\b(mg|mcg|microgram|milligram)s?\b\s*(per|/)\s*(kg|m2|day|dose)\b",
+    r"\b(once|twice|three times)\s+(a\s+)?(daily|day|week)\b",
+    r"\b(first|second)[- ]line\s+(treatment|therapy|agent)\b",
 ]
 ```
 
-`lab/tools/helix_lab_tools/claims.py`, lines 30 to 35:
+`lab/tools/helix_lab_tools/claims.py`, lines 64 to 69:
 
 ```python
 FACT_MARKERS = [
@@ -291,7 +298,7 @@ FACT_MARKERS = [
 ]
 ```
 
-`lab/tools/helix_lab_tools/claims.py`, lines 78 to 94:
+`lab/tools/helix_lab_tools/claims.py`, lines 119 to 135:
 
 ```python
 def check_text(text: str, known_ids: set[str] | None = None, *, require_citations: bool = False) -> list[str]:
@@ -359,7 +366,7 @@ def run_budget(role: str) -> Evaluator:
     return evaluate
 ```
 
-`lab/tools/helix_lab_tools/registry.py`, lines 69 to 80:
+`lab/tools/helix_lab_tools/registry.py`, lines 81 to 99:
 
 ```python
 CLOSING_TOOLS = frozenset(
@@ -370,19 +377,26 @@ CLOSING_TOOLS = frozenset(
         "record_interpretation",
         "record_decision",
         "record_next_experiment",
+        "list_candidate_targets",
+        "get_candidate_detail",
+        "record_target_rationale",
+        "propose_candidates",
+        "review_candidates",
+        "record_candidate_review",
+        "record_candidate",
         "record_handoff",
         "record_final_report",
     }
 )
 ```
 
-Default budget of a run: 160 lab tool calls and 300 compute seconds (`budget` in every `run.json`).
+Launcher default budget of a run: 200 lab tool calls and 300 compute seconds (`DEFAULT_MAX_TOOL_CALLS` and `DEFAULT_MAX_COMPUTE_SECONDS` in `lab/tools/helix_lab_tools/budget.py`). The budget actually in force is the `budget` block of each `run.json`; the kept reference run was given 160 tool calls and 300 compute seconds.
 
 ## Human approval gate
 
 The safety agent calls `request_approval`. The tool writes an `approval_request` to the record and waits for an `approval_decision`. If none arrives before the timeout it writes a rejection itself.
 
-`lab/tools/helix_lab_tools/record.py`, lines 849 to 869:
+`lab/tools/helix_lab_tools/record.py`, lines 916 to 936:
 
 ```python
     request = append_event(current_role(), "approval_request", build, refs=[test_id])
@@ -413,7 +427,7 @@ A decision reaches the record in one of two ways.
 1. A human answers through the API, `POST /api/v1/lab/runs/{run_id}/approvals/{approval_id}` (`api/helix/routers/lab.py`). The run page calls this endpoint from its Approve and Reject buttons.
 2. The operator starts the launcher with `--approve`. The launcher then writes the decision with the operator's name:
 
-`lab/run_lab.py`, lines 381 to 395:
+`lab/run_lab.py`, lines 398 to 412:
 
 ```python
         if waiting and arguments.approve:
@@ -462,7 +476,7 @@ def child_environment(run_directory: Path, api_url: str, approval_timeout: int) 
 
 ## Verification with real Omnigent sessions
 
-`lab/verify_policies.py` runs a probe agent (runner tools and runner policies with a neutral prompt) and asserts what the policy log shows. Last run: 2026-10-03T21:44:17Z, Omnigent 0.16.0, harness `claude-sdk`, 9 of 9 checks passed (`lab/policy_checks/latest/report.json`).
+`lab/verify_policies.py` runs a probe agent (runner tools and runner policies with a neutral prompt) and asserts what the policy log shows. Last run: 2026-10-04T00:49:09Z, Omnigent 0.16.0, harness `claude-sdk`, 9 of 9 checks passed (`lab/policy_checks/latest/report.json`).
 
 | Check | Policy | Expectation | Passed | Observed |
 | --- | --- | --- | --- | --- |
@@ -472,9 +486,9 @@ def child_environment(run_directory: Path, api_url: str, approval_timeout: int) 
 | `claims_guard_denies_clinical_wording` | `claims_guard` | record_handoff with treatment wording is denied | yes | DENY on `record_handoff`: Refused: clinical or treatment wording: "Patients should", "should be treated". Rewrite and call again. |
 | `denials_are_written_to_the_record` | `all` | every denial is a note in the research record | yes | policy_denial_notes = 4 |
 | `approval_gate_allows_approved_job` | `approval_gate` | after an approved decision the same job is allowed and starts | yes | ALLOW on `run_structure_comparison`: approved by operator of verify_policies.py |
-| `run_budget_denies_calls_beyond_the_cap` | `run_budget` | with a budget of 2 tool calls the third lab tool call is denied | yes | DENY on `get_job_status`: Run budget exhausted: 2 of 2 tool calls used. Only these remain available: get_budget_status, read_record, record_decision, record_final_report, record_handoff, record_interpretation, record_... |
+| `run_budget_denies_calls_beyond_the_cap` | `run_budget` | with a budget of 2 tool calls the third lab tool call is denied | yes | DENY on `get_job_status`: Run budget exhausted: 2 of 2 tool calls used. Only these remain available: get_budget_status, get_candidate_detail, list_candidate_targets, propose_candidates, read_record, record_candidate, ... |
 | `run_budget_keeps_closing_tools` | `run_budget` | read_record, a closing tool, still runs after the cap | yes | tool_calls_used = 3 |
-| `claims_guard_denies_clinical_reply` | `claims_guard` | a reply with treatment wording is refused | yes | DENY on `response`: Reply refused: clinical or treatment wording: "Patients should", "should be treated". Reply with record IDs only, or cite the ID next to each fact. |
+| `claims_guard_denies_clinical_reply` | `claims_guard` | a reply with treatment wording is refused | yes | DENY on `response`: Reply refused: clinical or treatment wording: "Patients should", "dosing", "should be treated". Reply with record IDs only, or cite the ID next to each fact. |
 
 ## What the kept runs show
 
@@ -483,7 +497,7 @@ def child_environment(run_directory: Path, api_url: str, approval_timeout: int) 
 - seq 42, `safety`, safety review of T1 for plan seq 39: verdict `cleared`, `requires_approval: false`.
 - seq 63, `safety`, safety review of T2 for plan seq 60: verdict `cleared`, `requires_approval: false`.
 
-**`lab/runs/approval-gate-demo-BTK-p.Arg28His/`**: approval mode "waits for a human decision through the API", 1 approval decisions, 0 policy denials in `run.json`; `policy_log.jsonl` holds 133 policy decisions, 0 of them DENY.
+**`lab/runs/approval-gate-demo-BTK-p.Arg28His/`**: approval mode "waits for a human decision through the API", 1 approval decision, 0 policy denials in `run.json`; `policy_log.jsonl` holds 133 policy decisions, 0 of them DENY.
 
 - seq 44, `safety`, safety review of T4 for plan seq 41: verdict `cleared`, `requires_approval: true`.
 - seq 45, `safety`, approval request A1: action "Run run_structure_comparison (Reference versus variant structure prediction) for BTK-p.Arg28His"; risk "Compute: 120 compute seconds of 300 remaining, and 3 tool calls. External service: the PH-domain sequence (BTK residues 1-143, UniProt Q06187 variant p.Arg28His) is sent to an external structure-prediction inference service. No patient data is included. Research only."

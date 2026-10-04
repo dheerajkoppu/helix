@@ -10,16 +10,20 @@ The benchmark asks what the multi-agent organisation adds to that. A single agen
 
 > For the same variant, tools, model, policies and budget, how do a supervised team of seven specialist agents and one generalist agent differ in the time to a complete cited record, in the breadth of the evidence they cite, in the conclusion they reach, and in whether the test changes that conclusion?
 
+Seven is the number of specialists the bundle held when this batch ran; it now holds eight (section 2).
+
 No human is timed. The benchmark cannot say how much faster either arm is than manual work, and `RESULTS.md` makes no such claim.
 
 Before the benchmark, the only timings were single development runs on BTK p.Arg28His reported by the lab builder (specialist lab 188 to 310 s, single agent 93 s). They suggest the lab is slower, not faster, than one agent. The protocol therefore does not assume a speed-up; it measures the direction and size of every difference.
 
 ## 2. Arms
 
-| Arm                     | Bundle                          | Agents                                                                                           |
-| ----------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Arm                     | Bundle                      | Agents                                                                                           |
+| ----------------------- | --------------------------- | ------------------------------------------------------------------------------------------------ |
 | `specialist_lab`        | `lab/agents/helix_lab`      | Omnigent supervisor plus literature, knowledge graph, insight, planner, safety, runner, analysis |
 | `single_agent_baseline` | `lab/agents/helix_baseline` | One generalist agent holding every lab tool                                                      |
+
+The arms above are the bundles as they stood when this batch ran. The lab bundle has since gained an eighth specialist, the translator, and the candidates step it owns. A re-run would compare nine agents against one; the numbers in `RESULTS.md` do not.
 
 Held equal: the tool implementations (one registry), the model (read from each `run.json`), the four policies (role boundary, approval gate, claims guard, run budget), the budget (160 lab tool calls, 300 compute seconds), the objective text and subject line (built by `lab/run_lab.py`), the approval rule (section 5), the Helix API instance.
 
