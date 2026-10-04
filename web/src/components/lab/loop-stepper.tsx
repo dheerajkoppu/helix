@@ -86,7 +86,7 @@ export function LoopStepper({
                     {STEP_LABEL[stage.id]}
                   </span>
                   {/* the caption wraps to two lines rather than clipping a question */}
-                  <span className="hidden text-2xs leading-[1.35] text-muted-foreground sm:line-clamp-2">
+                  <span className="hidden text-xs leading-[1.3] text-muted-foreground sm:line-clamp-2">
                     {notes[stage.id] ?? (pending ? "Waiting" : " ")}
                   </span>
                 </span>

@@ -9,6 +9,13 @@ The discovery engine answers a second question, which for most rare diseases nob
 Every row it produces is a hypothesis Helix built from records. None of it is a treatment, a dose or
 advice, and no row claims a molecule would work.
 
+**How well it does this is measured, and the honest summary is: safe, and not yet useful often
+enough.** Across the whole catalog with the disease's own drug records withheld, it recovered a known
+drug for 11 of 226 disease-molecule pairs and for 2 of 32 evaluable diseases, while wrongly refusing
+2 of those 226 — one of which, plerixafor for WHIM syndrome, is a real direction-of-effect error from
+a single wrong upstream field. Method, full figures and limits:
+[Measuring the engine](#measuring-the-engine).
+
 Code: `api/helix/discovery/`. Endpoints: `GET /api/v1/discovery/candidates`,
 `GET /api/v1/discovery/controls`. Screen: `/discover/<gene>`, the seventh stage of the journey.
 
@@ -130,7 +137,13 @@ the same sentence:
 
 A candidate has exactly one primary bridge: the kind of the module that produced it. The five run
 concurrently, each with its own timeout; a bridge that fails or runs out of time reports itself in
-`bridges` and never fails the request.
+`bridges` and never fails the request. All five start together in one `asyncio.gather` and their
+results are re-sorted into the fixed `BRIDGES` order before rows are collected, so row ordering never
+depends on which bridge finished first. A protein's ChEMBL records are fetched once per request
+through `BridgeContext.protein_actions` and shared by every bridge that asks for them; the fetch is
+`asyncio.shield`ed, so one bridge's timeout cannot cancel a fetch another bridge is waiting on. What
+that scheduling is worth, and the evidence that it changed no answer, is in
+[Measuring the engine](#measuring-the-engine).
 
 | Bridge                | What it claims                                                                                         | Sources                                                                      | Can it return `matches`? |
 | --------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- | ------------------------ |
@@ -367,6 +380,157 @@ control needs one JAK-family molecule and two are present.
 - Open Targets answered `empty` for APDS, so whatever it holds did not reach that result.
 - No test suite covers this. Verification is the live calls recorded above. A source changing its
   data could change the ranks without anything failing loudly.
+- Three controls are not a rate. How often the engine recovers a drug that is really used is measured
+  separately, and it is low: see [Measuring the engine](#measuring-the-engine).
+
+## Measuring the engine
+
+Two experiments measure the engine beyond the three controls. One asks whether its answers are right
+across the whole catalog; the other counts the work one request settles and times the engine itself.
+Both are re-runnable from a single command, both write their raw passes and a summary block that
+recomputes every derived figure, and neither changed an engine threshold, ranking key or rule.
+
+| Experiment       | Runner                      | Result file                       | Write-up                |
+| ---------------- | --------------------------- | --------------------------------- | ----------------------- |
+| Accuracy         | `run_discovery_accuracy.py` | `results/discovery-accuracy.json` | `DISCOVERY-ACCURACY.md` |
+| Effort and speed | `run_discovery_effort.py`   | `results/discovery-effort.json`   | `DISCOVERY-EFFORT.md`   |
+
+All paths are under `lab/experiments/`.
+
+### Accuracy on held-out known drugs: the method
+
+The question: on diseases where some molecule is really used or really being tried, does the engine
+find that molecule when the record naming it is withheld, and does it ever rule one out?
+
+1. **Ground truth comes only from records held-out mode withholds**, so the engine is forbidden to
+   use them when it is then asked. Two routes, both Open Targets: (A) disease-anchored,
+   `GET /diseases/{slug}` → `treatments[]`, the drugs on the disease's own MONDO or ORPHA node, which
+   are exactly the `open_targets_disease_drug` edges `exclude_direct=true` drops; (B) target-anchored,
+   `GET /genes/{symbol}/treatments`, drugs on the disease gene's protein whose own `indications[]`
+   name this disease's MONDO id exactly. A drug counts only at stage APPROVAL, PHASE_1, PHASE_1_2,
+   PHASE_2, PHASE_2_3, PHASE_3 or PHASE_4; withdrawn and unknown-stage drugs are excluded, and a
+   disease with only those is reported as such.
+2. **Identity before matching.** Every ground-truth molecule is resolved through a different
+   endpoint, `GET /compounds/{chembl_id}`, to a ChEMBL id and an InChIKey, and candidate rows are
+   matched on those identifiers only. Nothing is ever matched on a name.
+3. **Every catalog disease is asked for**, with `exclude_direct=true`. No sampling.
+4. **Thresholds are declared in the runner before any result is read**: TOP_N = 10, WIDE_N = 25.
+5. **A disease that returns candidates and has no known drug is "no ground truth", never a miss.**
+6. **A pair whose molecule has no ChEMBL mechanism record anywhere is reported separately** as
+   outside the engine's universe, because the engine only ever considers molecules with such a
+   record. The in-universe figures are reported beside the unrestricted ones.
+7. **Both lists are read.** A known-used molecule found in `candidates` is a recovery with its rank;
+   one found in `ruled_out` is a false rejection and is opened individually.
+
+What came out, run 2026-10-04T02:53:25Z, n = 226 disease-molecule pairs over 32 diseases:
+
+| Metric                              | Value                                                                                      |
+| ----------------------------------- | ------------------------------------------------------------------------------------------ |
+| Recall, pairs                       | **11 of 226 (4.9%)**; in-universe 11 of 173 (6.4%)                                         |
+| Recall, diseases                    | **2 of 32 (6.2%)**                                                                         |
+| Where the recall comes from         | Cystic fibrosis 10, CD40 ligand deficiency 1                                               |
+| Median rank when recovered          | 5, range 1 to 12; 10 of 11 inside the top 10                                               |
+| **False rejection**                 | **2 of 226 (0.9%)**, 2 diseases; 2 of 173 (1.2%) in universe                               |
+| Missed                              | 213, of which 53 have no ChEMBL mechanism record and **160 do**                            |
+| Direction verdict on recovered rows | 11 `unknown`, 0 `matches`                                                                  |
+| Bridges that recovered anything     | `same_target` 10, `interaction_partner` 1; the other three 0                               |
+| Coverage                            | 604 catalog diseases → 35 eligible → 32 evaluated                                          |
+| Cost                                | 1342 API requests; about 9 s warm, 1219 s cold; 3 failures, all 400 `disease_without_gene` |
+
+The two false rejections, each opened by hand:
+
+- **PLERIXAFOR for WHIM syndrome** is a real direction-of-effect error. Blocking CXCR4 is the
+  molecule's entire pharmacology, and ChEMBL records its single mechanism on P61073 with `action_type`
+  PARTIAL AGONIST (checked through `GET /compounds/CHEMBL18442`). Direction is read from `action_type`
+  alone, so the engine concluded the molecule raises CXCR4 and refused it against a mechanism needing
+  less. The rule fired correctly on a record that is wrong for this purpose, and no wording of the
+  rule would catch it, because the rule has exactly one input.
+- **BARICITINIB for AD-HIES STAT3 deficiency** is a legitimate refusal counted against the engine.
+  The catalog direction is right and a JAK1 inhibitor does lower STAT3 phosphorylation; the Phase 1
+  record targets the inflammatory phenotype, not the protein. The engine has no representation of
+  treating a symptom.
+
+Limits of this method, in full in `DISCOVERY-ACCURACY.md`: the ground truth is Open Targets only;
+source B is target-anchored, so it structurally favours `same_target` and the zero recoveries for
+`pathway_node` and `structural_analogue` are partly an artefact of it (the stored source mix is 214
+pairs found by route A alone and 12 found by both, so route B added no pair of its own); indication
+matching is on exact
+MONDO or ORPHA identifiers, so pairs filed under a parent term are invisible and the 35-disease
+eligible set is a lower bound — which is why APDS, the subject of control 1, cannot be evaluated here
+and the controls and this experiment share no subject; a disease with no stated mechanism cannot
+produce a false rejection at all, and 8 of the 32 resolved to mechanism `unknown`; the ground truth
+itself records that a molecule is being tried, not that it works; and the 0.9% safety figure rests on
+two events.
+
+### Effort and speed: the method
+
+The unit of work is **one molecule-target pair whose recorded action has to be looked up and whose
+direction has to be judged against the disease** — settled only when all three signs (what the
+mechanism needs, what the molecule does to that protein, how that carries over to the subject) have
+been read from records and the pair is recorded `matches`, `opposes` or `unknown`. The count is
+`bridges[].candidate_count + bridges[].ruled_out_count`, which the engine reports per bridge before
+de-duplication and before the 40-row display caps, so it is judgments made rather than judgments
+shown. n = 16 requests over 14 subjects: the 13 flagship genes of `data/seed/catalog.json` by symbol
+plus the three control subjects by disease slug.
+
+Over those 16 requests: **410 judgments** (median 24, range 0 to 94; 174 ranked, 164 ruled out, 72
+dropped before display), **492 distinct upstream records** (ChEMBL 445, Reactome 18, IntAct 15,
+UniProt 9, STRING 3, IUIS 2), 5 to 8 databases per request and eight across the set, 63 target
+proteins judged, 942 molecules carrying a recorded action on the proteins reached, and 9 to 18
+protein-record fetches per request counted inside the engine. **4 of the 16 settle nothing**: RAG1,
+CYBB and FOXP3 return no judgment and ADA returns two, both ruled out.
+
+The manual equivalent is a machine doing the same lookups the way a person has to — one request at a
+time, no concurrency, no cache, straight to ChEMBL, Reactome, IntAct and UniProt, under the engine's
+own caps. n = 3, the control subjects: **301 requests and 247.8 wall seconds to reach 132 judgments**
+(2.28 requests and 1.88 s per judgment), against one request per subject and 195.0, 198.7 and
+118.8 ms for the engine. **No scientist was timed**, the emulation only fetches and never reads,
+decides or records, so it is a lower bound on the manual path and not a human baseline; no claim about
+human time is made anywhere in these documents. The two judgment sets are not identical either: the
+emulation covers three of the five bridges, orders IntAct partners differently and ignores the row
+caps, so the per-judgment columns are the comparable ones and the totals are not.
+
+Timing uses three tiers whose cache preconditions are stated in the result file: `first_rebuild`,
+`warm_rebuild` and `served_from_cache`. The engine's assembled-response cache is emptied by touching
+`api/helix/discovery/cache.py`, which the dev server watches; the server is never killed, and the
+source adapters' HTTP cache is left alone. **There is therefore no cold measurement**: a true cold run
+would mean purging a cache shared with a running dev server.
+
+The scheduling change (all five bridges started together, protein records fetched once per request)
+was measured for equivalence first: **0 of 16 subjects differ** on eight count fields, in each of
+three independent after-passes, and the three controls still pass 3 of 3 with identical ranks. The
+reliable speed figure is the within-pass counterfactual, where observed over a serial-head model is
+1.009 before and 0.819, 0.818, 0.820 after: **the overlap removes 18% of the serial schedule, stable
+to 0.2 percentage points.** The cross-pass figure is -8.4% (1937.9 ms before, mean 1774.5 ms after)
+with a 114 ms spread between identical after-passes against a 163 ms gain, so it is real but imprecise
+at -4.7% to -10.6%. Six of 16 subjects got slower, five of them inside that noise floor, and
+`same_target` itself is slower once it shares the loop. The de-duplication half of the change avoided
+0 duplicate fetches over 7 subjects.
+
+### Re-running both
+
+```bash
+# accuracy: every catalog disease, ground truth from the withheld records
+# 1342 requests, about 9 s warm and 1219 s cold
+lab/.venv/bin/python lab/experiments/run_discovery_accuracy.py
+
+# what one request settles, and the three timing tiers (16 requests, about 1 min)
+lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase engine --label after
+
+# protein records read per request, counted inside the engine (needs the API's interpreter)
+api/.venv/bin/python lab/experiments/run_discovery_effort.py --phase fetches
+
+# the serial uncached path, against the public APIs (3 subjects, about 4 min)
+lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase manual
+
+# recompute every total, median and ratio from the stored passes
+lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase summary
+```
+
+`--label` names a pass; the stored file holds `before` plus `after`, `after2` and `after3`. Re-running
+under `before` overwrites the pre-change pass, which cannot be reproduced without reverting the two
+scheduling edits. Neither experiment needs an agent or a model account, and both need the API at
+`http://localhost:8000`.
 
 ## Limitations of the method
 
@@ -384,7 +548,14 @@ These are limits of the reasoning, not bugs. They are listed again in
 - **Direction is read from `action_type` alone.** A molecule recorded as MODULATOR, BINDING AGENT or
   SUBSTRATE, or with no action recorded, gets `unknown` rather than a decision. It is ranked below
   matches and never ruled out, which means **the ruled-out list is a lower bound** on what is
-  actually wrong.
+  actually wrong. It also means a wrong `action_type` upstream can refuse the right drug, and one
+  measured case exists: plerixafor is ruled out for WHIM syndrome, the disease it is used for, because
+  ChEMBL records its CXCR4 mechanism as PARTIAL AGONIST (see
+  [Measuring the engine](#measuring-the-engine)). Nothing in the engine flags that disagreement.
+- **Recall is low.** Across the catalog, with ground truth built only from the records held-out mode
+  withholds, the engine recovered a known drug for 11 of 226 pairs and for 2 of 32 evaluable
+  diseases. A thin or empty candidate list is the normal outcome, and 160 of the misses were molecules
+  the engine had a ChEMBL mechanism record for.
 - **Only molecules ChEMBL records a mechanism for are considered.** A molecule without such a record
   is missing from both lists. Absence from a database is not evidence of absence.
 - **Several bridges rest on a single source.** `pathway_node` rests on Reactome,
@@ -427,7 +598,14 @@ curl http://localhost:8000/api/v1/discovery/controls
 # one subject
 curl "http://localhost:8000/api/v1/discovery/candidates?disease=stat1-gof"
 curl "http://localhost:8000/api/v1/discovery/candidates?gene=PIK3CD&exclude_direct=true"
+
+# the two measurements: accuracy on held-out known drugs, then effort and speed
+lab/.venv/bin/python lab/experiments/run_discovery_accuracy.py
+lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase engine --label after
 ```
+
+The accuracy and effort runs are described under
+[Measuring the engine](#measuring-the-engine), with every phase and its cost.
 
 `GET /api/v1/discovery/controls` returns 404 `controls_not_run` before the runner has written the
 file.

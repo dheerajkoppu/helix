@@ -216,9 +216,9 @@ export function CandidatesPanel({ className }: { className?: string }) {
       </p>
     );
   return (
-    <div className={cn("flex flex-col gap-6", className)}>
+    <div className={cn("flex flex-col gap-5", className)}>
       {rationale ? (
-        <div className="flex flex-wrap items-end gap-x-8 gap-y-4 border-y border-border py-5">
+        <div className="flex flex-wrap items-end gap-x-8 gap-y-4 border-y border-border py-4">
           <div className="flex min-w-0 flex-col gap-1">
             <span className="text-xs text-subtle-foreground">
               {CANDIDATE_WORDS.direction}

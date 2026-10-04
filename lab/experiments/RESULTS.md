@@ -2,6 +2,21 @@
 
 Batch `bench01`, run on 2026-10-03 from 22:07 to 22:34 UTC, plus two repeat batches until 22:41 UTC. Protocol: `protocol.md`. Every number below is read from `results/latest.json`, which `run_benchmark.py` builds from the run records in `lab/runs/`. The tables are the output of `render_tables.py` (`results/tables.md`).
 
+**This is not the measurement of the product's bottleneck.** It compares two ways of organising
+agents around the mechanism loop, and it found the specialist lab slower and broader than one agent.
+The bottleneck the discovery engine removes — crossing ChEMBL mechanisms, Reactome reactions,
+interaction records and a disease catalog by hand to judge which way each molecule pushes a protein —
+is measured in two separate experiments, neither of which involves an agent:
+
+| Question                                                      | Where                                                                               | Headline                                                                                                                                                                                                                                         |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| How much work does one request settle, and how fast is it?    | [`DISCOVERY-EFFORT.md`](DISCOVERY-EFFORT.md), `results/discovery-effort.json`       | 410 molecule-direction judgments over 16 requests from 492 upstream records; a serial uncached emulation needed 301 requests and 247.8 s for 132 judgments on 3 subjects; 18% of the serial bridge schedule removed with 0 of 16 answers changed |
+| Are the answers right?                                        | [`DISCOVERY-ACCURACY.md`](DISCOVERY-ACCURACY.md), `results/discovery-accuracy.json` | recall 11 of 226 held-out pairs (4.9%) and 2 of 32 diseases; false rejection 2 of 226 (0.9%), one of them a real direction-of-effect error                                                                                                       |
+| Does the direction filter behave correctly on known subjects? | [`DISCOVERY-CONTROLS.md`](DISCOVERY-CONTROLS.md), `results/discovery-controls.json` | 3 of 3 controls pass                                                                                                                                                                                                                             |
+
+No human was timed in any of them, here or there, and no figure in any of these files is a claim
+about human time.
+
 ## What was run
 
 - 13 variants (the first-listed flagship variant of each gene in `data/seed/catalog.json`), two arms, one run per cell: 26 cells.
@@ -12,7 +27,7 @@ Batch `bench01`, run on 2026-10-03 from 22:07 to 22:34 UTC, plus two repeat batc
 
 ## Headline
 
-**The bottleneck is the time from a variant to a complete cited record with one executed test.** Measured, specialist lab against single agent:
+**The bottleneck this batch measures is the time from a variant to a complete cited record with one executed test**, which is the mechanism loop and not the database-crossing bottleneck of the two experiments above. Measured, specialist lab against single agent:
 
 |                              | Specialist lab | Single agent  |
 | ---------------------------- | -------------- | ------------- |
@@ -295,15 +310,18 @@ Before either: remove the bare-word patterns from the claims guard and stop `rev
 
 ## Files
 
-| File                                                                                   | Contents                                                                                              |
-| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `protocol.md`                                                                          | Question, arms, variants, metrics, approval rule, reference rules, controls, threats known in advance |
-| `reference_labels.py`, `reference/labels.json`, `reference/snapshots/`                 | Reference derivation, its output, the raw UniProtKB and PDBe-KB responses it used                     |
-| `preflight.py`, `results/preflight.json`                                               | Scripted retrieval per variant, with timings                                                          |
-| `run_benchmark.py`                                                                     | Runs the batch (resumable, parallel) and aggregates                                                   |
-| `results/latest.json`                                                                  | The aggregate, served by `GET /api/v1/lab/benchmark`                                                  |
-| `results/bench01.json`, `results/bench01-repeat2.json`, `results/bench01-repeat3.json` | Aggregates per batch                                                                                  |
-| `results/attempts-*.jsonl`, `results/conditions-*.json`, `results/logs/`               | Every attempt with its exit code, the conditions of each batch, one launcher log per run              |
-| `interpretation.json`                                                                  | The hand-written note, caveats and next experiment that `run_benchmark.py` merges into `latest.json`  |
-| `render_tables.py`, `results/tables.md`                                                | The tables above                                                                                      |
-| `lab/runs/bench01-*`                                                                   | 31 run directories: record, report, results, policy log, transcripts                                  |
+| File                                                                                    | Contents                                                                                              |
+| --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `protocol.md`                                                                           | Question, arms, variants, metrics, approval rule, reference rules, controls, threats known in advance |
+| `reference_labels.py`, `reference/labels.json`, `reference/snapshots/`                  | Reference derivation, its output, the raw UniProtKB and PDBe-KB responses it used                     |
+| `preflight.py`, `results/preflight.json`                                                | Scripted retrieval per variant, with timings                                                          |
+| `run_benchmark.py`                                                                      | Runs the batch (resumable, parallel) and aggregates                                                   |
+| `results/latest.json`                                                                   | The aggregate, served by `GET /api/v1/lab/benchmark`                                                  |
+| `results/bench01.json`, `results/bench01-repeat2.json`, `results/bench01-repeat3.json`  | Aggregates per batch                                                                                  |
+| `results/attempts-*.jsonl`, `results/conditions-*.json`, `results/logs/`                | Every attempt with its exit code, the conditions of each batch, one launcher log per run              |
+| `interpretation.json`                                                                   | The hand-written note, caveats and next experiment that `run_benchmark.py` merges into `latest.json`  |
+| `render_tables.py`, `results/tables.md`                                                 | The tables above                                                                                      |
+| `lab/runs/bench01-*`                                                                    | 31 run directories: record, report, results, policy log, transcripts                                  |
+| `run_discovery_controls.py`, `results/discovery-controls.json`, `DISCOVERY-CONTROLS.md` | The engine's three controls: a held-out positive, a negative and an upstream positive                 |
+| `run_discovery_accuracy.py`, `results/discovery-accuracy.json`, `DISCOVERY-ACCURACY.md` | Recall and false-rejection rate on held-out known drugs over the whole catalog                        |
+| `run_discovery_effort.py`, `results/discovery-effort.json`, `DISCOVERY-EFFORT.md`       | The judgments one request settles, the serial uncached equivalent, and the engine's own timing tiers  |

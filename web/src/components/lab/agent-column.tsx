@@ -115,7 +115,7 @@ export function AgentColumn({
                   </span>
                   <span
                     className={cn(
-                      "shrink-0 text-2xs",
+                      "shrink-0 text-xs",
                       working ? "text-foreground" : "text-subtle-foreground",
                     )}
                   >
