@@ -141,7 +141,7 @@ API reference: http://localhost:8000/api/v1/docs. Every route is under `/api/v1`
 | `make lint`   | `ruff` over `api/`                                                                 |
 | `make build`  | Production build of the web app                                                    |
 
-Everything runs with no configuration. To change a setting, copy [`.env.example`](.env.example) to
+Everything runs without configuration. To change a setting, copy [`.env.example`](.env.example) to
 `.env` in the repository root; it lists every setting with its default.
 
 ### With PostgreSQL, Redis and object storage
