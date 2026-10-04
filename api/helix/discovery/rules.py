@@ -37,6 +37,34 @@ Three signs are multiplied, and every one of them has to come from a record:
 verdict = matches when the product equals the required direction, opposes when it is the reverse,
 unknown when any of the three is unknown. "opposes" is ruled out. "unknown" is ranked below
 "matches" and labelled. The word "inhibitor" alone never decides anything.
+
+A CONTRADICTED action_type CANNOT CARRY A REJECTION
+
+A rejection is the dangerous verdict: it removes a molecule from the list a reader sees. ChEMBL's
+`action_type` is one curated field and it is sometimes wrong for this purpose, so a rejection is
+not allowed to stand on it when another record of the same molecule against the same protein
+contradicts it. Two signals are read, each from a different record than `action_type`:
+
+- the measured assay types ChEMBL holds for the molecule against that protein. An IC50 or a percent
+  inhibition is an inhibition measurement; an EC50 or a percent activation is an activation one; a
+  Ki or a Kd measures binding only and says nothing about direction, so it is never a signal here.
+- a second mechanism record for the same molecule on the same target whose `action_type` points the
+  other way.
+
+If either contradicts the direction read from `action_type`, the verdict is "unknown", the reason
+names both records, and the molecule appears as a candidate carrying the 'may push the wrong way'
+caveat rather than being hidden. When nothing contradicts the field, the filter rejects exactly as
+it did before: this is not an exception list and not a relaxation, it is a requirement that the one
+field not be contradicted by the measurements sitting beside it.
+
+The "matches" side of the filter is untouched. A contradiction can only hold a rejection back; it
+can never turn an unknown into a match.
+
+This exists because the accuracy experiment caught the filter rejecting PLERIXAFOR for WHIM
+syndrome. ChEMBL records its single mechanism on P61073 with action_type PARTIAL AGONIST, while
+blocking CXCR4 is the molecule's entire pharmacology and ChEMBL's own four activities against that
+protein are all IC50. One field said raise, four measurements said lower, and the filter believed
+the field.
 """
 
 from dataclasses import dataclass
@@ -174,6 +202,41 @@ def molecule_effect(action_type: str | None) -> MoleculeEffect:
     return "unknown"
 
 
+# Measured assay types that state a direction. A Ki or a Kd measures how tightly a molecule binds
+# and is deliberately absent: binding alone does not say which way the protein moves.
+LOWERING_ASSAYS = frozenset({"IC50", "INHIBITION", "XC50", "IC90", "IC95", "KI APP", "PIC50"})
+RAISING_ASSAYS = frozenset({"EC50", "ACTIVATION", "AC50", "PEC50"})
+
+
+def assay_effect(standard_types: dict[str, int] | None) -> tuple[MoleculeEffect, int, int]:
+    """Direction implied by the assay types measured against a protein, with the two counts."""
+    lowering = 0
+    raising = 0
+    for name, count in (standard_types or {}).items():
+        key = str(name).strip().upper()
+        if key in LOWERING_ASSAYS:
+            lowering += int(count or 0)
+        elif key in RAISING_ASSAYS:
+            raising += int(count or 0)
+    if lowering and not raising:
+        return "lowers", lowering, raising
+    if raising and not lowering:
+        return "raises", lowering, raising
+    return "unknown", lowering, raising
+
+
+@dataclass(frozen=True, slots=True)
+class DirectionEvidence:
+    """Records of the same molecule against the same protein, other than the action_type itself.
+
+    Every field is read from a different ChEMBL record than the `action_type` under test, which is
+    what makes a contradiction meaningful rather than a restatement.
+    """
+
+    other_action_types: tuple[str, ...] = ()
+    assay_standard_types: dict[str, int] | None = None
+
+
 def required_action(mechanism_class: MechanismClass, direction: Direction) -> ActionRule:
     """The rule table, as a pure function. Unknown in means no action out."""
     resolved: MechanismClass = mechanism_class
@@ -254,6 +317,35 @@ def _sign(need: NeedDirection) -> int:
     return -1 if need == "less_activity" else 1 if need == "more_activity" else 0
 
 
+def _contradictions(effect: MoleculeEffect, evidence: DirectionEvidence | None) -> list[str]:
+    """Signals from other records of this molecule on this protein that point the other way."""
+    if evidence is None or effect == "unknown":
+        return []
+    opposite: MoleculeEffect = "raises" if effect == "lowers" else "lowers"
+    rows: list[str] = []
+    measured, lowering, raising = assay_effect(evidence.assay_standard_types)
+    if measured == opposite:
+        count = lowering if measured == "lowers" else raising
+        kinds = ", ".join(
+            sorted(
+                name
+                for name in (evidence.assay_standard_types or {})
+                if str(name).strip().upper() in (LOWERING_ASSAYS | RAISING_ASSAYS)
+            )
+        )
+        rows.append(
+            f"ChEMBL holds {count} measured activit{'y' if count == 1 else 'ies'} of this molecule "
+            f"against this protein ({kinds}), which {measured} it"
+        )
+    for other in evidence.other_action_types:
+        if molecule_effect(other) == opposite:
+            rows.append(
+                f"a second ChEMBL mechanism record for this molecule on the same target reads "
+                f"{other.lower()}, which {opposite} it"
+            )
+    return rows
+
+
 def direction_check(
     rule: ActionRule,
     *,
@@ -262,6 +354,7 @@ def direction_check(
     target_label: str,
     subject_label: str,
     activity_label: str,
+    evidence: DirectionEvidence | None = None,
 ) -> DirectionCheck:
     """Compare the required action with what the molecule's recorded action would do to the subject.
 
@@ -276,6 +369,7 @@ def direction_check(
     molecule_phrase = f"ChEMBL records this molecule as {_article(action_text)} of {target_label}"
     verdict: Verdict = "unknown"
     why: str
+    corroboration: list[str] = []
 
     if need == "none":
         why = (
@@ -307,6 +401,20 @@ def direction_check(
             f"{need_phrase} {molecule_phrase}, which {effect} that protein. Because {relation.phrase}, that "
             f"{carried} what {activity_label} does. {closing}"
         )
+        if verdict == "opposes":
+            # A rejection is not allowed to rest on an action_type another record of the same
+            # molecule against the same protein contradicts
+            conflicts = _contradictions(effect, evidence)
+            if conflicts:
+                verdict = "unknown"
+                why = (
+                    f"{need_phrase} {molecule_phrase}, which would "
+                    f"{'lower' if effect == 'lowers' else 'raise'} that protein, and on that "
+                    f"field alone this molecule would be ruled out. But {' and '.join(conflicts)}. "
+                    "Two records of the same molecule against the same protein disagree, so the "
+                    "direction cannot be checked and this molecule is not ruled out."
+                )
+                corroboration = conflicts
 
     return DirectionCheck(
         required=rule.actions,
@@ -316,6 +424,8 @@ def direction_check(
         target_relation_effect=relation.effect,
         verdict=verdict,
         why=why,
+        corroboration=corroboration,
+        corroborated=None if verdict != "opposes" else True,
     )
 
 

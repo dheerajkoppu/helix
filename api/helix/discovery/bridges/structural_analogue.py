@@ -21,7 +21,6 @@ row of this bridge.
 """
 
 import asyncio
-import importlib
 from typing import Any
 
 from helix.discovery.build import build_rows
@@ -46,26 +45,46 @@ FALLBACK_REASON = (
 
 
 async def _foldseek_rows(accession: str) -> list[dict[str, Any]] | None:
-    """Rows from the structural similarity source, or None when it is not there yet."""
+    """Fold-similar proteins for one accession, or None when no alignment is available yet.
+
+    Calls `services.structure_similarity.structural_analogue_bridges`, which is the engine's only
+    entry point into fold similarity: it ranks human proteins first, keeps only alignments at
+    1e-3 or better, and never waits on a cold Foldseek job. A `pending` or `unavailable` status
+    comes back as None, which makes this bridge fall back to shared chemistry and report itself
+    partial rather than claiming there is no analogue.
+
+    An earlier version of this function probed `helix.sources.foldseek` for `similar_structures`,
+    `similar` and `search`. That module exposes none of those names, so the probe always returned
+    None and the bridge never once ran on a fold alignment. The accuracy experiment showed
+    structural_analogue recovering nothing, which is what sent us looking.
+    """
+    from helix.services.structure_similarity import structural_analogue_bridges
+
     try:
-        module = importlib.import_module("helix.sources.foldseek")
-    except ModuleNotFoundError:
+        result = await asyncio.wait_for(
+            structural_analogue_bridges(accession, limit=MAX_ANALOGUES), ANALOGUE_TIMEOUT
+        )
+    except Exception as error:  # noqa: BLE001 - a bridge never fails the request
+        logger.info("Fold similarity did not answer for %s: %s", accession, error)
         return None
-    for name in ("similar_structures", "similar", "search"):
-        call = getattr(module, name, None) or getattr(getattr(module, "foldseek", None), name, None)
-        if call is None:
+    if result.status != "ready" or not result.analogues:
+        logger.info("Fold similarity for %s is %s", accession, result.status)
+        return None
+    rows: list[dict[str, Any]] = []
+    for analogue in result.analogues:
+        analogue_accession = (analogue.protein.id or "").upper()
+        if not analogue_accession:
             continue
-        try:
-            result = await asyncio.wait_for(call(accession), ANALOGUE_TIMEOUT)
-        except Exception as error:  # noqa: BLE001 - an unfinished module never fails the request
-            logger.info("Foldseek source did not answer for %s: %s", accession, error)
-            return None
-        rows = getattr(result, "data", result)
-        if isinstance(rows, dict):
-            rows = rows.get("rows") or rows.get("hits") or []
-        if isinstance(rows, list):
-            return [row for row in rows if isinstance(row, dict) and row.get("accession")]
-    return None
+        metrics = {metric.name.lower(): metric.value for metric in analogue.fold_metrics}
+        rows.append(
+            {
+                "accession": analogue_accession,
+                "gene_symbol": analogue.gene_symbol,
+                "evalue": metrics.get("foldseek_evalue"),
+                "tm_score": metrics.get("foldseek_tm_score") or metrics.get("tm_score"),
+            }
+        )
+    return rows or None
 
 
 async def _pocket(accession: str) -> tuple[str | None, str | None, list[int]]:

@@ -1,0 +1,3865 @@
+{
+  "generated_at": "2026-10-04T03:20:48Z",
+  "source": "discovery-accuracy.json",
+  "method": "Reads the pairs the accuracy run recorded as missed and asks, for each one, why the engine never\nproduced a row for it. Every answer comes from a source call, not from a judgement written here:",
+  "cause_order": [
+    "no_chembl_mechanism_record_at_all",
+    "a_source_the_request_needed_was_unavailable",
+    "not_a_small_molecule_so_outside_the_engine_modality",
+    "mechanism_target_resolves_to_no_human_protein",
+    "acts_on_the_subject_protein_but_the_bridge_cap_cut_it",
+    "acts_on_a_reached_bridge_node_but_the_cap_cut_it",
+    "acts_on_a_human_protein_with_no_bridge_path_to_the_subject"
+  ],
+  "scope": {
+    "rule": "ChEMBL molecule_type == 'Small molecule' AND at least one ChEMBL mechanism record whose target resolves to a human (Homo sapiens) UniProt accession. Fixed before the number was computed; reads source fields only; independent of what the engine returned.",
+    "n_pairs_total": 226,
+    "n_in_scope": 74,
+    "recovered": 11,
+    "recall_rate": 0.1486,
+    "falsely_rejected": 1,
+    "false_rejection_rate": 0.0135,
+    "missed": 62,
+    "outcome_mix": {
+      "falsely_rejected": 1,
+      "missed": 62,
+      "recovered": 11
+    }
+  },
+  "n_missed": 213,
+  "counts_all_missed": {
+    "no_chembl_mechanism_record_at_all": 53,
+    "a_source_the_request_needed_was_unavailable": 0,
+    "not_a_small_molecule_so_outside_the_engine_modality": 51,
+    "mechanism_target_resolves_to_no_human_protein": 47,
+    "acts_on_the_subject_protein_but_the_bridge_cap_cut_it": 0,
+    "acts_on_a_reached_bridge_node_but_the_cap_cut_it": 1,
+    "acts_on_a_human_protein_with_no_bridge_path_to_the_subject": 61
+  },
+  "counts_within_the_chembl_mechanism_universe": {
+    "no_chembl_mechanism_record_at_all": 0,
+    "a_source_the_request_needed_was_unavailable": 0,
+    "not_a_small_molecule_so_outside_the_engine_modality": 51,
+    "mechanism_target_resolves_to_no_human_protein": 47,
+    "acts_on_the_subject_protein_but_the_bridge_cap_cut_it": 0,
+    "acts_on_a_reached_bridge_node_but_the_cap_cut_it": 1,
+    "acts_on_a_human_protein_with_no_bridge_path_to_the_subject": 61
+  },
+  "recurring_targets_in_the_no_path_bucket": {
+    "Tyrosine-protein kinase JAK2": 8,
+    "Inosine-5'-monophosphate dehydrogenase (IMPDH)": 6,
+    "Tyrosine-protein kinase JAK1": 5,
+    "Peptidyl-prolyl cis-trans isomerase FKBP1A": 4,
+    "Glucocorticoid receptor": 3,
+    "Histamine H2 receptor": 3,
+    "Matrilysin": 3,
+    "Potassium-transporting ATPase": 3,
+    "Succinate-semialdehyde dehydrogenase, mitochondrial": 3,
+    "Alcohol dehydrogenase class-3": 2,
+    "Amiloride-sensitive sodium channel, ENaC": 2,
+    "CRL4(CRBN) E3 ubiquitin ligase": 2,
+    "Estrogen receptor": 2,
+    "Muscarinic acetylcholine receptor M3": 2,
+    "Phosphatidylinositol 4,5-bisphosphate 3-kinase catalytic subunit delta isoform": 2,
+    "Receptor-type tyrosine-protein kinase FLT3": 2,
+    "Soluble guanylate cyclase": 2,
+    "Thrombopoietin receptor": 2,
+    "cGMP-specific 3',5'-cyclic phosphodiesterase": 2,
+    "3-hydroxy-3-methylglutaryl-coenzyme A reductase": 1
+  },
+  "api_calls": 179,
+  "run_seconds": 0.6,
+  "misses": [
+    {
+      "disease": "AD-HIES STAT3 deficiency (Job syndrome)",
+      "slug": "ad-hies-stat3-deficiency",
+      "subject_accession": "P40763",
+      "chembl_id": "CHEMBL1790041",
+      "name": "RANITIDINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P25021"
+      ],
+      "mechanism_target_names": [
+        "Histamine H2 receptor",
+        "Histamine H2 receptor",
+        "Histamine H2 receptor"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P25021",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "AD-HIES STAT3 deficiency (Job syndrome)",
+      "slug": "ad-hies-stat3-deficiency",
+      "subject_accession": "P40763",
+      "chembl_id": "CHEMBL1201589",
+      "name": "OMALIZUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [
+        "P01854"
+      ],
+      "mechanism_target_names": [
+        "Immunoglobulin heavy constant epsilon"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "AD STING-associated vasculopathy, infantile-onset (SAVI)",
+      "slug": "ad-sting-associated-vasculopathy-infantile-onset",
+      "subject_accession": "Q86WV6",
+      "chembl_id": "CHEMBL2105759",
+      "name": "BARICITINIB",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2_3",
+      "mechanism_target_accessions": [
+        "O60674",
+        "P23458"
+      ],
+      "mechanism_target_names": [
+        "Tyrosine-protein kinase JAK1",
+        "Tyrosine-protein kinase JAK2"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: O60674, P23458",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "ADA deficiency",
+      "slug": "ada-deficiency",
+      "subject_accession": "P00813",
+      "chembl_id": "CHEMBL4298201",
+      "name": "SIMOLADAGENE AUTOTEMCEL",
+      "modality": "Gene",
+      "clinical_stage": "PHASE_2_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "ADA deficiency",
+      "slug": "ada-deficiency",
+      "subject_accession": "P00813",
+      "chembl_id": "CHEMBL1201514",
+      "name": "PEGADEMASE BOVINE",
+      "modality": "Enzyme",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "2'-deoxyadenosine",
+        "Adenosine"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Enzyme'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "APECED (APS-1), autoimmune polyendocrinopathy with candidiasis and ectodermal dystrophy",
+      "slug": "apeced-autoimmune-polyendocrinopathy-with-candidiasis",
+      "subject_accession": "O43918",
+      "chembl_id": "CHEMBL1789941",
+      "name": "RUXOLITINIB",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "O60674",
+        "P23458",
+        "P29597",
+        "P52333"
+      ],
+      "mechanism_target_names": [
+        "Tyrosine-protein kinase JAK1",
+        "Tyrosine-protein kinase JAK2",
+        "Tyrosine-protein kinase JAK3",
+        "Tyrosine-protein kinase JAK2"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: O60674, P23458, P29597, P52333",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "AR STING-associated vasculopathy, infantile-onset (SAVI)",
+      "slug": "ar-sting-associated-vasculopathy-infantile-onset",
+      "subject_accession": "Q86WV6",
+      "chembl_id": "CHEMBL2105759",
+      "name": "BARICITINIB",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2_3",
+      "mechanism_target_accessions": [
+        "O60674",
+        "P23458"
+      ],
+      "mechanism_target_names": [
+        "Tyrosine-protein kinase JAK1",
+        "Tyrosine-protein kinase JAK2"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: O60674, P23458",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Ataxia\u2013telangiectasia",
+      "slug": "ataxia-telangiectasia",
+      "subject_accession": "Q13315",
+      "chembl_id": "CHEMBL2021430",
+      "name": "DEXAMETHASONE SODIUM PHOSPHATE",
+      "modality": "Small molecule",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [
+        "P04150"
+      ],
+      "mechanism_target_names": [
+        "Glucocorticoid receptor"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P04150",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Ataxia\u2013telangiectasia",
+      "slug": "ataxia-telangiectasia",
+      "subject_accession": "Q13315",
+      "chembl_id": "CHEMBL56021",
+      "name": "LEVACETYLLEUCINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        null
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "None (None, organism not stated)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Ataxia\u2013telangiectasia",
+      "slug": "ataxia-telangiectasia",
+      "subject_accession": "Q13315",
+      "chembl_id": "CHEMBL3039538",
+      "name": "TRENONACOG ALFA",
+      "modality": "Unknown",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P00740"
+      ],
+      "mechanism_target_names": [
+        "Coagulation factor IX"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Unknown'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Ataxia\u2013telangiectasia",
+      "slug": "ataxia-telangiectasia",
+      "subject_accession": "Q13315",
+      "chembl_id": "CHEMBL1140",
+      "name": "NIACINAMIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Autoimmune lymphoproliferative syndrome (ALPS-SFAS)",
+      "slug": "autoimmune-lymphoproliferative-syndrome-phenocopy",
+      "subject_accession": "P25445",
+      "chembl_id": "CHEMBL3643413",
+      "name": "LENIOLISIB",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "O00329"
+      ],
+      "mechanism_target_names": [
+        "Phosphatidylinositol 4,5-bisphosphate 3-kinase catalytic subunit delta isoform",
+        "Phosphatidylinositol 4,5-bisphosphate 3-kinase catalytic subunit delta isoform"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: O00329",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Autoimmune lymphoproliferative syndrome (ALPS-SFAS)",
+      "slug": "autoimmune-lymphoproliferative-syndrome-phenocopy",
+      "subject_accession": "P25445",
+      "chembl_id": "CHEMBL5817577",
+      "name": "SOQUELITINIB",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Autoimmune lymphoproliferative syndrome (ALPS-SFAS)",
+      "slug": "autoimmune-lymphoproliferative-syndrome-phenocopy",
+      "subject_accession": "P25445",
+      "chembl_id": "CHEMBL109",
+      "name": "VALPROIC ACID",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [
+        "P51649"
+      ],
+      "mechanism_target_names": [
+        "Succinate-semialdehyde dehydrogenase, mitochondrial",
+        "Succinate-semialdehyde dehydrogenase, mitochondrial",
+        "Succinate-semialdehyde dehydrogenase, mitochondrial"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P51649",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Autoimmune lymphoproliferative syndrome (ALPS-SFAS)",
+      "slug": "autoimmune-lymphoproliferative-syndrome-phenocopy",
+      "subject_accession": "P25445",
+      "chembl_id": "CHEMBL36",
+      "name": "PYRIMETHAMINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bifunctional dihydrofolate reductase-thymidylate synthase"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bifunctional dihydrofolate reductase-thymidylate synthase (SINGLE PROTEIN, Plasmodium falciparum K1)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Autoimmune lymphoproliferative syndrome (ALPS-SFAS)",
+      "slug": "autoimmune-lymphoproliferative-syndrome-phenocopy",
+      "subject_accession": "P25445",
+      "chembl_id": "CHEMBL1539",
+      "name": "SULFADOXINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Dihydropteroate synthetase"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Dihydropteroate synthetase (SINGLE PROTEIN, Plasmodium falciparum)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Barth syndrome (3-methylglutaconic aciduria type II)",
+      "slug": "barth-syndrome",
+      "subject_accession": "Q16635",
+      "chembl_id": "CHEMBL3833370",
+      "name": "ELAMIPRETIDE",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_2_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "BTK deficiency, X-linked agammaglobulinemia",
+      "slug": "btk-deficiency-x-linked-agammaglobulinemia",
+      "subject_accession": "Q06187",
+      "chembl_id": "CHEMBL1201599",
+      "name": "HUMAN IMMUNOGLOBULIN G",
+      "modality": "Unknown",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        null
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Unknown'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "CD40 ligand (CD154) deficiency",
+      "slug": "cd40-ligand-deficiency",
+      "subject_accession": "P29965",
+      "chembl_id": "CHEMBL1201587",
+      "name": "ALEMTUZUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P31358"
+      ],
+      "mechanism_target_names": [
+        "CAMPATH-1 antigen"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "CD40 ligand (CD154) deficiency",
+      "slug": "cd40-ligand-deficiency",
+      "subject_accession": "P29965",
+      "chembl_id": "CHEMBL1568",
+      "name": "FLUDARABINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "CD40 ligand (CD154) deficiency",
+      "slug": "cd40-ligand-deficiency",
+      "subject_accession": "P29965",
+      "chembl_id": "CHEMBL5314988",
+      "name": "KEYHOLE LIMPET HEMOCYANIN",
+      "modality": "Unknown",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "CD40 ligand (CD154) deficiency",
+      "slug": "cd40-ligand-deficiency",
+      "subject_accession": "P29965",
+      "chembl_id": "CHEMBL852",
+      "name": "MELPHALAN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA",
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens); DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "CD40 ligand (CD154) deficiency",
+      "slug": "cd40-ligand-deficiency",
+      "subject_accession": "P29965",
+      "chembl_id": "CHEMBL820",
+      "name": "BUSULFAN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Comel\u2013Netherton syndrome",
+      "slug": "comel-netherton-syndrome",
+      "subject_accession": "Q9NQ38",
+      "chembl_id": "CHEMBL2108675",
+      "name": "DUPILUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_2_3",
+      "mechanism_target_accessions": [
+        "P24394"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-4 receptor subunit alpha"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Comel\u2013Netherton syndrome",
+      "slug": "comel-netherton-syndrome",
+      "subject_accession": "Q9NQ38",
+      "chembl_id": "CHEMBL4297911",
+      "name": "SPESOLIMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_2_3",
+      "mechanism_target_accessions": [
+        "Q9HB29",
+        "Q9NPH3"
+      ],
+      "mechanism_target_names": [
+        "IL36 receptor"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Comel\u2013Netherton syndrome",
+      "slug": "comel-netherton-syndrome",
+      "subject_accession": "Q9NQ38",
+      "chembl_id": "CHEMBL1201580",
+      "name": "ADALIMUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P01375"
+      ],
+      "mechanism_target_names": [
+        "Tumor necrosis factor"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Comel\u2013Netherton syndrome",
+      "slug": "comel-netherton-syndrome",
+      "subject_accession": "Q9NQ38",
+      "chembl_id": "CHEMBL1743068",
+      "name": "SECUKINUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "Q16552"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-17A"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Comel\u2013Netherton syndrome",
+      "slug": "comel-netherton-syndrome",
+      "subject_accession": "Q9NQ38",
+      "chembl_id": "CHEMBL5095274",
+      "name": "DS-2325A",
+      "modality": "Unknown",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Comel\u2013Netherton syndrome",
+      "slug": "comel-netherton-syndrome",
+      "subject_accession": "Q9NQ38",
+      "chembl_id": "CHEMBL1200686",
+      "name": "PIMECROLIMUS",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [
+        "P62942"
+      ],
+      "mechanism_target_names": [
+        "Peptidyl-prolyl cis-trans isomerase FKBP1A"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P62942",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cryopyrinopathy, (Muckle\u2013Wells/CINCA/NOMID-like syndrome)",
+      "slug": "cryopyrinopathy-phenocopy",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL1201834",
+      "name": "CANAKINUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [
+        "P01584"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-1 beta"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cryopyrinopathy, (Muckle\u2013Wells/CINCA/NOMID-like syndrome)",
+      "slug": "cryopyrinopathy-phenocopy",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL1201830",
+      "name": "RILONACEPT",
+      "modality": "Protein",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [
+        "P01584"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-1 beta"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cryopyrinopathy, (Muckle\u2013Wells/CINCA/NOMID-like syndrome)",
+      "slug": "cryopyrinopathy-phenocopy",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL415324",
+      "name": "TRANILAST",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cryopyrinopathy, (Muckle\u2013Wells/CINCA/NOMID-like syndrome)",
+      "slug": "cryopyrinopathy-phenocopy",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL5314548",
+      "name": "USNOFLAST",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cryopyrinopathy, (Muckle\u2013Wells/CINCA/NOMID-like syndrome)",
+      "slug": "cryopyrinopathy-phenocopy",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL3704901",
+      "name": "ZUNSEMETINIB",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cryopyrinopathy, (Muckle\u2013Wells/CINCA/NOMID-like syndrome)",
+      "slug": "cryopyrinopathy-phenocopy",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL4650350",
+      "name": "INZOMELID",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cryopyrinopathy, (Muckle\u2013Wells/CINCA/NOMID-like syndrome)",
+      "slug": "cryopyrinopathy-phenocopy",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL5095351",
+      "name": "SELNOFLAST POTASSIUM",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL600",
+      "name": "ACETYLCYSTEINE",
+      "modality": "Small molecule",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        null,
+        null,
+        null
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "None (None, organism not stated); None (None, organism not stated); None (None, organism not stated)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL529",
+      "name": "AZITHROMYCIN",
+      "modality": "Small molecule",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial 70S ribosome"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial 70S ribosome (PROTEIN NUCLEIC-ACID COMPLEX, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL158",
+      "name": "AZTREONAM",
+      "modality": "Small molecule",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial penicillin-binding protein",
+        "Bacterial penicillin-binding protein"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial penicillin-binding protein (PROTEIN FAMILY, Bacteria); Bacterial penicillin-binding protein (PROTEIN FAMILY, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL3833340",
+      "name": "AZTREONAM LYSINE",
+      "modality": "Small molecule",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial penicillin-binding protein",
+        "Bacterial penicillin-binding protein"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial penicillin-binding protein (PROTEIN FAMILY, Bacteria); Bacterial penicillin-binding protein (PROTEIN FAMILY, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1201441",
+      "name": "COLISTIMETHATE SODIUM",
+      "modality": "Unknown",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Cell membrane",
+        "Cell membrane"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Unknown'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4297603",
+      "name": "DEUTIVACAFTOR",
+      "modality": "Small molecule",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [
+        "P13569"
+      ],
+      "mechanism_target_names": [
+        "Cystic fibrosis transmembrane conductance regulator",
+        "Cystic fibrosis transmembrane conductance regulator"
+      ],
+      "cause": "acts_on_a_reached_bridge_node_but_the_cap_cut_it",
+      "note": "the engine produced rows on P13569 but not this molecule",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1201431",
+      "name": "DORNASE ALFA",
+      "modality": "Enzyme",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Enzyme'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1201564",
+      "name": "INTERFERON GAMMA-1B",
+      "modality": "Protein",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [
+        "P15260",
+        "P38484"
+      ],
+      "mechanism_target_names": [
+        "Interferon gamma receptor"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL5315124",
+      "name": "LEVOFLOXACIN",
+      "modality": "Small molecule",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA gyrase",
+        "Topoisomerase IV"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA gyrase (PROTEIN COMPLEX, Streptococcus pneumoniae); Topoisomerase IV (PROTEIN COMPLEX, Streptococcus pneumoniae)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL689",
+      "name": "MANNITOL",
+      "modality": "Small molecule",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        null
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "None (None, organism not stated)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1550",
+      "name": "PHYTONADIONE",
+      "modality": "Small molecule",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1747",
+      "name": "TOBRAMYCIN",
+      "modality": "Small molecule",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "70S ribosome",
+        "70S ribosome"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "70S ribosome (PROTEIN NUCLEIC-ACID COMPLEX, Pseudomonas aeruginosa); 70S ribosome (PROTEIN NUCLEIC-ACID COMPLEX, Pseudomonas aeruginosa)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL177",
+      "name": "AMIKACIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial 70S ribosome"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial 70S ribosome (PROTEIN NUCLEIC-ACID COMPLEX, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL256997",
+      "name": "ATALUREN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P05386",
+        "P05388",
+        "P08708",
+        "P08865",
+        "P15880",
+        "P18077",
+        "P18124",
+        "P18621",
+        "P22090",
+        "P23396",
+        "P25398",
+        "P26373",
+        "P27635",
+        "P30050",
+        "P32969",
+        "P35268",
+        "P36578",
+        "P39019",
+        "P39023",
+        "P40429",
+        "P42677",
+        "P42766",
+        "P46776",
+        "P46777",
+        "P46778",
+        "P46779",
+        "P46781",
+        "P46782",
+        "P46783",
+        "P47914",
+        "P49207",
+        "P50914",
+        "P60866",
+        "P61247",
+        "P61254",
+        "P61313",
+        "P61353",
+        "P61513",
+        "P61927",
+        "P62081",
+        "P62241",
+        "P62244",
+        "P62249",
+        "P62263",
+        "P62266",
+        "P62269",
+        "P62273",
+        "P62277",
+        "P62280",
+        "P62424",
+        "P62701",
+        "P62750",
+        "P62753",
+        "P62829",
+        "P62841",
+        "P62847",
+        "P62851",
+        "P62854",
+        "P62857",
+        "P62861",
+        "P62888",
+        "P62891",
+        "P62899",
+        "P62906",
+        "P62910",
+        "P62913",
+        "P62917",
+        "P62945",
+        "P62979",
+        "P63173",
+        "P63220",
+        "P83731",
+        "P83881",
+        "P84098",
+        "Q02543",
+        "Q02878",
+        "Q07020",
+        "Q9Y3U8"
+      ],
+      "mechanism_target_names": [
+        "80S Ribosome"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P05386, P05388, P08708, P08865, P15880, P18077",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1200544",
+      "name": "CEPHALEXIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial penicillin-binding protein",
+        "Bacterial penicillin-binding protein"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial penicillin-binding protein (PROTEIN FAMILY, Bacteria); Bacterial penicillin-binding protein (PROTEIN FAMILY, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL6067481",
+      "name": "COLISTIN",
+      "modality": "Unknown",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Cell outer membrane"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Unknown'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1543",
+      "name": "GLUTATHIONE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2104391",
+      "name": "INSULIN DETEMIR",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P06213"
+      ],
+      "mechanism_target_names": [
+        "Insulin receptor"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1201497",
+      "name": "INSULIN GLARGINE",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P06213"
+      ],
+      "mechanism_target_names": [
+        "Insulin receptor"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1201631",
+      "name": "INSULIN HUMAN",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P06213"
+      ],
+      "mechanism_target_names": [
+        "Insulin receptor"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2108703",
+      "name": "LIPROTAMASE",
+      "modality": "Enzyme",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Triglyceride",
+        "Polypeptides",
+        "Starch"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Enzyme'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1456",
+      "name": "MYCOPHENOLATE MOFETIL",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P12268",
+        "P20839"
+      ],
+      "mechanism_target_names": [
+        "Inosine-5'-monophosphate dehydrogenase (IMPDH)",
+        "Inosine-5'-monophosphate dehydrogenase (IMPDH)"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P12268, P20839",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2108073",
+      "name": "PANCREATIN",
+      "modality": "Unknown",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2108074",
+      "name": "PANCRELIPASE",
+      "modality": "Enzyme",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Fatty acids",
+        "Starch",
+        "Polypeptides"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Enzyme'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL635",
+      "name": "PREDNISONE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P04150"
+      ],
+      "mechanism_target_names": [
+        "Glucocorticoid receptor"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P04150",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1272",
+      "name": "REPAGLINIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "Q09428",
+        "Q14654"
+      ],
+      "mechanism_target_names": [
+        "Sulfonylurea receptor 1, Kir6.2"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: Q09428, Q14654",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1200574",
+      "name": "SODIUM CHLORIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1201621",
+      "name": "SOMATROPIN",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P10912"
+      ],
+      "mechanism_target_names": [
+        "Growth hormone receptor"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1900528",
+      "name": "TIOTROPIUM",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P20309"
+      ],
+      "mechanism_target_names": [
+        "Muscarinic acetylcholine receptor M3"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P20309",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1029",
+      "name": "MIGLUSTAT",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2_3",
+      "mechanism_target_accessions": [
+        "Q16739"
+      ],
+      "mechanism_target_names": [
+        "Ceramide glucosyltransferase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: Q16739",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL181886",
+      "name": "PYRUVATE SODIUM",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL192",
+      "name": "SILDENAFIL",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2_3",
+      "mechanism_target_accessions": [
+        "O76074"
+      ],
+      "mechanism_target_names": [
+        "cGMP-specific 3',5'-cyclic phosphodiesterase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: O76074",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4297879",
+      "name": ".ALPHA.1-PROTEINASE INHIBITOR HUMAN",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P08246"
+      ],
+      "mechanism_target_names": [
+        "Neutrophil elastase"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL445472",
+      "name": "16.ALPHA.-BROMOEPIANDROSTERONE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4297604",
+      "name": "ACEBILUSTAT",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P09960"
+      ],
+      "mechanism_target_names": [
+        "Leukotriene A-4 hydrolase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P09960",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2108894",
+      "name": "ALGINIC ACID",
+      "modality": "Unknown",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        null
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Unknown'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL3617964",
+      "name": "ALVELESTAT",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P08246"
+      ],
+      "mechanism_target_names": [
+        "Neutrophil elastase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P08246",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1742420",
+      "name": "AMELUBANT",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "Q15722"
+      ],
+      "mechanism_target_names": [
+        "Leukotriene B4 receptor 1"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: Q15722",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL945",
+      "name": "AMILORIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P37088",
+        "P51168",
+        "P51170"
+      ],
+      "mechanism_target_names": [
+        "Amiloride-sensitive sodium channel, ENaC"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P37088, P51168, P51170",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL629",
+      "name": "AMITRIPTYLINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P23975",
+        "P31645"
+      ],
+      "mechanism_target_names": [
+        "Sodium-dependent serotonin transporter",
+        "Sodium-dependent noradrenaline transporter"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P23975, P31645",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1201570",
+      "name": "ANAKINRA",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P14778"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-1 receptor type 1"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL3833374",
+      "name": "ANDECALIXIMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P14780"
+      ],
+      "mechanism_target_names": [
+        "Matrix metalloproteinase-9"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1485",
+      "name": "ARGININE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4297352",
+      "name": "AZD-1236",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P14780",
+        "P39900"
+      ],
+      "mechanism_target_names": [
+        "Matrix metalloproteinase-9",
+        "Macrophage metalloelastase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P14780, P39900",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL3900409",
+      "name": "BRENSOCATIB",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P53634"
+      ],
+      "mechanism_target_names": [
+        "Dipeptidyl peptidase 1"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P53634",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL590799",
+      "name": "CAMOSTAT",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1231840",
+      "name": "CARBON MONOXIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL3989910",
+      "name": "CAVOSONSTAT",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P11766"
+      ],
+      "mechanism_target_names": [
+        "Alcohol dehydrogenase class-3"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P11766",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4297088",
+      "name": "CHLORHEXIDINE GLUCONATE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Cell membrane"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Cell membrane (SUBCELLULAR, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1042",
+      "name": "CHOLECALCIFEROL",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P11473"
+      ],
+      "mechanism_target_names": [
+        "Vitamin D3 receptor"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P11473",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL8",
+      "name": "CIPROFLOXACIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial DNA gyrase",
+        "Bacterial DNA gyrase",
+        "Topoisomerase IV",
+        "Topoisomerase IV"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial DNA gyrase (PROTEIN COMPLEX, Bacteria); Bacterial DNA gyrase (PROTEIN COMPLEX, Bacteria); Topoisomerase IV (PROTEIN COMPLEX, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1741",
+      "name": "CLARITHROMYCIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial 70S ribosome"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial 70S ribosome (PROTEIN NUCLEIC-ACID COMPLEX, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL58061",
+      "name": "CO-TRIMOXAZOLE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Dihydrofolate reductase",
+        "Dihydropteroate synthase"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Dihydrofolate reductase (SINGLE PROTEIN, Bacteria); Dihydropteroate synthase (SINGLE PROTEIN, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1767407",
+      "name": "DENUFOSOL TETRASODIUM",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P41231"
+      ],
+      "mechanism_target_names": [
+        "P2Y purinoceptor 2"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P41231",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL254219",
+      "name": "DIGITOXIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P05023",
+        "P05026",
+        "P13637",
+        "P14415",
+        "P50993",
+        "P54709",
+        "P54710",
+        "Q13733"
+      ],
+      "mechanism_target_names": [
+        "Sodium/potassium-transporting ATPase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P05023, P05026, P13637, P14415, P50993, P54709",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL367149",
+      "name": "DOCONEXENT",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1200699",
+      "name": "DOXYCYCLINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P03956",
+        "P09237",
+        "P22894",
+        "P45452"
+      ],
+      "mechanism_target_names": [
+        "Matrilysin",
+        "Matrilysin",
+        "Matrilysin",
+        "Neutrophil collagenase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P03956, P09237, P22894, P45452",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL51085",
+      "name": "EBSELEN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        null
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "None (None, organism not stated)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2178579",
+      "name": "ELUBRIXIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P25025"
+      ],
+      "mechanism_target_names": [
+        "C-X-C chemokine receptor type 2"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P25025",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4297744",
+      "name": "ELX-02",
+      "modality": "Unknown",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P05386",
+        "P05388",
+        "P08708",
+        "P08865",
+        "P15880",
+        "P18077",
+        "P18124",
+        "P18621",
+        "P22090",
+        "P23396",
+        "P25398",
+        "P26373",
+        "P27635",
+        "P30050",
+        "P32969",
+        "P35268",
+        "P36578",
+        "P39019",
+        "P39023",
+        "P40429",
+        "P42677",
+        "P42766",
+        "P46776",
+        "P46777",
+        "P46778",
+        "P46779",
+        "P46781",
+        "P46782",
+        "P46783",
+        "P47914",
+        "P49207",
+        "P50914",
+        "P60866",
+        "P61247",
+        "P61254",
+        "P61313",
+        "P61353",
+        "P61513",
+        "P61927",
+        "P62081",
+        "P62241",
+        "P62244",
+        "P62249",
+        "P62263",
+        "P62266",
+        "P62269",
+        "P62273",
+        "P62277",
+        "P62280",
+        "P62424",
+        "P62701",
+        "P62750",
+        "P62753",
+        "P62829",
+        "P62841",
+        "P62847",
+        "P62851",
+        "P62854",
+        "P62857",
+        "P62861",
+        "P62888",
+        "P62891",
+        "P62899",
+        "P62906",
+        "P62910",
+        "P62913",
+        "P62917",
+        "P62945",
+        "P62979",
+        "P63173",
+        "P63220",
+        "P83731",
+        "P83881",
+        "P84098",
+        "Q02543",
+        "Q02878",
+        "Q07020",
+        "Q9Y3U8"
+      ],
+      "mechanism_target_names": [
+        "80S Ribosome"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Unknown'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4594287",
+      "name": "ENSIFENTRINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P27815",
+        "Q07343",
+        "Q08493",
+        "Q08499",
+        "Q13370",
+        "Q14432"
+      ],
+      "mechanism_target_names": [
+        "Phosphodiesterase 4",
+        "Phosphodiesterase 3"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P27815, Q07343, Q08493, Q08499, Q13370, Q14432",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1201320",
+      "name": "ESOMEPRAZOLE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P20648",
+        "P51164"
+      ],
+      "mechanism_target_names": [
+        "Potassium-transporting ATPase",
+        "Potassium-transporting ATPase",
+        "Potassium-transporting ATPase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P20648, P51164",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1757",
+      "name": "FOSFOMYCIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "UDP-N-acetylglucosamine 1-carboxyvinyltransferase"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "UDP-N-acetylglucosamine 1-carboxyvinyltransferase (SINGLE PROTEIN, Escherichia coli K-12)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1200983",
+      "name": "GALLIUM NITRATE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P23921",
+        "P31350",
+        "Q7LG56"
+      ],
+      "mechanism_target_names": [
+        "Ribonucleoside-diphosphate reductase RR1",
+        "Hydroxyapatite"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P23921, P31350, Q7LG56",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL6067485",
+      "name": "GENTAMICIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial 70S ribosome"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial 70S ribosome (PROTEIN NUCLEIC-ACID COMPLEX, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL6068548",
+      "name": "GLPG-2737",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL5095031",
+      "name": "IDREVLORIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P37088",
+        "P51168",
+        "P51170"
+      ],
+      "mechanism_target_names": [
+        "Amiloride-sensitive sodium channel, ENaC"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P37088, P51168, P51170",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2109536",
+      "name": "KB-001",
+      "modality": "Unknown",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Low calcium response locus protein V"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Unknown'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2108327",
+      "name": "LANCOVUTIDE",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL456341",
+      "name": "LENABASUM",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL126",
+      "name": "LINEZOLID",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial 70S ribosome"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial 70S ribosome (PROTEIN NUCLEIC-ACID COMPLEX, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL191",
+      "name": "LOSARTAN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P30556"
+      ],
+      "mechanism_target_names": [
+        "Type-1 angiotensin II receptor"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P30556",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1434",
+      "name": "MINOCYCLINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial 70S ribosome"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial 70S ribosome (PROTEIN NUCLEIC-ACID COMPLEX, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4298049",
+      "name": "MS-1819",
+      "modality": "Unknown",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL719",
+      "name": "MUPIROCIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Isoleucine--tRNA ligase",
+        "Isoleucine--tRNA ligase",
+        "Isoleucine--tRNA ligase",
+        "Isoleucine--tRNA ligase"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Isoleucine--tRNA ligase (SINGLE PROTEIN, Staphylococcus aureus); Isoleucine--tRNA ligase (SINGLE PROTEIN, Staphylococcus aureus); Isoleucine--tRNA ligase (SINGLE PROTEIN, Streptococcus pyogenes)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4297479",
+      "name": "NESOLICAFTOR",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1200689",
+      "name": "NITRIC OXIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "O75343",
+        "P33402",
+        "Q02108",
+        "Q02153"
+      ],
+      "mechanism_target_names": [
+        "Soluble guanylate cyclase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: O75343, P33402, Q02108, Q02153",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1201478",
+      "name": "POLYETHYLENE GLYCOL",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        null,
+        null
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "None (None, organism not stated); None (None, organism not stated)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL374478",
+      "name": "RIFAMPIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial DNA-directed RNA polymerase"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial DNA-directed RNA polymerase (PROTEIN COMPLEX, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2107834",
+      "name": "RIOCIGUAT",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "O75343",
+        "P33402",
+        "Q02108",
+        "Q02153"
+      ],
+      "mechanism_target_names": [
+        "Soluble guanylate cyclase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: O75343, P33402, Q02108, Q02153",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1201774",
+      "name": "SAPROPTERIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P00439"
+      ],
+      "mechanism_target_names": [
+        "Phenylalanine-4-hydroxylase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P00439",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL14762",
+      "name": "SELICICLIB",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P06493",
+        "P24941",
+        "P50613",
+        "P50750",
+        "Q00535"
+      ],
+      "mechanism_target_names": [
+        "Cyclin-dependent kinase 2",
+        "Cyclin-dependent kinase 7",
+        "Cyclin-dependent kinase 9",
+        "Cyclin-dependent kinase 1"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P06493, P24941, P50613, P50750, Q00535",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4297635",
+      "name": "SETOGEPRAM",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "O14842",
+        "Q9NQS5"
+      ],
+      "mechanism_target_names": [
+        "Free fatty acid receptor 1",
+        "G-protein coupled receptor 84"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: O14842, Q9NQS5",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL6068525",
+      "name": "SPX-101",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL786",
+      "name": "TAMOXIFEN CITRATE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P03372"
+      ],
+      "mechanism_target_names": [
+        "Estrogen receptor"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P03372",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2108055",
+      "name": "TEFIBAZUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Clumping factor A"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL3545181",
+      "name": "TIOTROPIUM BROMIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P20309"
+      ],
+      "mechanism_target_names": [
+        "Muscarinic acetylcholine receptor M3"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P20309",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL22",
+      "name": "TRIMETHOPRIM",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Dihydrofolate reductase",
+        "Dihydrofolate reductase",
+        "Dihydrofolate reductase"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Dihydrofolate reductase (SINGLE PROTEIN, Bacteria); Dihydrofolate reductase (SINGLE PROTEIN, Bacteria); Dihydrofolate reductase (SINGLE PROTEIN, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL262777",
+      "name": "VANCOMYCIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Peptidoglycan",
+        "Peptidoglycan"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Peptidoglycan (MACROMOLECULE, Bacteria); Peptidoglycan (MACROMOLECULE, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1520",
+      "name": "VARDENAFIL",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "O76074"
+      ],
+      "mechanism_target_names": [
+        "cGMP-specific 3',5'-cyclic phosphodiesterase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: O76074",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4297254",
+      "name": "552-02",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL602",
+      "name": "CYSTEAMINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Cystine",
+        "Cystine"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Cystine (SMALL MOLECULE, Homo sapiens); Cystine (SMALL MOLECULE, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4594297",
+      "name": "DIROCAFTOR",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL53463",
+      "name": "DOXORUBICIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [
+        "P11388"
+      ],
+      "mechanism_target_names": [
+        "DNA topoisomerase 2-alpha",
+        "DNA"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P11388",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4594587",
+      "name": "ELUFORSEN",
+      "modality": "Oligonucleotide",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2110553",
+      "name": "GALLIUM CITRATE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL44",
+      "name": "GENISTEIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2105745",
+      "name": "GLYCEROL PHENYLBUTYRATE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Glutamine"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Glutamine (SMALL MOLECULE, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4594274",
+      "name": "POSENACAFTOR",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1064",
+      "name": "SIMVASTATIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [
+        "P04035"
+      ],
+      "mechanism_target_names": [
+        "3-hydroxy-3-methylglutaryl-coenzyme A reductase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P04035",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL93268",
+      "name": "SODIUM NITRITE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1746",
+      "name": "SODIUM PHENYLBUTYRATE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Glutamine"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Glutamine (SMALL MOLECULE, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL96783",
+      "name": "XYLITOL",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL44354",
+      "name": "CEFTAZIDIME",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial penicillin-binding protein",
+        "Bacterial penicillin-binding protein"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial penicillin-binding protein (PROTEIN FAMILY, Bacteria); Bacterial penicillin-binding protein (PROTEIN FAMILY, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4650476",
+      "name": "COFIRASERSEN",
+      "modality": "Oligonucleotide",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [
+        "ENSG00000111319",
+        "ENSG00000166828",
+        "ENSG00000168447"
+      ],
+      "mechanism_target_names": [
+        "Amiloride-sensitive sodium channel, ENaC mRNA"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Oligonucleotide'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL140",
+      "name": "CURCUMIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4297508",
+      "name": "DORZAGLIATIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [
+        "P35557"
+      ],
+      "mechanism_target_names": [
+        "Hexokinase-4"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P35557",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL691",
+      "name": "ETHINYL ESTRADIOL",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [
+        "P03372"
+      ],
+      "mechanism_target_names": [
+        "Estrogen receptor"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P03372",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL5095180",
+      "name": "FDL169",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL7301",
+      "name": "FENRETINIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1535",
+      "name": "HYDROXYCHLOROQUINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [
+        "Q9NR96",
+        "Q9NYK1"
+      ],
+      "mechanism_target_names": [
+        "Ferriprotoporphyrin IX",
+        "Toll-like receptor 7",
+        "Toll-like receptor 9"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: Q9NR96, Q9NYK1",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL2110660",
+      "name": "IGMESINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL3291398",
+      "name": "LEFAMULIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Bacterial 70S ribosome"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "Bacterial 70S ribosome (PROTEIN NUCLEIC-ACID COMPLEX, Bacteria)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1201716",
+      "name": "MECASERMIN",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [
+        "P08069"
+      ],
+      "mechanism_target_names": [
+        "Insulin-like growth factor 1 receptor"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1738699",
+      "name": "N6022",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [
+        "P11766"
+      ],
+      "mechanism_target_names": [
+        "Alcohol dehydrogenase class-3"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P11766",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL595",
+      "name": "PIOGLITAZONE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [
+        "P37231"
+      ],
+      "mechanism_target_names": [
+        "Peroxisome proliferator-activated receptor gamma"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P37231",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL1353",
+      "name": "SODIUM BICARBONATE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Cystic fibrosis",
+      "slug": "cystic-fibrosis",
+      "subject_accession": "P13569",
+      "chembl_id": "CHEMBL4297166",
+      "name": "TEICOPLANIN",
+      "modality": "Unknown",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "Peptidoglycan"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Unknown'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "DiGeorge/velocardiofacial syndrome Chromosome 22q11.2DS",
+      "slug": "digeorge-velocardiofacial-syndrome-chromosome-22q11-2ds",
+      "subject_accession": "O43435",
+      "chembl_id": "CHEMBL190461",
+      "name": "CANNABIDIOL",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P21554"
+      ],
+      "mechanism_target_names": [
+        "Cannabinoid receptor 1"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P21554",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "DiGeorge/velocardiofacial syndrome Chromosome 22q11.2DS",
+      "slug": "digeorge-velocardiofacial-syndrome-chromosome-22q11-2ds",
+      "subject_accession": "O43435",
+      "chembl_id": "CHEMBL1200862",
+      "name": "METYROSINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P07101"
+      ],
+      "mechanism_target_names": [
+        "Tyrosine 3-monooxygenase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P07101",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "DiGeorge/velocardiofacial syndrome Chromosome 22q11.2DS",
+      "slug": "digeorge-velocardiofacial-syndrome-chromosome-22q11-2ds",
+      "subject_accession": "O43435",
+      "chembl_id": "CHEMBL4297305",
+      "name": "NB-001",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "DiGeorge/velocardiofacial syndrome Chromosome 22q11.2DS",
+      "slug": "digeorge-velocardiofacial-syndrome-chromosome-22q11-2ds",
+      "subject_accession": "O43435",
+      "chembl_id": "CHEMBL160",
+      "name": "CYCLOSPORINE",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [
+        "P62937"
+      ],
+      "mechanism_target_names": [
+        "Peptidyl-prolyl cis-trans isomerase A"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "DIRA (deficiency of the interleukin-1 receptor antagonist)",
+      "slug": "dira",
+      "subject_accession": "P18510",
+      "chembl_id": "CHEMBL1201830",
+      "name": "RILONACEPT",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P01584"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-1 beta"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "DOCK8 deficiency",
+      "slug": "dock8-deficiency",
+      "subject_accession": "Q8NF50",
+      "chembl_id": "CHEMBL1568",
+      "name": "FLUDARABINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "G6PD deficiency class I",
+      "slug": "g6pd-deficiency-class-i",
+      "subject_accession": "P11413",
+      "chembl_id": "CHEMBL4297207",
+      "name": "STANNSOPORFIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "G6PD deficiency class I",
+      "slug": "g6pd-deficiency-class-i",
+      "subject_accession": "P11413",
+      "chembl_id": "CHEMBL506",
+      "name": "PRIMAQUINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        null
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "None (None, organism not stated)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "\u03b3c deficiency (common gamma chain SCID, CD132 deficiency)",
+      "slug": "gamma-c-deficiency",
+      "subject_accession": "P31785",
+      "chembl_id": "CHEMBL820",
+      "name": "BUSULFAN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "\u03b3c deficiency (common gamma chain SCID, CD132 deficiency)",
+      "slug": "gamma-c-deficiency",
+      "subject_accession": "P31785",
+      "chembl_id": "CHEMBL1201716",
+      "name": "MECASERMIN",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [
+        "P08069"
+      ],
+      "mechanism_target_names": [
+        "Insulin-like growth factor 1 receptor"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "\u03b3c deficiency (common gamma chain SCID, CD132 deficiency)",
+      "slug": "gamma-c-deficiency",
+      "subject_accession": "P31785",
+      "chembl_id": "CHEMBL1201821",
+      "name": "PALIFERMIN",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [
+        "P21802"
+      ],
+      "mechanism_target_names": [
+        "Fibroblast growth factor receptor 2"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "GATA2 deficiency",
+      "slug": "gata2-deficiency",
+      "subject_accession": "P23769",
+      "chembl_id": "CHEMBL5095110",
+      "name": "BRIQUILIMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P10721"
+      ],
+      "mechanism_target_names": [
+        "Mast/stem cell growth factor receptor Kit"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "GATA2 deficiency",
+      "slug": "gata2-deficiency",
+      "subject_accession": "P23769",
+      "chembl_id": "CHEMBL820",
+      "name": "BUSULFAN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "GATA2 deficiency",
+      "slug": "gata2-deficiency",
+      "subject_accession": "P23769",
+      "chembl_id": "CHEMBL1200796",
+      "name": "CYCLOPHOSPHAMIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "GATA2 deficiency",
+      "slug": "gata2-deficiency",
+      "subject_accession": "P23769",
+      "chembl_id": "CHEMBL1568",
+      "name": "FLUDARABINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "GATA2 deficiency",
+      "slug": "gata2-deficiency",
+      "subject_accession": "P23769",
+      "chembl_id": "CHEMBL1456",
+      "name": "MYCOPHENOLATE MOFETIL",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P12268",
+        "P20839"
+      ],
+      "mechanism_target_names": [
+        "Inosine-5'-monophosphate dehydrogenase (IMPDH)",
+        "Inosine-5'-monophosphate dehydrogenase (IMPDH)"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P12268, P20839",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "GATA2 deficiency",
+      "slug": "gata2-deficiency",
+      "subject_accession": "P23769",
+      "chembl_id": "CHEMBL3989887",
+      "name": "TACROLIMUS",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P62942"
+      ],
+      "mechanism_target_names": [
+        "Peptidyl-prolyl cis-trans isomerase FKBP1A"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P62942",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "GATA2 deficiency",
+      "slug": "gata2-deficiency",
+      "subject_accession": "P23769",
+      "chembl_id": "CHEMBL269732",
+      "name": "TACROLIMUS ANHYDROUS",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P62942"
+      ],
+      "mechanism_target_names": [
+        "Peptidyl-prolyl cis-trans isomerase FKBP1A"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P62942",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Glycogen storage disease type 1b",
+      "slug": "glycogen-storage-disease-type-1b",
+      "subject_accession": "O43826",
+      "chembl_id": "CHEMBL2107830",
+      "name": "EMPAGLIFLOZIN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P31639"
+      ],
+      "mechanism_target_names": [
+        "Sodium/glucose cotransporter 2"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P31639",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "IPEX, immune dysregulation, polyendocrinopathy, enteropathy X-linked",
+      "slug": "ipex-immune-dysregulation-polyendocrinopathy-enteropathy-x",
+      "subject_accession": "Q9BZS1",
+      "chembl_id": "CHEMBL1201587",
+      "name": "ALEMTUZUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P31358"
+      ],
+      "mechanism_target_names": [
+        "CAMPATH-1 antigen"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "IPEX, immune dysregulation, polyendocrinopathy, enteropathy X-linked",
+      "slug": "ipex-immune-dysregulation-polyendocrinopathy-enteropathy-x",
+      "subject_accession": "Q9BZS1",
+      "chembl_id": "CHEMBL1568",
+      "name": "FLUDARABINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "IPEX, immune dysregulation, polyendocrinopathy, enteropathy X-linked",
+      "slug": "ipex-immune-dysregulation-polyendocrinopathy-enteropathy-x",
+      "subject_accession": "Q9BZS1",
+      "chembl_id": "CHEMBL852",
+      "name": "MELPHALAN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA",
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens); DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "IRF8 deficiency",
+      "slug": "irf8-deficiency-ar",
+      "subject_accession": "Q02556",
+      "chembl_id": "CHEMBL384467",
+      "name": "DEXAMETHASONE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P04150"
+      ],
+      "mechanism_target_names": [
+        "Glucocorticoid receptor"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P04150",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "IRF8 deficiency",
+      "slug": "irf8-deficiency-ar",
+      "subject_accession": "Q02556",
+      "chembl_id": "CHEMBL848",
+      "name": "LENALIDOMIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P62877",
+        "Q13619",
+        "Q16531",
+        "Q96SW2"
+      ],
+      "mechanism_target_names": [
+        "CRL4(CRBN) E3 ubiquitin ligase",
+        "CRL4(CRBN) E3 ubiquitin ligase"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P62877, Q13619, Q16531, Q96SW2",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "IRF8 deficiency",
+      "slug": "irf8-deficiency-ar",
+      "subject_accession": "Q02556",
+      "chembl_id": "CHEMBL1201576",
+      "name": "RITUXIMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P11836"
+      ],
+      "mechanism_target_names": [
+        "B-lymphocyte antigen CD20"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "IRF8 deficiency",
+      "slug": "irf8-deficiency-ar",
+      "subject_accession": "Q02556",
+      "chembl_id": "CHEMBL1200796",
+      "name": "CYCLOPHOSPHAMIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "IRF8 deficiency",
+      "slug": "irf8-deficiency-ar",
+      "subject_accession": "Q02556",
+      "chembl_id": "CHEMBL1568",
+      "name": "FLUDARABINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Leukocyte adhesion deficiency type 1 (LAD1)",
+      "slug": "leukocyte-adhesion-deficiency-type-1",
+      "subject_accession": "P05107",
+      "chembl_id": "CHEMBL1201587",
+      "name": "ALEMTUZUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P31358"
+      ],
+      "mechanism_target_names": [
+        "CAMPATH-1 antigen"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Leukocyte adhesion deficiency type 1 (LAD1)",
+      "slug": "leukocyte-adhesion-deficiency-type-1",
+      "subject_accession": "P05107",
+      "chembl_id": "CHEMBL1568",
+      "name": "FLUDARABINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Leukocyte adhesion deficiency type 1 (LAD1)",
+      "slug": "leukocyte-adhesion-deficiency-type-1",
+      "subject_accession": "P05107",
+      "chembl_id": "CHEMBL1201564",
+      "name": "INTERFERON GAMMA-1B",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P15260",
+        "P38484"
+      ],
+      "mechanism_target_names": [
+        "Interferon gamma receptor"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Leukocyte adhesion deficiency type 1 (LAD1)",
+      "slug": "leukocyte-adhesion-deficiency-type-1",
+      "subject_accession": "P05107",
+      "chembl_id": "CHEMBL852",
+      "name": "MELPHALAN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA",
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens); DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Leukocyte adhesion deficiency type 1 (LAD1)",
+      "slug": "leukocyte-adhesion-deficiency-type-1",
+      "subject_accession": "P05107",
+      "chembl_id": "CHEMBL4802256",
+      "name": "MARNETEGRAGENE AUTOTEMCEL",
+      "modality": "Gene",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Leukocyte adhesion deficiency type 1 (LAD1)",
+      "slug": "leukocyte-adhesion-deficiency-type-1",
+      "subject_accession": "P05107",
+      "chembl_id": "CHEMBL1201835",
+      "name": "USTEKINUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [
+        "P29459",
+        "P29460",
+        "Q9NPF7"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-12",
+        "Interleukin-23"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Leukocyte adhesion deficiency type 2 (LAD2)",
+      "slug": "leukocyte-adhesion-deficiency-type-2",
+      "subject_accession": "Q96A29",
+      "chembl_id": "CHEMBL6067643",
+      "name": "L-FUCOSE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Muckle\u2013Wells syndrome",
+      "slug": "muckle-wells-syndrome",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL1201834",
+      "name": "CANAKINUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [
+        "P01584"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-1 beta"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Muckle\u2013Wells syndrome",
+      "slug": "muckle-wells-syndrome",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL1201830",
+      "name": "RILONACEPT",
+      "modality": "Protein",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [
+        "P01584"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-1 beta"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Muckle\u2013Wells syndrome",
+      "slug": "muckle-wells-syndrome",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL1743026",
+      "name": "GEVOKIZUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [
+        "P01584"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-1 beta"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Neonatal-onset multisystem inflammatory disease (NOMID)/chronic infantile neurological cutaneous and articular syndrome (CINCA)",
+      "slug": "neonatal-onset-multisystem-inflammatory-disease",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL1201570",
+      "name": "ANAKINRA",
+      "modality": "Protein",
+      "clinical_stage": "APPROVAL",
+      "mechanism_target_accessions": [
+        "P14778"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-1 receptor type 1"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Neonatal-onset multisystem inflammatory disease (NOMID)/chronic infantile neurological cutaneous and articular syndrome (CINCA)",
+      "slug": "neonatal-onset-multisystem-inflammatory-disease",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL1201834",
+      "name": "CANAKINUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P01584"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-1 beta"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Neonatal-onset multisystem inflammatory disease (NOMID)/chronic infantile neurological cutaneous and articular syndrome (CINCA)",
+      "slug": "neonatal-onset-multisystem-inflammatory-disease",
+      "subject_accession": "Q96P20",
+      "chembl_id": "CHEMBL1201830",
+      "name": "RILONACEPT",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P01584"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-1 beta"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Nijmegen breakage syndrome",
+      "slug": "nijmegen-breakage-syndrome",
+      "subject_accession": "O60934",
+      "chembl_id": "CHEMBL455186",
+      "name": "TREOSULFAN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Retinal dystrophy, optic nerve edema, splenomegaly, anhidrosis, and headache (ROSAH)",
+      "slug": "retinal-dystrophy-optic-nerve-edema-splenomegaly-anhidrosis",
+      "subject_accession": "Q96QP1",
+      "chembl_id": "CHEMBL1606347",
+      "name": "DF-003",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "TNF receptor\u2013associated periodic syndrome (TRAPS)",
+      "slug": "tnf-receptor-associated-periodic-syndrome",
+      "subject_accession": "P19438",
+      "chembl_id": "CHEMBL1201834",
+      "name": "CANAKINUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_3",
+      "mechanism_target_accessions": [
+        "P01584"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-1 beta"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "VEXAS (vacuoles, E1 enzyme, X-linked, autoinflammatory, somatic) syndrome",
+      "slug": "vexas-syndrome-phenocopy",
+      "subject_accession": "P22314",
+      "chembl_id": "CHEMBL1078178",
+      "name": "MOMELOTINIB",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2_3",
+      "mechanism_target_accessions": [
+        "O60674",
+        "P23458",
+        "Q04771"
+      ],
+      "mechanism_target_names": [
+        "Tyrosine-protein kinase JAK1",
+        "Tyrosine-protein kinase JAK2",
+        "Tyrosine-protein kinase JAK2",
+        "Tyrosine-protein kinase JAK1"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: O60674, P23458, Q04771",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "VEXAS (vacuoles, E1 enzyme, X-linked, autoinflammatory, somatic) syndrome",
+      "slug": "vexas-syndrome-phenocopy",
+      "subject_accession": "P22314",
+      "chembl_id": "CHEMBL820",
+      "name": "BUSULFAN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "VEXAS (vacuoles, E1 enzyme, X-linked, autoinflammatory, somatic) syndrome",
+      "slug": "vexas-syndrome-phenocopy",
+      "subject_accession": "P22314",
+      "chembl_id": "CHEMBL1200796",
+      "name": "CYCLOPHOSPHAMIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "VEXAS (vacuoles, E1 enzyme, X-linked, autoinflammatory, somatic) syndrome",
+      "slug": "vexas-syndrome-phenocopy",
+      "subject_accession": "P22314",
+      "chembl_id": "CHEMBL1568",
+      "name": "FLUDARABINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "VEXAS (vacuoles, E1 enzyme, X-linked, autoinflammatory, somatic) syndrome",
+      "slug": "vexas-syndrome-phenocopy",
+      "subject_accession": "P22314",
+      "chembl_id": "CHEMBL1456",
+      "name": "MYCOPHENOLATE MOFETIL",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P12268",
+        "P20839"
+      ],
+      "mechanism_target_names": [
+        "Inosine-5'-monophosphate dehydrogenase (IMPDH)",
+        "Inosine-5'-monophosphate dehydrogenase (IMPDH)"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P12268, P20839",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "VEXAS (vacuoles, E1 enzyme, X-linked, autoinflammatory, somatic) syndrome",
+      "slug": "vexas-syndrome-phenocopy",
+      "subject_accession": "P22314",
+      "chembl_id": "CHEMBL2035187",
+      "name": "PACRITINIB",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "O60674",
+        "P36888",
+        "P51617",
+        "Q04771"
+      ],
+      "mechanism_target_names": [
+        "Tyrosine-protein kinase JAK2",
+        "Receptor-type tyrosine-protein kinase FLT3",
+        "Tyrosine-protein kinase JAK2",
+        "Receptor-type tyrosine-protein kinase FLT3"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: O60674, P36888, P51617, Q04771",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "VEXAS (vacuoles, E1 enzyme, X-linked, autoinflammatory, somatic) syndrome",
+      "slug": "vexas-syndrome-phenocopy",
+      "subject_accession": "P22314",
+      "chembl_id": "CHEMBL3989887",
+      "name": "TACROLIMUS",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P62942"
+      ],
+      "mechanism_target_names": [
+        "Peptidyl-prolyl cis-trans isomerase FKBP1A"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P62942",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Wiskott\u2013Aldrich syndrome (WAS LOF)",
+      "slug": "wiskott-aldrich-syndrome",
+      "subject_accession": "P42768",
+      "chembl_id": "CHEMBL1201587",
+      "name": "ALEMTUZUMAB",
+      "modality": "Antibody",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P31358"
+      ],
+      "mechanism_target_names": [
+        "CAMPATH-1 antigen"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Antibody'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Wiskott\u2013Aldrich syndrome (WAS LOF)",
+      "slug": "wiskott-aldrich-syndrome",
+      "subject_accession": "P42768",
+      "chembl_id": "CHEMBL1200796",
+      "name": "CYCLOPHOSPHAMIDE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Wiskott\u2013Aldrich syndrome (WAS LOF)",
+      "slug": "wiskott-aldrich-syndrome",
+      "subject_accession": "P42768",
+      "chembl_id": "CHEMBL461101",
+      "name": "ELTROMBOPAG",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P40238"
+      ],
+      "mechanism_target_names": [
+        "Thrombopoietin receptor",
+        "Thrombopoietin receptor"
+      ],
+      "cause": "acts_on_a_human_protein_with_no_bridge_path_to_the_subject",
+      "note": "mechanism targets: P40238",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Wiskott\u2013Aldrich syndrome (WAS LOF)",
+      "slug": "wiskott-aldrich-syndrome",
+      "subject_accession": "P42768",
+      "chembl_id": "CHEMBL1568",
+      "name": "FLUDARABINE",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [],
+      "cause": "no_chembl_mechanism_record_at_all",
+      "note": "",
+      "in_engine_universe": false
+    },
+    {
+      "disease": "Wiskott\u2013Aldrich syndrome (WAS LOF)",
+      "slug": "wiskott-aldrich-syndrome",
+      "subject_accession": "P42768",
+      "chembl_id": "CHEMBL1201832",
+      "name": "ROMIPLOSTIM",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_2",
+      "mechanism_target_accessions": [
+        "P40238"
+      ],
+      "mechanism_target_names": [
+        "Thrombopoietin receptor"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Wiskott\u2013Aldrich syndrome (WAS LOF)",
+      "slug": "wiskott-aldrich-syndrome",
+      "subject_accession": "P42768",
+      "chembl_id": "CHEMBL820",
+      "name": "BUSULFAN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1_2",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Wiskott\u2013Aldrich syndrome (WAS LOF)",
+      "slug": "wiskott-aldrich-syndrome",
+      "subject_accession": "P42768",
+      "chembl_id": "CHEMBL1201438",
+      "name": "ALDESLEUKIN",
+      "modality": "Protein",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [
+        "P01589",
+        "P14784",
+        "P31785"
+      ],
+      "mechanism_target_names": [
+        "Interleukin-2 receptor"
+      ],
+      "cause": "not_a_small_molecule_so_outside_the_engine_modality",
+      "note": "ChEMBL molecule_type 'Protein'",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Wiskott\u2013Aldrich syndrome (WAS LOF)",
+      "slug": "wiskott-aldrich-syndrome",
+      "subject_accession": "P42768",
+      "chembl_id": "CHEMBL852",
+      "name": "MELPHALAN",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA",
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens); DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    },
+    {
+      "disease": "Wiskott\u2013Aldrich syndrome (WAS LOF)",
+      "slug": "wiskott-aldrich-syndrome",
+      "subject_accession": "P42768",
+      "chembl_id": "CHEMBL671",
+      "name": "THIOTEPA",
+      "modality": "Small molecule",
+      "clinical_stage": "PHASE_1",
+      "mechanism_target_accessions": [],
+      "mechanism_target_names": [
+        "DNA"
+      ],
+      "cause": "mechanism_target_resolves_to_no_human_protein",
+      "note": "DNA (NUCLEIC-ACID, Homo sapiens)",
+      "in_engine_universe": true
+    }
+  ]
+}

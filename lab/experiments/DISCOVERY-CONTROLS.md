@@ -1,6 +1,6 @@
 # Discovery controls
 
-Run 2026-10-04T02:41:08Z against the live API. 3 of 3 passed.
+Run 2026-10-04T03:23:36Z against the live API. 4 of 4 passed.
 
 These three calls are the product's own evidence that the direction-of-effect filter works: one
 recovery with the answer held out, one refusal, one upstream target. Every expected molecule is
@@ -13,16 +13,17 @@ that cache and how long the engine took to build the response it served.
 
 | Control | Result | Candidates | Ruled out | Sources | Wall time |
 | --- | --- | --- | --- | --- | --- |
-| Held-out positive: a molecule studied for APDS, recovered without the edge that names it | PASS | 24 | 0 | 7/8 | 536.8 ms |
-| Negative: no molecule that lowers BTK is offered for BTK loss of function | PASS | 4 | 33 | 8/8 | 207.4 ms |
-| Upstream positive: a JAK inhibitor reached through the pathway, not through STAT1 | PASS | 23 | 4 | 6/6 | 69.3 ms |
+| Held-out positive: a molecule studied for APDS, recovered without the edge that names it | PASS | 27 | 0 | 7/8 | 5.0 ms |
+| Negative: no molecule that lowers BTK is offered for BTK loss of function | PASS | 4 | 34 | 8/8 | 2.9 ms |
+| Upstream positive: a JAK inhibitor reached through the pathway, not through STAT1 | PASS | 23 | 4 | 6/6 | 3.2 ms |
+| Safety: a rejection may not rest on an action_type the measurements contradict | PASS | 17 | 0 | 8/8 | 2.6 ms |
 
 ## Held-out positive: a molecule studied for APDS, recovered without the edge that names it
 
 - Subject: Activated p110δ syndrome (APDS), PIK3CD, gain of function
 - Request: `/discovery/candidates?disease=activated-p110-delta-syndrome-pik3cd&exclude_direct=true`
 - Expected: Leniolisib among the top 10 candidates, direction 'matches', no withheld edge in the chain
-- Result: **PASS** — Leniolisib (CHEMBL3643413, MWKYMZXCGYXLPL-ZDUSSCGKSA-N) came back at rank 4 of 24 through a same_target bridge with the direction check 'matches', while 18 direct disease-to-molecule edges were withheld, 1 of them naming this molecule.
+- Result: **PASS** — Leniolisib (CHEMBL3643413, MWKYMZXCGYXLPL-ZDUSSCGKSA-N) came back at rank 4 of 27 through a same_target bridge with the direction check 'matches', while 18 direct disease-to-molecule edges were withheld, 1 of them naming this molecule.
 
 Chain for Leniolisib (CHEMBL3643413):
 
@@ -37,18 +38,18 @@ What was measured:
 - Bridge same_target, 3 steps, 3 cited records, from_disease=None.
 - The cited mechanism record is confirmed independently: GET /proteins/O00329/compounds returns mechanism 8305 (INHIBITOR) for the same molecule.
 - The withheld edge is a real one: in full mode the same molecule's chain cites drug_indication:147079 ('studied or used for' the disease), and that step is gone from the held-out chain while the molecule still reaches rank 4.
-- Full mode withholds 1 edge(s) against 18 in held-out mode, and ranks it 4 of 24 (199.3 ms).
-- gene=PIK3CD&exclude_direct=true recovers it at rank 4 of 24 (192.0 ms).
-- Bridges that fired: same_target (12 ranked, 0 refused), interaction_partner (9 ranked, 0 refused). pathway_node is empty: Reactome records 27 reactions for this protein, but none of them names a modification of it, so no direction can be read. structural_analogue is partial: No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment. mechanism_class is empty: ChEMBL records no molecule with an action on the proteins of those diseases.
+- Full mode withholds 1 edge(s) against 18 in held-out mode, and ranks it 4 of 27 (4.1 ms).
+- gene=PIK3CD&exclude_direct=true recovers it at rank 4 of 27 (3.6 ms).
+- Bridges that fired: same_target (12 ranked, 0 refused), interaction_partner (9 ranked, 0 refused), structural_analogue (6 ranked, 0 refused). pathway_node is empty: Reactome records 27 reactions for this protein, but none of them names a modification of it, so no direction can be read. mechanism_class is empty: ChEMBL records no molecule with an action on the proteins of those diseases.
 - Sources that did not answer ok: open_targets: empty.
-- Server-side elapsed 531.4 ms, from_cache=False; wall time 536.8 ms.
+- Server-side elapsed 3370.7 ms, from_cache=True; wall time 5.0 ms.
 
 ## Negative: no molecule that lowers BTK is offered for BTK loss of function
 
 - Subject: BTK deficiency, X-linked agammaglobulinemia, loss of function
 - Request: `/discovery/candidates?disease=btk-deficiency-x-linked-agammaglobulinemia`
 - Expected: Every BTK inhibitor absent from candidates and present in ruled_out with verdict 'opposes'
-- Result: **PASS** — None of the 20 molecules ChEMBL records as lowering BTK is offered as a candidate. Ibrutinib (CHEMBL1873475) sits in ruled_out with verdict 'opposes' and a plain reason, and so do 20 of those 20 molecules in total, within 33 ruled-out rows.
+- Result: **PASS** — None of the 20 molecules ChEMBL records as lowering BTK is offered as a candidate. Ibrutinib (CHEMBL1873475) sits in ruled_out with verdict 'opposes' and a plain reason, and so do 20 of those 20 molecules in total, within 34 ruled-out rows.
 
 Chain for Ibrutinib (CHEMBL1873475):
 
@@ -63,8 +64,8 @@ What was measured:
 - GET /proteins/Q06187/compounds holds 24 ChEMBL mechanism records against BTK, 24 of which lower it, covering 20 distinct molecules. Those 20 molecules, resolved to ChEMBL ids and InChIKeys, are the set this control checks; no name is written into the runner.
 - Ibrutinib resolved from ChEMBL's own records to CHEMBL1873475 / XYFPWWZEPKGCCK-GOSISDBHSA-N, action INHIBITOR, confirmed back through GET /compounds/XYFPWWZEPKGCCK-GOSISDBHSA-N as IBRUTINIB.
 - Of those 20 molecules, 20 appear in ruled_out and 20 of them carry verdict 'opposes'. 0 are in neither list, so the user never sees them refused: none.
-- Bridges that fired: same_target (0 ranked, 20 refused), pathway_node (1 ranked, 13 refused), interaction_partner (3 ranked, 0 refused). structural_analogue is empty: No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment. mechanism_class is empty: ChEMBL records no molecule with an action on the proteins of those diseases.
-- Server-side elapsed 204.4 ms, from_cache=False; wall time 207.4 ms.
+- Bridges that fired: same_target (0 ranked, 20 refused), pathway_node (1 ranked, 13 refused), interaction_partner (3 ranked, 0 refused), structural_analogue (0 ranked, 1 refused). mechanism_class is empty: ChEMBL records no molecule with an action on the proteins of those diseases.
+- Server-side elapsed 1598.2 ms, from_cache=True; wall time 2.9 ms.
 
 ## Upstream positive: a JAK inhibitor reached through the pathway, not through STAT1
 
@@ -86,21 +87,44 @@ What was measured:
 - 12 candidate rows aim at a JAK-family protein whose accession this runner resolved itself: [(1, 'Abrocitinib', 'JAK1'), (2, 'Baricitinib', 'JAK1'), (3, 'Baricitinib', 'JAK2'), (4, 'Cravacitinib', 'TYK2'), (5, 'Fedratinib', 'JAK2'), (6, 'Filgotinib', 'JAK1'), (7, 'Filgotinib', 'JAK2'), (8, 'Filgotinib', 'TYK2'), (9, 'Momelotinib', 'JAK1'), (10, 'Momelotinib', 'JAK2'), (11, 'Ruxolitinib', 'TYK2'), (12, 'Upadacitinib', 'TYK2')]
 - Resolved but absent from the candidate list: ['tofacitinib']. The control needs only one, but the per-bridge caps mean a JAK molecule can be cut.
 - Candidates aimed at STAT1 itself: none.
-- Bridges that fired: pathway_node (15 ranked, 3 refused), interaction_partner (6 ranked, 0 refused), mechanism_class (5 ranked, 1 refused). same_target is empty: ChEMBL records no molecule with an action on this protein. structural_analogue is empty: No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment.
-- Server-side elapsed 66.6 ms, from_cache=False; wall time 69.3 ms.
+- Bridges that fired: pathway_node (15 ranked, 3 refused), interaction_partner (6 ranked, 0 refused), mechanism_class (5 ranked, 1 refused). same_target is empty: ChEMBL records no molecule with an action on this protein. structural_analogue is empty: No further molecule was recorded against the proteins that share this one's chemistry.
+- Server-side elapsed 1386.3 ms, from_cache=True; wall time 3.2 ms.
+
+## Safety: a rejection may not rest on an action_type the measurements contradict
+
+- Subject: WHIM syndrome, CXCR4, gain of function
+- Request: `/discovery/candidates?disease=whim-syndrome&exclude_direct=true`
+- Expected: Plerixafor absent from ruled_out, and the filter still rejecting elsewhere
+- Result: **PASS** — Plerixafor (CHEMBL18442) is not in ruled_out for WHIM syndrome; its PARTIAL AGONIST record is contradicted by its measured activities against P61073, so the direction reads 'unknown' instead of 'opposes' and it is offered at rank 8.
+
+Chain for Plerixafor (CHEMBL18442):
+
+1. CXCR4 encodes UniProt P61073, C-X-C chemokine receptor type 4. — uniprot P61073
+1. ChEMBL records Plerixafor as a partial agonist of C-X-C chemokine receptor type 4, described as "C-X-C chemokine receptor type 4 partial agonist". — chembl mechanism:923
+1. ChEMBL holds 4 measured activities of Plerixafor against C-X-C chemokine receptor type 4, median pChEMBL 7.83. — chembl activity:13847094
+
+What was measured:
+
+- Plerixafor resolved from ChEMBL's own records against P61073 to CHEMBL18442 / YIQPUIGJQJDJOS-UHFFFAOYSA-N, action_type 'PARTIAL AGONIST', confirmed back through GET /compounds/YIQPUIGJQJDJOS-UHFFFAOYSA-N as PLERIXAFOR. The action_type is the field that used to rule it out.
+- GET /proteins/P61073/compounds holds 4 measured activities of plerixafor against P61073, of types {'IC50': 4}. These are the records that contradict the PARTIAL AGONIST field.
+- Plerixafor comes back as candidate rank 8 of 17 with direction verdict 'unknown' and corroboration ['ChEMBL holds 4 measured activities of this molecule against this protein (IC50), which lowers it'].
+- The filter still rejected 0 molecule(s) for this subject, so requiring that a rejection not be contradicted has not switched the filter off.
+- Bridges that fired: same_target (8 ranked, 0 refused), interaction_partner (6 ranked, 0 refused), mechanism_class (3 ranked, 0 refused). pathway_node is empty: Reactome records 15 reactions for this protein, but none of them names a modification of it, so no direction can be read. structural_analogue is empty: No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment.
+- Server-reported elapsed 436.5 ms, from_cache=True; wall time 2.6 ms.
 
 ## What a pass here does not prove
 
-- Three subjects are three subjects. Each control shows the rule behaving correctly once, on one disease, against today's records. It is not a measure of how often the engine is right.
+- Four subjects are four subjects. Each control shows the rule behaving correctly once, on one disease, against today's records. It is not a measure of how often the engine is right.
+- Control 4 is a regression test for an error the accuracy experiment found in the engine, not a demonstration that the engine was right. It passes because the engine was changed.
 - The engine's ranking is checked for position, not for quality. Nothing here tests whether a higher-ranked molecule is a better hypothesis than a lower-ranked one.
 - positive_held_out: the pathway_node bridge contributed nothing (empty) — Reactome records 27 reactions for this protein, but none of them names a modification of it, so no direction can be read.
-- positive_held_out: the structural_analogue bridge ran partial and still produced 3 ranked row(s) — No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment.
 - positive_held_out: the mechanism_class bridge contributed nothing (empty) — ChEMBL records no molecule with an action on the proteins of those diseases.
 - positive_held_out: Open Targets Platform answered 'empty', so whatever it holds did not reach this result.
-- negative_direction_filter: the structural_analogue bridge contributed nothing (empty) — No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment.
 - negative_direction_filter: the mechanism_class bridge contributed nothing (empty) — ChEMBL records no molecule with an action on the proteins of those diseases.
 - positive_upstream_node: the same_target bridge contributed nothing (empty) — ChEMBL records no molecule with an action on this protein.
-- positive_upstream_node: the structural_analogue bridge contributed nothing (empty) — No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment.
+- positive_upstream_node: the structural_analogue bridge contributed nothing (empty) — No further molecule was recorded against the proteins that share this one's chemistry.
+- safety_contradicted_action_type: the pathway_node bridge contributed nothing (empty) — Reactome records 15 reactions for this protein, but none of them names a modification of it, so no direction can be read.
+- safety_contradicted_action_type: the structural_analogue bridge contributed nothing (empty) — No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment.
 
 ## How to re-run
 

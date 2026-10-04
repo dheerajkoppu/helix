@@ -1,6 +1,6 @@
 {
-  "run_at": "2026-10-04T02:53:25Z",
-  "wall_seconds": 8.5,
+  "run_at": "2026-10-04T03:21:54Z",
+  "wall_seconds": 8.0,
   "question": "On diseases where some molecule is really used or really being tried, does the discovery engine find that molecule when the record naming it is withheld, and does it ever rule one out?",
   "conditions": {
     "base_url": "http://localhost:8000",
@@ -9,7 +9,7 @@
     "catalog_genes": 511,
     "gene_treatment_calls": 511,
     "api_requests": 1342,
-    "api_wall_ms": 8468.1,
+    "api_wall_ms": 7950.3,
     "api_failures": 3,
     "deterministic": true,
     "sampling": "none - every catalog disease was asked for",
@@ -35,36 +35,36 @@
     "in_engine_universe": {
       "n_pairs": 173,
       "definition": "pairs whose molecule has at least one ChEMBL mechanism record, the only molecules the engine ever considers",
-      "recovered": 11,
-      "recall_rate": 0.0636,
-      "falsely_rejected": 2,
-      "false_rejection_rate": 0.0116,
+      "recovered": 12,
+      "recall_rate": 0.0694,
+      "falsely_rejected": 1,
+      "false_rejection_rate": 0.0058,
       "missed": 160
     },
     "n_pairs": 226,
     "n_diseases_evaluated": 32,
-    "n_diseases_with_a_hit": 2,
-    "n_diseases_with_a_false_rejection": 2,
+    "n_diseases_with_a_hit": 3,
+    "n_diseases_with_a_false_rejection": 1,
     "recall_pairs": {
-      "recovered": 11,
-      "rate": 0.0487,
-      "top_10": 10,
-      "top_10_rate": 0.0442,
-      "top_25": 11,
-      "top_25_rate": 0.0487,
-      "median_rank": 5,
+      "recovered": 12,
+      "rate": 0.0531,
+      "top_10": 11,
+      "top_10_rate": 0.0487,
+      "top_25": 12,
+      "top_25_rate": 0.0531,
+      "median_rank": 5.5,
       "rank_range": [
         1,
         12
       ]
     },
     "recall_diseases": {
-      "rate": 0.0625
+      "rate": 0.0938
     },
     "false_rejection": {
-      "pairs": 2,
-      "rate": 0.0088,
-      "diseases": 2,
+      "pairs": 1,
+      "rate": 0.0044,
+      "diseases": 1,
       "cases": [
         {
           "disease": "AD-HIES STAT3 deficiency (Job syndrome)",
@@ -84,27 +84,6 @@
             "INHIBITOR"
           ],
           "direction_needed": "more_activity"
-        },
-        {
-          "disease": "WHIM (warts, hypogammaglobulinemia, infections, myelokathexis) syndrome",
-          "slug": "whim-syndrome",
-          "mechanism": "gain_of_function / increased_activity",
-          "mechanism_confidence": "stated_in_the_catalog",
-          "molecule": "PLERIXAFOR",
-          "chembl_id": "CHEMBL18442",
-          "clinical_stage": "PHASE_1_2",
-          "modality": "Small molecule",
-          "ruled_out_on": "CXCR4",
-          "bridge": "same_target",
-          "reason_code": "opposes_required_action",
-          "reason": "WHIM (warts, hypogammaglobulinemia, infections, myelokathexis) syndrome needs CXCR4 to do less. ChEMBL records this molecule as a partial agonist of C-X-C chemokine receptor type 4, which raises that protein. Because this is the protein the disease's gene encodes, that raises what CXCR4 does. That is the opposite of what this mechanism needs, so it is ruled out.",
-          "chembl_action_types_on_subject_protein": [
-            "PARTIAL AGONIST"
-          ],
-          "chembl_action_types_on_the_protein_it_was_ruled_out_on": [
-            "PARTIAL AGONIST"
-          ],
-          "direction_needed": "less_activity"
         }
       ]
     },
@@ -136,11 +115,11 @@
       "disagrees": 1
     },
     "bridge_mix": {
-      "same_target": 10,
+      "same_target": 11,
       "interaction_partner": 1
     },
     "direction_check_mix": {
-      "unknown": 11
+      "unknown": 12
     },
     "mechanism_confidence_mix": {
       "named_in_the_disease_label": 17,
@@ -168,7 +147,8 @@
     },
     "diseases_contributing_hits": {
       "Cystic fibrosis": 10,
-      "CD40 ligand (CD154) deficiency": 1
+      "CD40 ligand (CD154) deficiency": 1,
+      "WHIM (warts, hypogammaglobulinemia, infections, myelokathexis) syndrome": 1
     }
   },
   "diseases": [
@@ -196,7 +176,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 65.4,
+      "server_elapsed_ms": 1296.5,
       "pairs": [
         {
           "chembl_id": "CHEMBL1790041",
@@ -301,7 +281,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 31.8,
+      "server_elapsed_ms": 464.8,
       "pairs": [
         {
           "chembl_id": "CHEMBL2105759",
@@ -354,7 +334,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 6.7,
+      "server_elapsed_ms": 1208.7,
       "pairs": [
         {
           "chembl_id": "CHEMBL4298201",
@@ -432,7 +412,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 9.1,
+      "server_elapsed_ms": 520.7,
       "pairs": [
         {
           "chembl_id": "CHEMBL1789941",
@@ -485,7 +465,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 23.0,
+      "server_elapsed_ms": 92.8,
       "pairs": [
         {
           "chembl_id": "CHEMBL2105759",
@@ -538,7 +518,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 2449.2,
+      "server_elapsed_ms": 75.3,
       "pairs": [
         {
           "chembl_id": "CHEMBL2021430",
@@ -672,7 +652,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 975.2,
+      "server_elapsed_ms": 96.0,
       "pairs": [
         {
           "chembl_id": "CHEMBL3643413",
@@ -825,7 +805,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 939.7,
+      "server_elapsed_ms": 411.6,
       "pairs": [
         {
           "chembl_id": "CHEMBL3833370",
@@ -870,17 +850,17 @@
       "mechanism_confidence": "named_in_the_disease_label",
       "direction_needed": "more_activity",
       "candidate_count": 4,
-      "ruled_out_count": 33,
+      "ruled_out_count": 34,
       "withheld_edge_count": 2,
       "bridges": {
         "same_target": "ok",
         "pathway_node": "ok",
         "interaction_partner": "ok",
-        "structural_analogue": "empty",
+        "structural_analogue": "ok",
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 524.2,
+      "server_elapsed_ms": 586.0,
       "pairs": [
         {
           "chembl_id": "CHEMBL1201599",
@@ -922,18 +902,18 @@
       "mechanism_direction": "decreased_activity",
       "mechanism_confidence": "named_in_the_disease_label",
       "direction_needed": "more_activity",
-      "candidate_count": 3,
-      "ruled_out_count": 6,
+      "candidate_count": 4,
+      "ruled_out_count": 7,
       "withheld_edge_count": 7,
       "bridges": {
         "same_target": "ok",
         "pathway_node": "empty",
         "interaction_partner": "ok",
-        "structural_analogue": "empty",
+        "structural_analogue": "ok",
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 7.7,
+      "server_elapsed_ms": 1343.9,
       "pairs": [
         {
           "chembl_id": "CHEMBL1201587",
@@ -1113,7 +1093,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 877.1,
+      "server_elapsed_ms": 521.1,
       "pairs": [
         {
           "chembl_id": "CHEMBL2108675",
@@ -1301,7 +1281,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 16754.8,
+      "server_elapsed_ms": 543.5,
       "pairs": [
         {
           "chembl_id": "CHEMBL1201834",
@@ -1499,18 +1479,18 @@
       "mechanism_direction": "unknown",
       "mechanism_confidence": "unknown",
       "direction_needed": null,
-      "candidate_count": 12,
+      "candidate_count": 13,
       "ruled_out_count": 0,
       "withheld_edge_count": 161,
       "bridges": {
         "same_target": "ok",
         "pathway_node": "empty",
         "interaction_partner": "empty",
-        "structural_analogue": "empty",
+        "structural_analogue": "ok",
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 64.4,
+      "server_elapsed_ms": 2307.4,
       "pairs": [
         {
           "chembl_id": "CHEMBL600",
@@ -4993,7 +4973,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 932.4,
+      "server_elapsed_ms": 415.1,
       "pairs": [
         {
           "chembl_id": "CHEMBL190461",
@@ -5125,7 +5105,7 @@
         "mechanism_class": "ok"
       },
       "from_cache": true,
-      "server_elapsed_ms": 988.3,
+      "server_elapsed_ms": 315.3,
       "pairs": [
         {
           "chembl_id": "CHEMBL1201830",
@@ -5178,7 +5158,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 897.6,
+      "server_elapsed_ms": 610.3,
       "pairs": [
         {
           "chembl_id": "CHEMBL1568",
@@ -5230,7 +5210,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 794.0,
+      "server_elapsed_ms": 350.8,
       "pairs": [
         {
           "chembl_id": "CHEMBL4297207",
@@ -5297,18 +5277,18 @@
       "mechanism_direction": "decreased_activity",
       "mechanism_confidence": "named_in_the_disease_label",
       "direction_needed": "more_activity",
-      "candidate_count": 19,
+      "candidate_count": 20,
       "ruled_out_count": 40,
       "withheld_edge_count": 9,
       "bridges": {
         "same_target": "ok",
         "pathway_node": "ok",
         "interaction_partner": "ok",
-        "structural_analogue": "partial",
+        "structural_analogue": "ok",
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 520.3,
+      "server_elapsed_ms": 2087.8,
       "pairs": [
         {
           "chembl_id": "CHEMBL820",
@@ -5410,7 +5390,7 @@
         "mechanism_class": "ok"
       },
       "from_cache": true,
-      "server_elapsed_ms": 1608.0,
+      "server_elapsed_ms": 332.8,
       "pairs": [
         {
           "chembl_id": "CHEMBL5095110",
@@ -5613,7 +5593,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 875.2,
+      "server_elapsed_ms": 311.7,
       "pairs": [
         {
           "chembl_id": "CHEMBL2107830",
@@ -5666,7 +5646,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 11.2,
+      "server_elapsed_ms": 742.4,
       "pairs": [
         {
           "chembl_id": "CHEMBL1201587",
@@ -5769,7 +5749,7 @@
         "mechanism_class": "ok"
       },
       "from_cache": true,
-      "server_elapsed_ms": 757.4,
+      "server_elapsed_ms": 358.1,
       "pairs": [
         {
           "chembl_id": "CHEMBL384467",
@@ -5922,7 +5902,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 2884.5,
+      "server_elapsed_ms": 535.6,
       "pairs": [
         {
           "chembl_id": "CHEMBL1201587",
@@ -6100,7 +6080,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 922.1,
+      "server_elapsed_ms": 326.9,
       "pairs": [
         {
           "chembl_id": "CHEMBL6067643",
@@ -6153,7 +6133,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 11740.3,
+      "server_elapsed_ms": 26.3,
       "pairs": [
         {
           "chembl_id": "CHEMBL1201834",
@@ -6260,7 +6240,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 19.1,
+      "server_elapsed_ms": 17.9,
       "pairs": [
         {
           "chembl_id": "CHEMBL1201570",
@@ -6367,7 +6347,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 1145.6,
+      "server_elapsed_ms": 526.3,
       "pairs": [
         {
           "chembl_id": "CHEMBL455186",
@@ -6422,7 +6402,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 971.1,
+      "server_elapsed_ms": 405.8,
       "pairs": [
         {
           "chembl_id": "CHEMBL1606347",
@@ -6475,7 +6455,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 6024.7,
+      "server_elapsed_ms": 371.5,
       "pairs": [
         {
           "chembl_id": "CHEMBL1201834",
@@ -6528,7 +6508,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 1068.5,
+      "server_elapsed_ms": 134.7,
       "pairs": [
         {
           "chembl_id": "CHEMBL1078178",
@@ -6720,9 +6700,9 @@
       "mechanism_direction": "increased_activity",
       "mechanism_confidence": "stated_in_the_catalog",
       "direction_needed": "less_activity",
-      "candidate_count": 16,
-      "ruled_out_count": 1,
-      "withheld_edge_count": 8,
+      "candidate_count": 17,
+      "ruled_out_count": 0,
+      "withheld_edge_count": 9,
       "bridges": {
         "same_target": "ok",
         "pathway_node": "empty",
@@ -6731,7 +6711,7 @@
         "mechanism_class": "ok"
       },
       "from_cache": true,
-      "server_elapsed_ms": 18184.1,
+      "server_elapsed_ms": 436.5,
       "pairs": [
         {
           "chembl_id": "CHEMBL18442",
@@ -6753,14 +6733,14 @@
           ],
           "direction_needed": "less_activity",
           "direction_agreement": "disagrees",
-          "outcome": "falsely_rejected",
-          "rank": null,
-          "bridge": null,
-          "direction_check": null,
-          "ruled_out_reason_code": "opposes_required_action",
-          "ruled_out_reason": "WHIM (warts, hypogammaglobulinemia, infections, myelokathexis) syndrome needs CXCR4 to do less. ChEMBL records this molecule as a partial agonist of C-X-C chemokine receptor type 4, which raises that protein. Because this is the protein the disease's gene encodes, that raises what CXCR4 does. That is the opposite of what this mechanism needs, so it is ruled out.",
-          "ruled_out_bridge": "same_target",
-          "ruled_out_target": "CXCR4"
+          "outcome": "recovered",
+          "rank": 8,
+          "bridge": "same_target",
+          "direction_check": "unknown",
+          "ruled_out_reason_code": null,
+          "ruled_out_reason": null,
+          "ruled_out_bridge": null,
+          "ruled_out_target": null
         }
       ]
     },
@@ -6788,7 +6768,7 @@
         "mechanism_class": "empty"
       },
       "from_cache": true,
-      "server_elapsed_ms": 13.0,
+      "server_elapsed_ms": 1086.3,
       "pairs": [
         {
           "chembl_id": "CHEMBL1201587",
@@ -9922,6 +9902,10 @@
     }
   ],
   "threats_to_validity": [
+    "The cause classification rests on ChEMBL mechanism records. A drug whose real target is known to pharmacology but unrecorded in ChEMBL is classified by what ChEMBL holds, not by what is true, so the 'no path to the subject protein' bucket is an upper bound on how legitimately silent the engine is.",
+    "The no-path bucket is read as 'the drug is aimed elsewhere' from the recurring targets its own records name. Two members of it are not symptom drugs and are real engine gaps: ataluren, whose ChEMBL target is the 80S ribosome because it is a nonsense-readthrough agent that no protein-to-protein bridge can reach, and amiloride and idrevloride, which act on ENaC, the channel that physiologically counterbalances CFTR. ENaC is not a curated IntAct or STRING physical partner of CFTR, so the interaction bridge cannot see a relationship that is functional rather than physical.",
+    "The scope rule was fixed before the stratified number was computed, but it was written by the same person who then measured it. It reads only ChEMBL molecule_type and mechanism target organism, both source fields, and is reproducible from `classify_discovery_misses.py` without reference to any engine output.",
+    "Bridge-reachability was considered as a scope rule and rejected as circular: it would have put the denominator at about 12 pairs and produced a recall near 90% that measured nothing but the definition. The in-scope figure here is deliberately the harsher of the two.",
     "Ground truth comes from Open Targets only. ChEMBL drug_indication is retrievable by molecule in this deployment, not by disease, so it corroborates pairs rather than creating them; a molecule ChEMBL records for a disease that Open Targets does not is absent from the ground truth entirely.",
     "Source B is target-anchored: it only finds a known drug that acts on the disease gene's own protein. That structurally favours the same_target bridge and cannot test whether the pathway or structural bridges recover drugs they alone could reach. Source A is disease-anchored and does not have this bias, but returns far fewer rows.",
     "Indication matching is an exact MONDO or ORPHA identifier match. ChEMBL and Open Targets often file a rare disease under a parent term (leniolisib sits under 'inborn error of immunity'), and every such pair is missed by this ground truth, so the evaluable set is a lower bound on what exists.",

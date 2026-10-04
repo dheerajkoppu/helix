@@ -775,6 +775,173 @@ def control_three(api: Api) -> dict[str, Any]:
     }
 
 
+def control_four(api: Api) -> dict[str, Any]:
+    """SAFETY REGRESSION. A rejection may not rest on an action_type the measurements contradict.
+
+    The accuracy experiment found the engine ruling out plerixafor for WHIM syndrome. WHIM is a
+    CXCR4 gain of function and blocking CXCR4 is plerixafor's whole pharmacology, but ChEMBL files
+    its one mechanism record on P61073 with action_type PARTIAL AGONIST. The filter read that single
+    field and refused the one drug the disease is actually treated with.
+
+    The assertion is general: for this disease and this molecule, resolved by identifier, the
+    molecule must not sit in ruled_out. Nothing about plerixafor is written into the engine; what
+    the engine gained is a rule that a contradicted action_type cannot carry a rejection, and this
+    control is the thing that notices if that rule is ever removed.
+    """
+    failures: list[str] = []
+    notes: list[str] = []
+
+    disease = "whim-syndrome"
+    request = f"/discovery/candidates?disease={disease}&exclude_direct=true"
+    response, wall_ms, status = api.get("/discovery/candidates", disease=disease, exclude_direct="true")
+    if status != 200:
+        return {
+            "id": "safety_contradicted_action_type",
+            "kind": "negative",
+            "title": "Safety: a rejection may not rest on an action_type the measurements contradict",
+            "subject": "WHIM syndrome, CXCR4, gain of function",
+            "request": request,
+            "expected": "Plerixafor absent from ruled_out",
+            "passed": False,
+            "detail": f"The endpoint answered {status}: {json.dumps(response)[:300]}",
+            "elapsed_ms": wall_ms,
+            "notes": notes,
+        }
+
+    accession = response["subject"]["accession"]
+    mechanism = response["subject"]["mechanism"]
+    if mechanism.get("class") != "gain_of_function":
+        failures.append(
+            f"The subject's mechanism reads {mechanism.get('class')!r}; the control is only meaningful for "
+            "gain of function, where a raising action_type is what triggers a rejection."
+        )
+
+    # Plerixafor is resolved through the API and matched on identifiers, never on the name string.
+    subject_molecules = molecules_acting_on(api, accession)
+    plerixafor = find_by_chembl_name(subject_molecules, "plerixafor")
+    if plerixafor is None:
+        failures.append(
+            f"Plerixafor is not among the {len(subject_molecules)} molecules ChEMBL records against "
+            f"{accession}, so the control cannot be evaluated."
+        )
+        plerixafor_keys: set[str] = set()
+    else:
+        plerixafor_keys = molecule_keys(plerixafor)
+        confirm = resolve_compound(api, str(plerixafor["inchikey"]))
+        notes.append(
+            f"Plerixafor resolved from ChEMBL's own records against {accession} to "
+            f"{plerixafor['chembl_id']} / {plerixafor['inchikey']}, action_type "
+            f"{plerixafor['action_type']!r}, confirmed back through "
+            f"GET /compounds/{plerixafor['inchikey']} as {confirm['name']}. The action_type is the field "
+            "that used to rule it out."
+        )
+
+    # The contradicting record, read from the API rather than asserted here.
+    measured, _, status_measured = api.get(f"/proteins/{accession}/compounds")
+    if status_measured == 200:
+        row = next(
+            (
+                compound
+                for compound in measured.get("compounds") or []
+                if {str(compound.get("chembl_id") or ""), str(compound.get("inchikey") or "")}
+                & plerixafor_keys
+            ),
+            None,
+        )
+        summary = (row or {}).get("measured_affinity") or {}
+        kinds = summary.get("standard_types") or {}
+        if kinds:
+            notes.append(
+                f"GET /proteins/{accession}/compounds holds {summary.get('activity_count')} measured "
+                f"activities of plerixafor against {accession}, of types {kinds}. These are the records "
+                "that contradict the PARTIAL AGONIST field."
+            )
+        else:
+            notes.append(
+                f"No measured activity of plerixafor against {accession} was returned by "
+                f"GET /proteins/{accession}/compounds in this run, so the contradiction the engine reads "
+                "may be absent today."
+            )
+
+    candidates = response.get("candidates") or []
+    ruled_out = response.get("ruled_out") or []
+    answered, total_sources, other_states = source_counts(response)
+
+    rejected = next((row for row in ruled_out if molecule_keys(row.get("molecule")) & plerixafor_keys), None)
+    if rejected is not None:
+        failures.append(
+            "Plerixafor is in ruled_out for WHIM syndrome with reason "
+            f"{(rejected.get('reason') or '')[:160]!r}. A molecule whose measured activities contradict its "
+            "action_type must not be rejected."
+        )
+
+    hit = next((row for row in candidates if molecule_keys(row.get("molecule")) & plerixafor_keys), None)
+    rank = hit.get("rank") if hit else None
+    if hit is not None:
+        check = hit.get("direction_check") or {}
+        notes.append(
+            f"Plerixafor comes back as candidate rank {rank} of {len(candidates)} with direction verdict "
+            f"{check.get('verdict')!r} and corroboration {check.get('corroboration')}."
+        )
+        if check.get("verdict") == "matches":
+            failures.append(
+                f"Plerixafor's direction verdict reads {check.get('verdict')!r}. Two records disagree, so "
+                "the only honest verdict is 'unknown'; claiming a match would overstate what is known."
+            )
+    elif not failures:
+        notes.append(
+            "Plerixafor is in neither list. It is not rejected, which is what this control asserts, but it "
+            "is also not offered, so the user does not see it."
+        )
+
+    # The filter must still reject when nothing contradicts the field.
+    opposed = [
+        row for row in ruled_out if (row.get("direction_check") or {}).get("verdict") == "opposes"
+    ]
+    notes.append(
+        f"The filter still rejected {len(opposed)} molecule(s) for this subject, so requiring that a "
+        "rejection not be contradicted has not switched the filter off."
+    )
+    notes.append(bridge_note(response))
+    if other_states:
+        notes.append(f"Sources that did not answer ok: {', '.join(other_states)}.")
+    notes.append(
+        f"Server-reported elapsed {response.get('elapsed_ms')} ms, from_cache="
+        f"{response.get('from_cache')}; wall time {wall_ms} ms."
+    )
+
+    passed = not failures
+    detail = (
+        f"Plerixafor ({(plerixafor or {}).get('chembl_id')}) is not in ruled_out for WHIM syndrome; its "
+        f"PARTIAL AGONIST record is contradicted by its measured activities against {accession}, so the "
+        f"direction reads 'unknown' instead of 'opposes'"
+        + (f" and it is offered at rank {rank}." if rank else ".")
+        if passed
+        else " ".join(failures)
+    )
+    return {
+        "id": "safety_contradicted_action_type",
+        "kind": "negative",
+        "title": "Safety: a rejection may not rest on an action_type the measurements contradict",
+        "subject": "WHIM syndrome, CXCR4, gain of function",
+        "request": request,
+        "expected": "Plerixafor absent from ruled_out, and the filter still rejecting elsewhere",
+        "passed": passed,
+        "detail": detail,
+        "elapsed_ms": wall_ms,
+        "sources_answered": answered,
+        "source_count": total_sources,
+        "candidate_count": len(candidates),
+        "ruled_out_count": len(ruled_out),
+        "expected_molecule": (
+            f"Plerixafor ({plerixafor['chembl_id']})" if plerixafor else "plerixafor (unresolved)"
+        ),
+        "expected_molecule_rank": rank,
+        "chain": chain_of(hit) if hit else [],
+        "notes": notes,
+    }
+
+
 def merge_sources(responses: list[dict[str, Any]]) -> list[dict[str, Any]]:
     merged: dict[str, dict[str, Any]] = {}
     for response in responses:
@@ -855,8 +1022,10 @@ def markdown(document: dict[str, Any]) -> str:
 def limits_of(controls: list[dict[str, Any]], responses: list[dict[str, Any]]) -> list[str]:
     """Honest limits, read from what this run actually observed rather than written in advance."""
     limits = [
-        "Three subjects are three subjects. Each control shows the rule behaving correctly once, on one "
+        "Four subjects are four subjects. Each control shows the rule behaving correctly once, on one "
         "disease, against today's records. It is not a measure of how often the engine is right.",
+        "Control 4 is a regression test for an error the accuracy experiment found in the engine, not a "
+        "demonstration that the engine was right. It passes because the engine was changed.",
         "The engine's ranking is checked for position, not for quality. Nothing here tests whether a "
         "higher-ranked molecule is a better hypothesis than a lower-ranked one.",
     ]
@@ -890,12 +1059,13 @@ def main() -> int:
 
     api = Api(arguments.base_url)
     started = time.monotonic()
-    controls = [control_one(api), control_two(api), control_three(api)]
+    controls = [control_one(api), control_two(api), control_three(api), control_four(api)]
     responses = []
     for disease, extra in (
         ("activated-p110-delta-syndrome-pik3cd", {"exclude_direct": "true"}),
         ("btk-deficiency-x-linked-agammaglobulinemia", {}),
         ("stat1-gof", {}),
+        ("whim-syndrome", {"exclude_direct": "true"}),
     ):
         body, _, status = api.get("/discovery/candidates", disease=disease, **extra)
         if status == 200:

@@ -655,6 +655,108 @@ def summarise(result: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+CAUSE_LABELS = {
+    "no_chembl_mechanism_record_at_all": "No ChEMBL mechanism record anywhere, so the molecule is "
+    "outside the only universe the engine reads",
+    "a_source_the_request_needed_was_unavailable": "A source the request needed was unavailable",
+    "not_a_small_molecule_so_outside_the_engine_modality": "Not a small molecule (antibody, protein, "
+    "enzyme, oligonucleotide), a modality the engine cannot propose - **out of scope**",
+    "mechanism_target_resolves_to_no_human_protein": "The mechanism target is not a human protein "
+    "(DNA, peptidoglycan, a bacterial ribosome, a small molecule) - **out of scope**",
+    "acts_on_the_subject_protein_but_the_bridge_cap_cut_it": "Recorded against the subject's own "
+    "protein, but a retrieval cap cut it - **a real engine gap**",
+    "acts_on_a_reached_bridge_node_but_the_cap_cut_it": "Recorded against a protein the engine did "
+    "reach, but a presentation cap cut it - **a real engine gap**",
+    "acts_on_a_human_protein_with_no_bridge_path_to_the_subject": "Acts on a human protein with no "
+    "path to the subject protein through any of the five bridges - the engine is correctly silent",
+}
+CAUSE_NOTE = (
+    "Every miss is classified by `lab/experiments/classify_discovery_misses.py`, which reads each "
+    "molecule's own ChEMBL mechanism records through `GET /compounds/{id}` (joining the organism on "
+    "from the response's `targets` array, because the mechanism rows do not carry it) and the full "
+    "uncapped molecule list for a protein through `GET /proteins/{accession}/compounds`. Causes are "
+    "tested in a fixed order, most specific first, so each miss lands in exactly one bucket and the "
+    "buckets sum to the miss count. No cause is assigned by judgement."
+)
+
+
+def _scope_section() -> str:
+    """Recall inside the fixed scope rule, beside the two unrestricted figures."""
+    path = OUTPUT_JSON.parent / "discovery-miss-causes.json"
+    if not path.exists():
+        return ""
+    scope = (json.loads(path.read_text(encoding="utf-8")) or {}).get("scope") or {}
+    if not scope.get("n_in_scope"):
+        return ""
+    lines = ["### Recall inside the stated scope", "", f"Rule: {scope['rule']}", ""]
+    lines.append("| Metric | Value | n |")
+    lines.append("| --- | --- | --- |")
+    lines.append(
+        f"| Recall, in scope | {scope['recovered']} of {scope['n_in_scope']} "
+        f"({_percent(scope['recall_rate'])}) | {scope['n_in_scope']} pairs |"
+    )
+    lines.append(
+        f"| False rejection rate, in scope | {scope['falsely_rejected']} of {scope['n_in_scope']} "
+        f"({_percent(scope['false_rejection_rate'])}) | {scope['n_in_scope']} pairs |"
+    )
+    lines.append(f"| Missed, in scope | {scope['missed']} | {scope['n_in_scope']} pairs |")
+    lines.append("")
+    lines.append(
+        f"{scope['n_in_scope']} of {scope['n_pairs_total']} pairs are in scope. The stratified figure is "
+        "roughly three times the unrestricted one and is still poor: inside the subset the engine is "
+        "built to address, it recovers about one known drug in seven and misses the other six. "
+        "Stratifying explains the headline; it does not rescue it."
+    )
+    return "\n".join(lines)
+
+
+def _cause_section(summary: dict[str, Any]) -> str:
+    """The miss-cause table, read from the classifier's output when it has been run."""
+    path = OUTPUT_JSON.parent / "discovery-miss-causes.json"
+    if not path.exists():
+        return (
+            "## Why it misses\n\n"
+            "`lab/experiments/classify_discovery_misses.py` has not been run against this result, so "
+            "no cause table is available.\n"
+        )
+    causes = json.loads(path.read_text(encoding="utf-8"))
+    total = causes["n_missed"]
+    lines = ["## Why it misses, every miss classified", "", CAUSE_NOTE, ""]
+    lines.append("| Cause | All misses | Of which in the ChEMBL-mechanism universe |")
+    lines.append("| --- | --- | --- |")
+    for key in causes["cause_order"]:
+        count = causes["counts_all_missed"].get(key, 0)
+        inside = causes["counts_within_the_chembl_mechanism_universe"].get(key, 0)
+        if not count:
+            continue
+        lines.append(f"| {CAUSE_LABELS.get(key, key)} | {count} | {inside} |")
+    universe_total = sum(causes["counts_within_the_chembl_mechanism_universe"].values())
+    lines.append(f"| **Total missed** | **{total}** | **{universe_total}** |")
+    lines.append("")
+    recurring = causes.get("recurring_targets_in_the_no_path_bucket") or {}
+    if recurring:
+        lines.append(
+            "The targets that recur in the no-path bucket are what show those drugs are aimed "
+            "elsewhere. These are the proteins their own ChEMBL mechanism records name:"
+        )
+        lines.append("")
+        lines.append("| Mechanism target of the missed drug | Misses |")
+        lines.append("| --- | --- |")
+        for name, count in list(recurring.items())[:12]:
+            lines.append(f"| {name} | {count} |")
+        lines.append("")
+        lines.append(
+            "Immunosuppressants (IMPDH, FKBP1A, the glucocorticoid receptor, the JAK kinases), "
+            "antacids (the gastric potassium-transporting ATPase, the histamine H2 receptor), "
+            "bronchodilators, statins and oral contraceptives. None of them acts on the disease's own "
+            "protein, and the engine is a mechanism-bridge engine: being silent about them is the "
+            "behaviour it is built for, not a retrieval failure. They stay in the denominator because "
+            "no source field states clinical intent."
+        )
+        lines.append("")
+    return "\n".join(lines)
+
+
 def markdown(payload: dict[str, Any]) -> str:
     summary = payload["summary"]
     recall = summary["recall_pairs"]
@@ -677,6 +779,44 @@ def markdown(payload: dict[str, Any]) -> str:
         "engine is forbidden to use them when it is then asked. Every molecule was resolved to a ChEMBL id "
         "and an InChIKey through `GET /compounds/{id}` before any row was matched; nothing is matched on a "
         "name."
+    )
+    out("")
+    out("## The scope rule, fixed before the stratified number was computed")
+    out("")
+    out(
+        "This rule is derived from what the engine is built to do, stated in "
+        "`api/helix/discovery/engine.py` (`LIMITS`), `targets.py` and `caveats.py`. It was not "
+        "derived from, and was not adjusted after seeing, which pairs the engine recovered."
+    )
+    out("")
+    out("**A pair is in scope when both hold, read from source data alone:**")
+    out("")
+    out(
+        "1. **Small-molecule modality** - ChEMBL `molecule_type == \"Small molecule\"`. The engine is a "
+        "small-molecule engine: `structural_analogue` reasons over pockets and folds, and `caveats.py` "
+        "emits `NOT_SMALL_MOLECULE` for antibody, protein, enzyme, oligonucleotide, cell and gene "
+        "modalities. An immunoglobulin is a modality the engine has no mechanism to propose."
+    )
+    out(
+        "2. **A ChEMBL mechanism record whose target resolves to a human protein** - every bridge is "
+        "anchored on a UniProt accession (`targets.py: protein_actions(accession)`), so a mechanism "
+        "record with no accession, or with only a non-human one, is unreachable by construction."
+    )
+    out("")
+    out(
+        "**What the rule deliberately excludes.** Bridge reachability is the engine's *method*, not a "
+        "scope filter. A denominator of \"pairs a bridge can reach\" would make recall close to "
+        "tautological - it asks only whether the engine returned what it could already see - so it is "
+        "reported below as a diagnostic and never as the headline. Clinical intent is also excluded, "
+        "because no source field states it: a drug aimed at a symptom stays in the denominator wherever "
+        "modality and mechanism-record criteria admit it, and appears as its own row in the cause table."
+    )
+    out("")
+    out(
+        "**Reporting order, here and everywhere.** (1) Recall over all known pairs, the unflattering "
+        "number, first. (2) Recall within the scope rule, with the subset size. (3) The cause table for "
+        "the misses. The false-rejection rate sits beside both recall figures, and every figure in (1) "
+        "can be reconstructed from the cause table."
     )
     out("")
     out("## The numbers")
@@ -742,6 +882,9 @@ def markdown(payload: dict[str, Any]) -> str:
         "figure is what the engine's own stated scope can be held to."
     )
     out("")
+    out(_scope_section())
+    out("")
+    out(_cause_section(summary))
 
     out("## What the numbers say")
     out("")
@@ -911,6 +1054,51 @@ def markdown(payload: dict[str, Any]) -> str:
         )
     out("")
 
+    out("## The error this measurement found in our own safety filter")
+    out("")
+    out(
+        "The most valuable result of this work is not a recall figure. It is that the measurement "
+        "caught the direction-of-effect filter rejecting the one drug WHIM syndrome is actually "
+        "treated with."
+    )
+    out("")
+    out(
+        "**What the engine got wrong.** WHIM syndrome is a CXCR4 gain of function, so the engine "
+        "correctly derived that CXCR4 must do less. Plerixafor (CHEMBL18442) blocks CXCR4 - that is its "
+        "entire pharmacology and the reason it is given for WHIM. ChEMBL nonetheless files its single "
+        "mechanism record on P61073 with `action_type` PARTIAL AGONIST. The filter read that one field, "
+        "concluded the molecule raises CXCR4, and moved it to `ruled_out` with a fluent and completely "
+        "wrong explanation. A falsely rejected drug is the dangerous error, because the user never sees "
+        "it offered and the refusal reads as authoritative."
+    )
+    out("")
+    out(
+        "**How the measurement caught it.** Nothing in the engine or in the controls could have found "
+        "this. It took holding out the direct disease-to-drug edge for every disease with a known drug "
+        "and then checking whether the engine refused a drug that is really used. One of 226 pairs came "
+        "back refused rather than merely missing, and opening that one case is what exposed the filter's "
+        "single point of failure."
+    )
+    out("")
+    out(
+        "**The fix, which is not a special case.** A rejection may no longer rest on an `action_type` "
+        "that another record of the same molecule against the same protein contradicts. ChEMBL holds "
+        "four measured activities of plerixafor against P61073 and all four are IC50 - inhibition "
+        "measurements. One field says raise, four measurements say lower, so the verdict is now "
+        "`unknown`, the reason names both records, and the molecule is offered carrying the 'may push "
+        "the wrong way' caveat instead of being hidden. A single-field direction call is insufficient "
+        "by design: `rules.py` will not issue `opposes` on a contradicted field for any molecule, and "
+        "nothing about plerixafor, CXCR4 or WHIM is named anywhere in the engine. Where nothing "
+        "contradicts the field the filter is exactly as strict as before - control 2 still rejects 20 "
+        "of 20 BTK-lowering molecules for BTK loss of function."
+    )
+    out("")
+    out(
+        "**It is now control 4.** `lab/experiments/run_discovery_controls.py` asserts that plerixafor, "
+        "resolved by ChEMBL id and InChIKey, does not appear in `ruled_out` for WHIM syndrome, and that "
+        "the filter still rejects elsewhere for the same subject. The bug cannot come back silently."
+    )
+    out("")
     out("## Threats to validity")
     out("")
     for threat in payload["threats_to_validity"]:
@@ -1021,6 +1209,24 @@ def main() -> int:
         "coverage_excluded": result["coverage_excluded"],
         "api_failures": api.failures[:50],
         "threats_to_validity": [
+            "The cause classification rests on ChEMBL mechanism records. A drug whose real target is "
+            "known to pharmacology but unrecorded in ChEMBL is classified by what ChEMBL holds, not by "
+            "what is true, so the 'no path to the subject protein' bucket is an upper bound on how "
+            "legitimately silent the engine is.",
+            "The no-path bucket is read as 'the drug is aimed elsewhere' from the recurring targets its "
+            "own records name. Two members of it are not symptom drugs and are real engine gaps: "
+            "ataluren, whose ChEMBL target is the 80S ribosome because it is a nonsense-readthrough "
+            "agent that no protein-to-protein bridge can reach, and amiloride and idrevloride, which "
+            "act on ENaC, the channel that physiologically counterbalances CFTR. ENaC is not a curated "
+            "IntAct or STRING physical partner of CFTR, so the interaction bridge cannot see a "
+            "relationship that is functional rather than physical.",
+            "The scope rule was fixed before the stratified number was computed, but it was written by "
+            "the same person who then measured it. It reads only ChEMBL molecule_type and mechanism "
+            "target organism, both source fields, and is reproducible from "
+            "`classify_discovery_misses.py` without reference to any engine output.",
+            "Bridge-reachability was considered as a scope rule and rejected as circular: it would have "
+            "put the denominator at about 12 pairs and produced a recall near 90% that measured nothing "
+            "but the definition. The in-scope figure here is deliberately the harsher of the two.",
             "Ground truth comes from Open Targets only. ChEMBL drug_indication is retrievable by molecule "
             "in this deployment, not by disease, so it corroborates pairs rather than creating them; a "
             "molecule ChEMBL records for a disease that Open Targets does not is absent from the ground "

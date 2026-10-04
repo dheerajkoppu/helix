@@ -198,6 +198,21 @@ class DirectionCheck(Schema):
     )
     verdict: Verdict
     why: str = Field(description="Built from a fixed template, never free prose")
+    corroboration: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Independent signals about what the molecule does to this target, each read from a "
+            "different record than the action_type: the free-text mechanism_of_action, a second "
+            "mechanism record, the measured assay types. A rejection needs at least one that agrees."
+        ),
+    )
+    corroborated: bool | None = Field(
+        default=None,
+        description=(
+            "Whether the action_type's direction was corroborated by an independent signal. False "
+            "or null means no rejection was made on it."
+        ),
+    )
 
 
 class CandidateStructure(Schema):

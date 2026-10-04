@@ -9,7 +9,7 @@ from typing import Any
 
 from helix.discovery.caveats import caveats_for
 from helix.discovery.context import BRIDGE_LABELS, BridgeContext, CandidateRow, RuledOutRow
-from helix.discovery.rules import Relation, direction_check
+from helix.discovery.rules import DirectionEvidence, Relation, direction_check
 from helix.discovery.targets import ProteinActions
 from helix.evidence import try_build_evidence
 from helix.knowledge.catalog import SeedDisease, normalise_alias
@@ -124,6 +124,7 @@ def build_rows(
     structure: CandidateStructure | None = None,
     affinities: dict[str, MeasuredAffinity] | None = None,
     affinity_evidence: dict[str, Evidence] | None = None,
+    assay_types: dict[str, dict[str, int]] | None = None,
     indication_rows: dict[str, list[dict[str, Any]]] | None = None,
     indication_provenance: Any = None,
     extra_sources: set[str] | None = None,
@@ -140,9 +141,10 @@ def build_rows(
     subject_label = context.subject_label
     subject_protein = context.subject.protein or context.subject.gene
 
+    # Every retrieved mechanism record is direction-checked. `max_rows` is a presentation limit and
+    # is applied at the end, so a cap can never drop a molecule into neither list: an opposition
+    # found past the cap still reaches ruled_out, where the user can see the refusal.
     for action in actions.actions:
-        if len(candidates) >= max_rows:
-            break
         target = CandidateTarget(
             accession=accession,
             gene_symbol=target_symbol,
@@ -162,6 +164,10 @@ def build_rows(
             target_label=label,
             subject_label=subject_label,
             activity_label=context.subject.gene_symbol,
+            evidence=DirectionEvidence(
+                other_action_types=action.other_action_types,
+                assay_standard_types=(assay_types or {}).get(action.chembl_id),
+            ),
         )
         molecule = action.molecule()
         rows = (indication_rows or {}).get(action.chembl_id, [])
@@ -262,7 +268,9 @@ def build_rows(
                 affinity=affinity.median_pchembl if affinity else None,
             )
         )
-    return candidates, ruled_out
+    # The engine ranks across bridges before it cuts, so a bridge hands back its best `max_rows` in
+    # the order its own retrieval produced them. Oppositions are never cut here.
+    return candidates[:max_rows], ruled_out
 
 
 def strongest_class(evidence: list[Evidence]) -> int:

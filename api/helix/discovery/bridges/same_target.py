@@ -60,7 +60,9 @@ def subject_protein_step(context: BridgeContext) -> BridgeStep:
 
 async def measured_affinities(
     accession: str, output: BridgeOutput
-) -> tuple[dict[str, MeasuredAffinity], dict[str, Evidence], dict[str, Any], list[int]]:
+) -> tuple[
+    dict[str, MeasuredAffinity], dict[str, Evidence], dict[str, Any], list[int], dict[str, dict[str, int]]
+]:
     """Measured activities and bound ligands of the subject protein, from the compounds service."""
     from helix.services.compounds import protein_compounds
 
@@ -68,15 +70,19 @@ async def measured_affinities(
         response = await asyncio.wait_for(protein_compounds(accession), AFFINITY_TIMEOUT)
     except Exception as error:  # noqa: BLE001 - a missing measurement is a caveat, not a failure
         logger.info("Measured activities for %s were not read: %s", accession, error)
-        return {}, {}, {}, []
+        return {}, {}, {}, [], {}
     output.statuses.extend(response.sources)
     affinities: dict[str, MeasuredAffinity] = {}
     affinity_evidence: dict[str, Evidence] = {}
+    # Assay types with their counts, kept as a dict because the direction filter reads which kinds
+    # of measurement exist, not just how strong they are
+    assay_types: dict[str, dict[str, int]] = {}
     target = response.target
     for compound in response.compounds:
         summary = compound.measured_affinity
         if summary is None or not compound.chembl_id:
             continue
+        assay_types[compound.chembl_id] = dict(summary.standard_types)
         affinities[compound.chembl_id] = MeasuredAffinity(
             median_pchembl=summary.median_pchembl,
             activity_count=summary.activity_count,
@@ -101,7 +107,7 @@ async def measured_affinities(
         for compound in response.compounds
         if compound.co_crystal and compound.co_crystal.pdb_ids
     }
-    return affinities, affinity_evidence, ligands, positions
+    return affinities, affinity_evidence, ligands, positions, assay_types
 
 
 async def run(context: BridgeContext) -> BridgeOutput:
@@ -115,7 +121,9 @@ async def run(context: BridgeContext) -> BridgeOutput:
         output.message = "ChEMBL records no molecule with an action on this protein."
         return output
 
-    affinities, affinity_evidence, ligands, positions = await measured_affinities(accession, output)
+    affinities, affinity_evidence, ligands, positions, assay_types = await measured_affinities(
+        accession, output
+    )
     context.shared["subject_bound_ligands"] = ligands
     indication_rows: dict[str, list[dict[str, Any]]] = {}
     indication_provenance = None
@@ -156,6 +164,7 @@ async def run(context: BridgeContext) -> BridgeOutput:
         structure=structure,
         affinities=affinities,
         affinity_evidence=affinity_evidence,
+        assay_types=assay_types,
         indication_rows=indication_rows,
         indication_provenance=indication_provenance,
     )

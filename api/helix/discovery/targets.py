@@ -88,6 +88,9 @@ class MoleculeAction:
     target: ChemblTarget
     direct_interaction: bool | None
     reference_urls: list[str] = field(default_factory=list)
+    # action_type values from any further mechanism record of this molecule on the same target.
+    # Read by the direction filter: a second record pointing the other way blocks a rejection.
+    other_action_types: tuple[str, ...] = ()
 
     @property
     def sort_key(self) -> tuple[Any, ...]:
@@ -231,8 +234,19 @@ async def protein_actions(accession: str, *, timeout: float = 30.0) -> ProteinAc
         return found
     found.mechanism_provenance = mechanisms.provenance
     rows = mechanisms.data.get("rows", [])
+    # ChEMBL returns mechanism rows in no useful order, so truncating to the first
+    # MAX_MOLECULES_PER_PROTEIN parents used to keep an arbitrary subset. Order by the record's own
+    # strength first - a single-protein target and the highest clinical phase - so that when the cap
+    # does bite it keeps the strongest records rather than whichever arrived first.
+    def _retrieval_rank(row: dict[str, Any]) -> tuple[Any, ...]:
+        target = by_id.get(row.get("target_chembl_id") or "")
+        return (
+            0 if target is not None and target.is_single_protein else 1,
+            -(_number(row.get("max_phase")) or 0.0),
+        )
+
     parents: list[str] = []
-    for row in rows:
+    for row in sorted(rows, key=_retrieval_rank):
         parent = row.get("parent_molecule_chembl_id") or row["molecule_chembl_id"]
         if parent not in parents:
             parents.append(parent)
@@ -252,6 +266,17 @@ async def protein_actions(accession: str, *, timeout: float = 30.0) -> ProteinAc
     }
     withdrawn = gathered.data("chembl_withdrawn", {}) or {}
 
+    # Every action_type recorded for one molecule on one target, before the one-row-per-pair dedup
+    # below drops the extras. The direction filter needs the ones it is about to discard.
+    all_action_types: dict[tuple[str, str], list[str]] = {}
+    for row in rows:
+        parent = row.get("parent_molecule_chembl_id") or row["molecule_chembl_id"]
+        target_id = row.get("target_chembl_id") or ""
+        if parent not in parents or target_id not in by_id:
+            continue
+        if row.get("action_type"):
+            all_action_types.setdefault((parent, target_id), []).append(str(row["action_type"]))
+
     seen: set[tuple[str, str]] = set()
     for row in rows:
         parent = row.get("parent_molecule_chembl_id") or row["molecule_chembl_id"]
@@ -262,6 +287,8 @@ async def protein_actions(accession: str, *, timeout: float = 30.0) -> ProteinAc
         if key in seen:
             continue
         seen.add(key)
+        kept = row.get("action_type")
+        others = [value for value in all_action_types.get(key, []) if value != kept]
         molecule = molecules.get(parent) or {}
         structures = molecule.get("molecule_structures") or {}
         found.actions.append(
@@ -284,6 +311,7 @@ async def protein_actions(accession: str, *, timeout: float = 30.0) -> ProteinAc
                     for reference in row.get("mechanism_refs") or []
                     if reference.get("ref_url")
                 ][:4],
+                other_action_types=tuple(dict.fromkeys(others)),
             )
         )
     found.actions.sort(key=lambda action: action.sort_key)
