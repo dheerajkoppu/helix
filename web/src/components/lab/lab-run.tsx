@@ -77,6 +77,7 @@ import { useAdvancedMode } from "@/lib/state/preferences";
 
 const STEP_PARAM = "step";
 const TAB_PARAM = "tab";
+const PLAY_PARAM = "play";
 
 type RunTab = "loop" | "record";
 
@@ -221,17 +222,20 @@ function RunView({
   const active = isActiveStatus(run.status);
   const finished = isFinishedStatus(run.status);
 
+  // a link can open the run with the replay already running: /lab/<id>?play=1
+  const autoPlay = searchParams.get(PLAY_PARAM) === "1" && events.length > 0;
+
   // the replay position is local and mirrored to the URL, so a step never waits on the router
   const [position, setPosition] = useState<number | null>(() => {
     const raw = searchParams.get(STEP_PARAM);
     const requested = raw === null ? Number.NaN : Number(raw);
-    if (!Number.isFinite(requested)) return null;
+    if (!Number.isFinite(requested)) return autoPlay ? 0 : null;
     return Math.max(
       0,
       events.findLastIndex((event) => event.seq <= requested),
     );
   });
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(autoPlay);
   const [speed, setSpeed] = useState<ReplaySpeed>(1);
   const [tab, setTab] = useState<RunTab>(() =>
     searchParams.get(TAB_PARAM) === "record" ? "record" : "loop",
@@ -251,6 +255,7 @@ function RunView({
     else params.set(STEP_PARAM, String(currentSeq));
     if (tab === "record") params.set(TAB_PARAM, "record");
     else params.delete(TAB_PARAM);
+    params.delete(PLAY_PARAM);
     const query = params.toString();
     const next = `${window.location.pathname}${query ? `?${query}` : ""}`;
     if (next !== `${window.location.pathname}${window.location.search}`)

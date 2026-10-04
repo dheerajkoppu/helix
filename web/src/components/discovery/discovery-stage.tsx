@@ -210,7 +210,7 @@ export function DiscoveryStage({
       <RuledOutSection rows={ruledOut} />
       <div className="flex flex-col gap-1 px-4 py-4 text-xs text-muted-foreground sm:px-6">
         <p>{DISCOVERY_WORDS.hypothesisLine}</p>
-        <p>{DISCOVERY_WORDS.testLine}</p>
+        {advanced ? <p>{DISCOVERY_WORDS.testLine}</p> : null}
       </div>
     </div>
   );

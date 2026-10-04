@@ -1,0 +1,896 @@
+"""Accuracy of the discovery engine on held-out known drugs, across the whole seeded catalog.
+
+    lab/.venv/bin/python lab/experiments/run_discovery_accuracy.py
+
+The three controls in run_discovery_controls.py show the direction filter behaving correctly on three
+subjects. Three subjects are three subjects. This runner asks a different question: over every disease in
+the catalog for which some molecule is really used or really being tried, does the engine find that molecule
+when the record naming it is withheld, and does it ever push one the wrong way?
+
+THE DESIGN
+
+Ground truth is built from the disease-to-molecule records that `exclude_direct=true` withholds, so the
+engine is forbidden to use them when it is then asked:
+
+  source A, disease-anchored: GET /diseases/{slug} -> treatments[]. Open Targets drugs recorded against the
+    disease through its own MONDO/ORPHA cross-reference. These are exactly the `open_targets_disease_drug`
+    edges the held-out mode drops.
+  source B, target-anchored: GET /genes/{symbol}/treatments -> a drug acting on the disease gene's target
+    whose own indications[] name this disease's MONDO id exactly.
+
+Every ground-truth molecule is then resolved through GET /compounds/{chembl_id}, a different endpoint, to a
+ChEMBL id and an InChIKey, and candidate rows are matched on those identifiers only. Nothing is matched on a
+name string. That call also carries the molecule's ChEMBL mechanism action types and its ChEMBL
+drug_indication rows, which are used to corroborate the pair and to score direction agreement.
+
+WHAT IS MEASURED, each with its n
+
+  recall           - of the evaluable disease-molecule pairs, how many come back in `candidates` at all,
+                     at what rank (median), and the hit rate within the top 10 and the top 25
+  false rejection  - how often a molecule genuinely used for a disease lands in `ruled_out`. Every case is
+                     printed individually with the engine's own reason, because each one is either a
+                     direction-of-effect error or a symptomatic drug that does not correct the protein
+  direction agree  - for each pair, whether the action the mechanism requires agrees with the molecule's
+                     recorded ChEMBL action type on the subject's protein
+  coverage         - how many diseases could be evaluated, and the reason each of the rest could not
+  bridge mix       - which bridge recovered the molecule, so it is visible whether same_target does all the
+                     work or the pathway and structural bridges contribute
+
+Diseases that return candidates but have no known drug are counted separately as "no ground truth" and are
+never counted as a miss.
+
+RULES THIS RUNNER HOLDS ITSELF TO
+
+  1. Nothing is tuned. No threshold, ranking or rule in the engine was touched. TOP_N and WIDE_N are
+     declared here before any result was seen and are printed in the output.
+  2. No human-minutes figure is invented anywhere. This runner counts requests and records; it did not
+     measure a scientist.
+  3. Every pair, hit, miss and rejection is written to the JSON with the identifiers it was matched on, so
+     any figure can be recomputed from the stored file.
+
+Writes lab/experiments/results/discovery-accuracy.json and lab/experiments/DISCOVERY-ACCURACY.md.
+"""
+
+import argparse
+import json
+import statistics
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+from collections import Counter
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Any
+
+EXPERIMENTS = Path(__file__).resolve().parent
+REPO = EXPERIMENTS.parent.parent
+OUTPUT_JSON = EXPERIMENTS / "results" / "discovery-accuracy.json"
+OUTPUT_MARKDOWN = EXPERIMENTS / "DISCOVERY-ACCURACY.md"
+CATALOG = REPO / "data" / "seed" / "catalog.json"
+DEFAULT_BASE_URL = "http://localhost:8000"
+
+# Declared before any result was seen, and printed in the output. "Found at all" is the primary recall
+# figure; these two are reported beside it so a reader can see where in the list the molecules land.
+TOP_N = 10
+WIDE_N = 25
+
+# Open Targets clinical stages that count as "approved or in clinical development". WITHDRAWAL and UNKNOWN
+# are excluded from ground truth and counted separately, because a withdrawn drug is not in use and an
+# unknown stage is not evidence of development.
+GROUND_TRUTH_STAGES = {
+    "APPROVAL",
+    "PHASE_4",
+    "PHASE_3",
+    "PHASE_2_3",
+    "PHASE_2",
+    "PHASE_1_2",
+    "PHASE_1",
+}
+
+# ChEMBL action_type values, read from the engine's own rules module so this runner and the engine cannot
+# drift apart. Loaded at import; the fallback literals are the same sets written out.
+LOWERING_ACTIONS = {
+    "INHIBITOR",
+    "ANTAGONIST",
+    "NEGATIVE ALLOSTERIC MODULATOR",
+    "BLOCKER",
+    "DISRUPTING AGENT",
+    "DEGRADER",
+    "INVERSE AGONIST",
+    "NEGATIVE MODULATOR",
+    "ANTISENSE INHIBITOR",
+    "RNAI INHIBITOR",
+    "PROTEOLYTIC ENZYME",
+    "HYDROLYTIC ENZYME",
+    "SEQUESTERING AGENT",
+}
+RAISING_ACTIONS = {
+    "AGONIST",
+    "ACTIVATOR",
+    "POSITIVE ALLOSTERIC MODULATOR",
+    "POSITIVE MODULATOR",
+    "PARTIAL AGONIST",
+    "CHAPERONE",
+    "STABILISER",
+    "STABILIZER",
+    "OPENER",
+}
+
+
+def now() -> str:
+    return datetime.now(UTC).isoformat(timespec="seconds").replace("+00:00", "Z")
+
+
+class Api:
+    """Every HTTP call this runner makes, counted, so the request total in the result is real."""
+
+    def __init__(self, base_url: str) -> None:
+        self.base_url = base_url.rstrip("/")
+        self.call_count = 0
+        self.failures: list[dict[str, Any]] = []
+        self.elapsed_total_ms = 0.0
+
+    def get(self, path: str, **params: Any) -> tuple[dict[str, Any] | None, int]:
+        query = urllib.parse.urlencode({k: v for k, v in params.items() if v is not None})
+        url = f"{self.base_url}/api/v1{path}" + (f"?{query}" if query else "")
+        request = urllib.request.Request(url, headers={"Accept": "application/json"})
+        started = time.monotonic()
+        self.call_count += 1
+        try:
+            with urllib.request.urlopen(request, timeout=180) as response:
+                body = json.loads(response.read().decode("utf-8"))
+                status = response.status
+        except urllib.error.HTTPError as error:
+            status = error.code
+            body = None
+            self.failures.append({"path": path, "params": params, "status": status})
+        except Exception as error:  # noqa: BLE001 - a dead call is a coverage reason, not a crash
+            status = 0
+            body = None
+            self.failures.append({"path": path, "params": params, "error": str(error)})
+        self.elapsed_total_ms += (time.monotonic() - started) * 1000
+        return body, status
+
+
+def normalise_identifier(value: str | None) -> str | None:
+    """MONDO_0014222 and MONDO:0014222 are the same identifier written two ways."""
+    if not value:
+        return None
+    return str(value).strip().replace("_", ":").upper()
+
+
+def disease_identifiers(disease: dict[str, Any]) -> set[str]:
+    xrefs = disease.get("xrefs") or {}
+    values = [*(xrefs.get("mondo") or []), *(xrefs.get("orphanet") or [])]
+    return {identifier for identifier in (normalise_identifier(v) for v in values) if identifier}
+
+
+def collect_ground_truth(
+    api: Api, diseases: list[dict[str, Any]], gene_treatments: dict[str, dict[str, Any]]
+) -> dict[str, dict[str, Any]]:
+    """For every catalog disease, the molecules two Open Targets routes record as used or being tried for it."""
+    per_disease: dict[str, dict[str, Any]] = {}
+    for disease in diseases:
+        slug = disease["id"]
+        identifiers = disease_identifiers(disease)
+        molecules: dict[str, dict[str, Any]] = {}
+        excluded_stage: list[dict[str, Any]] = []
+
+        bundle, status = api.get(f"/diseases/{urllib.parse.quote(slug)}")
+        bundle_ok = bundle is not None
+        for treatment in (bundle or {}).get("treatments") or []:
+            chembl_id = treatment.get("drug_id")
+            if not chembl_id:
+                continue
+            stage = treatment.get("clinical_stage")
+            row = {
+                "chembl_id": chembl_id,
+                "name_from_source": treatment.get("name"),
+                "clinical_stage": stage,
+                "drug_max_clinical_stage": treatment.get("drug_max_clinical_stage"),
+                "modality": treatment.get("modality"),
+                "ground_truth_source": "open_targets_disease_drug",
+                "matched_on": "the disease's own Open Targets node",
+            }
+            if stage in GROUND_TRUTH_STAGES:
+                molecules[chembl_id] = row
+            else:
+                excluded_stage.append(row)
+
+        symbol = disease.get("gene_symbol")
+        treatments_payload = gene_treatments.get(symbol or "")
+        for treatment in (treatments_payload or {}).get("treatments") or []:
+            chembl_id = treatment.get("drug_id")
+            if not chembl_id:
+                continue
+            hits = [
+                normalise_identifier(indication.get("id"))
+                for indication in treatment.get("indications") or []
+            ]
+            overlap = identifiers & {hit for hit in hits if hit}
+            if not overlap:
+                continue
+            stage = treatment.get("clinical_stage")
+            row = {
+                "chembl_id": chembl_id,
+                "name_from_source": treatment.get("name"),
+                "clinical_stage": stage,
+                "drug_max_clinical_stage": treatment.get("drug_max_clinical_stage"),
+                "modality": treatment.get("modality"),
+                "ground_truth_source": "open_targets_target_drug_indication",
+                "matched_on": f"indication {sorted(overlap)[0]} on the disease gene's target",
+            }
+            if stage not in GROUND_TRUTH_STAGES:
+                excluded_stage.append(row)
+                continue
+            if chembl_id in molecules:
+                molecules[chembl_id]["ground_truth_source"] = "both_open_targets_routes"
+            else:
+                molecules[chembl_id] = row
+
+        per_disease[slug] = {
+            "slug": slug,
+            "name": disease.get("name"),
+            "gene_symbol": symbol,
+            "identifiers": sorted(identifiers),
+            "disease_node_read": bundle_ok,
+            "disease_node_status": status,
+            "molecules": list(molecules.values()),
+            "excluded_by_stage": excluded_stage,
+        }
+    return per_disease
+
+
+def resolve_molecule(api: Api, chembl_id: str, cache: dict[str, Any]) -> dict[str, Any]:
+    """Identity, ChEMBL mechanisms and ChEMBL indications, through an endpoint the match does not use."""
+    if chembl_id in cache:
+        return cache[chembl_id]
+    payload, status = api.get(f"/compounds/{urllib.parse.quote(chembl_id)}")
+    compound = (payload or {}).get("compound") or {}
+    resolved = {
+        "chembl_id": compound.get("chembl_id"),
+        "inchikey": compound.get("inchikey"),
+        "name": compound.get("name"),
+        "max_phase": compound.get("max_phase"),
+        "resolved": bool(compound.get("chembl_id")),
+        "status": status,
+        "mechanisms": [
+            {
+                "action_type": mechanism.get("action_type"),
+                "accessions": mechanism.get("target_accessions") or [],
+                "target_name": mechanism.get("target_name"),
+                "target_type": mechanism.get("target_type"),
+                "mechanism_of_action": mechanism.get("mechanism_of_action"),
+            }
+            for mechanism in (payload or {}).get("mechanisms") or []
+        ],
+        "chembl_indications": [
+            {"efo_id": normalise_identifier(row.get("efo_id")), "efo_term": row.get("efo_term")}
+            for row in (payload or {}).get("indications") or []
+        ],
+    }
+    cache[chembl_id] = resolved
+    return resolved
+
+
+def action_direction(action_type: str | None) -> str:
+    if action_type in LOWERING_ACTIONS:
+        return "less_activity"
+    if action_type in RAISING_ACTIONS:
+        return "more_activity"
+    return "unknown"
+
+
+def evaluate(api: Api, ground_truth: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    molecule_cache: dict[str, Any] = {}
+    evaluated: list[dict[str, Any]] = []
+    coverage: list[dict[str, Any]] = []
+    no_ground_truth = 0
+
+    eligible = [row for row in ground_truth.values() if row["molecules"]]
+    eligible.sort(key=lambda row: row["slug"])
+
+    for row in ground_truth.values():
+        if not row["molecules"]:
+            reason = "no_known_drug_in_either_source"
+            if not row["disease_node_read"]:
+                reason = "disease_record_unavailable"
+            elif row["excluded_by_stage"]:
+                reason = "only_withdrawn_or_unknown_stage_drugs"
+            elif not row["gene_symbol"]:
+                reason = "no_gene_in_the_catalog"
+            elif not row["identifiers"]:
+                reason = "no_mondo_or_orphanet_cross_reference_to_match_on"
+            coverage.append({"slug": row["slug"], "name": row["name"], "reason": reason})
+
+    for row in eligible:
+        slug = row["slug"]
+        payload, status = api.get("/discovery/candidates", disease=slug, exclude_direct=True)
+        if payload is None:
+            coverage.append(
+                {
+                    "slug": slug,
+                    "name": row["name"],
+                    "reason": "discovery_request_failed",
+                    "status": status,
+                }
+            )
+            continue
+
+        subject = payload.get("subject") or {}
+        mechanism = subject.get("mechanism") or {}
+        required = payload.get("required_action") or {}
+        direction_needed = required.get("direction_needed")
+        accession = subject.get("accession")
+
+        if accession is None:
+            coverage.append(
+                {"slug": slug, "name": row["name"], "reason": "no_protein_for_the_disease_gene"}
+            )
+            continue
+
+        candidates = payload.get("candidates") or []
+        ruled_out = payload.get("ruled_out") or []
+        by_candidate: dict[str, dict[str, Any]] = {}
+        for candidate in candidates:
+            molecule = candidate.get("molecule") or {}
+            for key in (molecule.get("chembl_id"), molecule.get("inchikey")):
+                if key and key not in by_candidate:
+                    by_candidate[key] = candidate
+        by_ruled_out: dict[str, dict[str, Any]] = {}
+        for rejected in ruled_out:
+            molecule = rejected.get("molecule") or {}
+            for key in (molecule.get("chembl_id"), molecule.get("inchikey")):
+                if key and key not in by_ruled_out:
+                    by_ruled_out[key] = rejected
+
+        pairs: list[dict[str, Any]] = []
+        for known in row["molecules"]:
+            resolved = resolve_molecule(api, known["chembl_id"], molecule_cache)
+            keys = [key for key in (resolved.get("chembl_id"), resolved.get("inchikey")) if key]
+            if not keys:
+                keys = [known["chembl_id"]]
+            hit = next((by_candidate[key] for key in keys if key in by_candidate), None)
+            rejected = next((by_ruled_out[key] for key in keys if key in by_ruled_out), None)
+
+            row_target = (
+                ((hit or rejected or {}).get("target") or {}).get("accession")
+                if (hit or rejected)
+                else None
+            )
+            on_subject = [
+                mechanism_row
+                for mechanism_row in resolved["mechanisms"]
+                if accession in (mechanism_row.get("accessions") or [])
+            ]
+            on_row_target = [
+                mechanism_row
+                for mechanism_row in resolved["mechanisms"]
+                if row_target and row_target in (mechanism_row.get("accessions") or [])
+            ]
+            actions = sorted({m.get("action_type") for m in on_subject if m.get("action_type")})
+            row_actions = sorted({m.get("action_type") for m in on_row_target if m.get("action_type")})
+            molecule_directions = sorted({action_direction(action) for action in actions})
+            if not actions:
+                agreement = (
+                    "acts_on_another_protein_not_the_subject_protein"
+                    if resolved["mechanisms"]
+                    else "no_chembl_mechanism_record_at_all"
+                )
+            elif direction_needed is None:
+                agreement = "no_required_action_derived"
+            elif molecule_directions == [direction_needed]:
+                agreement = "agrees"
+            elif "unknown" in molecule_directions and len(molecule_directions) == 1:
+                agreement = "molecule_action_unknown"
+            elif direction_needed in molecule_directions:
+                agreement = "mixed"
+            else:
+                agreement = "disagrees"
+
+            corroborated = sorted(
+                {
+                    indication["efo_id"]
+                    for indication in resolved["chembl_indications"]
+                    if indication["efo_id"] and indication["efo_id"] in set(row["identifiers"])
+                }
+            )
+
+            pairs.append(
+                {
+                    "chembl_id": resolved.get("chembl_id") or known["chembl_id"],
+                    "inchikey": resolved.get("inchikey"),
+                    "name": resolved.get("name") or known["name_from_source"],
+                    "identity_resolved_independently": resolved["resolved"],
+                    "ground_truth_source": known["ground_truth_source"],
+                    "matched_on": known["matched_on"],
+                    "clinical_stage": known["clinical_stage"],
+                    "modality": known["modality"],
+                    "chembl_indication_corroborates": corroborated,
+                    "chembl_action_types_on_subject_protein": actions,
+                    "has_any_chembl_mechanism": bool(resolved["mechanisms"]),
+                    "engine_row_target": row_target,
+                    "chembl_action_types_on_engine_row_target": row_actions,
+                    "direction_needed": direction_needed,
+                    "direction_agreement": agreement,
+                    "outcome": (
+                        "recovered"
+                        if hit
+                        else "falsely_rejected"
+                        if rejected
+                        else "missed"
+                    ),
+                    "rank": (hit or {}).get("rank"),
+                    "bridge": ((hit or {}).get("bridge") or {}).get("kind"),
+                    "direction_check": ((hit or {}).get("direction_check") or {}).get("verdict"),
+                    "ruled_out_reason_code": (rejected or {}).get("reason_code"),
+                    "ruled_out_reason": (rejected or {}).get("reason"),
+                    "ruled_out_bridge": (rejected or {}).get("bridge_kind"),
+                    "ruled_out_target": ((rejected or {}).get("target") or {}).get("gene_symbol"),
+                }
+            )
+
+        evaluated.append(
+            {
+                "slug": slug,
+                "name": row["name"],
+                "gene_symbol": row["gene_symbol"],
+                "accession": accession,
+                "identifiers": row["identifiers"],
+                "mechanism_class": mechanism.get("class"),
+                "mechanism_direction": mechanism.get("direction"),
+                "mechanism_confidence": mechanism.get("confidence"),
+                "direction_needed": direction_needed,
+                "candidate_count": len(candidates),
+                "ruled_out_count": len(ruled_out),
+                "withheld_edge_count": len(payload.get("withheld_edges") or []),
+                "bridges": {
+                    bridge["kind"]: bridge["state"] for bridge in payload.get("bridges") or []
+                },
+                "from_cache": payload.get("from_cache"),
+                "server_elapsed_ms": payload.get("elapsed_ms"),
+                "pairs": pairs,
+            }
+        )
+
+    for row in ground_truth.values():
+        if row["molecules"]:
+            continue
+        no_ground_truth += 1
+
+    return {
+        "evaluated": evaluated,
+        "coverage_excluded": coverage,
+        "no_ground_truth_count": no_ground_truth,
+        "molecules_resolved": len(molecule_cache),
+    }
+
+
+def summarise(result: dict[str, Any]) -> dict[str, Any]:
+    evaluated = result["evaluated"]
+    pairs = [pair for disease in evaluated for pair in disease["pairs"]]
+    recovered = [pair for pair in pairs if pair["outcome"] == "recovered"]
+    rejected = [pair for pair in pairs if pair["outcome"] == "falsely_rejected"]
+    missed = [pair for pair in pairs if pair["outcome"] == "missed"]
+    ranks = [pair["rank"] for pair in recovered if pair["rank"]]
+
+    diseases_with_a_hit = {
+        disease["slug"]
+        for disease in evaluated
+        if any(pair["outcome"] == "recovered" for pair in disease["pairs"])
+    }
+    diseases_with_a_rejection = {
+        disease["slug"]
+        for disease in evaluated
+        if any(pair["outcome"] == "falsely_rejected" for pair in disease["pairs"])
+    }
+
+    # The engine only ever considers a molecule ChEMBL records a mechanism for. A pair whose molecule has
+    # no mechanism record anywhere is outside that universe: the engine had no record to find it with, so
+    # it is reported separately rather than folded into the recall figure as if it were a ranking failure.
+    in_universe = [pair for pair in pairs if pair["has_any_chembl_mechanism"]]
+    recovered_in_universe = [pair for pair in in_universe if pair["outcome"] == "recovered"]
+    rejected_in_universe = [pair for pair in in_universe if pair["outcome"] == "falsely_rejected"]
+    outside_universe = [pair for pair in missed if not pair["has_any_chembl_mechanism"]]
+    missed_in_universe = [pair for pair in missed if pair["has_any_chembl_mechanism"]]
+
+    return {
+        "in_engine_universe": {
+            "n_pairs": len(in_universe),
+            "definition": (
+                "pairs whose molecule has at least one ChEMBL mechanism record, the only molecules the "
+                "engine ever considers"
+            ),
+            "recovered": len(recovered_in_universe),
+            "recall_rate": round(len(recovered_in_universe) / len(in_universe), 4)
+            if in_universe
+            else None,
+            "falsely_rejected": len(rejected_in_universe),
+            "false_rejection_rate": round(len(rejected_in_universe) / len(in_universe), 4)
+            if in_universe
+            else None,
+            "missed": len(missed_in_universe),
+        },
+        "n_pairs": len(pairs),
+        "n_diseases_evaluated": len(evaluated),
+        "n_diseases_with_a_hit": len(diseases_with_a_hit),
+        "n_diseases_with_a_false_rejection": len(diseases_with_a_rejection),
+        "recall_pairs": {
+            "recovered": len(recovered),
+            "rate": round(len(recovered) / len(pairs), 4) if pairs else None,
+            "top_10": sum(1 for rank in ranks if rank <= TOP_N),
+            "top_10_rate": round(sum(1 for rank in ranks if rank <= TOP_N) / len(pairs), 4)
+            if pairs
+            else None,
+            "top_25": sum(1 for rank in ranks if rank <= WIDE_N),
+            "top_25_rate": round(sum(1 for rank in ranks if rank <= WIDE_N) / len(pairs), 4)
+            if pairs
+            else None,
+            "median_rank": statistics.median(ranks) if ranks else None,
+            "rank_range": [min(ranks), max(ranks)] if ranks else None,
+        },
+        "recall_diseases": {
+            "rate": round(len(diseases_with_a_hit) / len(evaluated), 4) if evaluated else None,
+        },
+        "false_rejection": {
+            "pairs": len(rejected),
+            "rate": round(len(rejected) / len(pairs), 4) if pairs else None,
+            "diseases": len(diseases_with_a_rejection),
+            "cases": [
+                {
+                    "disease": disease["name"],
+                    "slug": disease["slug"],
+                    "mechanism": f"{disease['mechanism_class']} / {disease['mechanism_direction']}",
+                    "mechanism_confidence": disease["mechanism_confidence"],
+                    "molecule": pair["name"],
+                    "chembl_id": pair["chembl_id"],
+                    "clinical_stage": pair["clinical_stage"],
+                    "modality": pair["modality"],
+                    "ruled_out_on": pair["ruled_out_target"],
+                    "bridge": pair["ruled_out_bridge"],
+                    "reason_code": pair["ruled_out_reason_code"],
+                    "reason": pair["ruled_out_reason"],
+                    "chembl_action_types_on_subject_protein": pair[
+                        "chembl_action_types_on_subject_protein"
+                    ],
+                    "chembl_action_types_on_the_protein_it_was_ruled_out_on": pair[
+                        "chembl_action_types_on_engine_row_target"
+                    ],
+                    "direction_needed": pair["direction_needed"],
+                }
+                for disease in evaluated
+                for pair in disease["pairs"]
+                if pair["outcome"] == "falsely_rejected"
+            ],
+        },
+        "missed": {
+            "pairs": len(missed),
+            "outside_the_engine_universe": len(outside_universe),
+            "with_a_chembl_mechanism_but_not_returned": len(missed_in_universe),
+            "modality_mix": dict(Counter(pair["modality"] for pair in missed).most_common()),
+            "outside_universe_modality_mix": dict(
+                Counter(pair["modality"] for pair in outside_universe).most_common()
+            ),
+        },
+        "direction_agreement": dict(
+            Counter(pair["direction_agreement"] for pair in pairs).most_common()
+        ),
+        "bridge_mix": dict(Counter(pair["bridge"] for pair in recovered).most_common()),
+        "direction_check_mix": dict(
+            Counter(pair["direction_check"] for pair in recovered).most_common()
+        ),
+        "mechanism_confidence_mix": dict(
+            Counter(disease["mechanism_confidence"] for disease in evaluated).most_common()
+        ),
+        "ground_truth_source_mix": dict(
+            Counter(pair["ground_truth_source"] for pair in pairs).most_common()
+        ),
+        "identity_unresolved": sum(
+            1 for pair in pairs if not pair["identity_resolved_independently"]
+        ),
+        "chembl_corroborated_pairs": sum(1 for pair in pairs if pair["chembl_indication_corroborates"]),
+        "coverage": {
+            "catalog_diseases": None,
+            "evaluated": len(evaluated),
+            "no_ground_truth": result["no_ground_truth_count"],
+            "excluded_reasons": dict(
+                Counter(row["reason"] for row in result["coverage_excluded"]).most_common()
+            ),
+        },
+    }
+
+
+def markdown(payload: dict[str, Any]) -> str:
+    summary = payload["summary"]
+    recall = summary["recall_pairs"]
+    rejection = summary["false_rejection"]
+    lines: list[str] = []
+    out = lines.append
+
+    out("# Discovery accuracy on held-out known drugs")
+    out("")
+    out(
+        f"Run {payload['run_at']}. {summary['n_pairs']} disease-molecule pairs over "
+        f"{summary['n_diseases_evaluated']} diseases, from a catalog of "
+        f"{payload['conditions']['catalog_diseases']} diseases and "
+        f"{payload['conditions']['catalog_genes']} genes. "
+        f"{payload['conditions']['api_requests']} API requests."
+    )
+    out("")
+    out(
+        "Ground truth is the disease-to-molecule records that `exclude_direct=true` withholds, so the "
+        "engine is forbidden to use them when it is then asked. Every molecule was resolved to a ChEMBL id "
+        "and an InChIKey through `GET /compounds/{id}` before any row was matched; nothing is matched on a "
+        "name."
+    )
+    out("")
+    out("## The numbers")
+    out("")
+    out("| Metric | Value | n |")
+    out("| --- | --- | --- |")
+    out(
+        f"| Recall, pairs recovered as a candidate | **{recall['recovered']} of {summary['n_pairs']}** "
+        f"({_percent(recall['rate'])}) | {summary['n_pairs']} pairs |"
+    )
+    out(
+        f"| Recall, diseases with at least one known drug recovered | "
+        f"**{summary['n_diseases_with_a_hit']} of {summary['n_diseases_evaluated']}** "
+        f"({_percent(summary['recall_diseases']['rate'])}) | "
+        f"{summary['n_diseases_evaluated']} diseases |"
+    )
+    out(
+        f"| Median rank of a recovered molecule | {recall['median_rank']} | "
+        f"{recall['recovered']} recovered |"
+    )
+    out(
+        f"| Recovered within the top {TOP_N} | {recall['top_10']} ({_percent(recall['top_10_rate'])}) | "
+        f"{summary['n_pairs']} pairs |"
+    )
+    out(
+        f"| Recovered within the top {WIDE_N} | {recall['top_25']} ({_percent(recall['top_25_rate'])}) | "
+        f"{summary['n_pairs']} pairs |"
+    )
+    out(
+        f"| **False rejection rate** (a used molecule in `ruled_out`) | "
+        f"**{rejection['pairs']} of {summary['n_pairs']}** ({_percent(rejection['rate'])}) | "
+        f"{summary['n_pairs']} pairs, {rejection['diseases']} diseases |"
+    )
+    out(
+        f"| Missed entirely | {summary['missed']['pairs']} | of which "
+        f"{summary['missed']['outside_the_engine_universe']} have no ChEMBL mechanism record anywhere |"
+    )
+    out("")
+    out(f"Rank range of recovered molecules: {recall['rank_range']}.")
+    out("")
+    universe = summary["in_engine_universe"]
+    out(
+        f"The engine only ever considers a molecule ChEMBL records a mechanism for. "
+        f"{universe['n_pairs']} of {summary['n_pairs']} pairs are inside that universe. Restricted to "
+        f"those, the same figures are:"
+    )
+    out("")
+    out("| Metric | Value | n |")
+    out("| --- | --- | --- |")
+    out(
+        f"| Recall | {universe['recovered']} of {universe['n_pairs']} "
+        f"({_percent(universe['recall_rate'])}) | {universe['n_pairs']} pairs |"
+    )
+    out(
+        f"| False rejection rate | {universe['falsely_rejected']} of {universe['n_pairs']} "
+        f"({_percent(universe['false_rejection_rate'])}) | {universe['n_pairs']} pairs |"
+    )
+    out(f"| Missed | {universe['missed']} | {universe['n_pairs']} pairs |")
+    out("")
+    out(
+        "The unrestricted figure is the honest headline, because a user asking the engine for a disease "
+        "treated with an immunoglobulin gets nothing useful back whatever the reason. The restricted "
+        "figure is what the engine's own stated scope can be held to."
+    )
+    out("")
+
+    out("## False rejections, every case")
+    out("")
+    if not rejection["cases"]:
+        out(
+            f"None. Across {summary['n_pairs']} pairs, no molecule recorded as used or being tried for a "
+            "disease was moved to `ruled_out` for that disease."
+        )
+    else:
+        for case in rejection["cases"]:
+            out(
+                f"- **{case['molecule']}** ({case['chembl_id']}, {case['clinical_stage']}) for "
+                f"*{case['disease']}* — mechanism {case['mechanism']}, ruled out on "
+                f"{case['ruled_out_on']} via `{case['bridge']}`, code `{case['reason_code']}`. "
+                f"ChEMBL action types on the protein it was ruled out on: "
+                f"{', '.join(case['chembl_action_types_on_the_protein_it_was_ruled_out_on']) or 'none'}; "
+                f"on the subject's own protein: "
+                f"{', '.join(case['chembl_action_types_on_subject_protein']) or 'none'}; the mechanism "
+                f"needs {case['direction_needed']}."
+            )
+            out(f"  > {case['reason']}")
+    out("")
+
+    out("## Direction agreement")
+    out("")
+    out("For each pair, whether the action the mechanism requires agrees with the molecule's recorded")
+    out("ChEMBL action type on the subject's protein.")
+    out("")
+    out("| Verdict | Pairs |")
+    out("| --- | --- |")
+    for verdict, count in summary["direction_agreement"].items():
+        out(f"| `{verdict}` | {count} |")
+    out("")
+
+    out("## Bridge mix of recovered molecules")
+    out("")
+    out("| Bridge | Pairs recovered |")
+    out("| --- | --- |")
+    for bridge, count in summary["bridge_mix"].items():
+        out(f"| `{bridge}` | {count} |")
+    out("")
+    out("| Direction verdict on the recovered row | Pairs |")
+    out("| --- | --- |")
+    for verdict, count in summary["direction_check_mix"].items():
+        out(f"| `{verdict}` | {count} |")
+    out("")
+
+    out("## Coverage")
+    out("")
+    out("| Outcome | Diseases |")
+    out("| --- | --- |")
+    out(f"| Evaluated (at least one known molecule) | {summary['coverage']['evaluated']} |")
+    out(f"| No ground truth (no known drug in either source) | {summary['coverage']['no_ground_truth']} |")
+    out("")
+    out("Reasons a disease could not be evaluated:")
+    out("")
+    out("| Reason | Diseases |")
+    out("| --- | --- |")
+    for reason, count in summary["coverage"]["excluded_reasons"].items():
+        out(f"| `{reason}` | {count} |")
+    out("")
+    out(
+        "A disease that returns candidates but has no known drug is **not** a failure and is not counted as "
+        "one. It is in the `no_ground_truth` row above."
+    )
+    out("")
+
+    out("## Per-disease results")
+    out("")
+    out("| Disease | Gene | Mechanism | Known molecules | Recovered | Best rank | Ruled out |")
+    out("| --- | --- | --- | --- | --- | --- | --- |")
+    for disease in sorted(payload["diseases"], key=lambda row: row["name"] or ""):
+        pairs = disease["pairs"]
+        hits = [pair for pair in pairs if pair["outcome"] == "recovered"]
+        ranks = [pair["rank"] for pair in hits if pair["rank"]]
+        bad = sum(1 for pair in pairs if pair["outcome"] == "falsely_rejected")
+        out(
+            f"| {disease['name']} | {disease['gene_symbol']} | "
+            f"{disease['mechanism_class'] or 'unknown'} / {disease['mechanism_direction'] or 'unknown'} | "
+            f"{len(pairs)} | {len(hits)} | {min(ranks) if ranks else '-'} | {bad} |"
+        )
+    out("")
+
+    out("## Threats to validity")
+    out("")
+    for threat in payload["threats_to_validity"]:
+        out(f"- {threat}")
+    out("")
+    out("## Reproducing it")
+    out("")
+    out("```bash")
+    out("lab/.venv/bin/python lab/experiments/run_discovery_accuracy.py")
+    out("```")
+    out("")
+    out(
+        f"Thresholds were declared in the runner before any result was seen: top-{TOP_N} and top-{WIDE_N}. "
+        "No engine threshold, ranking key or rule was changed by this work."
+    )
+    return "\n".join(lines) + "\n"
+
+
+def _percent(value: float | None) -> str:
+    return "-" if value is None else f"{value * 100:.1f}%"
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
+    parser.add_argument(
+        "--limit", type=int, default=None, help="Evaluate only the first N catalog diseases, by slug order"
+    )
+    args = parser.parse_args()
+
+    started = time.monotonic()
+    catalog = json.loads(CATALOG.read_text())
+    diseases = catalog["diseases"]
+    genes = catalog["genes"]
+    if args.limit:
+        diseases = sorted(diseases, key=lambda row: row["id"])[: args.limit]
+
+    api = Api(args.base_url)
+
+    symbols = sorted({disease["gene_symbol"] for disease in diseases if disease.get("gene_symbol")})
+    gene_treatments: dict[str, dict[str, Any]] = {}
+    for symbol in symbols:
+        payload, _ = api.get(f"/genes/{urllib.parse.quote(symbol)}/treatments")
+        if payload:
+            gene_treatments[symbol] = payload
+
+    ground_truth = collect_ground_truth(api, diseases, gene_treatments)
+    result = evaluate(api, ground_truth)
+    summary = summarise(result)
+    summary["coverage"]["catalog_diseases"] = len(diseases)
+
+    payload = {
+        "run_at": now(),
+        "wall_seconds": round(time.monotonic() - started, 1),
+        "question": (
+            "On diseases where some molecule is really used or really being tried, does the discovery "
+            "engine find that molecule when the record naming it is withheld, and does it ever rule one "
+            "out?"
+        ),
+        "conditions": {
+            "base_url": args.base_url,
+            "endpoint": "GET /api/v1/discovery/candidates?disease=<slug>&exclude_direct=true",
+            "catalog_diseases": len(diseases),
+            "catalog_genes": len(genes),
+            "gene_treatment_calls": len(symbols),
+            "api_requests": api.call_count,
+            "api_wall_ms": round(api.elapsed_total_ms, 1),
+            "api_failures": len(api.failures),
+            "deterministic": True,
+            "sampling": "none - every catalog disease was asked for",
+            "top_n_threshold": TOP_N,
+            "wide_n_threshold": WIDE_N,
+            "ground_truth_stages": sorted(GROUND_TRUTH_STAGES),
+            "ground_truth_sources": [
+                "GET /diseases/{slug} -> treatments[] (Open Targets drugs on the disease's own node)",
+                "GET /genes/{symbol}/treatments -> treatments[] whose indications[] name the disease MONDO",
+            ],
+            "identity_resolution": "GET /compounds/{chembl_id}, matched on ChEMBL id and InChIKey only",
+            "engine_changed": False,
+        },
+        "summary": summary,
+        "diseases": result["evaluated"],
+        "coverage_excluded": result["coverage_excluded"],
+        "api_failures": api.failures[:50],
+        "threats_to_validity": [
+            "Ground truth comes from Open Targets only. ChEMBL drug_indication is retrievable by molecule "
+            "in this deployment, not by disease, so it corroborates pairs rather than creating them; a "
+            "molecule ChEMBL records for a disease that Open Targets does not is absent from the ground "
+            "truth entirely.",
+            "Source B is target-anchored: it only finds a known drug that acts on the disease gene's own "
+            "protein. That structurally favours the same_target bridge and cannot test whether the pathway "
+            "or structural bridges recover drugs they alone could reach. Source A is disease-anchored and "
+            "does not have this bias, but returns far fewer rows.",
+            "Indication matching is an exact MONDO or ORPHA identifier match. ChEMBL and Open Targets "
+            "often file a rare disease under a parent term (leniolisib sits under 'inborn error of "
+            "immunity'), and every such pair is missed by this ground truth, so the evaluable set is a "
+            "lower bound on what exists.",
+            "A molecule for which ChEMBL records no mechanism cannot appear in either list, so pairs like "
+            "an immunoglobulin replacement are counted as missed although the engine never had a record to "
+            "find them with. They are reported separately as outside the engine's universe.",
+            "Recall here is recovery of a molecule already known to be used. It says nothing about whether "
+            "the candidates the engine ranks above it are good hypotheses.",
+            "A disease with no stated mechanism gets no required action, so nothing is ruled out on "
+            "direction for it. Those diseases cannot produce a false rejection, which flatters the safety "
+            "figure; the mechanism-confidence mix is reported beside it.",
+            "Both the API and the engine cache for fifteen minutes, so the wall times here are not cold "
+            "times. Accuracy figures are unaffected.",
+            "The sources are live. A source changing its records changes these numbers without anything "
+            "failing loudly.",
+        ],
+    }
+
+    OUTPUT_JSON.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT_JSON.write_text(json.dumps(payload, indent=2) + "\n")
+    OUTPUT_MARKDOWN.write_text(markdown(payload))
+
+    print(json.dumps(summary, indent=2))
+    print(f"\nwrote {OUTPUT_JSON}\nwrote {OUTPUT_MARKDOWN}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

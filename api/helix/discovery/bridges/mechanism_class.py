@@ -22,7 +22,6 @@ from helix.discovery.build import build_rows
 from helix.discovery.context import BridgeContext, BridgeOutput, CandidateRow, RuledOutRow
 from helix.discovery.evidence import hypothesis, seed_provenance
 from helix.discovery.rules import SAME_ACTION_CLASS, action_class_matches, molecule_effect
-from helix.discovery.targets import protein_actions
 from helix.evidence import try_build_evidence
 from helix.knowledge.catalog import SeedDisease
 from helix.log import get_logger
@@ -92,7 +91,7 @@ async def run(context: BridgeContext) -> BridgeOutput:
         if gene and gene.uniprot_accession:
             accessions.append((disease, gene.symbol, gene.uniprot_accession, gene.protein_name))
     found = await asyncio.gather(
-        *(asyncio.wait_for(protein_actions(row[2]), DISEASE_TIMEOUT) for row in accessions),
+        *(asyncio.wait_for(context.protein_actions(row[2]), DISEASE_TIMEOUT) for row in accessions),
         return_exceptions=True,
     )
     for row, actions in zip(accessions, found, strict=True):

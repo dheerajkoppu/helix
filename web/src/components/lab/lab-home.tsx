@@ -16,6 +16,7 @@ import {
   labKeys,
 } from "@/components/lab/api";
 import { Benchmark } from "@/components/lab/benchmark";
+import { FeaturedRun } from "@/components/lab/featured-run";
 import { ComparisonSummary } from "@/components/lab/comparison-summary";
 import { RecentRuns } from "@/components/lab/recent-runs";
 import { RunsList } from "@/components/lab/runs-list";
@@ -28,7 +29,7 @@ import {
   PageSection,
 } from "@/components/shell/page";
 import { Button } from "@/components/ui/button";
-import { LAB_TAGLINE, LAB_WORDS } from "@/lib/plain-language";
+import { LAB_WORDS } from "@/lib/plain-language";
 import { useAdvancedMode } from "@/lib/state/preferences";
 
 const ACTIVE_INTERVAL_MS = 3000;
@@ -78,11 +79,7 @@ export function LabHome() {
     <Page>
       <PageHeader
         title={LAB_WORDS.title}
-        description={
-          advanced
-            ? "Agents take one variant from question to an updated decision."
-            : LAB_TAGLINE
-        }
+        description="Agents take one variant from question to an updated decision."
       />
       <PageBody>
         {advanced ? (
@@ -103,6 +100,16 @@ export function LabHome() {
             </DefinitionList>
           </section>
         ) : null}
+
+        {advanced ? null : (
+          <section
+            id="featured"
+            aria-label={LAB_WORDS.featured}
+            className="border-b border-border-subtle py-7"
+          >
+            <FeaturedRun runs={runs} />
+          </section>
+        )}
 
         <section
           id="start"

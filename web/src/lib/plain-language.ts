@@ -684,6 +684,11 @@ export const LAB_WORDS = {
   hideDetails: "Hide details",
   typicalTime: "The middle value across runs",
   average: "The average across runs",
+  featured: "A finished investigation",
+  watchIt: "Watch it work",
+  firstAnswer: "First answer",
+  finalAnswer: "Final answer",
+  tookTime: "Took",
 } as const;
 
 /** Who ran it: "Team of agents" or "One agent". */

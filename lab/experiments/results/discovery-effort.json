@@ -1,0 +1,5529 @@
+{
+  "unit_of_work": "The effort the discovery engine removes, and how long the engine itself takes.\n\n    lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase engine --label before\n    lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase engine --label after\n    lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase manual\n\nTHE UNIT OF WORK, and it is the only thing this script counts.\n\nOne unit is ONE MOLECULE-TARGET PAIR whose recorded action has to be looked up and whose direction\nhas to be judged against the subject's mechanism. Concretely, one unit is the triple\n\n    (molecule, the protein target a record says it acts on, the subject's required direction)\n\nand settling it needs three things, every one of which is a record and not an opinion:\n\n  1. what the mechanism needs (less activity, or more) - from the disease record;\n  2. what the molecule does to that protein - from the ChEMBL mechanism `action_type`;\n  3. how an effect on that protein carries over to the subject - from the bridge's own record\n     (same protein / upstream producer / brake / binds it / similar pocket / another disease).\n\nThe engine makes one such judgment per (molecule, target) pair every bridge proposes. That count is\nread from `bridges[].candidate_count + bridges[].ruled_out_count`, which the engine reports per\nbridge BEFORE the response is de-duplicated and before the 40-row display caps, so it is the number\nof judgments actually made rather than the number displayed.\n\nWHAT THIS SCRIPT DOES NOT MEASURE. No scientist was timed. Nothing here is a claim about human\nminutes, and the manual phase is a machine doing the same lookups one at a time, which is a LOWER\nBOUND on the manual path: a person also has to read each record, decide, and write the decision down.\nEvery figure is reported as requests issued and wall seconds to reach the same set of judgments.\n\nWrites lab/experiments/results/discovery-effort.json.",
+  "base_url": "http://localhost:8000",
+  "written_at": "2026-10-04T02:27:59Z",
+  "engine_passes": {
+    "before": {
+      "label": "before",
+      "run_at": "2026-10-04T02:24:45Z",
+      "n_subjects": 16,
+      "subjects": [
+        {
+          "name": "ADA",
+          "kind": "flagship",
+          "params": {
+            "gene": "ADA"
+          }
+        },
+        {
+          "name": "IL2RG",
+          "kind": "flagship",
+          "params": {
+            "gene": "IL2RG"
+          }
+        },
+        {
+          "name": "BTK",
+          "kind": "flagship",
+          "params": {
+            "gene": "BTK"
+          }
+        },
+        {
+          "name": "WAS",
+          "kind": "flagship",
+          "params": {
+            "gene": "WAS"
+          }
+        },
+        {
+          "name": "RAG1",
+          "kind": "flagship",
+          "params": {
+            "gene": "RAG1"
+          }
+        },
+        {
+          "name": "JAK3",
+          "kind": "flagship",
+          "params": {
+            "gene": "JAK3"
+          }
+        },
+        {
+          "name": "CYBB",
+          "kind": "flagship",
+          "params": {
+            "gene": "CYBB"
+          }
+        },
+        {
+          "name": "STAT3",
+          "kind": "flagship",
+          "params": {
+            "gene": "STAT3"
+          }
+        },
+        {
+          "name": "STAT1",
+          "kind": "flagship",
+          "params": {
+            "gene": "STAT1"
+          }
+        },
+        {
+          "name": "FOXP3",
+          "kind": "flagship",
+          "params": {
+            "gene": "FOXP3"
+          }
+        },
+        {
+          "name": "CD40LG",
+          "kind": "flagship",
+          "params": {
+            "gene": "CD40LG"
+          }
+        },
+        {
+          "name": "PIK3CD",
+          "kind": "flagship",
+          "params": {
+            "gene": "PIK3CD"
+          }
+        },
+        {
+          "name": "CTLA4",
+          "kind": "flagship",
+          "params": {
+            "gene": "CTLA4"
+          }
+        },
+        {
+          "name": "APDS (held out)",
+          "kind": "control",
+          "params": {
+            "disease": "activated-p110-delta-syndrome-pik3cd",
+            "exclude_direct": "true"
+          }
+        },
+        {
+          "name": "X-linked agammaglobulinemia",
+          "kind": "control",
+          "params": {
+            "disease": "btk-deficiency-x-linked-agammaglobulinemia"
+          }
+        },
+        {
+          "name": "STAT1 gain of function",
+          "kind": "control",
+          "params": {
+            "disease": "stat1-gof"
+          }
+        }
+      ],
+      "reloads": {
+        "before_first_rebuild": {
+          "reloaded": true,
+          "wait_s": 2.84
+        },
+        "before_warm_rebuild": {
+          "reloaded": true,
+          "wait_s": 3.12
+        }
+      },
+      "tiers": {
+        "first_rebuild": {
+          "precondition": "the engine's assembled-response cache was empty (the worker was reloaded just before this pass); the database-backed HTTP cache of the source adapters was in whatever state earlier use left it, so a subject never asked for before pays full upstream latency here and a subject asked for recently does not. This tier is the noisy one.",
+          "subjects": {
+            "ADA": {
+              "status": 200,
+              "server_elapsed_ms": 25.8,
+              "end_to_end_ms": 32.1,
+              "from_cache": false,
+              "judgments_made": 2,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 2,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 7,
+              "records_by_database": {
+                "chembl": 6,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 1,
+              "molecules_with_a_recorded_action_on_those_proteins": 2,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 2,
+                  "elapsed_ms": 17.6
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.7
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 6.7
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.4
+                }
+              ]
+            },
+            "IL2RG": {
+              "status": 200,
+              "server_elapsed_ms": 3610.6,
+              "end_to_end_ms": 3618.9,
+              "from_cache": false,
+              "judgments_made": 94,
+              "judgments_ranked": 19,
+              "judgments_ruled_out": 40,
+              "judgments_dropped_before_display": 35,
+              "distinct_upstream_records": 54,
+              "records_by_database": {
+                "chembl": 50,
+                "intact": 1,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 8,
+              "molecules_with_a_recorded_action_on_those_proteins": 85,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 6,
+                  "ruled_out_count": 2,
+                  "elapsed_ms": 1415.8
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 7,
+                  "ruled_out_count": 69,
+                  "elapsed_ms": 2194.0
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 4,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1274.2
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 3,
+                  "ruled_out_count": 3,
+                  "elapsed_ms": 1673.1
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.9
+                }
+              ]
+            },
+            "BTK": {
+              "status": 200,
+              "server_elapsed_ms": 272.9,
+              "end_to_end_ms": 277.8,
+              "from_cache": false,
+              "judgments_made": 37,
+              "judgments_ranked": 4,
+              "judgments_ruled_out": 33,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 80,
+              "records_by_database": {
+                "chembl": 76,
+                "intact": 1,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 43,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 20,
+                  "elapsed_ms": 97.5
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 1,
+                  "ruled_out_count": 13,
+                  "elapsed_ms": 45.7
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 38.0
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 174.6
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 10.2
+                }
+              ]
+            },
+            "WAS": {
+              "status": 200,
+              "server_elapsed_ms": 1078.3,
+              "end_to_end_ms": 1081.6,
+              "from_cache": false,
+              "judgments_made": 8,
+              "judgments_ranked": 8,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 9,
+              "records_by_database": {
+                "chembl": 8,
+                "reactome": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 2,
+              "molecules_with_a_recorded_action_on_those_proteins": 27,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.2
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 8,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1076.7
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 769.7
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "RAG1": {
+              "status": 200,
+              "server_elapsed_ms": 806.6,
+              "end_to_end_ms": 810.3,
+              "from_cache": false,
+              "judgments_made": 0,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 0,
+              "records_by_database": {},
+              "databases_in_the_chains": [],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 0,
+              "molecules_with_a_recorded_action_on_those_proteins": 0,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.9
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 805.5
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 186.0
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "JAK3": {
+              "status": 200,
+              "server_elapsed_ms": 2898.0,
+              "end_to_end_ms": 2904.5,
+              "from_cache": false,
+              "judgments_made": 81,
+              "judgments_ranked": 10,
+              "judgments_ruled_out": 40,
+              "judgments_dropped_before_display": 31,
+              "distinct_upstream_records": 51,
+              "records_by_database": {
+                "chembl": 48,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 6,
+              "molecules_with_a_recorded_action_on_those_proteins": 58,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 17,
+                  "elapsed_ms": 931.6
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 10,
+                  "ruled_out_count": 28,
+                  "elapsed_ms": 1965.3
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 617.8
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 0,
+                  "ruled_out_count": 26,
+                  "elapsed_ms": 180.7
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.4
+                }
+              ]
+            },
+            "CYBB": {
+              "status": 200,
+              "server_elapsed_ms": 919.0,
+              "end_to_end_ms": 922.3,
+              "from_cache": false,
+              "judgments_made": 0,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 0,
+              "records_by_database": {},
+              "databases_in_the_chains": [],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 0,
+              "molecules_with_a_recorded_action_on_those_proteins": 0,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.6
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 814.5
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 915.8
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 915.7
+                }
+              ]
+            },
+            "STAT3": {
+              "status": 200,
+              "server_elapsed_ms": 2537.4,
+              "end_to_end_ms": 2542.0,
+              "from_cache": false,
+              "judgments_made": 29,
+              "judgments_ranked": 29,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 37,
+              "records_by_database": {
+                "chembl": 28,
+                "intact": 4,
+                "reactome": 5
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 11,
+              "molecules_with_a_recorded_action_on_those_proteins": 143,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.9
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 19,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2534.8
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 10,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 986.8
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "STAT1": {
+              "status": 200,
+              "server_elapsed_ms": 56.5,
+              "end_to_end_ms": 60.7,
+              "from_cache": false,
+              "judgments_made": 24,
+              "judgments_ranked": 21,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 3,
+              "distinct_upstream_records": 24,
+              "records_by_database": {
+                "chembl": 21,
+                "intact": 1,
+                "reactome": 2
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 6,
+              "molecules_with_a_recorded_action_on_those_proteins": 123,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.6
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 18,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 55.3
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 6,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 51.9
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "FOXP3": {
+              "status": 200,
+              "server_elapsed_ms": 793.7,
+              "end_to_end_ms": 796.9,
+              "from_cache": false,
+              "judgments_made": 0,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 0,
+              "records_by_database": {},
+              "databases_in_the_chains": [],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 0,
+              "molecules_with_a_recorded_action_on_those_proteins": 0,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.0
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 791.2
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 453.8
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.3
+                }
+              ]
+            },
+            "CD40LG": {
+              "status": 200,
+              "server_elapsed_ms": 1219.4,
+              "end_to_end_ms": 1224.8,
+              "from_cache": false,
+              "judgments_made": 9,
+              "judgments_ranked": 3,
+              "judgments_ruled_out": 6,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 16,
+              "records_by_database": {
+                "chembl": 14,
+                "string": 1,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "string",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 2,
+              "molecules_with_a_recorded_action_on_those_proteins": 17,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 6,
+                  "elapsed_ms": 446.2
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 772.4
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 635.9
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.8
+                }
+              ]
+            },
+            "PIK3CD": {
+              "status": 200,
+              "server_elapsed_ms": 551.4,
+              "end_to_end_ms": 559.1,
+              "from_cache": false,
+              "judgments_made": 24,
+              "judgments_ranked": 24,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 47,
+              "records_by_database": {
+                "chembl": 43,
+                "intact": 2,
+                "string": 1,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "string",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 126,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 12,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 41.1
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.6
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 9,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 22.5
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 509.4
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.1
+                }
+              ]
+            },
+            "CTLA4": {
+              "status": 200,
+              "server_elapsed_ms": 31.8,
+              "end_to_end_ms": 36.0,
+              "from_cache": false,
+              "judgments_made": 11,
+              "judgments_ranked": 5,
+              "judgments_ruled_out": 6,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 20,
+              "records_by_database": {
+                "chembl": 17,
+                "intact": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 3,
+              "molecules_with_a_recorded_action_on_those_proteins": 11,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 6,
+                  "elapsed_ms": 12.2
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 3.6
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 5,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 18.9
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 6.2
+                }
+              ]
+            },
+            "APDS (held out)": {
+              "status": 200,
+              "server_elapsed_ms": 290.9,
+              "end_to_end_ms": 296.6,
+              "from_cache": false,
+              "judgments_made": 24,
+              "judgments_ranked": 24,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 35,
+              "records_by_database": {
+                "chembl": 31,
+                "intact": 2,
+                "string": 1,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "string",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 8,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 126,
+              "withheld_edges": 18,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 12,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 21.9
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.2
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 9,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 96.2
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 265.4
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.6
+                }
+              ]
+            },
+            "X-linked agammaglobulinemia": {
+              "status": 200,
+              "server_elapsed_ms": 221.4,
+              "end_to_end_ms": 228.5,
+              "from_cache": false,
+              "judgments_made": 37,
+              "judgments_ranked": 4,
+              "judgments_ruled_out": 33,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 80,
+              "records_by_database": {
+                "chembl": 76,
+                "intact": 1,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 8,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 43,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 20,
+                  "elapsed_ms": 38.9
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 1,
+                  "ruled_out_count": 13,
+                  "elapsed_ms": 16.7
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 16.6
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 180.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 8.4
+                }
+              ]
+            },
+            "STAT1 gain of function": {
+              "status": 200,
+              "server_elapsed_ms": 51.6,
+              "end_to_end_ms": 59.2,
+              "from_cache": false,
+              "judgments_made": 30,
+              "judgments_ranked": 23,
+              "judgments_ruled_out": 4,
+              "judgments_dropped_before_display": 3,
+              "distinct_upstream_records": 32,
+              "records_by_database": {
+                "chembl": 27,
+                "intact": 1,
+                "iuis": 2,
+                "reactome": 2
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "iuis",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 6,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 8,
+              "molecules_with_a_recorded_action_on_those_proteins": 138,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.5
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 15,
+                  "ruled_out_count": 3,
+                  "elapsed_ms": 40.3
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 6,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 39.3
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "ok",
+                  "candidate_count": 5,
+                  "ruled_out_count": 1,
+                  "elapsed_ms": 44.7
+                }
+              ]
+            }
+          }
+        },
+        "warm_rebuild": {
+          "precondition": "the assembled-response cache was empty again (second reload) but the HTTP cache now holds every upstream record this subject needs, because the first_rebuild pass just fetched them. Every chain is rebuilt from scratch against local cache reads, so this tier isolates the engine's own work from upstream latency and is the fair before/after comparison.",
+          "subjects": {
+            "ADA": {
+              "status": 200,
+              "server_elapsed_ms": 40.1,
+              "end_to_end_ms": 43.9,
+              "from_cache": false,
+              "judgments_made": 2,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 2,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 7,
+              "records_by_database": {
+                "chembl": 6,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 1,
+              "molecules_with_a_recorded_action_on_those_proteins": 2,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 2,
+                  "elapsed_ms": 31.7
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 3.8
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 7.4
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.7
+                }
+              ]
+            },
+            "IL2RG": {
+              "status": 200,
+              "server_elapsed_ms": 500.2,
+              "end_to_end_ms": 507.4,
+              "from_cache": false,
+              "judgments_made": 94,
+              "judgments_ranked": 19,
+              "judgments_ruled_out": 40,
+              "judgments_dropped_before_display": 35,
+              "distinct_upstream_records": 54,
+              "records_by_database": {
+                "chembl": 50,
+                "intact": 1,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 8,
+              "molecules_with_a_recorded_action_on_those_proteins": 85,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 6,
+                  "ruled_out_count": 2,
+                  "elapsed_ms": 10.7
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 7,
+                  "ruled_out_count": 69,
+                  "elapsed_ms": 52.7
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 4,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 45.6
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 3,
+                  "ruled_out_count": 3,
+                  "elapsed_ms": 488.6
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.6
+                }
+              ]
+            },
+            "BTK": {
+              "status": 200,
+              "server_elapsed_ms": 208.6,
+              "end_to_end_ms": 213.3,
+              "from_cache": false,
+              "judgments_made": 37,
+              "judgments_ranked": 4,
+              "judgments_ruled_out": 33,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 80,
+              "records_by_database": {
+                "chembl": 76,
+                "intact": 1,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 43,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 20,
+                  "elapsed_ms": 37.2
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 1,
+                  "ruled_out_count": 13,
+                  "elapsed_ms": 39.5
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 37.5
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 170.4
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 7.1
+                }
+              ]
+            },
+            "WAS": {
+              "status": 200,
+              "server_elapsed_ms": 21.4,
+              "end_to_end_ms": 24.7,
+              "from_cache": false,
+              "judgments_made": 8,
+              "judgments_ranked": 8,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 9,
+              "records_by_database": {
+                "chembl": 8,
+                "reactome": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 2,
+              "molecules_with_a_recorded_action_on_those_proteins": 27,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.7
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 8,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 20.2
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 15.5
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "RAG1": {
+              "status": 200,
+              "server_elapsed_ms": 4.7,
+              "end_to_end_ms": 7.4,
+              "from_cache": false,
+              "judgments_made": 0,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 0,
+              "records_by_database": {},
+              "databases_in_the_chains": [],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 0,
+              "molecules_with_a_recorded_action_on_those_proteins": 0,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.7
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.0
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 3.8
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "JAK3": {
+              "status": 200,
+              "server_elapsed_ms": 216.6,
+              "end_to_end_ms": 221.1,
+              "from_cache": false,
+              "judgments_made": 81,
+              "judgments_ranked": 10,
+              "judgments_ruled_out": 40,
+              "judgments_dropped_before_display": 31,
+              "distinct_upstream_records": 51,
+              "records_by_database": {
+                "chembl": 48,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 6,
+              "molecules_with_a_recorded_action_on_those_proteins": 58,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 17,
+                  "elapsed_ms": 26.6
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 10,
+                  "ruled_out_count": 28,
+                  "elapsed_ms": 28.2
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 25.2
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 0,
+                  "ruled_out_count": 26,
+                  "elapsed_ms": 188.9
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.0
+                }
+              ]
+            },
+            "CYBB": {
+              "status": 200,
+              "server_elapsed_ms": 19.3,
+              "end_to_end_ms": 25.3,
+              "from_cache": false,
+              "judgments_made": 0,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 0,
+              "records_by_database": {},
+              "databases_in_the_chains": [],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 0,
+              "molecules_with_a_recorded_action_on_those_proteins": 0,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 3.6
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 3.8
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 15.0
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 6.2
+                }
+              ]
+            },
+            "STAT3": {
+              "status": 200,
+              "server_elapsed_ms": 78.0,
+              "end_to_end_ms": 82.8,
+              "from_cache": false,
+              "judgments_made": 29,
+              "judgments_ranked": 29,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 37,
+              "records_by_database": {
+                "chembl": 28,
+                "intact": 4,
+                "reactome": 5
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 11,
+              "molecules_with_a_recorded_action_on_those_proteins": 143,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.8
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 19,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 74.5
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 10,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 69.9
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "STAT1": {
+              "status": 200,
+              "server_elapsed_ms": 49.7,
+              "end_to_end_ms": 53.3,
+              "from_cache": false,
+              "judgments_made": 24,
+              "judgments_ranked": 21,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 3,
+              "distinct_upstream_records": 24,
+              "records_by_database": {
+                "chembl": 21,
+                "intact": 1,
+                "reactome": 2
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 6,
+              "molecules_with_a_recorded_action_on_those_proteins": 123,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.3
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 18,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 48.8
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 6,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 45.5
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "FOXP3": {
+              "status": 200,
+              "server_elapsed_ms": 10.5,
+              "end_to_end_ms": 13.2,
+              "from_cache": false,
+              "judgments_made": 0,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 0,
+              "records_by_database": {},
+              "databases_in_the_chains": [],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 0,
+              "molecules_with_a_recorded_action_on_those_proteins": 0,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.5
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.6
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 8.5
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.3
+                }
+              ]
+            },
+            "CD40LG": {
+              "status": 200,
+              "server_elapsed_ms": 11.0,
+              "end_to_end_ms": 14.1,
+              "from_cache": false,
+              "judgments_made": 9,
+              "judgments_ranked": 3,
+              "judgments_ruled_out": 6,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 16,
+              "records_by_database": {
+                "chembl": 14,
+                "string": 1,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "string",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 2,
+              "molecules_with_a_recorded_action_on_those_proteins": 17,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 6,
+                  "elapsed_ms": 6.2
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.4
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.5
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.6
+                }
+              ]
+            },
+            "PIK3CD": {
+              "status": 200,
+              "server_elapsed_ms": 226.0,
+              "end_to_end_ms": 232.4,
+              "from_cache": false,
+              "judgments_made": 24,
+              "judgments_ranked": 24,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 47,
+              "records_by_database": {
+                "chembl": 43,
+                "intact": 2,
+                "string": 1,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "string",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 126,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 12,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 31.1
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 24.0
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 9,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 62.3
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 194.3
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 21.4
+                }
+              ]
+            },
+            "CTLA4": {
+              "status": 200,
+              "server_elapsed_ms": 25.4,
+              "end_to_end_ms": 28.9,
+              "from_cache": false,
+              "judgments_made": 11,
+              "judgments_ranked": 5,
+              "judgments_ruled_out": 6,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 20,
+              "records_by_database": {
+                "chembl": 17,
+                "intact": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 3,
+              "molecules_with_a_recorded_action_on_those_proteins": 11,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 6,
+                  "elapsed_ms": 8.4
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.6
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 5,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 16.6
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 5.4
+                }
+              ]
+            },
+            "APDS (held out)": {
+              "status": 200,
+              "server_elapsed_ms": 201.0,
+              "end_to_end_ms": 206.5,
+              "from_cache": false,
+              "judgments_made": 24,
+              "judgments_ranked": 24,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 35,
+              "records_by_database": {
+                "chembl": 31,
+                "intact": 2,
+                "string": 1,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "string",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 8,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 126,
+              "withheld_edges": 18,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 12,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 20.1
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.1
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 9,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 9.3
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 178.3
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.3
+                }
+              ]
+            },
+            "X-linked agammaglobulinemia": {
+              "status": 200,
+              "server_elapsed_ms": 286.5,
+              "end_to_end_ms": 291.2,
+              "from_cache": false,
+              "judgments_made": 37,
+              "judgments_ranked": 4,
+              "judgments_ruled_out": 33,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 80,
+              "records_by_database": {
+                "chembl": 76,
+                "intact": 1,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 8,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 43,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 20,
+                  "elapsed_ms": 29.2
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 1,
+                  "ruled_out_count": 13,
+                  "elapsed_ms": 16.6
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 16.4
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 255.2
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 6.9
+                }
+              ]
+            },
+            "STAT1 gain of function": {
+              "status": 200,
+              "server_elapsed_ms": 38.9,
+              "end_to_end_ms": 42.9,
+              "from_cache": false,
+              "judgments_made": 30,
+              "judgments_ranked": 23,
+              "judgments_ruled_out": 4,
+              "judgments_dropped_before_display": 3,
+              "distinct_upstream_records": 32,
+              "records_by_database": {
+                "chembl": 27,
+                "intact": 1,
+                "iuis": 2,
+                "reactome": 2
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "iuis",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 6,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 8,
+              "molecules_with_a_recorded_action_on_those_proteins": 138,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.3
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 15,
+                  "ruled_out_count": 3,
+                  "elapsed_ms": 31.1
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 6,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 30.6
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "ok",
+                  "candidate_count": 5,
+                  "ruled_out_count": 1,
+                  "elapsed_ms": 35.2
+                }
+              ]
+            }
+          }
+        },
+        "served_from_cache": {
+          "precondition": "the same request repeated with no reload, so the engine returned the assembled response it had already built. No chain is rebuilt. server_elapsed_ms is the figure recorded when the response was built, not the time this call took.",
+          "subjects": {
+            "ADA": {
+              "status": 200,
+              "server_elapsed_ms": 40.1,
+              "end_to_end_ms": 2.3,
+              "from_cache": true
+            },
+            "IL2RG": {
+              "status": 200,
+              "server_elapsed_ms": 500.2,
+              "end_to_end_ms": 5.0,
+              "from_cache": true
+            },
+            "BTK": {
+              "status": 200,
+              "server_elapsed_ms": 208.6,
+              "end_to_end_ms": 3.7,
+              "from_cache": true
+            },
+            "WAS": {
+              "status": 200,
+              "server_elapsed_ms": 21.4,
+              "end_to_end_ms": 2.4,
+              "from_cache": true
+            },
+            "RAG1": {
+              "status": 200,
+              "server_elapsed_ms": 4.7,
+              "end_to_end_ms": 2.1,
+              "from_cache": true
+            },
+            "JAK3": {
+              "status": 200,
+              "server_elapsed_ms": 216.6,
+              "end_to_end_ms": 3.5,
+              "from_cache": true
+            },
+            "CYBB": {
+              "status": 200,
+              "server_elapsed_ms": 19.3,
+              "end_to_end_ms": 1.8,
+              "from_cache": true
+            },
+            "STAT3": {
+              "status": 200,
+              "server_elapsed_ms": 78.0,
+              "end_to_end_ms": 3.4,
+              "from_cache": true
+            },
+            "STAT1": {
+              "status": 200,
+              "server_elapsed_ms": 49.7,
+              "end_to_end_ms": 3.4,
+              "from_cache": true
+            },
+            "FOXP3": {
+              "status": 200,
+              "server_elapsed_ms": 10.5,
+              "end_to_end_ms": 1.6,
+              "from_cache": true
+            },
+            "CD40LG": {
+              "status": 200,
+              "server_elapsed_ms": 11.0,
+              "end_to_end_ms": 2.1,
+              "from_cache": true
+            },
+            "PIK3CD": {
+              "status": 200,
+              "server_elapsed_ms": 226.0,
+              "end_to_end_ms": 4.0,
+              "from_cache": true
+            },
+            "CTLA4": {
+              "status": 200,
+              "server_elapsed_ms": 25.4,
+              "end_to_end_ms": 5.7,
+              "from_cache": true
+            },
+            "APDS (held out)": {
+              "status": 200,
+              "server_elapsed_ms": 201.0,
+              "end_to_end_ms": 3.8,
+              "from_cache": true
+            },
+            "X-linked agammaglobulinemia": {
+              "status": 200,
+              "server_elapsed_ms": 286.5,
+              "end_to_end_ms": 3.4,
+              "from_cache": true
+            },
+            "STAT1 gain of function": {
+              "status": 200,
+              "server_elapsed_ms": 38.9,
+              "end_to_end_ms": 3.4,
+              "from_cache": true
+            }
+          }
+        }
+      }
+    },
+    "after": {
+      "label": "after",
+      "run_at": "2026-10-04T02:27:20Z",
+      "n_subjects": 16,
+      "subjects": [
+        {
+          "name": "ADA",
+          "kind": "flagship",
+          "params": {
+            "gene": "ADA"
+          }
+        },
+        {
+          "name": "IL2RG",
+          "kind": "flagship",
+          "params": {
+            "gene": "IL2RG"
+          }
+        },
+        {
+          "name": "BTK",
+          "kind": "flagship",
+          "params": {
+            "gene": "BTK"
+          }
+        },
+        {
+          "name": "WAS",
+          "kind": "flagship",
+          "params": {
+            "gene": "WAS"
+          }
+        },
+        {
+          "name": "RAG1",
+          "kind": "flagship",
+          "params": {
+            "gene": "RAG1"
+          }
+        },
+        {
+          "name": "JAK3",
+          "kind": "flagship",
+          "params": {
+            "gene": "JAK3"
+          }
+        },
+        {
+          "name": "CYBB",
+          "kind": "flagship",
+          "params": {
+            "gene": "CYBB"
+          }
+        },
+        {
+          "name": "STAT3",
+          "kind": "flagship",
+          "params": {
+            "gene": "STAT3"
+          }
+        },
+        {
+          "name": "STAT1",
+          "kind": "flagship",
+          "params": {
+            "gene": "STAT1"
+          }
+        },
+        {
+          "name": "FOXP3",
+          "kind": "flagship",
+          "params": {
+            "gene": "FOXP3"
+          }
+        },
+        {
+          "name": "CD40LG",
+          "kind": "flagship",
+          "params": {
+            "gene": "CD40LG"
+          }
+        },
+        {
+          "name": "PIK3CD",
+          "kind": "flagship",
+          "params": {
+            "gene": "PIK3CD"
+          }
+        },
+        {
+          "name": "CTLA4",
+          "kind": "flagship",
+          "params": {
+            "gene": "CTLA4"
+          }
+        },
+        {
+          "name": "APDS (held out)",
+          "kind": "control",
+          "params": {
+            "disease": "activated-p110-delta-syndrome-pik3cd",
+            "exclude_direct": "true"
+          }
+        },
+        {
+          "name": "X-linked agammaglobulinemia",
+          "kind": "control",
+          "params": {
+            "disease": "btk-deficiency-x-linked-agammaglobulinemia"
+          }
+        },
+        {
+          "name": "STAT1 gain of function",
+          "kind": "control",
+          "params": {
+            "disease": "stat1-gof"
+          }
+        }
+      ],
+      "reloads": {
+        "before_first_rebuild": {
+          "reloaded": true,
+          "wait_s": 1.78
+        },
+        "before_warm_rebuild": {
+          "reloaded": true,
+          "wait_s": 1.49
+        }
+      },
+      "tiers": {
+        "first_rebuild": {
+          "precondition": "the engine's assembled-response cache was empty (the worker was reloaded just before this pass); the database-backed HTTP cache of the source adapters was in whatever state earlier use left it, so a subject never asked for before pays full upstream latency here and a subject asked for recently does not. This tier is the noisy one.",
+          "subjects": {
+            "ADA": {
+              "status": 200,
+              "server_elapsed_ms": 21.7,
+              "end_to_end_ms": 25.8,
+              "from_cache": false,
+              "judgments_made": 2,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 2,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 7,
+              "records_by_database": {
+                "chembl": 6,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 1,
+              "molecules_with_a_recorded_action_on_those_proteins": 2,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 2,
+                  "elapsed_ms": 21.0
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 3.3
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 11.7
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 11.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 11.2
+                }
+              ]
+            },
+            "IL2RG": {
+              "status": 200,
+              "server_elapsed_ms": 501.3,
+              "end_to_end_ms": 509.6,
+              "from_cache": false,
+              "judgments_made": 94,
+              "judgments_ranked": 19,
+              "judgments_ruled_out": 40,
+              "judgments_dropped_before_display": 35,
+              "distinct_upstream_records": 54,
+              "records_by_database": {
+                "chembl": 50,
+                "intact": 1,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 8,
+              "molecules_with_a_recorded_action_on_those_proteins": 85,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 6,
+                  "ruled_out_count": 2,
+                  "elapsed_ms": 33.0
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 7,
+                  "ruled_out_count": 69,
+                  "elapsed_ms": 47.0
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 4,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 36.4
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 3,
+                  "ruled_out_count": 3,
+                  "elapsed_ms": 500.2
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.1
+                }
+              ]
+            },
+            "BTK": {
+              "status": 200,
+              "server_elapsed_ms": 197.7,
+              "end_to_end_ms": 203.4,
+              "from_cache": false,
+              "judgments_made": 37,
+              "judgments_ranked": 4,
+              "judgments_ruled_out": 33,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 80,
+              "records_by_database": {
+                "chembl": 76,
+                "intact": 1,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 43,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 20,
+                  "elapsed_ms": 80.6
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 1,
+                  "ruled_out_count": 13,
+                  "elapsed_ms": 77.1
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 62.0
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 196.7
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 13.7
+                }
+              ]
+            },
+            "WAS": {
+              "status": 200,
+              "server_elapsed_ms": 19.5,
+              "end_to_end_ms": 22.9,
+              "from_cache": false,
+              "judgments_made": 8,
+              "judgments_ranked": 8,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 9,
+              "records_by_database": {
+                "chembl": 8,
+                "reactome": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 2,
+              "molecules_with_a_recorded_action_on_those_proteins": 27,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.8
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 8,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 19.1
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 15.7
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.7
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "RAG1": {
+              "status": 200,
+              "server_elapsed_ms": 4.5,
+              "end_to_end_ms": 7.4,
+              "from_cache": false,
+              "judgments_made": 0,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 0,
+              "records_by_database": {},
+              "databases_in_the_chains": [],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 0,
+              "molecules_with_a_recorded_action_on_those_proteins": 0,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.4
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.7
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.2
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.2
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "JAK3": {
+              "status": 200,
+              "server_elapsed_ms": 182.2,
+              "end_to_end_ms": 187.7,
+              "from_cache": false,
+              "judgments_made": 81,
+              "judgments_ranked": 10,
+              "judgments_ruled_out": 40,
+              "judgments_dropped_before_display": 31,
+              "distinct_upstream_records": 51,
+              "records_by_database": {
+                "chembl": 48,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 6,
+              "molecules_with_a_recorded_action_on_those_proteins": 58,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 17,
+                  "elapsed_ms": 45.6
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 10,
+                  "ruled_out_count": 28,
+                  "elapsed_ms": 52.3
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 49.0
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 0,
+                  "ruled_out_count": 26,
+                  "elapsed_ms": 181.5
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.1
+                }
+              ]
+            },
+            "CYBB": {
+              "status": 200,
+              "server_elapsed_ms": 9.3,
+              "end_to_end_ms": 12.6,
+              "from_cache": false,
+              "judgments_made": 0,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 0,
+              "records_by_database": {},
+              "databases_in_the_chains": [],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 0,
+              "molecules_with_a_recorded_action_on_those_proteins": 0,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 7.2
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.8
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 8.7
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 7.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 6.8
+                }
+              ]
+            },
+            "STAT3": {
+              "status": 200,
+              "server_elapsed_ms": 72.4,
+              "end_to_end_ms": 76.7,
+              "from_cache": false,
+              "judgments_made": 29,
+              "judgments_ranked": 29,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 37,
+              "records_by_database": {
+                "chembl": 28,
+                "intact": 4,
+                "reactome": 5
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 11,
+              "molecules_with_a_recorded_action_on_those_proteins": 143,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 34.8
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 19,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 71.9
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 10,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 64.3
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 34.7
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "STAT1": {
+              "status": 200,
+              "server_elapsed_ms": 40.2,
+              "end_to_end_ms": 44.0,
+              "from_cache": false,
+              "judgments_made": 24,
+              "judgments_ranked": 21,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 3,
+              "distinct_upstream_records": 24,
+              "records_by_database": {
+                "chembl": 21,
+                "intact": 1,
+                "reactome": 2
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 6,
+              "molecules_with_a_recorded_action_on_those_proteins": 123,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.5
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 18,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 39.7
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 6,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 36.7
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.4
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "FOXP3": {
+              "status": 200,
+              "server_elapsed_ms": 9.1,
+              "end_to_end_ms": 11.3,
+              "from_cache": false,
+              "judgments_made": 0,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 0,
+              "records_by_database": {},
+              "databases_in_the_chains": [],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 0,
+              "molecules_with_a_recorded_action_on_those_proteins": 0,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 6.9
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.3
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 8.7
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 6.8
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.3
+                }
+              ]
+            },
+            "CD40LG": {
+              "status": 200,
+              "server_elapsed_ms": 9.4,
+              "end_to_end_ms": 11.8,
+              "from_cache": false,
+              "judgments_made": 9,
+              "judgments_ranked": 3,
+              "judgments_ruled_out": 6,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 16,
+              "records_by_database": {
+                "chembl": 14,
+                "string": 1,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "string",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 2,
+              "molecules_with_a_recorded_action_on_those_proteins": 17,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 6,
+                  "elapsed_ms": 9.1
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.9
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 6.9
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.6
+                }
+              ]
+            },
+            "PIK3CD": {
+              "status": 200,
+              "server_elapsed_ms": 192.0,
+              "end_to_end_ms": 199.8,
+              "from_cache": false,
+              "judgments_made": 24,
+              "judgments_ranked": 24,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 47,
+              "records_by_database": {
+                "chembl": 43,
+                "intact": 2,
+                "string": 1,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "string",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 126,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 12,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 41.1
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.3
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 9,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 23.7
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 191.4
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.6
+                }
+              ]
+            },
+            "CTLA4": {
+              "status": 200,
+              "server_elapsed_ms": 29.5,
+              "end_to_end_ms": 33.4,
+              "from_cache": false,
+              "judgments_made": 11,
+              "judgments_ranked": 5,
+              "judgments_ruled_out": 6,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 20,
+              "records_by_database": {
+                "chembl": 17,
+                "intact": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 3,
+              "molecules_with_a_recorded_action_on_those_proteins": 11,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 6,
+                  "elapsed_ms": 29.2
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 3.6
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 5,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 23.2
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 20.5
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 8.1
+                }
+              ]
+            },
+            "APDS (held out)": {
+              "status": 200,
+              "server_elapsed_ms": 194.9,
+              "end_to_end_ms": 200.5,
+              "from_cache": false,
+              "judgments_made": 24,
+              "judgments_ranked": 24,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 35,
+              "records_by_database": {
+                "chembl": 31,
+                "intact": 2,
+                "string": 1,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "string",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 8,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 126,
+              "withheld_edges": 18,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 12,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 27.8
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.1
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 9,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 18.4
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 191.5
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 10.1
+                }
+              ]
+            },
+            "X-linked agammaglobulinemia": {
+              "status": 200,
+              "server_elapsed_ms": 197.0,
+              "end_to_end_ms": 203.6,
+              "from_cache": false,
+              "judgments_made": 37,
+              "judgments_ranked": 4,
+              "judgments_ruled_out": 33,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 80,
+              "records_by_database": {
+                "chembl": 76,
+                "intact": 1,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 8,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 43,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 20,
+                  "elapsed_ms": 50.2
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 1,
+                  "ruled_out_count": 13,
+                  "elapsed_ms": 31.0
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 30.7
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 194.2
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 17.4
+                }
+              ]
+            },
+            "STAT1 gain of function": {
+              "status": 200,
+              "server_elapsed_ms": 43.7,
+              "end_to_end_ms": 47.5,
+              "from_cache": false,
+              "judgments_made": 30,
+              "judgments_ranked": 23,
+              "judgments_ruled_out": 4,
+              "judgments_dropped_before_display": 3,
+              "distinct_upstream_records": 32,
+              "records_by_database": {
+                "chembl": 27,
+                "intact": 1,
+                "iuis": 2,
+                "reactome": 2
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "iuis",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 6,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 8,
+              "molecules_with_a_recorded_action_on_those_proteins": 138,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 12.2
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 15,
+                  "ruled_out_count": 3,
+                  "elapsed_ms": 35.5
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 6,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 34.8
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 10.9
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "ok",
+                  "candidate_count": 5,
+                  "ruled_out_count": 1,
+                  "elapsed_ms": 39.4
+                }
+              ]
+            }
+          }
+        },
+        "warm_rebuild": {
+          "precondition": "the assembled-response cache was empty again (second reload) but the HTTP cache now holds every upstream record this subject needs, because the first_rebuild pass just fetched them. Every chain is rebuilt from scratch against local cache reads, so this tier isolates the engine's own work from upstream latency and is the fair before/after comparison.",
+          "subjects": {
+            "ADA": {
+              "status": 200,
+              "server_elapsed_ms": 18.9,
+              "end_to_end_ms": 22.7,
+              "from_cache": false,
+              "judgments_made": 2,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 2,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 7,
+              "records_by_database": {
+                "chembl": 6,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 1,
+              "molecules_with_a_recorded_action_on_those_proteins": 2,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 2,
+                  "elapsed_ms": 18.4
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.7
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 10.4
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 10.7
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 10.1
+                }
+              ]
+            },
+            "IL2RG": {
+              "status": 200,
+              "server_elapsed_ms": 506.2,
+              "end_to_end_ms": 516.8,
+              "from_cache": false,
+              "judgments_made": 94,
+              "judgments_ranked": 19,
+              "judgments_ruled_out": 40,
+              "judgments_dropped_before_display": 35,
+              "distinct_upstream_records": 54,
+              "records_by_database": {
+                "chembl": 50,
+                "intact": 1,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 8,
+              "molecules_with_a_recorded_action_on_those_proteins": 85,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 6,
+                  "ruled_out_count": 2,
+                  "elapsed_ms": 37.3
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 7,
+                  "ruled_out_count": 69,
+                  "elapsed_ms": 44.9
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 4,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 17.7
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 3,
+                  "ruled_out_count": 3,
+                  "elapsed_ms": 504.8
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.8
+                }
+              ]
+            },
+            "BTK": {
+              "status": 200,
+              "server_elapsed_ms": 213.5,
+              "end_to_end_ms": 219.3,
+              "from_cache": false,
+              "judgments_made": 37,
+              "judgments_ranked": 4,
+              "judgments_ruled_out": 33,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 80,
+              "records_by_database": {
+                "chembl": 76,
+                "intact": 1,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 43,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 20,
+                  "elapsed_ms": 82.8
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 1,
+                  "ruled_out_count": 13,
+                  "elapsed_ms": 66.3
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 56.6
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 212.5
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 14.2
+                }
+              ]
+            },
+            "WAS": {
+              "status": 200,
+              "server_elapsed_ms": 20.4,
+              "end_to_end_ms": 24.2,
+              "from_cache": false,
+              "judgments_made": 8,
+              "judgments_ranked": 8,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 9,
+              "records_by_database": {
+                "chembl": 8,
+                "reactome": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 2,
+              "molecules_with_a_recorded_action_on_those_proteins": 27,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.4
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 8,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 19.9
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 15.3
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.3
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "RAG1": {
+              "status": 200,
+              "server_elapsed_ms": 4.8,
+              "end_to_end_ms": 7.3,
+              "from_cache": false,
+              "judgments_made": 0,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 0,
+              "records_by_database": {},
+              "databases_in_the_chains": [],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 0,
+              "molecules_with_a_recorded_action_on_those_proteins": 0,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.7
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.7
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.5
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.5
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "JAK3": {
+              "status": 200,
+              "server_elapsed_ms": 182.7,
+              "end_to_end_ms": 187.0,
+              "from_cache": false,
+              "judgments_made": 81,
+              "judgments_ranked": 10,
+              "judgments_ruled_out": 40,
+              "judgments_dropped_before_display": 31,
+              "distinct_upstream_records": 51,
+              "records_by_database": {
+                "chembl": 48,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 6,
+              "molecules_with_a_recorded_action_on_those_proteins": 58,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 17,
+                  "elapsed_ms": 46.7
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 10,
+                  "ruled_out_count": 28,
+                  "elapsed_ms": 51.5
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 48.0
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 0,
+                  "ruled_out_count": 26,
+                  "elapsed_ms": 182.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.1
+                }
+              ]
+            },
+            "CYBB": {
+              "status": 200,
+              "server_elapsed_ms": 9.6,
+              "end_to_end_ms": 12.8,
+              "from_cache": false,
+              "judgments_made": 0,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 0,
+              "records_by_database": {},
+              "databases_in_the_chains": [],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 0,
+              "molecules_with_a_recorded_action_on_those_proteins": 0,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 5.0
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 3.7
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 9.1
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.8
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 7.3
+                }
+              ]
+            },
+            "STAT3": {
+              "status": 200,
+              "server_elapsed_ms": 73.8,
+              "end_to_end_ms": 78.0,
+              "from_cache": false,
+              "judgments_made": 29,
+              "judgments_ranked": 29,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 37,
+              "records_by_database": {
+                "chembl": 28,
+                "intact": 4,
+                "reactome": 5
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 11,
+              "molecules_with_a_recorded_action_on_those_proteins": 143,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 35.4
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 19,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 73.2
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 10,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 65.0
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 35.3
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "STAT1": {
+              "status": 200,
+              "server_elapsed_ms": 39.2,
+              "end_to_end_ms": 43.3,
+              "from_cache": false,
+              "judgments_made": 24,
+              "judgments_ranked": 21,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 3,
+              "distinct_upstream_records": 24,
+              "records_by_database": {
+                "chembl": 21,
+                "intact": 1,
+                "reactome": 2
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 6,
+              "molecules_with_a_recorded_action_on_those_proteins": 123,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.6
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 18,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 38.7
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 6,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 30.5
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.5
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.0
+                }
+              ]
+            },
+            "FOXP3": {
+              "status": 200,
+              "server_elapsed_ms": 8.5,
+              "end_to_end_ms": 10.7,
+              "from_cache": false,
+              "judgments_made": 0,
+              "judgments_ranked": 0,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 0,
+              "records_by_database": {},
+              "databases_in_the_chains": [],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 5,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 0,
+              "molecules_with_a_recorded_action_on_those_proteins": 0,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.1
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.2
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 8.1
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.3
+                }
+              ]
+            },
+            "CD40LG": {
+              "status": 200,
+              "server_elapsed_ms": 9.4,
+              "end_to_end_ms": 12.1,
+              "from_cache": false,
+              "judgments_made": 9,
+              "judgments_ranked": 3,
+              "judgments_ruled_out": 6,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 16,
+              "records_by_database": {
+                "chembl": 14,
+                "string": 1,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "string",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 2,
+              "molecules_with_a_recorded_action_on_those_proteins": 17,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 6,
+                  "elapsed_ms": 9.2
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 1.6
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 6.7
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.5
+                }
+              ]
+            },
+            "PIK3CD": {
+              "status": 200,
+              "server_elapsed_ms": 197.8,
+              "end_to_end_ms": 205.5,
+              "from_cache": false,
+              "judgments_made": 24,
+              "judgments_ranked": 24,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 47,
+              "records_by_database": {
+                "chembl": 43,
+                "intact": 2,
+                "string": 1,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "string",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 126,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 12,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 40.5
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 2.5
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 9,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 21.2
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 197.3
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.5
+                }
+              ]
+            },
+            "CTLA4": {
+              "status": 200,
+              "server_elapsed_ms": 30.7,
+              "end_to_end_ms": 33.5,
+              "from_cache": false,
+              "judgments_made": 11,
+              "judgments_ranked": 5,
+              "judgments_ruled_out": 6,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 20,
+              "records_by_database": {
+                "chembl": 17,
+                "intact": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 7,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 3,
+              "molecules_with_a_recorded_action_on_those_proteins": 11,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 6,
+                  "elapsed_ms": 30.4
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 4.5
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 5,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 23.8
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 20.5
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 15.1
+                }
+              ]
+            },
+            "APDS (held out)": {
+              "status": 200,
+              "server_elapsed_ms": 192.4,
+              "end_to_end_ms": 197.8,
+              "from_cache": false,
+              "judgments_made": 24,
+              "judgments_ranked": 24,
+              "judgments_ruled_out": 0,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 35,
+              "records_by_database": {
+                "chembl": 31,
+                "intact": 2,
+                "string": 1,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "string",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 8,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 126,
+              "withheld_edges": 18,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 12,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 26.6
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 0.1
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 9,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 17.0
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "partial",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 189.5
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 9.4
+                }
+              ]
+            },
+            "X-linked agammaglobulinemia": {
+              "status": 200,
+              "server_elapsed_ms": 197.4,
+              "end_to_end_ms": 203.1,
+              "from_cache": false,
+              "judgments_made": 37,
+              "judgments_ranked": 4,
+              "judgments_ruled_out": 33,
+              "judgments_dropped_before_display": 0,
+              "distinct_upstream_records": 80,
+              "records_by_database": {
+                "chembl": 76,
+                "intact": 1,
+                "reactome": 2,
+                "uniprot": 1
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "reactome",
+                "uniprot"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 8,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "pdbe",
+                "rcsb_pdb",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 4,
+              "molecules_with_a_recorded_action_on_those_proteins": 43,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "ok",
+                  "candidate_count": 0,
+                  "ruled_out_count": 20,
+                  "elapsed_ms": 50.2
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 1,
+                  "ruled_out_count": 13,
+                  "elapsed_ms": 31.2
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 3,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 31.0
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 195.2
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 17.7
+                }
+              ]
+            },
+            "STAT1 gain of function": {
+              "status": 200,
+              "server_elapsed_ms": 43.5,
+              "end_to_end_ms": 48.2,
+              "from_cache": false,
+              "judgments_made": 30,
+              "judgments_ranked": 23,
+              "judgments_ruled_out": 4,
+              "judgments_dropped_before_display": 3,
+              "distinct_upstream_records": 32,
+              "records_by_database": {
+                "chembl": 27,
+                "intact": 1,
+                "iuis": 2,
+                "reactome": 2
+              },
+              "databases_in_the_chains": [
+                "chembl",
+                "intact",
+                "iuis",
+                "reactome"
+              ],
+              "databases_consulted": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "reactome",
+                "string"
+              ],
+              "databases_consulted_count": 6,
+              "databases_that_answered": [
+                "chembl",
+                "helix_seed",
+                "intact",
+                "open_targets",
+                "reactome",
+                "string"
+              ],
+              "target_proteins_judged": 8,
+              "molecules_with_a_recorded_action_on_those_proteins": 138,
+              "withheld_edges": 1,
+              "bridges": [
+                {
+                  "kind": "same_target",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 12.3
+                },
+                {
+                  "kind": "pathway_node",
+                  "state": "ok",
+                  "candidate_count": 15,
+                  "ruled_out_count": 3,
+                  "elapsed_ms": 36.1
+                },
+                {
+                  "kind": "interaction_partner",
+                  "state": "ok",
+                  "candidate_count": 6,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 35.4
+                },
+                {
+                  "kind": "structural_analogue",
+                  "state": "empty",
+                  "candidate_count": 0,
+                  "ruled_out_count": 0,
+                  "elapsed_ms": 11.0
+                },
+                {
+                  "kind": "mechanism_class",
+                  "state": "ok",
+                  "candidate_count": 5,
+                  "ruled_out_count": 1,
+                  "elapsed_ms": 39.8
+                }
+              ]
+            }
+          }
+        },
+        "served_from_cache": {
+          "precondition": "the same request repeated with no reload, so the engine returned the assembled response it had already built. No chain is rebuilt. server_elapsed_ms is the figure recorded when the response was built, not the time this call took.",
+          "subjects": {
+            "ADA": {
+              "status": 200,
+              "server_elapsed_ms": 18.9,
+              "end_to_end_ms": 2.4,
+              "from_cache": true
+            },
+            "IL2RG": {
+              "status": 200,
+              "server_elapsed_ms": 506.2,
+              "end_to_end_ms": 4.7,
+              "from_cache": true
+            },
+            "BTK": {
+              "status": 200,
+              "server_elapsed_ms": 213.5,
+              "end_to_end_ms": 3.3,
+              "from_cache": true
+            },
+            "WAS": {
+              "status": 200,
+              "server_elapsed_ms": 20.4,
+              "end_to_end_ms": 3.0,
+              "from_cache": true
+            },
+            "RAG1": {
+              "status": 200,
+              "server_elapsed_ms": 4.8,
+              "end_to_end_ms": 1.3,
+              "from_cache": true
+            },
+            "JAK3": {
+              "status": 200,
+              "server_elapsed_ms": 182.7,
+              "end_to_end_ms": 3.2,
+              "from_cache": true
+            },
+            "CYBB": {
+              "status": 200,
+              "server_elapsed_ms": 9.6,
+              "end_to_end_ms": 1.3,
+              "from_cache": true
+            },
+            "STAT3": {
+              "status": 200,
+              "server_elapsed_ms": 73.8,
+              "end_to_end_ms": 3.8,
+              "from_cache": true
+            },
+            "STAT1": {
+              "status": 200,
+              "server_elapsed_ms": 39.2,
+              "end_to_end_ms": 3.0,
+              "from_cache": true
+            },
+            "FOXP3": {
+              "status": 200,
+              "server_elapsed_ms": 8.5,
+              "end_to_end_ms": 1.5,
+              "from_cache": true
+            },
+            "CD40LG": {
+              "status": 200,
+              "server_elapsed_ms": 9.4,
+              "end_to_end_ms": 1.8,
+              "from_cache": true
+            },
+            "PIK3CD": {
+              "status": 200,
+              "server_elapsed_ms": 197.8,
+              "end_to_end_ms": 4.7,
+              "from_cache": true
+            },
+            "CTLA4": {
+              "status": 200,
+              "server_elapsed_ms": 30.7,
+              "end_to_end_ms": 2.0,
+              "from_cache": true
+            },
+            "APDS (held out)": {
+              "status": 200,
+              "server_elapsed_ms": 192.4,
+              "end_to_end_ms": 3.2,
+              "from_cache": true
+            },
+            "X-linked agammaglobulinemia": {
+              "status": 200,
+              "server_elapsed_ms": 197.4,
+              "end_to_end_ms": 3.5,
+              "from_cache": true
+            },
+            "STAT1 gain of function": {
+              "status": 200,
+              "server_elapsed_ms": 43.5,
+              "end_to_end_ms": 2.7,
+              "from_cache": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "manual_equivalent": {
+    "run_at": "2026-10-04T02:30:02Z",
+    "definition": "A machine doing the same lookups a person would have to do: one request at a time, no concurrency, no cache shared between items, every record fetched from the public API that holds it (ChEMBL, Reactome, IntAct, UniProt). It reaches the same (molecule, target) pairs the engine judges, under the engine's own caps.",
+    "lower_bound_note": "This is a LOWER BOUND on the manual path and nothing more. The machine does not read, decide or record anything: it only fetches. A person doing this also has to read each record, apply the direction rule, and write the decision down. No scientist was timed, so no figure here is a claim about human time.",
+    "budget_s_per_subject": 300.0,
+    "subjects": [
+      {
+        "subject": "APDS (held out)",
+        "accession": "O00329",
+        "requests_issued": 60,
+        "wall_s": 38.28,
+        "judgments_reached": 43,
+        "proteins_read": 6,
+        "reactions_examined": 0,
+        "intact_partners_read": 5,
+        "truncated_by_budget": false,
+        "bridges_emulated": [
+          "same_target",
+          "pathway_node",
+          "interaction_partner"
+        ],
+        "bridges_not_emulated": [
+          "structural_analogue",
+          "mechanism_class"
+        ],
+        "request_statuses": {
+          "200": 60
+        },
+        "median_request_ms": 591.3
+      },
+      {
+        "subject": "X-linked agammaglobulinemia",
+        "accession": "Q06187",
+        "requests_issued": 50,
+        "wall_s": 54.1,
+        "judgments_reached": 25,
+        "proteins_read": 6,
+        "reactions_examined": 0,
+        "intact_partners_read": 5,
+        "truncated_by_budget": false,
+        "bridges_emulated": [
+          "same_target",
+          "pathway_node",
+          "interaction_partner"
+        ],
+        "bridges_not_emulated": [
+          "structural_analogue",
+          "mechanism_class"
+        ],
+        "request_statuses": {
+          "200": 50
+        },
+        "median_request_ms": 603.5
+      },
+      {
+        "subject": "STAT1 gain of function",
+        "accession": "P42224",
+        "requests_issued": 15,
+        "wall_s": 30.31,
+        "judgments_reached": 0,
+        "proteins_read": 6,
+        "reactions_examined": 0,
+        "intact_partners_read": 5,
+        "truncated_by_budget": false,
+        "bridges_emulated": [
+          "same_target",
+          "pathway_node",
+          "interaction_partner"
+        ],
+        "bridges_not_emulated": [
+          "structural_analogue",
+          "mechanism_class"
+        ],
+        "request_statuses": {
+          "200": 15
+        },
+        "median_request_ms": 694.7
+      }
+    ]
+  }
+}

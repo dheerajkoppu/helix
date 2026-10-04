@@ -6,8 +6,9 @@ the direction filter, rows the filter removed, the SourceResults it consulted, a
 partially. A bridge never raises for an upstream failure and never fails the request.
 """
 
+import asyncio
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from helix.knowledge.catalog import Catalog, SeedDisease
 from helix.schemas.common import Evidence, SourceStatus
@@ -23,6 +24,9 @@ from helix.schemas.discovery import (
     WithheldEdge,
 )
 from helix.sources.base import Gathered, SourceResult
+
+if TYPE_CHECKING:
+    from helix.discovery.targets import ProteinActions
 
 BRIDGE_LABELS: dict[BridgeKind, str] = {
     "same_target": "A molecule that acts on this very protein",
@@ -77,6 +81,29 @@ class BridgeContext:
 
     def direct_edge_for(self, chembl_id: str) -> DirectEdge | None:
         return next((edge for edge in self.direct_edges if edge.molecule_chembl_id == chembl_id), None)
+
+    async def protein_actions(self, accession: str) -> "ProteinActions":
+        """ChEMBL's records for one protein, fetched once per request however many bridges ask.
+
+        Bridges land on the same protein often: the subject's own protein is wanted by two of them,
+        and a pathway node is frequently also a curated partner. Each asker gets the same object.
+        The task is shielded, so one bridge's timeout never cancels the fetch another is waiting on.
+        """
+        from helix.discovery.targets import protein_actions
+
+        tasks: dict[str, asyncio.Task[ProteinActions]] = self.shared.setdefault("protein_action_tasks", {})
+        task = tasks.get(accession)
+        if task is None:
+            task = asyncio.ensure_future(protein_actions(accession))
+            task.add_done_callback(lambda done: done.cancelled() or done.exception())
+            tasks[accession] = task
+        return await asyncio.shield(task)
+
+    def release_protein_actions(self) -> None:
+        """Drop any fetch no bridge waited for, once the bridges are done."""
+        for task in (self.shared.get("protein_action_tasks") or {}).values():
+            if not task.done():
+                task.cancel()
 
 
 @dataclass(slots=True)

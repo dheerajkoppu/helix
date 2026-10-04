@@ -1,0 +1,619 @@
+{
+  "run_at": "2026-10-04T02:25:52Z",
+  "wall_seconds": 102.6,
+  "question": "On diseases where some molecule is really used or really being tried, does the discovery engine find that molecule when the record naming it is withheld, and does it ever rule one out?",
+  "conditions": {
+    "base_url": "http://localhost:8000",
+    "endpoint": "GET /api/v1/discovery/candidates?disease=<slug>&exclude_direct=true",
+    "catalog_diseases": 40,
+    "catalog_genes": 511,
+    "gene_treatment_calls": 34,
+    "api_requests": 85,
+    "api_wall_ms": 102556.1,
+    "api_failures": 0,
+    "deterministic": true,
+    "sampling": "none - every catalog disease was asked for",
+    "top_n_threshold": 10,
+    "wide_n_threshold": 25,
+    "ground_truth_stages": [
+      "APPROVAL",
+      "PHASE_1",
+      "PHASE_1_2",
+      "PHASE_2",
+      "PHASE_2_3",
+      "PHASE_3",
+      "PHASE_4"
+    ],
+    "ground_truth_sources": [
+      "GET /diseases/{slug} -> treatments[] (Open Targets drugs on the disease's own node)",
+      "GET /genes/{symbol}/treatments -> treatments[] whose indications[] name the disease MONDO"
+    ],
+    "identity_resolution": "GET /compounds/{chembl_id}, matched on ChEMBL id and InChIKey only",
+    "engine_changed": false
+  },
+  "summary": {
+    "n_pairs": 8,
+    "n_diseases_evaluated": 5,
+    "n_diseases_with_a_hit": 0,
+    "n_diseases_with_a_false_rejection": 1,
+    "recall_pairs": {
+      "recovered": 0,
+      "rate": 0.0,
+      "top_10": 0,
+      "top_10_rate": 0.0,
+      "top_25": 0,
+      "top_25_rate": 0.0,
+      "median_rank": null,
+      "rank_range": null
+    },
+    "recall_diseases": {
+      "rate": 0.0
+    },
+    "false_rejection": {
+      "pairs": 1,
+      "rate": 0.125,
+      "diseases": 1,
+      "cases": [
+        {
+          "disease": "AD-HIES STAT3 deficiency (Job syndrome)",
+          "slug": "ad-hies-stat3-deficiency",
+          "mechanism": "dominant_negative / decreased_activity",
+          "mechanism_confidence": "stated_in_the_catalog",
+          "molecule": "BARICITINIB",
+          "chembl_id": "CHEMBL2105759",
+          "clinical_stage": "PHASE_1",
+          "modality": "Small molecule",
+          "ruled_out_on": "JAK1",
+          "bridge": "pathway_node",
+          "reason_code": "opposes_required_action",
+          "reason": "AD-HIES STAT3 deficiency (Job syndrome) needs STAT3 to do more. ChEMBL records this molecule as an inhibitor of Tyrosine-protein kinase JAK1, which lowers that protein. Because this protein helps produce the active form of the subject protein, that lowers what STAT3 does. That is the opposite of what this mechanism needs, so it is ruled out.",
+          "chembl_action_types": [],
+          "direction_needed": "more_activity"
+        }
+      ]
+    },
+    "missed": {
+      "pairs": 7,
+      "outside_the_engine_universe": 7,
+      "no_chembl_mechanism_on_subject_protein": 7,
+      "with_a_mechanism_but_not_returned": 0,
+      "modality_mix": {
+        "Small molecule": 4,
+        "Antibody": 1,
+        "Gene": 1,
+        "Enzyme": 1
+      }
+    },
+    "direction_agreement": {
+      "no_chembl_mechanism_on_the_subject_protein": 8
+    },
+    "bridge_mix": {},
+    "direction_check_mix": {},
+    "mechanism_confidence_mix": {
+      "stated_in_the_catalog": 2,
+      "named_in_the_disease_label": 2,
+      "unknown": 1
+    },
+    "ground_truth_source_mix": {
+      "open_targets_disease_drug": 8
+    },
+    "identity_unresolved": 0,
+    "chembl_corroborated_pairs": 0,
+    "coverage": {
+      "catalog_diseases": 40,
+      "evaluated": 5,
+      "no_ground_truth": 35,
+      "excluded_reasons": {
+        "no_known_drug_in_either_source": 29,
+        "no_mondo_or_orphanet_cross_reference_to_match_on": 4,
+        "no_gene_in_the_catalog": 2
+      }
+    }
+  },
+  "diseases": [
+    {
+      "slug": "ad-hies-stat3-deficiency",
+      "name": "AD-HIES STAT3 deficiency (Job syndrome)",
+      "gene_symbol": "STAT3",
+      "accession": "P40763",
+      "identifiers": [
+        "MONDO:0007818",
+        "ORPHA:2314"
+      ],
+      "mechanism_class": "dominant_negative",
+      "mechanism_direction": "decreased_activity",
+      "mechanism_confidence": "stated_in_the_catalog",
+      "direction_needed": "more_activity",
+      "candidate_count": 14,
+      "ruled_out_count": 40,
+      "withheld_edge_count": 4,
+      "bridges": {
+        "same_target": "empty",
+        "pathway_node": "ok",
+        "interaction_partner": "ok",
+        "structural_analogue": "empty",
+        "mechanism_class": "empty"
+      },
+      "from_cache": false,
+      "server_elapsed_ms": 62.5,
+      "pairs": [
+        {
+          "chembl_id": "CHEMBL1790041",
+          "inchikey": "VMXUWOKSQNHOCA-UHFFFAOYSA-N",
+          "name": "RANITIDINE",
+          "identity_resolved_independently": true,
+          "ground_truth_source": "open_targets_disease_drug",
+          "matched_on": "the disease's own Open Targets node",
+          "clinical_stage": "PHASE_2",
+          "modality": "Small molecule",
+          "chembl_indication_corroborates": [],
+          "chembl_action_types_on_subject_protein": [],
+          "direction_needed": "more_activity",
+          "direction_agreement": "no_chembl_mechanism_on_the_subject_protein",
+          "outcome": "missed",
+          "rank": null,
+          "bridge": null,
+          "direction_check": null,
+          "ruled_out_reason_code": null,
+          "ruled_out_reason": null,
+          "ruled_out_bridge": null,
+          "ruled_out_target": null
+        },
+        {
+          "chembl_id": "CHEMBL2105759",
+          "inchikey": "XUZMWHLSFXCVMG-UHFFFAOYSA-N",
+          "name": "BARICITINIB",
+          "identity_resolved_independently": true,
+          "ground_truth_source": "open_targets_disease_drug",
+          "matched_on": "the disease's own Open Targets node",
+          "clinical_stage": "PHASE_1",
+          "modality": "Small molecule",
+          "chembl_indication_corroborates": [],
+          "chembl_action_types_on_subject_protein": [],
+          "direction_needed": "more_activity",
+          "direction_agreement": "no_chembl_mechanism_on_the_subject_protein",
+          "outcome": "falsely_rejected",
+          "rank": null,
+          "bridge": null,
+          "direction_check": null,
+          "ruled_out_reason_code": "opposes_required_action",
+          "ruled_out_reason": "AD-HIES STAT3 deficiency (Job syndrome) needs STAT3 to do more. ChEMBL records this molecule as an inhibitor of Tyrosine-protein kinase JAK1, which lowers that protein. Because this protein helps produce the active form of the subject protein, that lowers what STAT3 does. That is the opposite of what this mechanism needs, so it is ruled out.",
+          "ruled_out_bridge": "pathway_node",
+          "ruled_out_target": "JAK1"
+        },
+        {
+          "chembl_id": "CHEMBL1201589",
+          "inchikey": null,
+          "name": "OMALIZUMAB",
+          "identity_resolved_independently": true,
+          "ground_truth_source": "open_targets_disease_drug",
+          "matched_on": "the disease's own Open Targets node",
+          "clinical_stage": "PHASE_1",
+          "modality": "Antibody",
+          "chembl_indication_corroborates": [],
+          "chembl_action_types_on_subject_protein": [],
+          "direction_needed": "more_activity",
+          "direction_agreement": "no_chembl_mechanism_on_the_subject_protein",
+          "outcome": "missed",
+          "rank": null,
+          "bridge": null,
+          "direction_check": null,
+          "ruled_out_reason_code": null,
+          "ruled_out_reason": null,
+          "ruled_out_bridge": null,
+          "ruled_out_target": null
+        }
+      ]
+    },
+    {
+      "slug": "ad-sting-associated-vasculopathy-infantile-onset",
+      "name": "AD STING-associated vasculopathy, infantile-onset (SAVI)",
+      "gene_symbol": "STING1",
+      "accession": "Q86WV6",
+      "identifiers": [
+        "MONDO:0014405",
+        "ORPHA:425120"
+      ],
+      "mechanism_class": "unknown",
+      "mechanism_direction": "unknown",
+      "mechanism_confidence": "unknown",
+      "direction_needed": "none",
+      "candidate_count": 1,
+      "ruled_out_count": 0,
+      "withheld_edge_count": 3,
+      "bridges": {
+        "same_target": "ok",
+        "pathway_node": "empty",
+        "interaction_partner": "empty",
+        "structural_analogue": "empty",
+        "mechanism_class": "empty"
+      },
+      "from_cache": false,
+      "server_elapsed_ms": 17972.9,
+      "pairs": [
+        {
+          "chembl_id": "CHEMBL2105759",
+          "inchikey": "XUZMWHLSFXCVMG-UHFFFAOYSA-N",
+          "name": "BARICITINIB",
+          "identity_resolved_independently": true,
+          "ground_truth_source": "open_targets_disease_drug",
+          "matched_on": "the disease's own Open Targets node",
+          "clinical_stage": "PHASE_2_3",
+          "modality": "Small molecule",
+          "chembl_indication_corroborates": [],
+          "chembl_action_types_on_subject_protein": [],
+          "direction_needed": "none",
+          "direction_agreement": "no_chembl_mechanism_on_the_subject_protein",
+          "outcome": "missed",
+          "rank": null,
+          "bridge": null,
+          "direction_check": null,
+          "ruled_out_reason_code": null,
+          "ruled_out_reason": null,
+          "ruled_out_bridge": null,
+          "ruled_out_target": null
+        }
+      ]
+    },
+    {
+      "slug": "ada-deficiency",
+      "name": "ADA deficiency",
+      "gene_symbol": "ADA",
+      "accession": "P00813",
+      "identifiers": [
+        "MONDO:0007064",
+        "ORPHA:277"
+      ],
+      "mechanism_class": "loss_of_function",
+      "mechanism_direction": "decreased_activity",
+      "mechanism_confidence": "named_in_the_disease_label",
+      "direction_needed": "more_activity",
+      "candidate_count": 0,
+      "ruled_out_count": 2,
+      "withheld_edge_count": 3,
+      "bridges": {
+        "same_target": "ok",
+        "pathway_node": "empty",
+        "interaction_partner": "empty",
+        "structural_analogue": "empty",
+        "mechanism_class": "empty"
+      },
+      "from_cache": false,
+      "server_elapsed_ms": 27.7,
+      "pairs": [
+        {
+          "chembl_id": "CHEMBL4298201",
+          "inchikey": null,
+          "name": "SIMOLADAGENE AUTOTEMCEL",
+          "identity_resolved_independently": true,
+          "ground_truth_source": "open_targets_disease_drug",
+          "matched_on": "the disease's own Open Targets node",
+          "clinical_stage": "PHASE_2_3",
+          "modality": "Gene",
+          "chembl_indication_corroborates": [],
+          "chembl_action_types_on_subject_protein": [],
+          "direction_needed": "more_activity",
+          "direction_agreement": "no_chembl_mechanism_on_the_subject_protein",
+          "outcome": "missed",
+          "rank": null,
+          "bridge": null,
+          "direction_check": null,
+          "ruled_out_reason_code": null,
+          "ruled_out_reason": null,
+          "ruled_out_bridge": null,
+          "ruled_out_target": null
+        },
+        {
+          "chembl_id": "CHEMBL1201514",
+          "inchikey": null,
+          "name": "PEGADEMASE BOVINE",
+          "identity_resolved_independently": true,
+          "ground_truth_source": "open_targets_disease_drug",
+          "matched_on": "the disease's own Open Targets node",
+          "clinical_stage": "PHASE_1_2",
+          "modality": "Enzyme",
+          "chembl_indication_corroborates": [],
+          "chembl_action_types_on_subject_protein": [],
+          "direction_needed": "more_activity",
+          "direction_agreement": "no_chembl_mechanism_on_the_subject_protein",
+          "outcome": "missed",
+          "rank": null,
+          "bridge": null,
+          "direction_check": null,
+          "ruled_out_reason_code": null,
+          "ruled_out_reason": null,
+          "ruled_out_bridge": null,
+          "ruled_out_target": null
+        }
+      ]
+    },
+    {
+      "slug": "apeced-autoimmune-polyendocrinopathy-with-candidiasis",
+      "name": "APECED (APS-1), autoimmune polyendocrinopathy with candidiasis and ectodermal dystrophy",
+      "gene_symbol": "AIRE",
+      "accession": "O43918",
+      "identifiers": [
+        "MONDO:0009411",
+        "ORPHA:3453"
+      ],
+      "mechanism_class": "loss_of_function",
+      "mechanism_direction": "decreased_activity",
+      "mechanism_confidence": "named_in_the_disease_label",
+      "direction_needed": "more_activity",
+      "candidate_count": 0,
+      "ruled_out_count": 0,
+      "withheld_edge_count": 2,
+      "bridges": {
+        "same_target": "empty",
+        "pathway_node": "empty",
+        "interaction_partner": "empty",
+        "structural_analogue": "empty",
+        "mechanism_class": "empty"
+      },
+      "from_cache": false,
+      "server_elapsed_ms": 1556.1,
+      "pairs": [
+        {
+          "chembl_id": "CHEMBL1789941",
+          "inchikey": "HFNKQEVNSGCOJV-OAHLLOKOSA-N",
+          "name": "RUXOLITINIB",
+          "identity_resolved_independently": true,
+          "ground_truth_source": "open_targets_disease_drug",
+          "matched_on": "the disease's own Open Targets node",
+          "clinical_stage": "PHASE_2",
+          "modality": "Small molecule",
+          "chembl_indication_corroborates": [],
+          "chembl_action_types_on_subject_protein": [],
+          "direction_needed": "more_activity",
+          "direction_agreement": "no_chembl_mechanism_on_the_subject_protein",
+          "outcome": "missed",
+          "rank": null,
+          "bridge": null,
+          "direction_check": null,
+          "ruled_out_reason_code": null,
+          "ruled_out_reason": null,
+          "ruled_out_bridge": null,
+          "ruled_out_target": null
+        }
+      ]
+    },
+    {
+      "slug": "ar-sting-associated-vasculopathy-infantile-onset",
+      "name": "AR STING-associated vasculopathy, infantile-onset (SAVI)",
+      "gene_symbol": "STING1",
+      "accession": "Q86WV6",
+      "identifiers": [
+        "MONDO:0014405",
+        "ORPHA:425120"
+      ],
+      "mechanism_class": "gain_of_function",
+      "mechanism_direction": "increased_activity",
+      "mechanism_confidence": "stated_in_the_catalog",
+      "direction_needed": "less_activity",
+      "candidate_count": 0,
+      "ruled_out_count": 1,
+      "withheld_edge_count": 2,
+      "bridges": {
+        "same_target": "ok",
+        "pathway_node": "empty",
+        "interaction_partner": "empty",
+        "structural_analogue": "empty",
+        "mechanism_class": "empty"
+      },
+      "from_cache": false,
+      "server_elapsed_ms": 434.2,
+      "pairs": [
+        {
+          "chembl_id": "CHEMBL2105759",
+          "inchikey": "XUZMWHLSFXCVMG-UHFFFAOYSA-N",
+          "name": "BARICITINIB",
+          "identity_resolved_independently": true,
+          "ground_truth_source": "open_targets_disease_drug",
+          "matched_on": "the disease's own Open Targets node",
+          "clinical_stage": "PHASE_2_3",
+          "modality": "Small molecule",
+          "chembl_indication_corroborates": [],
+          "chembl_action_types_on_subject_protein": [],
+          "direction_needed": "less_activity",
+          "direction_agreement": "no_chembl_mechanism_on_the_subject_protein",
+          "outcome": "missed",
+          "rank": null,
+          "bridge": null,
+          "direction_check": null,
+          "ruled_out_reason_code": null,
+          "ruled_out_reason": null,
+          "ruled_out_bridge": null,
+          "ruled_out_target": null
+        }
+      ]
+    }
+  ],
+  "coverage_excluded": [
+    {
+      "slug": "3-methylglutaconic-aciduria",
+      "name": "3-Methylglutaconic aciduria",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "acquired-angioedema-phenocopy",
+      "name": "Acquired angioedema",
+      "reason": "no_gene_in_the_catalog"
+    },
+    {
+      "slug": "act1-deficiency",
+      "name": "ACT1 deficiency",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "activated-p110-delta-syndrome-pik3cd",
+      "name": "Activated p110\u03b4 syndrome (APDS)",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "activated-p110-delta-syndrome-pik3r1",
+      "name": "Activated p110\u03b4 syndrome (APDS)",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "activated-rac2-defect",
+      "name": "Activated RAC2 defect",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "activating-de-novo-mutations-in-nuclear-factor-erythroid-2-like",
+      "name": "Activating de novo mutations in nuclear factor, erythroid 2\u2013like (NFE2L2)",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "acute-liver-failure-due-to-nbas-deficiency",
+      "name": "Acute liver failure due to NBAS deficiency",
+      "reason": "no_mondo_or_orphanet_cross_reference_to_match_on"
+    },
+    {
+      "slug": "acute-necrotizing-encephalopathy",
+      "name": "Acute necrotizing encephalopathy",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "ada2-deficiency",
+      "name": "ADA2 deficiency",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "adam17-deficiency",
+      "name": "ADAM17 deficiency",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "adar1-deficiency-ags6-ad",
+      "name": "ADAR1 deficiency, AGS6",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "adar1-deficiency-ags6-ar",
+      "name": "ADAR1 deficiency, AGS6",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "adult-onset-immunodeficiency-with-susceptibility-phenocopy",
+      "name": "Adult-onset immunodeficiency with susceptibility to environmental mycobacteria",
+      "reason": "no_gene_in_the_catalog"
+    },
+    {
+      "slug": "aicardi-goutieres-syndrome-7",
+      "name": "Aicardi\u2013Gouti\u00e8res syndrome 7 (AGS7)",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "aid-deficiency-ad",
+      "name": "AID deficiency",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "aid-deficiency-ar",
+      "name": "AID deficiency",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "aiolos-deficiency",
+      "name": "AIOLOS deficiency",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "ak2-defect",
+      "name": "AK2 defect",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "alpi-deficiency",
+      "name": "ALPI deficiency",
+      "reason": "no_mondo_or_orphanet_cross_reference_to_match_on"
+    },
+    {
+      "slug": "alps-caspase-10",
+      "name": "ALPS-Caspase 10",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "alps-caspase-8",
+      "name": "ALPS-Caspase 8",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "alps-fas-ad",
+      "name": "ALPS-FAS",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "alps-fas-ar",
+      "name": "ALPS-FAS",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "alps-faslg",
+      "name": "ALPS-FASLG",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "ap1s3-deficiency",
+      "name": "AP1S3 deficiency",
+      "reason": "no_mondo_or_orphanet_cross_reference_to_match_on"
+    },
+    {
+      "slug": "aplaid-or-autoinflammation-antibody-deficiency-and-immune",
+      "name": "APLAID or autoinflammation, antibody deficiency, and immune dysregulation",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "april-deficiency",
+      "name": "APRIL deficiency",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "ar-cgd-cyba",
+      "name": "AR CGD",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "ar-cgd-cybc1",
+      "name": "AR CGD",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "ar-cgd-ncf1",
+      "name": "AR CGD",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "ar-cgd-ncf2",
+      "name": "AR CGD",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "ar-cgd-ncf4",
+      "name": "AR CGD",
+      "reason": "no_known_drug_in_either_source"
+    },
+    {
+      "slug": "arf1-deficiency",
+      "name": "ARF1 deficiency",
+      "reason": "no_mondo_or_orphanet_cross_reference_to_match_on"
+    },
+    {
+      "slug": "arhgef1-deficiency",
+      "name": "ARHGEF1 deficiency",
+      "reason": "no_known_drug_in_either_source"
+    }
+  ],
+  "api_failures": [],
+  "threats_to_validity": [
+    "Ground truth comes from Open Targets only. ChEMBL drug_indication is retrievable by molecule in this deployment, not by disease, so it corroborates pairs rather than creating them; a molecule ChEMBL records for a disease that Open Targets does not is absent from the ground truth entirely.",
+    "Source B is target-anchored: it only finds a known drug that acts on the disease gene's own protein. That structurally favours the same_target bridge and cannot test whether the pathway or structural bridges recover drugs they alone could reach. Source A is disease-anchored and does not have this bias, but returns far fewer rows.",
+    "Indication matching is an exact MONDO or ORPHA identifier match. ChEMBL and Open Targets often file a rare disease under a parent term (leniolisib sits under 'inborn error of immunity'), and every such pair is missed by this ground truth, so the evaluable set is a lower bound on what exists.",
+    "A molecule for which ChEMBL records no mechanism cannot appear in either list, so pairs like an immunoglobulin replacement are counted as missed although the engine never had a record to find them with. They are reported separately as outside the engine's universe.",
+    "Recall here is recovery of a molecule already known to be used. It says nothing about whether the candidates the engine ranks above it are good hypotheses.",
+    "A disease with no stated mechanism gets no required action, so nothing is ruled out on direction for it. Those diseases cannot produce a false rejection, which flatters the safety figure; the mechanism-confidence mix is reported beside it.",
+    "Both the API and the engine cache for fifteen minutes, so the wall times here are not cold times. Accuracy figures are unaffected.",
+    "The sources are live. A source changing its records changes these numbers without anything failing loudly."
+  ]
+}

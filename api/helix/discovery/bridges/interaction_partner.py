@@ -16,7 +16,6 @@ import asyncio
 from helix.discovery.build import build_rows
 from helix.discovery.context import BridgeContext, BridgeOutput
 from helix.discovery.rules import UNKNOWN_RELATION
-from helix.discovery.targets import protein_actions
 from helix.log import get_logger
 from helix.schemas.discovery import BridgeStep
 
@@ -89,7 +88,7 @@ async def run(context: BridgeContext) -> BridgeOutput:
         return output
 
     found = await asyncio.gather(
-        *(asyncio.wait_for(protein_actions(row[0]), PARTNER_TIMEOUT) for row in chosen),
+        *(asyncio.wait_for(context.protein_actions(row[0]), PARTNER_TIMEOUT) for row in chosen),
         return_exceptions=True,
     )
     for row, actions in zip(chosen, found, strict=True):

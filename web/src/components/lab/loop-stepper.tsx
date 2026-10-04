@@ -51,7 +51,7 @@ export function LoopStepper({
                 aria-pressed={isSelected}
                 onClick={() => onSelect(stage.id)}
                 className={cn(
-                  "group relative flex h-14 w-full min-w-0 items-center gap-2.5 px-1 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-inset",
+                  "group relative flex min-h-14 w-full min-w-0 items-center gap-2.5 py-1.5 pr-2 pl-1 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-inset",
                   "after:absolute after:inset-x-0 after:bottom-[-1px] after:h-0.5 after:bg-foreground after:opacity-0 after:transition-opacity after:duration-300",
                   isSelected && "after:opacity-100",
                 )}
@@ -85,7 +85,8 @@ export function LoopStepper({
                   >
                     {STEP_LABEL[stage.id]}
                   </span>
-                  <span className="hidden truncate text-2xs text-muted-foreground sm:block">
+                  {/* the caption wraps to two lines rather than clipping a question */}
+                  <span className="hidden text-2xs leading-[1.35] text-muted-foreground sm:line-clamp-2">
                     {notes[stage.id] ?? (pending ? "Waiting" : " ")}
                   </span>
                 </span>

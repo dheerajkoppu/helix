@@ -40,6 +40,11 @@ export const PRIMARY_NAV: NavItem[] = [
   },
 ];
 
+/** Simple mode prints one destination; Explore and Projects move into the overflow menu. */
+export const SIMPLE_NAV: NavItem[] = PRIMARY_NAV.filter(
+  (item) => item.href === "/lab",
+);
+
 /** Everything else, listed in the top bar's overflow menu. */
 export const SECONDARY_NAV: NavItem[] = [
   { label: "Jobs", href: "/jobs", match: ["/jobs"] },

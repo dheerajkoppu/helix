@@ -397,52 +397,49 @@ export function VariantLedger({
       }
       footer={
         !advanced && !(total !== null && total > PAGE_SIZE) ? undefined : (
-        <>
-          {advanced ? (
-            <>
-              <KeyHint keys="up" label="" />
-              <KeyHint keys="down" label="Move" />
-              <KeyHint keys="enter" label="Select, open" />
-            </>
-          ) : null}
-          {total !== null && total > PAGE_SIZE ? (
-            <span className="ml-auto flex items-center gap-1">
-              <span className="tabular font-mono">
-                {advanced ? `${first}-${last}` : `${first}–${last} of ${total}`}
+          <>
+            {advanced ? (
+              <>
+                <KeyHint keys="up" label="" />
+                <KeyHint keys="down" label="Move" />
+                <KeyHint keys="enter" label="Select, open" />
+              </>
+            ) : null}
+            {total !== null && total > PAGE_SIZE ? (
+              <span className="ml-auto flex items-center gap-1">
+                <span className="tabular font-mono">
+                  {advanced
+                    ? `${first}-${last}`
+                    : `${first}–${last} of ${total}`}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
+                  aria-label={GENE_WORDS.previous}
+                  disabled={filters.page === 0}
+                  onClick={() => update({ page: filters.page - 1 })}
+                >
+                  <ChevronLeftIcon />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
+                  aria-label={GENE_WORDS.next}
+                  disabled={!data?.has_more}
+                  onClick={() => update({ page: filters.page + 1 })}
+                >
+                  <ChevronRightIcon />
+                </Button>
               </span>
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                aria-label={GENE_WORDS.previous}
-                disabled={filters.page === 0}
-                onClick={() => update({ page: filters.page - 1 })}
-              >
-                <ChevronLeftIcon />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                aria-label={GENE_WORDS.next}
-                disabled={!data?.has_more}
-                onClick={() => update({ page: filters.page + 1 })}
-              >
-                <ChevronRightIcon />
-              </Button>
-            </span>
-          ) : null}
-        </>
+            ) : null}
+          </>
         )
       }
     >
       <div className="flex h-full min-h-0 flex-col">
         {!advanced && !filtered && total !== null ? (
-          <p className="flex shrink-0 flex-col gap-0.5 border-b border-border-subtle px-3 py-3">
-            <span className="text-sm font-medium text-foreground">
-              {plainHarmfulCount(total, symbol)}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {GENE_WORDS.classifiedBy}
-            </span>
+          <p className="shrink-0 border-b border-border-subtle px-3 py-3 text-sm font-medium text-foreground">
+            {plainHarmfulCount(total, symbol)}
           </p>
         ) : null}
         <div

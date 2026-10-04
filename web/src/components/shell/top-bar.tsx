@@ -24,7 +24,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useHydrated } from "@/hooks/use-hydrated";
 import { MENU_WORDS } from "@/lib/plain-language";
-import { PRIMARY_NAV, SECONDARY_NAV, site, type NavItem } from "@/lib/site";
+import {
+  PRIMARY_NAV,
+  SECONDARY_NAV,
+  SIMPLE_NAV,
+  site,
+  type NavItem,
+} from "@/lib/site";
 import { useAssistant } from "@/lib/state/assistant";
 import { usePreferences } from "@/lib/state/preferences";
 import { useShell } from "@/lib/state/shell";
@@ -71,7 +77,7 @@ function JobsCount({
   );
 }
 
-/** Everything that is not one of the three destinations: one menu, the same on every screen size. */
+/** Everything the bar does not print: one menu, the same on every screen size. */
 function OverflowMenu({ pathname }: { pathname: string }) {
   const activeJobs = useActiveJobs();
   const learnMode = usePreferences((state) => state.learnMode);
@@ -94,8 +100,9 @@ function OverflowMenu({ pathname }: { pathname: string }) {
         <EllipsisIcon className="size-4" aria-hidden />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
+        {/* the bar prints these above md; the menu is the only way to them below it */}
         <DropdownMenuGroup className="md:hidden">
-          {PRIMARY_NAV.map((item) => (
+          {(advanced ? PRIMARY_NAV : SIMPLE_NAV).map((item) => (
             <DropdownMenuItem
               key={item.href}
               render={<Link href={item.href} />}
@@ -105,8 +112,23 @@ function OverflowMenu({ pathname }: { pathname: string }) {
               {item.label}
             </DropdownMenuItem>
           ))}
-          <DropdownMenuSeparator />
         </DropdownMenuGroup>
+
+        {/* simple mode keeps Explore and Projects here at every width */}
+        {advanced
+          ? null
+          : PRIMARY_NAV.filter(
+              (item) => !SIMPLE_NAV.some((shown) => shown.href === item.href),
+            ).map((item) => (
+              <DropdownMenuItem
+                key={item.href}
+                render={<Link href={item.href} />}
+                aria-current={isCurrent(item, pathname) ? "page" : undefined}
+                className={cn(ITEM_CLASS, "aria-[current=page]:font-medium")}
+              >
+                {item.label}
+              </DropdownMenuItem>
+            ))}
 
         {SECONDARY_NAV.map((item) => (
           <DropdownMenuItem
@@ -212,24 +234,24 @@ export function TopBar() {
           aria-label="Primary"
           className="ml-3 hidden h-full items-stretch gap-1 md:flex"
         >
-        {PRIMARY_NAV.map((item) => {
-          const current = isCurrent(item, pathname);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={current ? "page" : undefined}
-              className={cn(
-                "relative inline-flex items-center px-2.5 text-sm",
-                current
-                  ? "font-medium text-foreground after:absolute after:inset-x-2.5 after:-bottom-px after:h-0.5 after:bg-foreground"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {item.label}
-            </Link>
-          );
-        })}
+          {(advanced ? PRIMARY_NAV : SIMPLE_NAV).map((item) => {
+            const current = isCurrent(item, pathname);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={current ? "page" : undefined}
+                className={cn(
+                  "relative inline-flex items-center px-2.5 text-sm",
+                  current
+                    ? "font-medium text-foreground after:absolute after:inset-x-2.5 after:-bottom-px after:h-0.5 after:bg-foreground"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
       </div>
 

@@ -101,104 +101,112 @@ export function ViewerToolbar({
   );
   const hasDomains = Boolean(domains && domains.length > 0 && onDomainSelect);
 
+  const shapes = (
+    <ToggleGroup
+      size="sm"
+      variant="outline"
+      spacing={0}
+      aria-label="Representation"
+      value={[representation]}
+      onValueChange={(value) => {
+        if (value.length) onRepresentationChange(value[0] as Representation);
+      }}
+    >
+      {REPRESENTATIONS.map((value) => (
+        <ToggleGroupItem key={value} value={value} disabled={disabled}>
+          {compact ? plainShape(value) : REPRESENTATION_LABEL[value]}
+        </ToggleGroupItem>
+      ))}
+    </ToggleGroup>
+  );
+
   return (
     <div
       role="toolbar"
       aria-label="3D viewer controls"
       data-slot="viewer-toolbar"
       data-compact={compact ? "" : undefined}
-      className="scroll-thin flex h-9 shrink-0 items-center gap-2 overflow-x-auto border-b border-border-subtle bg-background pl-2 data-compact:h-11 data-compact:pl-3"
+      className="flex h-9 shrink-0 items-center border-b border-border-subtle bg-background pl-2 data-compact:h-11 data-compact:pl-3"
     >
-      <ToggleGroup
-        size="sm"
-        variant="outline"
-        spacing={0}
-        aria-label="Representation"
-        value={[representation]}
-        onValueChange={(value) => {
-          if (value.length) onRepresentationChange(value[0] as Representation);
-        }}
-      >
-        {REPRESENTATIONS.map((value) => (
-          <ToggleGroupItem key={value} value={value} disabled={disabled}>
-            {compact ? plainShape(value) : REPRESENTATION_LABEL[value]}
-          </ToggleGroupItem>
-        ))}
-      </ToggleGroup>
+      {/* the controls scroll in their own column, so the sticky actions never sit over one */}
+      <div className="scroll-thin flex min-w-0 flex-1 items-center gap-2 overflow-x-auto">
+        {/* simple mode leads with colour, the control a reader reaches for first */}
+        {compact ? null : shapes}
 
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          className={MENU_TRIGGER}
-          disabled={disabled}
-          data-action="color-mode"
-        >
-          <span className="text-muted-foreground">
-            {compact ? COLOUR_BY : "Colour"}
-          </span>
-          {activeColor?.label ?? "Choose"}
-          <ChevronDownIcon
-            className="size-3 text-muted-foreground"
-            aria-hidden
-          />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-auto min-w-56">
-          <DropdownMenuRadioGroup
-            value={colorValue}
-            onValueChange={(value) => onColorChange(String(value))}
-          >
-            {colorOptions.map((option) => (
-              <DropdownMenuRadioItem
-                key={option.value}
-                value={option.value}
-                disabled={Boolean(option.unavailable)}
-                closeOnClick
-              >
-                <span className="flex flex-col">
-                  {option.label}
-                  {option.unavailable ? (
-                    <span className="text-2xs text-muted-foreground">
-                      {option.unavailable}
-                    </span>
-                  ) : null}
-                </span>
-              </DropdownMenuRadioItem>
-            ))}
-          </DropdownMenuRadioGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      {!compact && hasDomains ? (
         <DropdownMenu>
           <DropdownMenuTrigger
             className={MENU_TRIGGER}
             disabled={disabled}
-            data-action="select-domain"
+            data-action="color-mode"
           >
-            Select domain
+            <span className="text-muted-foreground">
+              {compact ? COLOUR_BY : "Colour"}
+            </span>
+            {activeColor?.label ?? "Choose"}
             <ChevronDownIcon
               className="size-3 text-muted-foreground"
               aria-hidden
             />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-auto min-w-56">
-            {domains?.map((domain) => (
-              <DropdownMenuItem
-                key={domain.id}
-                onClick={() => onDomainSelect?.(domain)}
-              >
-                {domain.label}
-                <span className="tabular ml-auto pl-4 font-mono text-2xs text-muted-foreground">
-                  {domain.start}-{domain.end}
-                </span>
-              </DropdownMenuItem>
-            ))}
+            <DropdownMenuRadioGroup
+              value={colorValue}
+              onValueChange={(value) => onColorChange(String(value))}
+            >
+              {colorOptions.map((option) => (
+                <DropdownMenuRadioItem
+                  key={option.value}
+                  value={option.value}
+                  disabled={Boolean(option.unavailable)}
+                  closeOnClick
+                >
+                  <span className="flex flex-col">
+                    {option.label}
+                    {option.unavailable ? (
+                      <span className="text-2xs text-muted-foreground">
+                        {option.unavailable}
+                      </span>
+                    ) : null}
+                  </span>
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
-      ) : null}
 
-      {compact ? null : children}
+        {!compact && hasDomains ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className={MENU_TRIGGER}
+              disabled={disabled}
+              data-action="select-domain"
+            >
+              Select domain
+              <ChevronDownIcon
+                className="size-3 text-muted-foreground"
+                aria-hidden
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-auto min-w-56">
+              {domains?.map((domain) => (
+                <DropdownMenuItem
+                  key={domain.id}
+                  onClick={() => onDomainSelect?.(domain)}
+                >
+                  {domain.label}
+                  <span className="tabular ml-auto pl-4 font-mono text-2xs text-muted-foreground">
+                    {domain.start}-{domain.end}
+                  </span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : null}
 
-      <div className="sticky right-0 ml-auto flex shrink-0 items-center gap-0.5 bg-background px-2">
+        {compact ? shapes : children}
+      </div>
+
+      <div className="flex shrink-0 items-center gap-0.5 bg-background px-2">
         <Button
           variant="ghost"
           size="icon-sm"

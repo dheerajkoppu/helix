@@ -280,12 +280,14 @@ async def discovery_candidates(
                 logger.warning("Bridge %s failed: %s", kind, error)
                 return kind, None, error, (time.perf_counter() - at) * 1000
 
-        # same_target runs first so the other bridges can reuse the subject's own ChEMBL records
-        head = next(entry for entry in BRIDGES if entry[0] == "same_target")
-        outputs.append(await run_one(*head))
-        outputs.extend(
-            await asyncio.gather(*(run_one(*entry) for entry in BRIDGES if entry[0] != "same_target"))
-        )
+        # All five run at once. The subject's own ChEMBL records, which two bridges want, are fetched
+        # once by BridgeContext.protein_actions rather than by running same_target first and waiting.
+        gathered_bridges = await asyncio.gather(*(run_one(*entry) for entry in BRIDGES))
+        context.release_protein_actions()
+        # Rows are collected in BRIDGES order, so the order two equally ranked rows come back in
+        # does not depend on which bridge finished first
+        position = {kind: index for index, (kind, _, _) in enumerate(BRIDGES)}
+        outputs.extend(sorted(gathered_bridges, key=lambda row: position[row[0]]))
         statuses = [_bridge_status(kind, output, error, elapsed) for kind, output, error, elapsed in outputs]
 
     candidate_rows: list[CandidateRow] = []

@@ -34,7 +34,6 @@ from typing import Any
 from helix.discovery.build import build_rows
 from helix.discovery.context import BridgeContext, BridgeOutput
 from helix.discovery.rules import BRAKE, UPSTREAM_ACTIVATOR, Relation
-from helix.discovery.targets import protein_actions
 from helix.evidence import try_build_evidence
 from helix.log import get_logger
 from helix.schemas.common import EntityRef, EntityType, EvidenceObject
@@ -230,7 +229,7 @@ async def run(context: BridgeContext) -> BridgeOutput:
         return output
 
     found = await asyncio.gather(
-        *(asyncio.wait_for(protein_actions(node[0]), NODE_TIMEOUT) for node in ordered),
+        *(asyncio.wait_for(context.protein_actions(node[0]), NODE_TIMEOUT) for node in ordered),
         return_exceptions=True,
     )
     reaction_provenance = details.provenance

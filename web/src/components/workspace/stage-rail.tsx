@@ -104,7 +104,7 @@ export function StageRail({
   if (simple)
     return (
       <nav aria-label="Research steps" className={frame}>
-        <ol className="hidden h-12 auto-cols-fr grid-flow-col lg:grid">
+        <ol className="hidden min-h-12 auto-cols-fr grid-flow-col lg:grid">
           {groups.map(({ group, href }) => {
             const isActive = group.id === activeGroup;
             const body = (
@@ -122,7 +122,8 @@ export function StageRail({
                     {plainStageGroup(group.id)}
                   </span>
                   {isActive && active ? (
-                    <span className="truncate text-2xs text-muted-foreground">
+                    // the caption wraps rather than clipping; the cell grows with it
+                    <span className="text-2xs leading-[1.35] text-muted-foreground">
                       {plainStage(active)}
                     </span>
                   ) : null}
@@ -130,7 +131,7 @@ export function StageRail({
               </>
             );
             const cell = cn(
-              "relative flex h-full min-w-0 items-center gap-2 px-3 text-sm outline-offset-[-2px]",
+              "relative flex h-full min-h-12 min-w-0 items-center gap-2 px-3 py-1.5 text-sm outline-offset-[-2px]",
               // tick on the axis at the start of every step
               "before:absolute before:bottom-0 before:left-0 before:h-1.5 before:w-px before:bg-border-strong",
               isActive &&

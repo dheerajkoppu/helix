@@ -20,6 +20,7 @@ import {
   plainStructureLine,
 } from "@/lib/plain-language";
 import { setWorkspaceHover } from "@/lib/state/hover";
+import { useAdvancedMode } from "@/lib/state/preferences";
 import { useWorkspaceSelection } from "@/lib/state/selection";
 import {
   type ApiStructureDescriptor,
@@ -69,6 +70,7 @@ export function ProteinSummary({
   onStructure,
 }: ProteinSummaryProps) {
   const [choosing, setChoosing] = useState(false);
+  const advanced = useAdvancedMode();
   const ranges = useWorkspaceSelection((state) => state.ranges);
   const selectRange = useWorkspaceSelection((state) => state.selectRange);
   const domains = useMemo(
@@ -123,9 +125,12 @@ export function ProteinSummary({
             />
           </p>
         </div>
-        <p className="text-sm text-foreground">
-          {plainBuildingBlocks(length)}
-        </p>
+        {/* the viewer strip and the sequence dock already print the length */}
+        {advanced ? (
+          <p className="text-sm text-foreground">
+            {plainBuildingBlocks(length)}
+          </p>
+        ) : null}
       </div>
 
       <div className="flex flex-col gap-2 border-t border-border-subtle px-4 py-4">
@@ -185,7 +190,7 @@ export function ProteinSummary({
             <p className="text-xs text-muted-foreground">
               {plainOriginCaveat(active.origin)}
             </p>
-            {span ? (
+            {span && advanced ? (
               <p className="text-xs text-muted-foreground">
                 {PROTEIN_WORDS.shown}: {span.toLowerCase()}
               </p>

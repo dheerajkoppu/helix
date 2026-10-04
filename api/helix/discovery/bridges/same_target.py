@@ -15,7 +15,7 @@ from helix.discovery.build import build_rows
 from helix.discovery.context import BridgeContext, BridgeOutput
 from helix.discovery.evidence import seed_provenance
 from helix.discovery.rules import SAME_PROTEIN
-from helix.discovery.targets import indications, protein_actions
+from helix.discovery.targets import indications
 from helix.evidence import try_build_evidence
 from helix.log import get_logger
 from helix.schemas.common import Evidence, EvidenceObject
@@ -109,10 +109,7 @@ async def run(context: BridgeContext) -> BridgeOutput:
     if accession is None:
         return BridgeOutput(message="The catalog gives no protein for this gene.")
 
-    actions = context.shared.get("subject_actions")
-    if actions is None:
-        actions = await protein_actions(accession)
-        context.shared["subject_actions"] = actions
+    actions = await context.protein_actions(accession)
     output = BridgeOutput(results=dict(actions.results))
     if not actions.actions:
         output.message = "ChEMBL records no molecule with an action on this protein."

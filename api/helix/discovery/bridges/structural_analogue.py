@@ -28,7 +28,7 @@ from helix.discovery.build import build_rows
 from helix.discovery.context import BridgeContext, BridgeOutput
 from helix.discovery.evidence import hypothesis
 from helix.discovery.rules import SAME_PROTEIN
-from helix.discovery.targets import ProteinActions, protein_actions
+from helix.discovery.targets import ProteinActions
 from helix.log import get_logger
 from helix.schemas.common import EntityRef, EntityType, EvidenceObject
 from helix.schemas.discovery import BridgeStep, CandidateStructure, CandidateTarget
@@ -103,10 +103,7 @@ async def run(context: BridgeContext) -> BridgeOutput:
         output.message = "The catalog gives no protein for this gene."
         return output
 
-    subject_actions = context.shared.get("subject_actions")
-    if subject_actions is None:
-        subject_actions = await protein_actions(accession)
-        context.shared["subject_actions"] = subject_actions
+    subject_actions = await context.protein_actions(accession)
 
     rows = await _foldseek_rows(accession)
     partial = rows is None
@@ -140,7 +137,7 @@ async def run(context: BridgeContext) -> BridgeOutput:
 
     structure_id, pocket_id, pocket_residues = await _pocket(accession)
     found = await asyncio.gather(
-        *(asyncio.wait_for(protein_actions(row[0]), ANALOGUE_TIMEOUT) for row in analogues),
+        *(asyncio.wait_for(context.protein_actions(row[0]), ANALOGUE_TIMEOUT) for row in analogues),
         return_exceptions=True,
     )
     subject_molecules = {action.chembl_id for action in subject_actions.actions}

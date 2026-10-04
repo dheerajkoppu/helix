@@ -1,5 +1,7 @@
 import { cn } from "cn";
 
+import { AdvancedOnly } from "@/components/docs/advanced-only";
+
 /**
  * Frame for every route outside the workspace: Explore, Projects, Jobs, Models, About, Docs,
  * Compound, Project. A ruled header band over a left-aligned column. No cards.
@@ -20,7 +22,7 @@ export interface PageHeaderProps {
   title: React.ReactNode;
   /** identifier or count set in monospace beside the title */
   id?: React.ReactNode;
-  /** one or two sentences; no marketing copy */
+  /** one sentence, Advanced only: simple mode is a title and the content */
   description?: React.ReactNode;
   /** source chips, origin tags, status */
   meta?: React.ReactNode;
@@ -58,9 +60,11 @@ export function PageHeader({
             ) : null}
           </div>
           {description ? (
-            <p className="max-w-[68ch] text-sm text-muted-foreground">
-              {description}
-            </p>
+            <AdvancedOnly>
+              <p className="max-w-[68ch] text-sm text-muted-foreground">
+                {description}
+              </p>
+            </AdvancedOnly>
           ) : null}
           {meta ? (
             <div className="mt-1 flex flex-wrap items-center gap-1.5">
@@ -137,9 +141,11 @@ export function PageSection({
         ) : null}
       </div>
       {description ? (
-        <p className="mb-3 max-w-[68ch] text-sm text-muted-foreground">
-          {description}
-        </p>
+        <AdvancedOnly>
+          <p className="mb-3 max-w-[68ch] text-sm text-muted-foreground">
+            {description}
+          </p>
+        </AdvancedOnly>
       ) : null}
       {children}
     </section>
