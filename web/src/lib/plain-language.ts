@@ -644,8 +644,38 @@ export function plainNext(kind: string | null | undefined): string {
 }
 
 /** The front page of the lab. */
+/**
+ * The questions a researcher actually asks of a mutation, offered as presets so nobody has to
+ * invent one. The first is the default. Each is a real question, not a restatement of the stage.
+ */
+export const LAB_QUESTIONS = [
+  {
+    id: "mechanism",
+    label: "What does it break?",
+    text: "What does this mutation break in the protein, and which explanation does the evidence best support?",
+  },
+  {
+    id: "target",
+    label: "What could a drug aim at?",
+    text: "Given what this mutation breaks, what could a drug act on to correct it?",
+  },
+  {
+    id: "existing",
+    label: "Could an existing drug help?",
+    text: "Is there a molecule already approved or in trials, for any disease, that acts the right way on this protein or on something upstream of it?",
+  },
+  {
+    id: "next",
+    label: "What should we test next?",
+    text: "What is the single most informative experiment to run next on this mutation, and what would each outcome rule in or out?",
+  },
+] as const;
+
+export type LabQuestionId = (typeof LAB_QUESTIONS)[number]["id"];
+
 export const LAB_WORDS = {
   title: "Discovery lab",
+  ownQuestion: "Ask your own",
   pickGene: "Pick a gene",
   pickMutation: "Pick a mutation",
   run: "Run",

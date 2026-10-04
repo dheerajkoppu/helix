@@ -1,7 +1,7 @@
 {
   "unit_of_work": "The effort the discovery engine removes, and how long the engine itself takes.\n\n    lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase engine --label before\n    lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase engine --label after\n    lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase manual\n\nTHE UNIT OF WORK, and it is the only thing this script counts.\n\nOne unit is ONE MOLECULE-TARGET PAIR whose recorded action has to be looked up and whose direction\nhas to be judged against the subject's mechanism. Concretely, one unit is the triple\n\n    (molecule, the protein target a record says it acts on, the subject's required direction)\n\nand settling it needs three things, every one of which is a record and not an opinion:\n\n  1. what the mechanism needs (less activity, or more) - from the disease record;\n  2. what the molecule does to that protein - from the ChEMBL mechanism `action_type`;\n  3. how an effect on that protein carries over to the subject - from the bridge's own record\n     (same protein / upstream producer / brake / binds it / similar pocket / another disease).\n\nThe engine makes one such judgment per (molecule, target) pair every bridge proposes. That count is\nread from `bridges[].candidate_count + bridges[].ruled_out_count`, which the engine reports per\nbridge BEFORE the response is de-duplicated and before the 40-row display caps, so it is the number\nof judgments actually made rather than the number displayed.\n\nWHAT THIS SCRIPT DOES NOT MEASURE. No scientist was timed. Nothing here is a claim about human\nminutes, and the manual phase is a machine doing the same lookups one at a time, which is a LOWER\nBOUND on the manual path: a person also has to read each record, decide, and write the decision down.\nEvery figure is reported as requests issued and wall seconds to reach the same set of judgments.\n\nWrites lab/experiments/results/discovery-effort.json.",
   "base_url": "http://localhost:8000",
-  "written_at": "2026-10-04T02:27:59Z",
+  "written_at": "2026-10-04T02:37:12Z",
   "engine_passes": {
     "before": {
       "label": "before",
@@ -5447,7 +5447,7 @@
     }
   },
   "manual_equivalent": {
-    "run_at": "2026-10-04T02:30:02Z",
+    "run_at": "2026-10-04T02:36:40Z",
     "definition": "A machine doing the same lookups a person would have to do: one request at a time, no concurrency, no cache shared between items, every record fetched from the public API that holds it (ChEMBL, Reactome, IntAct, UniProt). It reaches the same (molecule, target) pairs the engine judges, under the engine's own caps.",
     "lower_bound_note": "This is a LOWER BOUND on the manual path and nothing more. The machine does not read, decide or record anything: it only fetches. A person doing this also has to read each record, apply the direction rule, and write the decision down. No scientist was timed, so no figure here is a claim about human time.",
     "budget_s_per_subject": 300.0,
@@ -5456,7 +5456,7 @@
         "subject": "APDS (held out)",
         "accession": "O00329",
         "requests_issued": 60,
-        "wall_s": 38.28,
+        "wall_s": 37.76,
         "judgments_reached": 43,
         "proteins_read": 6,
         "reactions_examined": 0,
@@ -5474,16 +5474,16 @@
         "request_statuses": {
           "200": 60
         },
-        "median_request_ms": 591.3
+        "median_request_ms": 589.7
       },
       {
         "subject": "X-linked agammaglobulinemia",
         "accession": "Q06187",
-        "requests_issued": 50,
-        "wall_s": 54.1,
-        "judgments_reached": 25,
-        "proteins_read": 6,
-        "reactions_examined": 0,
+        "requests_issued": 97,
+        "wall_s": 76.88,
+        "judgments_reached": 31,
+        "proteins_read": 14,
+        "reactions_examined": 8,
         "intact_partners_read": 5,
         "truncated_by_budget": false,
         "bridges_emulated": [
@@ -5496,18 +5496,18 @@
           "mechanism_class"
         ],
         "request_statuses": {
-          "200": 50
+          "200": 97
         },
-        "median_request_ms": 603.5
+        "median_request_ms": 594.9
       },
       {
         "subject": "STAT1 gain of function",
         "accession": "P42224",
-        "requests_issued": 15,
-        "wall_s": 30.31,
-        "judgments_reached": 0,
-        "proteins_read": 6,
-        "reactions_examined": 0,
+        "requests_issued": 144,
+        "wall_s": 133.15,
+        "judgments_reached": 58,
+        "proteins_read": 14,
+        "reactions_examined": 8,
         "intact_partners_read": 5,
         "truncated_by_budget": false,
         "bridges_emulated": [
@@ -5520,9 +5520,71 @@
           "mechanism_class"
         ],
         "request_statuses": {
-          "200": 15
+          "200": 144
         },
-        "median_request_ms": 694.7
+        "median_request_ms": 603.6
+      }
+    ]
+  },
+  "protein_fetches": {
+    "run_at": "2026-10-04T02:37:12Z",
+    "note": "One fetch is one call for everything ChEMBL records about acting on one protein: its targets, the mechanism records on those targets, and the molecules behind them. The assembled-response cache is cleared before each subject so every chain is rebuilt.",
+    "subjects": [
+      {
+        "subject": "IL2RG",
+        "protein_record_fetches_issued": 15,
+        "distinct_proteins_read": 15,
+        "duplicate_fetches_avoided_by_the_memo": 0,
+        "candidates": 19,
+        "ruled_out": 40
+      },
+      {
+        "subject": "JAK3",
+        "protein_record_fetches_issued": 18,
+        "distinct_proteins_read": 18,
+        "duplicate_fetches_avoided_by_the_memo": 0,
+        "candidates": 10,
+        "ruled_out": 40
+      },
+      {
+        "subject": "STAT3",
+        "protein_record_fetches_issued": 14,
+        "distinct_proteins_read": 14,
+        "duplicate_fetches_avoided_by_the_memo": 0,
+        "candidates": 29,
+        "ruled_out": 0
+      },
+      {
+        "subject": "PIK3CD",
+        "protein_record_fetches_issued": 9,
+        "distinct_proteins_read": 9,
+        "duplicate_fetches_avoided_by_the_memo": 0,
+        "candidates": 24,
+        "ruled_out": 0
+      },
+      {
+        "subject": "APDS (held out)",
+        "protein_record_fetches_issued": 9,
+        "distinct_proteins_read": 9,
+        "duplicate_fetches_avoided_by_the_memo": 0,
+        "candidates": 24,
+        "ruled_out": 0
+      },
+      {
+        "subject": "X-linked agammaglobulinemia",
+        "protein_record_fetches_issued": 18,
+        "distinct_proteins_read": 18,
+        "duplicate_fetches_avoided_by_the_memo": 0,
+        "candidates": 4,
+        "ruled_out": 33
+      },
+      {
+        "subject": "STAT1 gain of function",
+        "protein_record_fetches_issued": 14,
+        "distinct_proteins_read": 14,
+        "duplicate_fetches_avoided_by_the_memo": 0,
+        "candidates": 23,
+        "ruled_out": 4
       }
     ]
   }

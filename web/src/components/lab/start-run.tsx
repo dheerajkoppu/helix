@@ -20,6 +20,7 @@ import { apiQuery } from "@/lib/api/query";
 import type { Schema } from "@/lib/api/types";
 import { parseVariantId } from "@/lib/ids";
 import {
+  LAB_QUESTIONS,
   LAB_WORDS,
   plainMutationLabel,
   plainNoMatch,
@@ -165,6 +166,8 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
   const [text, setText] = useState("");
   const [optionsToggled, setOptionsToggled] = useState<boolean | null>(null);
   const [objective, setObjective] = useState("");
+  // null means one of the presets; a preset writes its text into `objective`
+  const [customQuestion, setCustomQuestion] = useState(false);
   const [mode, setMode] = useState<RunMode>("specialist_lab");
   const [maxToolCalls, setMaxToolCalls] = useState("");
   const [maxComputeSeconds, setMaxComputeSeconds] = useState("");
@@ -487,19 +490,67 @@ export function StartRun({ apiState, defaultBudget }: StartRunProps) {
 
         <Field
           label={advanced ? "Objective" : LAB_WORDS.question}
-          htmlFor={`${fieldId}-objective`}
-          hint="Empty uses the lab's question."
+          htmlFor={customQuestion ? `${fieldId}-objective` : undefined}
+          hint={advanced ? "Empty uses the lab's question." : undefined}
         >
-          <Textarea
-            id={`${fieldId}-objective`}
-            value={objective}
-            maxLength={600}
-            placeholder={
-              advanced ? DEFAULT_OBJECTIVE : plainStepCaption("Question")
-            }
-            onChange={(event) => setObjective(event.target.value)}
-            className="max-w-2xl"
-          />
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap gap-1.5">
+              {LAB_QUESTIONS.map((question) => {
+                const selected = !customQuestion && objective === question.text;
+                return (
+                  <Button
+                    key={question.id}
+                    type="button"
+                    size="sm"
+                    variant={selected ? "secondary" : "ghost"}
+                    aria-pressed={selected}
+                    className={cn(
+                      "border border-border",
+                      selected && "border-foreground",
+                    )}
+                    onClick={() => {
+                      setCustomQuestion(false);
+                      setObjective(question.text);
+                    }}
+                  >
+                    {question.label}
+                  </Button>
+                );
+              })}
+              <Button
+                type="button"
+                size="sm"
+                variant={customQuestion ? "secondary" : "ghost"}
+                aria-pressed={customQuestion}
+                className={cn(
+                  "border border-border",
+                  customQuestion && "border-foreground",
+                )}
+                onClick={() => {
+                  setCustomQuestion(true);
+                  setObjective("");
+                }}
+              >
+                {LAB_WORDS.ownQuestion}
+              </Button>
+            </div>
+            {customQuestion || advanced ? (
+              <Textarea
+                id={`${fieldId}-objective`}
+                value={objective}
+                maxLength={600}
+                placeholder={
+                  advanced ? DEFAULT_OBJECTIVE : plainStepCaption("Question")
+                }
+                onChange={(event) => setObjective(event.target.value)}
+                className="max-w-2xl"
+              />
+            ) : (
+              <p className="max-w-2xl text-xs text-muted-foreground">
+                {objective || LAB_QUESTIONS[0].text}
+              </p>
+            )}
+          </div>
         </Field>
 
         <Field
