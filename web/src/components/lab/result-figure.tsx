@@ -534,7 +534,7 @@ export function ResultFigure({
   return (
     <div className="border border-border">
       {shown.hasFigure ? (
-        <div className="relative h-[clamp(16rem,42dvh,26rem)] bg-sunken">
+        <div className="relative h-[clamp(14rem,32dvh,24rem)] bg-sunken">
           {shown.structure ? (
             <StructureViewport
               ariaLabel={`${subject.gene ?? "Protein"} residue ${variant?.position ?? ""} on ${shown.structure.id}`}

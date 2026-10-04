@@ -426,13 +426,42 @@ export const CANDIDATE_WORDS = {
   ruledOut: "Ruled out",
   ruledOutLine: "Pushed the protein the wrong way.",
   onlyIf: "Only if",
-  noCandidates: "No candidate passed the direction check.",
+  noCandidates: "No molecule pushes this protein the right way.",
   notReached: "The agents did not reach this step.",
   seeAll: "See the full view",
   phase: "Studied up to",
   noMolecule: "No molecule found yet",
   rejectedBySafety: "Rejected in review",
 } as const;
+
+/**
+ * The end of a run that keeps nothing: the finding, in three lines. A protein that is missing or
+ * barely working has little for a small molecule to act on, which is why the direction check
+ * refuses every row. It is a result, not a blank, so it is worded as one.
+ */
+export function plainNoCandidateFinding(input: {
+  /** rows the direction check refused for pushing the wrong way */
+  ruledOut: number;
+  /** the action the fault needs, as the record names it: "restore", "inhibit" */
+  action: string | null | undefined;
+  /** the protein does too little, so there is little left to act on */
+  tooLittle: boolean;
+}): string[] {
+  const action = input.action
+    ? plainRequiredAction(input.action).toLowerCase()
+    : null;
+  const lead = action
+    ? `No molecule found that would ${action}.`
+    : CANDIDATE_WORDS.noCandidates;
+  const checked =
+    input.ruledOut > 0
+      ? `${plural(input.ruledOut, "molecule")} were checked. Every one pushed the protein the wrong way.`
+      : "Every molecule checked pushed the protein the wrong way.";
+  const why = input.tooLittle
+    ? "A protein that is missing or barely working gives a small molecule almost nothing to act on. Replacing the protein, or gene therapy, is the route that fits this kind of disease."
+    : "A molecule that pushes the wrong way would make the fault worse, so none was kept.";
+  return [lead, checked, why];
+}
 
 /** "Studied up to phase 4" from a ChEMBL max phase. */
 export function plainPhase(phase: number | null | undefined): string | null {
@@ -491,7 +520,14 @@ export function plainSource(database: string): string {
 /** "3 facts", "1 open question". */
 export function plainCount(
   count: number,
-  thing: "fact" | "open question" | "test" | "mutation" | "run" | "structure",
+  thing:
+    | "fact"
+    | "open question"
+    | "test"
+    | "mutation"
+    | "run"
+    | "structure"
+    | "candidate",
 ): string {
   return plural(count, thing);
 }
@@ -719,6 +755,7 @@ export const LAB_WORDS = {
   firstAnswer: "First answer",
   finalAnswer: "Final answer",
   tookTime: "Took",
+  endsWith: "Ends with",
 } as const;
 
 /** Who ran it: "Team of agents" or "One agent". */

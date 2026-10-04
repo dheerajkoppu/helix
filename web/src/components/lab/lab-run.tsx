@@ -182,10 +182,11 @@ function stepNotes(
 
 /** The same captions in everyday words, built from counts in the record. */
 function plainStepNotes(
+  run: LabRunData,
   view: RecordView,
   pendingApproval: boolean,
 ): Record<LoopStageId, string | null> {
-  const counts = stepCounts(view);
+  const counts = stepCounts(view, run.metrics.ruled_out_by_direction);
   return {
     question: view.objective ? plainStepCaption(LOOP_STEPS[0]) : null,
     evidence: counts.facts ? plainStepCaption(LOOP_STEPS[1], counts) : null,
@@ -325,7 +326,7 @@ function RunView({
     () =>
       advanced
         ? stepNotes(run, view, pendingNow)
-        : plainStepNotes(view, pendingNow),
+        : plainStepNotes(run, view, pendingNow),
     [advanced, run, view, pendingNow],
   );
 
@@ -478,61 +479,66 @@ function RunView({
           <div
             className={cn(
               WIDE,
-              "grid flex-1 lg:min-h-0 lg:grid-cols-[16rem_minmax(0,1fr)_13rem]",
+              "grid flex-1 lg:min-h-0 lg:grid-cols-[16rem_minmax(0,1fr)_14rem]",
             )}
           >
             <AgentColumn
               agents={agents}
               className="scroll-thin order-3 border-t border-border lg:order-1 lg:overflow-y-auto lg:border-t-0 lg:border-r"
             />
-            <div className="scroll-thin order-1 min-w-0 px-4 py-6 md:px-8 lg:order-2 lg:overflow-y-auto">
-              {pendingNow && selected !== "experiment" ? (
-                <p className="mb-4 flex flex-wrap items-baseline gap-x-3 text-base">
-                  <span className="font-medium text-foreground">
-                    {advanced ? "Approval needed." : STEP_WORDS.needsApproval}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setPinned("experiment")}
-                    className="rounded-xs text-foreground underline decoration-border-strong underline-offset-[3px] hover:decoration-foreground"
-                  >
-                    {STEP_WORDS.review}
-                  </button>
-                </p>
-              ) : null}
-              {run.status === "failed" && !replaying ? (
-                <p className="mb-4 text-base">
-                  <span className="font-medium text-destructive">
-                    {STEP_WORDS.failed}
-                  </span>{" "}
-                  {advanced ? (
-                    <span className="text-muted-foreground">
-                      {run.error ??
-                        (lastEvent
-                          ? `No error text was recorded. The record ends at line ${lastEvent.seq}.`
-                          : "It wrote nothing to its record.")}
+            <div
+              data-col="step"
+              className="scroll-thin order-1 flex min-w-0 flex-col lg:order-2 lg:overflow-y-auto"
+            >
+              <div className="mx-auto flex w-full max-w-[72rem] flex-1 flex-col justify-center px-4 py-5 md:px-8">
+                {pendingNow && selected !== "experiment" ? (
+                  <p className="mb-4 flex flex-wrap items-baseline gap-x-3 text-base">
+                    <span className="font-medium text-foreground">
+                      {advanced ? "Approval needed." : STEP_WORDS.needsApproval}
                     </span>
-                  ) : (
-                    <span
-                      className="text-muted-foreground"
-                      title={run.error ?? undefined}
+                    <button
+                      type="button"
+                      onClick={() => setPinned("experiment")}
+                      className="rounded-xs text-foreground underline decoration-border-strong underline-offset-[3px] hover:decoration-foreground"
                     >
-                      {STEP_WORDS.noAnswer}
-                    </span>
-                  )}
-                </p>
-              ) : null}
-              <StepPanel stage={selected} onDetails={openRecord} />
-              {advanced ? (
-                <div className="mt-8 border-t border-border">
-                  {selected === "question" ? <Question /> : null}
-                  {selected === "evidence" ? <EvidenceLedger /> : null}
-                  {selected === "hypothesis" ? <Hypotheses /> : null}
-                  {selected === "experiment" ? <TestPlan /> : null}
-                  {selected === "result" ? <ExperimentResult /> : null}
-                  {selected === "decision" ? <UpdatedDecision /> : null}
-                </div>
-              ) : null}
+                      {STEP_WORDS.review}
+                    </button>
+                  </p>
+                ) : null}
+                {run.status === "failed" && !replaying ? (
+                  <p className="mb-4 text-base">
+                    <span className="font-medium text-destructive">
+                      {STEP_WORDS.failed}
+                    </span>{" "}
+                    {advanced ? (
+                      <span className="text-muted-foreground">
+                        {run.error ??
+                          (lastEvent
+                            ? `No error text was recorded. The record ends at line ${lastEvent.seq}.`
+                            : "It wrote nothing to its record.")}
+                      </span>
+                    ) : (
+                      <span
+                        className="text-muted-foreground"
+                        title={run.error ?? undefined}
+                      >
+                        {STEP_WORDS.noAnswer}
+                      </span>
+                    )}
+                  </p>
+                ) : null}
+                <StepPanel stage={selected} onDetails={openRecord} />
+                {advanced ? (
+                  <div className="mt-8 border-t border-border">
+                    {selected === "question" ? <Question /> : null}
+                    {selected === "evidence" ? <EvidenceLedger /> : null}
+                    {selected === "hypothesis" ? <Hypotheses /> : null}
+                    {selected === "experiment" ? <TestPlan /> : null}
+                    {selected === "result" ? <ExperimentResult /> : null}
+                    {selected === "decision" ? <UpdatedDecision /> : null}
+                  </div>
+                ) : null}
+              </div>
             </div>
             <RunMeter
               elapsedSeconds={elapsed}
@@ -544,7 +550,7 @@ function RunView({
               plain={!advanced}
               active={active}
               totalsOnly={replaying && !atEnd}
-              className="order-2 border-t border-border lg:order-3 lg:border-t-0 lg:border-l"
+              className="scroll-thin order-2 border-t border-border lg:order-3 lg:overflow-y-auto lg:border-t-0 lg:border-l"
             />
           </div>
         ) : (

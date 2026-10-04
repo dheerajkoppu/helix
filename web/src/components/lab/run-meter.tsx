@@ -135,7 +135,10 @@ export function RunMeter({
           )}
           <Reading label={METER_WORDS.sources} value={String(databases.length)}>
             {databases.length ? (
-              <span className="line-clamp-4 text-xs text-muted-foreground">
+              <span
+                className="line-clamp-5 text-xs leading-5 text-muted-foreground"
+                title={databases.map(plainSource).join(", ")}
+              >
                 {databases.map(plainSource).join(", ")}
               </span>
             ) : null}

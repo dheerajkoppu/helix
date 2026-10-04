@@ -113,6 +113,8 @@ export interface LabRun {
     favoured_after: string | null;
     decision_changed: boolean | null;
     next_experiment: string | null;
+    /** molecules the run kept at the end of the loop, by name */
+    candidate_molecules: string[];
   };
   /** why the run failed, when it did */
   error: string | null;
@@ -400,6 +402,7 @@ export function toRun(raw: unknown): LabRun | null {
       favoured_after: readText(outcome.favoured_after),
       decision_changed: readBoolean(outcome.decision_changed),
       next_experiment: nextExperiment,
+      candidate_molecules: readStrings(outcome.candidate_molecules),
     },
     error: verbatim(raw.error),
     approval_mode: readText(raw.approval_mode),

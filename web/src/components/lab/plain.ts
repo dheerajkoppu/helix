@@ -53,8 +53,15 @@ export function evidenceBySource(view: RecordView): {
   return { groups, unsourced };
 }
 
-/** What the caption under each loop step is built from. */
-export function stepCounts(view: RecordView): StepCounts {
+/**
+ * What the caption under each loop step is built from. A run that writes no rejected row still
+ * counts the molecules the direction check refused in its metrics, so that total stands in once the
+ * run has said what to aim at.
+ */
+export function stepCounts(
+  view: RecordView,
+  ruledOutTotal?: number | null,
+): StepCounts {
   const outcome = overallOutcome(view);
   return {
     facts: view.evidence.length,
@@ -64,7 +71,9 @@ export function stepCounts(view: RecordView): StepCounts {
     finished: view.results.length > 0,
     changed: outcome ? outcome.changed : null,
     candidates: view.candidates.length,
-    ruledOut: view.ruledOut.length,
+    ruledOut:
+      view.ruledOut.length ||
+      (view.targetRationales.length ? (ruledOutTotal ?? 0) : 0),
   };
 }
 

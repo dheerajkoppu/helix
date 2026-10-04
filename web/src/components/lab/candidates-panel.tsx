@@ -4,7 +4,11 @@ import { ArrowRightIcon, ChevronRightIcon } from "lucide-react";
 import { cn } from "cn";
 
 import { ButtonLink } from "@/components/data/button-link";
-import type { CandidateEntry, RuledOutEntry } from "@/components/lab/record";
+import type {
+  CandidateEntry,
+  RuledOutEntry,
+  TargetRationaleEntry,
+} from "@/components/lab/record";
 import { useRun } from "@/components/lab/run-context";
 import { LoopSection } from "@/components/lab/section";
 import { routes } from "@/lib/ids";
@@ -15,6 +19,7 @@ import {
   plainDirection,
   plainIndication,
   plainMechanismDirection,
+  plainNoCandidateFinding,
   plainPhase,
   plainRequiredAction,
   plainRunSentence,
@@ -22,11 +27,18 @@ import {
 import { useAdvancedMode } from "@/lib/state/preferences";
 
 /** The chain behind one candidate, closed until asked for. */
-function Chain({ candidate }: { candidate: CandidateEntry }) {
+function Chain({
+  candidate,
+  onlyIf,
+}: {
+  candidate: CandidateEntry;
+  onlyIf: string | null;
+}) {
   const steps = candidate.bridge.steps;
-  if (steps.length === 0 && candidate.caveats.length === 0) return null;
+  if (steps.length === 0 && candidate.caveats.length === 0 && !onlyIf)
+    return null;
   return (
-    <details className="group/chain mt-3">
+    <details className="group/chain mt-2">
       <summary className="inline-flex cursor-pointer list-none items-center gap-1 rounded-xs text-sm text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 [&::-webkit-details-marker]:hidden">
         <ChevronRightIcon
           aria-hidden
@@ -35,6 +47,14 @@ function Chain({ candidate }: { candidate: CandidateEntry }) {
         {CANDIDATE_WORDS.howWeGotHere}
       </summary>
       <ol className="mt-2 flex max-w-[72ch] flex-col gap-2 text-sm leading-6 text-muted-foreground">
+        {onlyIf ? (
+          <li>
+            <span className="text-subtle-foreground">
+              {CANDIDATE_WORDS.onlyIf}:
+            </span>{" "}
+            {onlyIf}
+          </li>
+        ) : null}
         {steps.map((step, index) => (
           <li key={index} className="flex gap-2">
             <span className="tabular shrink-0 font-mono text-2xs text-subtle-foreground">
@@ -69,7 +89,7 @@ function CandidateRow({ candidate }: { candidate: CandidateEntry }) {
     advanced,
   );
   return (
-    <li className="border-t border-border py-4 first:border-t-0 first:pt-0">
+    <li className="border-t border-border py-3 first:border-t-0 first:pt-0">
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <span className="text-xl font-medium text-foreground" translate="no">
           {molecule?.name ?? CANDIDATE_WORDS.noMolecule}
@@ -82,26 +102,18 @@ function CandidateRow({ candidate }: { candidate: CandidateEntry }) {
             </span>
           </span>
         ) : null}
-        <span className="ml-auto rounded-xs border border-border-strong px-2 py-0.5 text-xs text-foreground">
+        <span className="ml-auto shrink-0 rounded-xs border border-border-strong px-2 py-0.5 text-xs whitespace-nowrap text-foreground">
           {plainDirection(candidate.direction_check.verdict)}
         </span>
       </div>
-      <p className="mt-1 text-sm text-muted-foreground">
+      <p className="mt-0.5 text-sm text-muted-foreground">
         {plainBridge(candidate.bridge.kind)}
         {plainIndication(candidate.bridge.from_disease)
           ? ` · ${plainIndication(candidate.bridge.from_disease)}`
           : ""}
         {phase ? ` · ${phase}` : ""}
       </p>
-      {onlyIf ? (
-        <p className="mt-2 max-w-[72ch] text-sm text-muted-foreground">
-          <span className="text-subtle-foreground">
-            {CANDIDATE_WORDS.onlyIf}:
-          </span>{" "}
-          {onlyIf}
-        </p>
-      ) : null}
-      <Chain candidate={candidate} />
+      <Chain candidate={candidate} onlyIf={onlyIf} />
     </li>
   );
 }
@@ -138,6 +150,45 @@ function RuledOutList({ rows }: { rows: RuledOutEntry[] }) {
         ))}
       </ul>
     </details>
+  );
+}
+
+/** Directions that mean the protein does too little, so there is little left to act on. */
+const TOO_LITTLE = new Set([
+  "loss_of_function",
+  "decreased_activity",
+  "decreased_function",
+  "no_function",
+  "haploinsufficiency",
+  "too_little",
+]);
+
+/** The end of a run that keeps nothing: the finding in three lines, not a blank. */
+function NoCandidates({
+  rationale,
+  ruledOut,
+}: {
+  rationale: TargetRationaleEntry | undefined;
+  ruledOut: number;
+}) {
+  const [lead, ...rest] = plainNoCandidateFinding({
+    ruledOut,
+    action: rationale?.required_actions[0],
+    tooLittle: [rationale?.direction, rationale?.mechanism_class].some(
+      (value) => value && TOO_LITTLE.has(value.toLowerCase()),
+    ),
+  });
+  return (
+    <div role="status" className="flex flex-col gap-2">
+      <p className="max-w-[48ch] text-2xl font-medium tracking-[-0.01em] text-foreground">
+        {lead}
+      </p>
+      {rest.map((line) => (
+        <p key={line} className="max-w-[72ch] text-base text-muted-foreground">
+          {line}
+        </p>
+      ))}
+    </div>
   );
 }
 
@@ -198,9 +249,12 @@ export function CandidatesPanel({ className }: { className?: string }) {
           ))}
         </ul>
       ) : (
-        <p className="text-base text-muted-foreground">
-          {CANDIDATE_WORDS.noCandidates}
-        </p>
+        <NoCandidates
+          rationale={rationale}
+          ruledOut={
+            view.ruledOut.length || (run.metrics.ruled_out_by_direction ?? 0)
+          }
+        />
       )}
 
       {view.ruledOut.length ? <RuledOutList rows={view.ruledOut} /> : null}

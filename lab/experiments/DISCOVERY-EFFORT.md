@@ -117,11 +117,15 @@ request returned HTTP 200; median request 0.59 to 0.60 s.
 | **All three**               | **301**         | **247.8**    | **132**           | **2.28**              | **1.88**             |
 
 The engine, for the same three subjects, issues **one** HTTP request each and settles 24, 37 and 30
-judgments in 198 ms, 203 ms and 48 ms end to end — 8.2 ms, 5.5 ms and 1.6 ms per judgment.
+judgments in 195.0 ms, 198.7 ms and 118.8 ms end to end (`after` pass, `warm_rebuild` tier) - 8.1 ms,
+5.4 ms and 4.0 ms per judgment.
 
 **The ratio, stated the only way it can honestly be stated:** to reach the same kind of judgment set,
-the serial uncached path spent **301 requests and 248 seconds across three subjects**, against three
-requests and 0.45 seconds for the engine. Per subject that is 191×, 379× and 2762× the wall seconds.
+the serial uncached path spent **301 requests and 247.8 seconds across three subjects**, against
+three requests and 0.51 seconds for the engine. Per subject that is 194x, 387x and 1121x the wall
+seconds. Those three ratios move with whichever engine pass they are divided by - the same three
+subjects in a different after-pass give 191x, 379x and 2762x - so the order of magnitude is the
+claim, not the figure.
 
 **This is a lower bound on the manual path, and only that.** The machine does not read, decide or
 record anything — it only fetches. A person doing this also has to read each record, apply the
@@ -158,19 +162,19 @@ Three tiers, each with its cache precondition stated in the result file. The ser
 killed; the assembled-response cache was emptied by touching a module the dev server watches, which
 reloads the worker and leaves the source adapters' database-backed HTTP cache alone.
 
-| Tier                | Precondition                                                                 | Total over 16 requests (after) | Median | Range        |
-| ------------------- | ---------------------------------------------------------------------------- | ------------------------------ | ------ | ------------ |
-| `first_rebuild`     | response cache empty; HTTP cache in whatever state earlier use left it       | 1798 ms end to end             | 46 ms  | 7 – 510 ms   |
-| `warm_rebuild`      | response cache empty again; HTTP cache holds every record this subject needs | 1822 ms end to end             | 46 ms  | 7 – 517 ms   |
-| `served_from_cache` | same request repeated, assembled response returned, no chain rebuilt         | 45 ms end to end               | 3.0 ms | 1.3 – 4.7 ms |
+| Tier                | Precondition                                                                 | Total over 16 requests (after) | Median  | Range          |
+| ------------------- | ---------------------------------------------------------------------------- | ------------------------------ | ------- | -------------- |
+| `first_rebuild`     | response cache empty; HTTP cache in whatever state earlier use left it       | 1891 ms end to end             | 46.0 ms | 5.9 – 513.5 ms |
+| `warm_rebuild`      | response cache empty again; HTTP cache holds every record this subject needs | 1899 ms end to end             | 74.2 ms | 6.0 – 522.5 ms |
+| `served_from_cache` | same request repeated, assembled response returned, no chain rebuilt         | 41 ms end to end               | 2.5 ms  | 1.1 – 6.9 ms   |
 
 **There is no honest cold number in this report, and that is the biggest gap in it.** A true cold
 run means an empty HTTP cache, which would mean purging a cache shared with a running dev server and
 re-fetching every record from the public APIs. That was not done. The one cold-ish datum on record is
 the `before` pass's `first_rebuild`, where subjects never requested before paid full upstream
-latency: IL2RG 3.6 s, JAK3 2.9 s, STAT3 2.5 s, CD40LG 1.2 s, WAS 1.1 s, against a 1798 ms total for
-all 16 once those records were cached. That shows the order of magnitude upstream latency adds. It
-cannot be used as a before/after comparison, and §5 does not use it.
+latency: IL2RG 3.6 s, JAK3 2.9 s, STAT3 2.5 s, CD40LG 1.2 s, WAS 1.1 s - 15.5 s for all 16, against
+1.9 s for all 16 once those records were cached. That shows the order of magnitude upstream latency
+adds. It cannot be used as a before/after comparison, and §5 does not use it.
 
 ---
 
@@ -253,7 +257,6 @@ it), CTLA4 25.4 -> 27.7 ms (+9%), RAG1 4.7 -> 4.9 ms, STAT3 78.0 -> 80.4 ms, IL2
 510.5 ms, CD40LG 11.0 -> 11.1 ms. Five of those six are within the pass-to-pass spread of the after
 runs themselves. None is investigated further here, and none is dismissed.
 
-
 ### What was looked at and left alone
 
 - **The de-duplication in change 1 saves nothing measurable.** Counted in process over 7 subjects:
@@ -273,8 +276,9 @@ runs themselves. None is investigated further here, and none is dismissed.
 
 ## 6. Threats to validity
 
-- **One run per cell.** No repeats, no confidence intervals. Differences under about 10 ms on a
-  sub-100 ms build, and under about 20 ms on a 500 ms build, are not resolvable by this design.
+- **Repeats only on one side.** The after build was measured three times, the before build once,
+  and the manual phase once. Three identical after-passes spread 114 ms over a 1774 ms total, which
+  is the noise floor this design can resolve: differences smaller than that mean nothing here.
 - **No cold measurement.** See §4. The before/after claim is about warm rebuilds and about the
   bridge schedule, not about the path a first-ever request takes.
 - **The `first_rebuild` tier is not comparable between passes.** The before pass fetched records the
@@ -316,6 +320,10 @@ lab/.venv/bin/python lab/experiments/run_discovery_effort.py --phase summary
 # the three correctness controls, which must still pass
 api/.venv/bin/python lab/experiments/run_discovery_controls.py
 ```
+
+`--label` names the pass. The stored file holds `before` (the pre-change build, one pass) and
+`after`, `after2`, `after3` (three passes of the post-change build, which is where the 114 ms noise
+floor in §5 comes from).
 
 `--phase engine` empties the engine's assembled-response cache by touching
 `api/helix/discovery/cache.py`, which the dev server watches. It never stops the server. Re-running a

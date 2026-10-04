@@ -13,12 +13,22 @@ import {
   LAB_WORDS,
   STEP_WORDS,
   plainCause,
+  plainCount,
   plainMutationLabel,
 } from "@/lib/plain-language";
 
+/** Molecules a run kept at the end of the loop, from either place the list is recorded. */
+function keptCount(run: LabRun): number {
+  return Math.max(
+    run.metrics.candidates ?? 0,
+    run.outcome.candidate_molecules.length,
+  );
+}
+
 /**
- * The strongest finished run: the lab's reference investigation first, then a run the evidence made
- * change its answer, then the one with the most evidence behind it. Baseline arms never lead.
+ * The strongest finished run: one that reaches the end of the loop with molecules to show, then one
+ * the evidence made change its answer, then the one with the most evidence behind it. A demo should
+ * land on the payoff, so candidates outrank everything. Baseline arms never lead.
  */
 export function bestRun(runs: LabRun[]): LabRun | null {
   const finished = runs.filter(
@@ -29,7 +39,7 @@ export function bestRun(runs: LabRun[]): LabRun | null {
   );
   if (finished.length === 0) return null;
   const score = (run: LabRun) =>
-    (run.run_id.startsWith("reference") ? 8 : 0) +
+    (keptCount(run) > 0 ? 16 : 0) +
     (run.outcome.decision_changed ? 4 : 0) +
     (run.outcome.favoured_before &&
     run.outcome.favoured_before !== run.outcome.favoured_after
@@ -59,6 +69,7 @@ export function FeaturedRun({
 
   const { favoured_before: before, favoured_after: after } = run.outcome;
   const changed = run.outcome.decision_changed;
+  const kept = keptCount(run);
   const seconds = run.metrics.wall_seconds;
   const mutation = run.subject.variant_id
     ? plainMutationLabel(variantLabel(run.subject.variant_id))
@@ -110,6 +121,16 @@ export function FeaturedRun({
             {plainCause(after)}
           </span>
         </span>
+        {kept > 0 ? (
+          <span className="flex flex-col gap-0.5">
+            <span className="text-2xs font-medium tracking-[0.06em] text-subtle-foreground uppercase">
+              {LAB_WORDS.endsWith}
+            </span>
+            <span className="text-lg text-foreground">
+              {plainCount(kept, "candidate")}
+            </span>
+          </span>
+        ) : null}
       </div>
 
       <div>

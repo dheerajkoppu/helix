@@ -118,6 +118,39 @@ RAISING_ACTIONS = {
 }
 
 
+# Every false rejection this runner has found has been opened individually and the cause written here,
+# keyed by (disease slug, molecule ChEMBL id). A case with no note prints as not yet investigated rather
+# than being given a generic explanation.
+FALSE_REJECTION_NOTES: dict[tuple[str, str], dict[str, str]] = {
+    ("whim-syndrome", "CHEMBL18442"): {
+        "verdict": "a real direction-of-effect error, caused by one upstream field",
+        "note": (
+            "Plerixafor is the CXCR4 blocker used to correct the CXCR4 gain of function that causes WHIM; "
+            "blocking CXCR4 is its entire pharmacology. ChEMBL nonetheless records its single mechanism "
+            "on P61073 with action_type PARTIAL AGONIST (mechanism_of_action 'C-X-C chemokine receptor "
+            "type 4 partial agonist'), confirmed through GET /compounds/CHEMBL18442. The engine reads "
+            "direction from action_type alone, so it concluded the molecule raises CXCR4 and ruled it out "
+            "against a mechanism that needs less. The rule fired correctly on a record that is wrong for "
+            "this purpose. This is the most serious result in this experiment: it is the one disease in "
+            "the evaluated set whose own specific drug the engine refuses, and no amount of care in the "
+            "rule would catch it, because the rule has exactly one input and that input disagrees with "
+            "the pharmacology."
+        ),
+    },
+    ("ad-hies-stat3-deficiency", "CHEMBL2105759"): {
+        "verdict": "legitimate: the drug treats a symptom rather than correcting the protein",
+        "note": (
+            "AD-HIES is caused by dominant-negative STAT3, so the catalog direction (needs more STAT3) is "
+            "right and baricitinib, a JAK1 inhibitor, does lower STAT3 phosphorylation. The Phase 1 record "
+            "is not an attempt to restore STAT3; it targets the eczema and inflammatory phenotype. The "
+            "engine's refusal is therefore correct about the protein and wrong about the clinical intent, "
+            "because the engine has no representation of treating a symptom. It is reported here as a "
+            "false rejection against this ground truth, and it is not a direction-of-effect bug."
+        ),
+    },
+}
+
+
 def now() -> str:
     return datetime.now(UTC).isoformat(timespec="seconds").replace("+00:00", "Z")
 
@@ -291,6 +324,9 @@ def evaluate(api: Api, ground_truth: dict[str, dict[str, Any]]) -> dict[str, Any
     eligible = [row for row in ground_truth.values() if row["molecules"]]
     eligible.sort(key=lambda row: row["slug"])
 
+    # Two different kinds of exclusion end up in `coverage`: a disease with no ground truth at all, and a
+    # disease that had ground truth but whose discovery request could not be served. They are kept apart
+    # so the eligible set and the evaluated set can be told from each other.
     for row in ground_truth.values():
         if not row["molecules"]:
             reason = "no_known_drug_in_either_source"
@@ -321,7 +357,11 @@ def evaluate(api: Api, ground_truth: dict[str, dict[str, Any]]) -> dict[str, Any
         subject = payload.get("subject") or {}
         mechanism = subject.get("mechanism") or {}
         required = payload.get("required_action") or {}
+        # The endpoint writes "none" as a string when the mechanism is unknown and no action is derived,
+        # so it has to be read as absence, not as a direction.
         direction_needed = required.get("direction_needed")
+        if direction_needed in (None, "", "none", "unknown"):
+            direction_needed = None
         accession = subject.get("accession")
 
         if accession is None:
@@ -592,12 +632,26 @@ def summarise(result: dict[str, Any]) -> dict[str, Any]:
         "chembl_corroborated_pairs": sum(1 for pair in pairs if pair["chembl_indication_corroborates"]),
         "coverage": {
             "catalog_diseases": None,
+            "eligible": len(evaluated)
+            + sum(
+                1
+                for row in result["coverage_excluded"]
+                if row["reason"] == "discovery_request_failed"
+            ),
             "evaluated": len(evaluated),
             "no_ground_truth": result["no_ground_truth_count"],
             "excluded_reasons": dict(
                 Counter(row["reason"] for row in result["coverage_excluded"]).most_common()
             ),
         },
+        "diseases_contributing_hits": dict(
+            Counter(
+                disease["name"]
+                for disease in evaluated
+                for pair in disease["pairs"]
+                if pair["outcome"] == "recovered"
+            ).most_common()
+        ),
     }
 
 
@@ -689,6 +743,60 @@ def markdown(payload: dict[str, Any]) -> str:
     )
     out("")
 
+    out("## What the numbers say")
+    out("")
+    hits = summary["diseases_contributing_hits"]
+    top_disease = next(iter(hits), None)
+    out(
+        f"- **Recall is low and concentrated.** {recall['recovered']} of {summary['n_pairs']} pairs came "
+        f"back, and {hits.get(top_disease, 0)} of those {recall['recovered']} are for one disease "
+        f"({top_disease}). On {summary['n_diseases_evaluated']} diseases the engine recovered a known "
+        f"drug for {summary['n_diseases_with_a_hit']}."
+    )
+    out(
+        f"- **When it does recover a molecule, the rank is usable.** Median rank "
+        f"{recall['median_rank']}, range {recall['rank_range']}, "
+        f"{recall['top_10']} of the {recall['recovered']} inside the top {TOP_N}. The failure is finding "
+        f"the molecule at all, not ordering it."
+    )
+    if summary["direction_check_mix"] and "matches" not in summary["direction_check_mix"]:
+        out(
+            f"- **Not one recovered molecule carried a `matches` direction verdict.** All "
+            f"{recall['recovered']} came back as `unknown`, the rank below every match, carrying the "
+            "caveat 'may push the wrong way'. The engine found these drugs but could not say they push "
+            "the right way."
+        )
+    silent_bridges = [
+        bridge
+        for bridge in ("pathway_node", "structural_analogue", "mechanism_class")
+        if bridge not in summary["bridge_mix"]
+    ]
+    if silent_bridges:
+        out(
+            f"- **{', '.join('`' + bridge + '`' for bridge in silent_bridges)} recovered nothing.** Every "
+            "recovery came through `same_target` or `interaction_partner`. Part of this is the "
+            "target-anchored ground truth, which can only contain drugs acting on the disease's own "
+            "protein; but `pathway_node` did produce the one false rejection, so it was running."
+        )
+    out(
+        f"- **{summary['missed']['with_a_chembl_mechanism_but_not_returned']} pairs were missed with a "
+        f"ChEMBL mechanism record in hand** — the molecule exists in the engine's universe and still "
+        "appeared in neither `candidates` nor `ruled_out`. Per-bridge caps and the requirement that the "
+        "mechanism sit on the subject's own protein or a readable pathway node are the places to look."
+    )
+    out(
+        f"- **The safety metric is the good one.** {rejection['pairs']} false rejections in "
+        f"{summary['n_pairs']} pairs, and only one of the two is a direction error rather than a drug "
+        "aimed at a symptom. That one matters a great deal and is written up below."
+    )
+    out(
+        "- **The control subject is not in this set.** APDS, the held-out positive in "
+        "`DISCOVERY-CONTROLS.md`, has no Open Targets disease node and ChEMBL files leniolisib under a "
+        "parent term, so no ground-truth pair exists for it under exact identifier matching. The three "
+        "controls and this experiment do not overlap on a single subject."
+    )
+    out("")
+
     out("## False rejections, every case")
     out("")
     if not rejection["cases"]:
@@ -697,6 +805,12 @@ def markdown(payload: dict[str, Any]) -> str:
             "disease was moved to `ruled_out` for that disease."
         )
     else:
+        out(
+            "Each one was opened individually. A drug that treats a symptom rather than correcting the "
+            "protein is a legitimate refusal and is labelled as such; a refusal of a drug that does "
+            "correct the protein is an error and is labelled as such."
+        )
+        out("")
         for case in rejection["cases"]:
             out(
                 f"- **{case['molecule']}** ({case['chembl_id']}, {case['clinical_stage']}) for "
@@ -709,6 +823,14 @@ def markdown(payload: dict[str, Any]) -> str:
                 f"needs {case['direction_needed']}."
             )
             out(f"  > {case['reason']}")
+            investigation = FALSE_REJECTION_NOTES.get((case["slug"], case["chembl_id"]))
+            if investigation:
+                out(f"  - **Cause — {investigation['verdict']}.** {investigation['note']}")
+            else:
+                out(
+                    "  - **Cause — not yet investigated.** This case appeared after the write-up and has "
+                    "no note in the runner."
+                )
     out("")
 
     out("## Direction agreement")
@@ -720,6 +842,19 @@ def markdown(payload: dict[str, Any]) -> str:
     out("| --- | --- |")
     for verdict, count in summary["direction_agreement"].items():
         out(f"| `{verdict}` | {count} |")
+    out("")
+
+    out("## Where the recall comes from")
+    out("")
+    out(
+        "Pair-level recall hides concentration. These are the diseases that contributed every recovered "
+        "molecule:"
+    )
+    out("")
+    out("| Disease | Molecules recovered |")
+    out("| --- | --- |")
+    for name, count in summary["diseases_contributing_hits"].items():
+        out(f"| {name} | {count} |")
     out("")
 
     out("## Bridge mix of recovered molecules")
@@ -739,10 +874,15 @@ def markdown(payload: dict[str, Any]) -> str:
     out("")
     out("| Outcome | Diseases |")
     out("| --- | --- |")
-    out(f"| Evaluated (at least one known molecule) | {summary['coverage']['evaluated']} |")
+    out(f"| In the catalog | {payload['conditions']['catalog_diseases']} |")
+    out(f"| Eligible (at least one known molecule) | {summary['coverage']['eligible']} |")
+    out(f"| Evaluated (eligible and the request was served) | {summary['coverage']['evaluated']} |")
     out(f"| No ground truth (no known drug in either source) | {summary['coverage']['no_ground_truth']} |")
     out("")
-    out("Reasons a disease could not be evaluated:")
+    out(
+        "Reasons a disease is not in the evaluated set. The first rows are diseases with no ground truth; "
+        "`discovery_request_failed` is a disease that *had* ground truth and could not be asked."
+    )
     out("")
     out("| Reason | Diseases |")
     out("| --- | --- |")
@@ -799,7 +939,32 @@ def main() -> int:
     parser.add_argument(
         "--limit", type=int, default=None, help="Evaluate only the first N catalog diseases, by slug order"
     )
+    parser.add_argument(
+        "--render-only",
+        action="store_true",
+        help="Recompute every figure and rewrite the Markdown from the stored JSON, with no API calls. "
+        "Every number in the report is derived from the per-pair rows, so this reproduces the report "
+        "exactly without re-measuring.",
+    )
     args = parser.parse_args()
+
+    if args.render_only:
+        stored = json.loads(OUTPUT_JSON.read_text())
+        rebuilt = {
+            "evaluated": stored["diseases"],
+            "coverage_excluded": stored["coverage_excluded"],
+            "no_ground_truth_count": stored["summary"]["coverage"]["no_ground_truth"],
+            "molecules_resolved": stored["summary"].get("molecules_resolved"),
+        }
+        summary = summarise(rebuilt)
+        summary["coverage"]["catalog_diseases"] = stored["conditions"]["catalog_diseases"]
+        stored["summary"] = summary
+        stored["rendered_at"] = now()
+        OUTPUT_JSON.write_text(json.dumps(stored, indent=2) + "\n")
+        OUTPUT_MARKDOWN.write_text(markdown(stored))
+        print(json.dumps(summary, indent=2))
+        print(f"\nrewrote {OUTPUT_JSON}\nrewrote {OUTPUT_MARKDOWN} from the stored measurement")
+        return 0
 
     started = time.monotonic()
     catalog = json.loads(CATALOG.read_text())
@@ -876,10 +1041,20 @@ def main() -> int:
             "A disease with no stated mechanism gets no required action, so nothing is ruled out on "
             "direction for it. Those diseases cannot produce a false rejection, which flatters the safety "
             "figure; the mechanism-confidence mix is reported beside it.",
-            "Both the API and the engine cache for fifteen minutes, so the wall times here are not cold "
-            "times. Accuracy figures are unaffected.",
+            "Both the API and the engine cache for fifteen minutes, so `wall_seconds` here is not a cold "
+            "time. The first cold run of this script took 1219 s for the same 1342 requests; a warm re-run "
+            "takes about 9 s. Accuracy figures are identical in both and are unaffected.",
             "The sources are live. A source changing its records changes these numbers without anything "
             "failing loudly.",
+            "The ground truth itself can be wrong. Open Targets records a Phase 1 trial as a drug for a "
+            "disease without saying whether the intent was to correct the protein or to damp a symptom, "
+            "and one of the two false rejections turned out to be exactly that distinction. A pair in "
+            "this ground truth is a record that a molecule is being tried, not a record that it works.",
+            "The runner was itself wrong once: an earlier version read `direction_needed` as absent only "
+            "when null, while the endpoint writes the string \"none\", which mislabelled 11 pairs as "
+            "direction disagreements. The figure in the direction-agreement table changed when that was "
+            "fixed; recall and false rejection did not. Both full runs produced identical recall and "
+            "false-rejection counts twenty minutes apart.",
         ],
     }
 

@@ -506,7 +506,7 @@ function ResultStep() {
     ]),
   );
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3">
       {view.results.length > 1 ? (
         <div
           role="tablist"
@@ -551,7 +551,7 @@ function ResultStep() {
           {interpretation.per_hypothesis.map((entry) => (
             <li
               key={entry.id}
-              className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-border-subtle px-1 py-2.5 text-base"
+              className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-border-subtle px-1 py-2 text-base"
             >
               <span className="text-foreground">
                 {plainCause(causeOf.get(entry.id))}
@@ -642,7 +642,7 @@ export function PlainStepPanel({
 }) {
   const { run, view, replaying } = useRun();
   const step = STEP_OF[stage];
-  const counts = stepCounts(view);
+  const counts = stepCounts(view, run.metrics.ruled_out_by_direction);
   const reached =
     (stage === "evidence" && view.evidence.length > 0) ||
     (stage === "hypothesis" && view.hypotheses.length > 0) ||
