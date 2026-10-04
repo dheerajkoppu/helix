@@ -79,7 +79,7 @@ const STRUCTURE_COLUMNS: DataTableColumn<StructureRow>[] = [
   {
     id: "origin",
     header: "Class",
-    width: 52,
+    width: 112,
     sortable: false,
     cell: (row) => <StructureOriginTag origin={row.origin} size="compact" />,
   },
@@ -112,7 +112,7 @@ const STRUCTURE_COLUMNS: DataTableColumn<StructureRow>[] = [
     id: "quality",
     header: "Quality",
     align: "right",
-    width: 88,
+    width: 96,
     accessor: (row) =>
       row.descriptor.resolution ?? row.descriptor.confidence?.plddt_mean,
     cell: (row) =>
@@ -127,7 +127,7 @@ const STRUCTURE_COLUMNS: DataTableColumn<StructureRow>[] = [
     id: "coverage",
     header: "Range",
     align: "right",
-    width: 76,
+    width: 88,
     accessor: (row) => row.fraction,
     cell: (row) => row.span,
   },
@@ -329,7 +329,7 @@ const FEATURE_COLUMNS: DataTableColumn<FeatureRow>[] = [
     id: "range",
     header: "Range",
     align: "right",
-    width: 76,
+    width: 88,
     accessor: (row) => row.start,
     cell: (row) =>
       row.start === row.end ? String(row.start) : `${row.start}-${row.end}`,

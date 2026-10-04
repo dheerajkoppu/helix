@@ -28,7 +28,7 @@ Nothing is deleted. Detail moves behind Advanced, a "Details" disclosure, a popo
 - Top bar: wordmark, `Lab`, `Explore`, `Projects`, search, one overflow menu holding everything else (Jobs, Models, Docs, Learn, Advanced, theme, source). Status line hidden except a small API-state dot.
 - Workspace: stage rail with stage names only; no subject chip row; two zones (a short list or key facts on the left, the 3D viewer large); the inspector appears only when something is selected; the sequence dock is one slim strip (domains and variant marks) with an Expand control.
 - At most one primary action per screen, visibly the primary.
-- More whitespace, fewer rules. Body text 14px, key numbers 20px or larger.
+- More whitespace, fewer rules. Body text 15px, key numbers 24px or larger.
 
 **Show the tangible result.** Wherever a model produced something, show it with one consistent strip: model name and version, the two or three metrics that matter as large numbers with units, run time, origin tag. Use `ModelResultStrip` (`@/components/science/model-result-strip`); create it there if it does not exist yet, and reuse it everywhere.
 
@@ -172,22 +172,22 @@ IBM Plex Sans for everything. IBM Plex Mono for sequences, HGVS, accessions, str
 
 | Utility     | Size / line | Use                                                  |
 | ----------- | ----------- | ---------------------------------------------------- |
-| `text-2xs`  | 11 / 16     | Column headers, badges, axis ticks, legends, footers |
-| `text-xs`   | 12 / 16     | Table cells, controls, zone content, identifiers     |
-| `text-sm`   | 13 / 20     | Body default, page prose                             |
-| `text-base` | 14 / 20     | Long explanation, hypothesis text, section titles    |
-| `text-lg`   | 16 / 24     | Panel titles, rarely needed                          |
-| `text-xl`   | 18 / 24     | Kit and page group titles                            |
-| `text-2xl`  | 22 / 28     | Page title, entity title                             |
-| `text-3xl`  | 28 / 32     | A rare single headline number                        |
+| `text-2xs`  | 12 / 16     | Column headers, badges, axis ticks, legends, footers |
+| `text-xs`   | 13 / 18     | Table cells, controls, zone content, identifiers     |
+| `text-sm`   | 14 / 20     | Page prose                                           |
+| `text-base` | 15 / 22     | Body default, long explanation, section titles       |
+| `text-lg`   | 17 / 26     | Panel titles, rarely needed                          |
+| `text-xl`   | 19 / 28     | Kit and page group titles                            |
+| `text-2xl`  | 24 / 30     | Page title, entity title                             |
+| `text-3xl`  | 30 / 36     | A rare single headline number                        |
 
 Rules:
 
-- Minimum size 11px. Density comes from layout, never from low contrast.
+- Minimum size 12px, in Advanced too. Density comes from layout, never from low contrast.
 - Uppercase only for `text-2xs` labels (column headers, zone names, section headers).
 - Numbers are right-aligned, monospace and tabular (`tabular font-mono`).
 - Identifiers are never truncated without a copy action: use `MonoId`.
-- 4px grid. Controls 28px (`h-7`), small 24px, table rows 28px, zone header 36px, toolbar 32px, footer 24px. Icons 14px in controls, stroke as shipped by lucide.
+- 4px grid. Controls 32px (`h-8`), small 28px, table rows 36px (`DATA_TABLE_ROW_HEIGHT`, the one source), table header 36px, zone header 36px, toolbar 36px, footer 28px. Cell padding `px-3`. Icons 14px in controls, stroke as shipped by lucide.
 - Radius: 2px badges, chips and swatches; 4px controls; 6px popovers and menus; 8px dialogs. Zones, plates and tables are square.
 - Every separation is a 1px line: `border-border-subtle` between rows, `border-border` between panels, `border-border-strong` on inputs, swatches and the axis. No shadows on in-flow content; only popovers and dialogs are elevated.
 - Selected row: `bg-active` plus a 2px ink bar on the leading edge. Selection is never coloured.

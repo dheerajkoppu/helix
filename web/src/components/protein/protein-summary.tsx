@@ -147,7 +147,7 @@ export function ProteinSummary({
               <PopoverContent
                 side="right"
                 align="start"
-                className="flex h-[min(32rem,70dvh)] w-[26rem] max-w-[calc(100vw-1.5rem)] flex-col gap-0 p-0"
+                className="flex h-[min(34rem,72dvh)] w-[31rem] max-w-[calc(100vw-1.5rem)] flex-col gap-0 p-0"
               >
                 <p className="flex shrink-0 items-baseline gap-2 border-b border-border-subtle px-3 py-2 text-xs font-medium text-foreground">
                   Structures

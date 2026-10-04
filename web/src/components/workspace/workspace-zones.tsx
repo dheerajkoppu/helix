@@ -82,7 +82,7 @@ function DesktopZones({
           <ResizablePanel
             id="ledger"
             panelRef={ledgerRef}
-            defaultSize={360}
+            defaultSize={392}
             minSize={264}
             maxSize="45%"
             collapsible
