@@ -8,8 +8,9 @@ partially. A bridge never raises for an upstream failure and never fails the req
 
 import asyncio
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
+from helix.discovery.targets import ProteinActions, protein_actions
 from helix.knowledge.catalog import Catalog, SeedDisease
 from helix.schemas.common import Evidence, SourceStatus
 from helix.schemas.discovery import (
@@ -24,9 +25,6 @@ from helix.schemas.discovery import (
     WithheldEdge,
 )
 from helix.sources.base import Gathered, SourceResult
-
-if TYPE_CHECKING:
-    from helix.discovery.targets import ProteinActions
 
 BRIDGE_LABELS: dict[BridgeKind, str] = {
     "same_target": "A molecule that acts on this very protein",
@@ -82,15 +80,13 @@ class BridgeContext:
     def direct_edge_for(self, chembl_id: str) -> DirectEdge | None:
         return next((edge for edge in self.direct_edges if edge.molecule_chembl_id == chembl_id), None)
 
-    async def protein_actions(self, accession: str) -> "ProteinActions":
+    async def protein_actions(self, accession: str) -> ProteinActions:
         """ChEMBL's records for one protein, fetched once per request however many bridges ask.
 
         Bridges land on the same protein often: the subject's own protein is wanted by two of them,
         and a pathway node is frequently also a curated partner. Each asker gets the same object.
         The task is shielded, so one bridge's timeout never cancels the fetch another is waiting on.
         """
-        from helix.discovery.targets import protein_actions
-
         tasks: dict[str, asyncio.Task[ProteinActions]] = self.shared.setdefault("protein_action_tasks", {})
         task = tasks.get(accession)
         if task is None:

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T02:27:05Z",
+  "generated_at": "2026-10-04T02:41:08Z",
   "all_passed": true,
   "passed": 3,
   "total": 3,
@@ -14,7 +14,7 @@
       "expected": "Leniolisib among the top 10 candidates, direction 'matches', no withheld edge in the chain",
       "passed": true,
       "detail": "Leniolisib (CHEMBL3643413, MWKYMZXCGYXLPL-ZDUSSCGKSA-N) came back at rank 4 of 24 through a same_target bridge with the direction check 'matches', while 18 direct disease-to-molecule edges were withheld, 1 of them naming this molecule.",
-      "elapsed_ms": 539.3,
+      "elapsed_ms": 536.8,
       "sources_answered": 7,
       "source_count": 8,
       "candidate_count": 24,
@@ -47,11 +47,11 @@
         "Bridge same_target, 3 steps, 3 cited records, from_disease=None.",
         "The cited mechanism record is confirmed independently: GET /proteins/O00329/compounds returns mechanism 8305 (INHIBITOR) for the same molecule.",
         "The withheld edge is a real one: in full mode the same molecule's chain cites drug_indication:147079 ('studied or used for' the disease), and that step is gone from the held-out chain while the molecule still reaches rank 4.",
-        "Full mode withholds 1 edge(s) against 18 in held-out mode, and ranks it 4 of 24 (199.0 ms).",
-        "gene=PIK3CD&exclude_direct=true recovers it at rank 4 of 24 (205.1 ms).",
+        "Full mode withholds 1 edge(s) against 18 in held-out mode, and ranks it 4 of 24 (199.3 ms).",
+        "gene=PIK3CD&exclude_direct=true recovers it at rank 4 of 24 (192.0 ms).",
         "Bridges that fired: same_target (12 ranked, 0 refused), interaction_partner (9 ranked, 0 refused). pathway_node is empty: Reactome records 27 reactions for this protein, but none of them names a modification of it, so no direction can be read. structural_analogue is partial: No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment. mechanism_class is empty: ChEMBL records no molecule with an action on the proteins of those diseases.",
         "Sources that did not answer ok: open_targets: empty.",
-        "Server-side elapsed 533.5 ms, from_cache=False; wall time 539.3 ms."
+        "Server-side elapsed 531.4 ms, from_cache=False; wall time 536.8 ms."
       ]
     },
     {
@@ -63,7 +63,7 @@
       "expected": "Every BTK inhibitor absent from candidates and present in ruled_out with verdict 'opposes'",
       "passed": true,
       "detail": "None of the 20 molecules ChEMBL records as lowering BTK is offered as a candidate. Ibrutinib (CHEMBL1873475) sits in ruled_out with verdict 'opposes' and a plain reason, and so do 20 of those 20 molecules in total, within 33 ruled-out rows.",
-      "elapsed_ms": 224.3,
+      "elapsed_ms": 207.4,
       "sources_answered": 8,
       "source_count": 8,
       "candidate_count": 4,
@@ -107,7 +107,7 @@
         "Ibrutinib resolved from ChEMBL's own records to CHEMBL1873475 / XYFPWWZEPKGCCK-GOSISDBHSA-N, action INHIBITOR, confirmed back through GET /compounds/XYFPWWZEPKGCCK-GOSISDBHSA-N as IBRUTINIB.",
         "Of those 20 molecules, 20 appear in ruled_out and 20 of them carry verdict 'opposes'. 0 are in neither list, so the user never sees them refused: none.",
         "Bridges that fired: same_target (0 ranked, 20 refused), pathway_node (1 ranked, 13 refused), interaction_partner (3 ranked, 0 refused). structural_analogue is empty: No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment. mechanism_class is empty: ChEMBL records no molecule with an action on the proteins of those diseases.",
-        "Server-side elapsed 218.5 ms, from_cache=False; wall time 224.3 ms."
+        "Server-side elapsed 204.4 ms, from_cache=False; wall time 207.4 ms."
       ]
     },
     {
@@ -119,7 +119,7 @@
       "expected": "A JAK-family inhibitor as a pathway_node candidate on a JAK protein, direction 'matches'",
       "passed": true,
       "detail": "Baricitinib (CHEMBL2105759) came back at rank 2 of 23 as a pathway_node candidate on JAK1, not on STAT1, with the direction check 'matches'.",
-      "elapsed_ms": 3.9,
+      "elapsed_ms": 69.3,
       "sources_answered": 6,
       "source_count": 6,
       "candidate_count": 23,
@@ -148,7 +148,7 @@
         "Resolved but absent from the candidate list: ['tofacitinib']. The control needs only one, but the per-bridge caps mean a JAK molecule can be cut.",
         "Candidates aimed at STAT1 itself: none.",
         "Bridges that fired: pathway_node (15 ranked, 3 refused), interaction_partner (6 ranked, 0 refused), mechanism_class (5 ranked, 1 refused). same_target is empty: ChEMBL records no molecule with an action on this protein. structural_analogue is empty: No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment.",
-        "Server-side elapsed 69.0 ms, from_cache=True; wall time 3.9 ms."
+        "Server-side elapsed 66.6 ms, from_cache=False; wall time 69.3 ms."
       ]
     }
   ],
@@ -172,7 +172,7 @@
       "state": "ok",
       "message": null,
       "release": "iuis_2024 2026-10-03",
-      "retrieved_at": "2026-10-04T02:26:23.353694Z",
+      "retrieved_at": "2026-10-04T02:40:52.407984Z",
       "license": null,
       "url": null,
       "from_cache": false,
@@ -270,6 +270,6 @@
     "positive_upstream_node: the same_target bridge contributed nothing (empty) \u2014 ChEMBL records no molecule with an action on this protein.",
     "positive_upstream_node: the structural_analogue bridge contributed nothing (empty) \u2014 No fold-similarity source is available in this deployment, so the chain uses shared chemistry instead of a measured fold alignment."
   ],
-  "run_seconds": 22.3,
+  "run_seconds": 1.51,
   "api_calls": 22
 }

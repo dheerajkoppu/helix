@@ -1,0 +1,84 @@
+{
+  "run_id": "20261004T023839Z-BTK-p.Arg28His-lab",
+  "objective": "Given what this mutation breaks, what could a drug act on to correct it?",
+  "subject": {
+    "gene": "BTK",
+    "variant_id": "BTK-p.Arg28His",
+    "accession": "Q06187",
+    "position": 28,
+    "reference_residue": "R",
+    "alternate_residue": "H",
+    "protein_change": "p.Arg28His"
+  },
+  "mode": "specialist_lab",
+  "status": "succeeded",
+  "budget": {
+    "max_tool_calls": 200,
+    "max_compute_seconds": 300
+  },
+  "started_at": "2026-10-04T02:38:40Z",
+  "finished_at": "2026-10-04T02:43:21Z",
+  "omnigent": {
+    "version": "0.16.0",
+    "harness": "claude-sdk",
+    "model": "claude-sonnet-5",
+    "session_id": "92f490a95bf742718737f1eea302d093",
+    "models": {
+      "orchestrator": "claude-sonnet-5",
+      "literature": "claude-sonnet-5",
+      "knowledge_graph": "claude-sonnet-5",
+      "insight": "claude-sonnet-5",
+      "planner": "claude-sonnet-5",
+      "safety": "claude-sonnet-5",
+      "runner": "claude-sonnet-5",
+      "analysis": "claude-sonnet-5",
+      "translator": "claude-sonnet-5"
+    },
+    "bundle": "lab/agents/helix_lab",
+    "sub_agent_sessions": 11,
+    "loop_ended": "finished"
+  },
+  "spec_hash": "fb176ca4cf76f13bc4167d5e2979d0ca72aa48c1675f275b6e09ab9bb51d0a9a",
+  "metrics": {
+    "wall_seconds": 281.3,
+    "tool_calls": 118,
+    "distinct_sources": 12,
+    "evidence_items": 22,
+    "hypotheses": 3,
+    "tests_considered": 3,
+    "approvals": 0,
+    "tests_executed": 1,
+    "compute_seconds": 0.0,
+    "tool_calls_by_agent": {
+      "orchestrator": 21,
+      "literature": 14,
+      "knowledge_graph": 36,
+      "insight": 5,
+      "planner": 8,
+      "safety": 13,
+      "runner": 5,
+      "analysis": 6,
+      "translator": 10
+    },
+    "policy_denials": 0,
+    "reopenings": 0,
+    "candidates": 0,
+    "candidates_rejected_by_safety": 0,
+    "ruled_out_by_direction": 66,
+    "bridge_kinds": []
+  },
+  "outcome": {
+    "favoured_before": "ligand_binding",
+    "favoured_after": "ligand_binding",
+    "decision_changed": false,
+    "next_experiment": "Laboratory binding measurement: express and purify the BTK PH domain (residues 1-135) with R28H and with wild-type R28 side by side, then measure binding to Ins(1,3,4,5)P4 by isothermal titration calorimetry or a fluorescence/lipid-binding assay, with a thermal-stability (CD or DSF) check on the same preparations. Confirms H1 if R28H affinity is clearly weaker than wild type while melting temperature is near wild type; overturns H1 if affinity matches wild type within error (the H1 refutation criterion). Lower affinity with lower stability would instead point toward H2.",
+    "favoured_before_hypothesis": "H1",
+    "favoured_after_hypothesis": "H1",
+    "decisions": 1,
+    "candidates": [],
+    "candidate_molecules": []
+  },
+  "question": "For a pathogenic missense variant in an immune-deficiency gene, which molecular mechanism best explains its effect on the protein, does a targeted computational test change the conclusion that the starting evidence suggested, and what could a drug act on if that mechanism is right?",
+  "approval_mode": "waits for a human decision through the API",
+  "error": null
+}

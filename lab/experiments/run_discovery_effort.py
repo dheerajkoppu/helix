@@ -331,9 +331,7 @@ class Public:
             return True
         return False
 
-    def get(
-        self, url: str, *, params: dict[str, Any] | None = None, accept: str = "application/json"
-    ) -> Any:
+    def get(self, url: str, *, params: dict[str, Any] | None = None, accept: str = "application/json") -> Any:
         full = url + (f"?{urllib.parse.urlencode(params)}" if params else "")
         request = urllib.request.Request(
             full,
@@ -390,9 +388,7 @@ def manual_protein_actions(public: Public, accession: str, judgments: set[tuple[
         if not target_id:
             continue
         # one target at a time, not target_chembl_id__in
-        mechanisms.extend(
-            _chembl_rows(public, "mechanism", "mechanisms", {"target_chembl_id": target_id})
-        )
+        mechanisms.extend(_chembl_rows(public, "mechanism", "mechanisms", {"target_chembl_id": target_id}))
     parents: list[str] = []
     for row in mechanisms:
         parent = row.get("parent_molecule_chembl_id") or row.get("molecule_chembl_id")
@@ -567,11 +563,14 @@ def measure_protein_fetches(subjects: list[dict[str, Any]]) -> dict[str, Any]:
         for subject in subjects:
             asks: list[str] = []
 
-            async def counted(accession: str, **kwargs: Any) -> Any:
-                asks.append(accession)
-                return await original(accession, **kwargs)
+            def counter(into: list[str]) -> Any:
+                async def counted(accession: str, **kwargs: Any) -> Any:
+                    into.append(accession)
+                    return await original(accession, **kwargs)
 
-            targets_module.protein_actions = counted
+                return counted
+
+            targets_module.protein_actions = counter(asks)
             response_cache.clear()
             params = {
                 key: (value == "true" if key == "exclude_direct" else value)
@@ -604,10 +603,197 @@ def measure_protein_fetches(subjects: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+# ---------------------------------------------------------------------------
+# Every derived figure the write-up quotes, recomputed from the stored passes
+
+
+def _median(values: list[float]) -> float | None:
+    if not values:
+        return None
+    ordered = sorted(values)
+    middle = len(ordered) // 2
+    if len(ordered) % 2:
+        return round(ordered[middle], 1)
+    return round((ordered[middle - 1] + ordered[middle]) / 2, 1)
+
+
+def _spread(values: list[float]) -> dict[str, Any]:
+    return {
+        "total": round(sum(values), 1),
+        "median": _median(values),
+        "min": round(min(values), 1) if values else None,
+        "max": round(max(values), 1) if values else None,
+        "n": len(values),
+    }
+
+
+def summarise(stored: dict[str, Any]) -> dict[str, Any]:
+    """The totals, medians and ratios the document quotes. Nothing here is typed in by hand."""
+    passes = stored.get("engine_passes") or {}
+    summary: dict[str, Any] = {"recomputed_at": now()}
+
+    effort_keys = [
+        "judgments_made",
+        "judgments_ranked",
+        "judgments_ruled_out",
+        "judgments_dropped_before_display",
+        "distinct_upstream_records",
+        "databases_consulted_count",
+        "target_proteins_judged",
+        "molecules_with_a_recorded_action_on_those_proteins",
+    ]
+    reference = (passes.get("after") or passes.get("before") or {}).get("tiers", {})
+    rows = (reference.get("warm_rebuild") or {}).get("subjects") or {}
+    if rows:
+        summary["effort_per_request"] = {
+            key: _spread([float(row[key]) for row in rows.values()]) for key in effort_keys
+        }
+        databases: set[str] = set()
+        records: dict[str, int] = {}
+        for row in rows.values():
+            databases |= set(row["databases_consulted"])
+            for database, count in (row.get("records_by_database") or {}).items():
+                records[database] = records.get(database, 0) + int(count)
+        summary["effort_per_request"]["databases_consulted_across_the_set"] = sorted(databases)
+        summary["effort_per_request"]["records_by_database_summed"] = dict(
+            sorted(records.items(), key=lambda item: -item[1])
+        )
+
+    # Did the performance change alter any answer? Compared on the counts, subject by subject.
+    if "before" in passes and "after" in passes:
+        before = passes["before"]["tiers"]["warm_rebuild"]["subjects"]
+        after = passes["after"]["tiers"]["warm_rebuild"]["subjects"]
+        differences = {
+            name: {
+                key: [before[name][key], after[name][key]]
+                for key in effort_keys
+                if before[name][key] != after[name][key]
+            }
+            for name in before
+            if any(before[name][key] != after[name][key] for key in effort_keys)
+        }
+        summary["equivalence_before_vs_after"] = {
+            "compared_on": effort_keys,
+            "tier": "warm_rebuild",
+            "subjects_compared": len(before),
+            "subjects_that_differ": len(differences),
+            "differences": differences,
+        }
+
+    # Timing, per tier and per pass, plus the schedule counterfactual read from the bridge timings
+    timing: dict[str, Any] = {}
+    for label, entry in passes.items():
+        for tier, body in entry["tiers"].items():
+            subjects = body["subjects"]
+            timing.setdefault(tier, {})[label] = {
+                "server_elapsed_ms": _spread([float(row["server_elapsed_ms"]) for row in subjects.values()]),
+                "end_to_end_ms": _spread([float(row["end_to_end_ms"]) for row in subjects.values()]),
+            }
+        warm = entry["tiers"].get("warm_rebuild", {}).get("subjects") or {}
+        serial = concurrent = observed = 0.0
+        per_subject = {}
+        for name, row in warm.items():
+            elapsed = {
+                str(bridge["kind"]): float(bridge.get("elapsed_ms") or 0.0) for bridge in row["bridges"]
+            }
+            head = elapsed.get("same_target", 0.0)
+            rest = [value for kind, value in elapsed.items() if kind != "same_target"]
+            serial_model = head + (max(rest) if rest else 0.0)
+            concurrent_model = max(elapsed.values()) if elapsed else 0.0
+            serial += serial_model
+            concurrent += concurrent_model
+            observed += float(row["server_elapsed_ms"])
+            per_subject[name] = {
+                "same_target_ms": round(head, 1),
+                "slowest_other_bridge_ms": round(max(rest) if rest else 0.0, 1),
+                "serial_head_model_ms": round(serial_model, 1),
+                "all_concurrent_model_ms": round(concurrent_model, 1),
+                "observed_build_ms": round(float(row["server_elapsed_ms"]), 1),
+            }
+        timing.setdefault("schedule_counterfactual", {})[label] = {
+            "explanation": (
+                "Read from the per-bridge elapsed_ms of this pass alone, so both models describe the "
+                "same cache state. serial_head_model is what the build costs when same_target runs to "
+                "completion before the other four start; all_concurrent_model is what it costs when all "
+                "five overlap. Whichever model the observed build matches is the schedule that ran."
+            ),
+            "serial_head_model_total_ms": round(serial, 1),
+            "all_concurrent_model_total_ms": round(concurrent, 1),
+            "observed_total_ms": round(observed, 1),
+            "observed_over_serial_model": round(observed / serial, 3) if serial else None,
+            "observed_over_concurrent_model": round(observed / concurrent, 3) if concurrent else None,
+            "subjects": per_subject,
+        }
+    summary["timing"] = timing
+
+    manual = stored.get("manual_equivalent")
+    if manual and rows:
+        comparison = []
+        for row in manual["subjects"]:
+            engine = rows.get(row["subject"]) or {}
+            comparison.append(
+                {
+                    "subject": row["subject"],
+                    "manual_requests": row["requests_issued"],
+                    "manual_wall_s": row["wall_s"],
+                    "manual_judgments_reached": row["judgments_reached"],
+                    "manual_requests_per_judgment": (
+                        round(row["requests_issued"] / row["judgments_reached"], 2)
+                        if row["judgments_reached"]
+                        else None
+                    ),
+                    "manual_seconds_per_judgment": (
+                        round(row["wall_s"] / row["judgments_reached"], 2)
+                        if row["judgments_reached"]
+                        else None
+                    ),
+                    "engine_requests": 1,
+                    "engine_judgments_made": engine.get("judgments_made"),
+                    "engine_end_to_end_ms_warm_rebuild": engine.get("end_to_end_ms"),
+                    "engine_ms_per_judgment": (
+                        round(engine["end_to_end_ms"] / engine["judgments_made"], 2)
+                        if engine.get("judgments_made")
+                        else None
+                    ),
+                    "seconds_ratio": (
+                        round(row["wall_s"] / (engine["end_to_end_ms"] / 1000), 0)
+                        if engine.get("end_to_end_ms")
+                        else None
+                    ),
+                }
+            )
+        totals_requests = sum(item["manual_requests"] for item in comparison)
+        totals_judgments = sum(item["manual_judgments_reached"] for item in comparison)
+        totals_seconds = sum(item["manual_wall_s"] for item in comparison)
+        summary["manual_vs_engine"] = {
+            "caution": (
+                "The two sides do not reach an identical judgment set. The emulation covers three of "
+                "the five bridges, picks IntAct partners in the order the result list returns them "
+                "rather than by score, and counts every (molecule, target) pair it reaches rather than "
+                "stopping at the engine's per-bridge row caps. Compare the per-judgment figures, not "
+                "the totals, and read the seconds ratio only with both cache conditions in mind: the "
+                "engine was reading a warm local HTTP cache, the emulation had no cache at all."
+            ),
+            "per_subject": comparison,
+            "manual_totals": {
+                "requests": totals_requests,
+                "wall_s": round(totals_seconds, 2),
+                "judgments_reached": totals_judgments,
+                "requests_per_judgment": (
+                    round(totals_requests / totals_judgments, 2) if totals_judgments else None
+                ),
+                "seconds_per_judgment": (
+                    round(totals_seconds / totals_judgments, 2) if totals_judgments else None
+                ),
+            },
+        }
+    return summary
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
-    parser.add_argument("--phase", choices=["engine", "manual", "fetches", "all"], default="all")
+    parser.add_argument("--phase", choices=["engine", "manual", "fetches", "summary", "all"], default="all")
     parser.add_argument("--label", default="run", help="which engine build this pass measures")
     parser.add_argument("--manual-budget-s", type=float, default=420.0)
     arguments = parser.parse_args()
@@ -648,6 +834,7 @@ def main() -> int:
                 f"{row['judgments_reached']} judgments"
             )
 
+    stored["summary"] = summarise(stored)
     OUTPUT_JSON.write_text(json.dumps(stored, indent=2) + "\n")
     print(f"wrote {OUTPUT_JSON}")
     return 0

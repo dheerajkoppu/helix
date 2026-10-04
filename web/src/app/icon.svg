@@ -1,15 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
-  <style>
-    .ink { stroke: #15171a; }
-    .fill { fill: #15171a; }
-    @media (prefers-color-scheme: dark) {
-      .ink { stroke: #edeff0; }
-      .fill { fill: #edeff0; }
-    }
-  </style>
-  <path class="ink" d="M1.25 13.25h13.5" stroke-width="1.5" stroke-linecap="square"/>
-  <path class="ink" d="M4.75 13.25v-3" stroke-width="1.4"/>
-  <circle class="ink" cx="4.75" cy="8.4" r="1.75" stroke-width="1.4"/>
-  <path class="ink" d="M10.75 13.25V6.5" stroke-width="1.4"/>
-  <circle class="fill" cx="10.75" cy="4.1" r="2.6"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="7" fill="#111113"/>
+  <path d="M5.4 13.6v4.8M11 11.9v8.2M16 5.2v21.6M21 11.2v9.6M26.6 14v4"
+        stroke="#ffffff" stroke-width="3.4" stroke-linecap="round"/>
 </svg>

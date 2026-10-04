@@ -136,11 +136,12 @@ export function HelixMark({ className }: GlyphProps) {
       aria-hidden
       className={cn("size-4 shrink-0", className)}
     >
-      <path d="M1.25 13.25h13.5" strokeWidth="1.5" strokeLinecap="square" />
-      <path d="M4.75 13.25v-3" strokeWidth="1.4" />
-      <circle cx="4.75" cy="8.4" r="1.75" strokeWidth="1.4" />
-      <path d="M10.75 13.25V6.5" strokeWidth="1.4" />
-      <circle cx="10.75" cy="4.1" r="2.6" fill="currentColor" stroke="none" />
+      {/* A sequence of residues with one standing out: the mutation the product is about. */}
+      <path
+        d="M1.7 6.8v2.4M4.5 6v4M8 2.6v10.8M11.5 5.6v4.8M14.3 7v2"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
