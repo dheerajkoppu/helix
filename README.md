@@ -4,7 +4,7 @@ What could we aim a drug at in a rare disease, and is there already a molecule t
 
 Helix is an open-source platform for computational rare-disease research. It follows one path:
 disease, gene, pathogenic variant, protein, mechanism, **candidate targets and molecules**, what to
-test next. At every step it shows where each statement comes from and how far it can be trusted. The
+test next. At every step it shows where each statement originates from and how far it can be trusted. The
 first dataset is the IUIS classification of inborn errors of immunity: 604 diseases and 511 genes.
 
 Every candidate is a hypothesis Helix built from records. Helix is a research and
